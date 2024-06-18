@@ -1,12 +1,12 @@
 {
   "packages": {
-    "package/test": {
+    "packages/test": {
       "package-name": "test",
       "pull-request-header": "Test1",
       "changelog-types": "[{\"type\":\"feat\",\"section\":\"Features\",\"hidden\":false},{\"type\":\"fix\",\"section\":\"Bug Fixes\",\"hidden\":false},{\"type\":\"chore\",\"section\":\"Miscellaneous\",\"hidden\":false},{ \"type\": \"revert\", \"section\": \"Reverts\", \"hidden\": false }]",
       "target-branch": "chore/release-please"
     },
-    "package/test2": {
+    "packages/test2": {
       "package-name": "test2",
       "pull-request-header": "Test2",
       "changelog-types": "[{\"type\":\"feat\",\"section\":\"Features\",\"hidden\":false},{\"type\":\"fix\",\"section\":\"Bug Fixes\",\"hidden\":false},{\"type\":\"chore\",\"section\":\"Miscellaneous\",\"hidden\":false},{ \"type\": \"revert\", \"section\": \"Reverts\", \"hidden\": false }]",
