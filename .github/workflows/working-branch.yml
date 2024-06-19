@@ -13,7 +13,7 @@ jobs:
         node-version: [20]
     steps:
       - name: Setup
-        uses: ./.github/actions/cache-setup.yml
+        uses: ./.github/actions/cache-setup
       - name: TurboBuild
         run: pnpm build
       # uses: ./.github/actions/cache-pnpm
