@@ -34,6 +34,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
-        run: pnpm install
+        uses: ./.github/actions/pnpm.yml
+        # run: pnpm install
   build:
     uses: ./.github/workflows/build.yml
