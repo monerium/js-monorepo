@@ -23,11 +23,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
+        #   cache: "pnpm"
       - name: Set PNPM cache dir
         run: pnpm config set store-dir .pnpm-store
-      - name: Install dependencies
-        run: pnpm install
       - name: Setup PNPM cache
         uses: actions/cache@v4
         with:
@@ -35,3 +33,5 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install
