@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["chore/test-rp-2"]
   pull_request:
     types: [opened, synchronize]
 
@@ -16,6 +16,7 @@ jobs:
         id: rp
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          target-branch: chore/test-rp-2
   release-values:
     name: "Release values"
     needs: [release-please]
@@ -66,11 +67,13 @@ jobs:
 
       - name: PrePublish SDK
         run: pnpm --filter @monerium/sdk pub:pre
+        # run: pnpm --filter @monerium/sdk publish --access public
         if: ${{ needs.release-please.outputs.data['packages/sdk--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: PrePublish React Provider
         run: pnpm --filter @monerium/sdk-react-provider pub:pre
+        # run: pnpm --filter @monerium/sdk-react-provider publish --access public
         if: ${{ needs.release-please.outputs.data['packages/sdk-react-provider--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
