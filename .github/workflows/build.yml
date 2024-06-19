@@ -15,9 +15,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "pnpm"
       # - uses: actions/cache@v4
       - name: Install dependencies
-        uses: ./.github/actions/cache-pnpm
+        run: pnpm install --frozen-lockfile
+        # uses: ./.github/actions/cache-pnpm
       #   name: Restore pnpm cache
       #   with:
       #     path: .pnpm-store
