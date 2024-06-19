@@ -2,20 +2,21 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["chore/test-rp"]
   pull_request:
     types: [opened, synchronize]
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    outputs:
-      data: ${{ toJson(steps.rp.outputs) }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: rp
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      data: ${{ toJson(steps.rp.outputs) }}
+      releases_created: ${{ steps.rp.outputs.releases_created }}
   release-values:
     name: "Release values"
     needs: [release-please]
@@ -23,6 +24,8 @@ jobs:
     steps:
       - name: echo outputs
         run: |
+          echo "Release created: ${{ needs.release-please.outputs.releases_created }}"
+          echo "Release data: ${{ toJson(needs.release-please.outputs.data) }}"
           echo "Release created: ${{ needs.release-please.outputs.data.release_created }}"
           echo "Releases created: ${{ needs.release-please.outputs.data.releases_created }}"
           echo "Release sha: ${{ needs.release-please.outputs.data.sha }}"
@@ -66,11 +69,13 @@ jobs:
 
       - name: PrePublish SDK
         run: pnpm --filter @monerium/sdk pub:pre
+        #run: pnpm --filter @monerium/sdk publish --access public
         if: ${{ needs.release-please.outputs.data['packages/sdk--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: PrePublish React Provider
         run: pnpm --filter @monerium/sdk-react-provider pub:pre
+        # run: pnpm --filter @monerium/sdk-react-provider publish --access public
         if: ${{ needs.release-please.outputs.data['packages/sdk-react-provider--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
