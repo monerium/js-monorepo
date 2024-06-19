@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+    branches-ignore:
+      - release-please--*
 
 jobs:
   cache-and-install:
@@ -17,6 +19,5 @@ jobs:
         uses: ./.github/actions/cache-setup
       - name: TurboBuild
         run: pnpm build
-      # uses: ./.github/actions/cache-pnpm
   build:
     uses: ./.github/workflows/build.yml

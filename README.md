@@ -61,7 +61,7 @@ Note: use `pnpm dev --log-order stream` for a more traditional log output.
 
 ### Pipeline
 
-We use [Release please](https://github.com/googleapis/release-please), for automated releases. The configuration file is located at `release-please-config.json`, and the manifest file is at `.release-please-manifest.json`. In general, you don't need to manually update the manifest file because the release-please action automatically updates it.
+We use [release-please](https://github.com/googleapis/release-please), for automated releases. The configuration file is located at `release-please-config.json`, and the manifest file is at `.release-please-manifest.json`. In general, you don't need to manually update the manifest file because the release-please action automatically updates it.
 
 If you need to adjust a package version, you can update the `release-please-config.json` file with `"release-as": "0.0.1"` for that package. Just remember to remove it after the release.
 
