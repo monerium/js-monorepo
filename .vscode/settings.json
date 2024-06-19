@@ -4,7 +4,12 @@
       "mode": "auto"
     }
   ],
-  "cSpell.words": ["Monerium", "sepolia", "stylelint"],
+  "cSpell.words": [
+    "Commitlint",
+    "Monerium",
+    "sepolia",
+    "stylelint"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": "explicit"
   },
