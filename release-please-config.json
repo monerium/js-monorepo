@@ -1,7 +1,14 @@
 {
   "pull-request-header": ":robot: I have created a release *beep* *boop*",
   "group-pull-request-title-pattern": "chore: release ${branch}",
-  "changelog-sections": "[{\"type\":\"feat\",\"section\":\"Features\",\"hidden\":false},{\"type\":\"fix\",\"section\":\"Bug Fixes\",\"hidden\":false},{\"type\":\"docs\",\"section\":\"Documentation\",\"hidden\":false},{\"type\":\"chore\",\"section\":\"Miscellaneous\",\"hidden\":false},{ \"type\": \"revert\", \"section\": \"Reverts\", \"hidden\": false }]",
+  "changelog-sections": [
+    { "type": "feat", "section": "Features", "hidden": false },
+    { "type": "fix", "section": "Bug Fixes", "hidden": false },
+    { "type": "docs", "section": "Documentation", "hidden": false },
+    { "type": "chore", "section": "Miscellaneous", "hidden": false },
+    { "type": "refactor", "section": "Refactors", "hidden": false },
+    { "type": "revert", "section": "Revert", "hidden": false }
+  ],
   "packages": {
     ".": {
       "package-name": "monorepo",
