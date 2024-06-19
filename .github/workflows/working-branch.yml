@@ -23,6 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
         #   cache: "pnpm"
       #   - name: Set PNPM cache dir
       #     run: pnpm config set store-dir .pnpm-store
@@ -34,7 +35,7 @@ jobs:
       #       restore-keys: |
       #         ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
-        uses: ./.github/actions/cache-pnpm
-        # run: pnpm install
+        run: pnpm install --frozen-lockfile
+      # uses: ./.github/actions/cache-pnpm
   build:
     uses: ./.github/workflows/build.yml
