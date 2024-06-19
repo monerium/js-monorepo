@@ -1,7 +1,7 @@
 {
   "pull-request-header": ":robot: I have created a release *beep* *boop*",
   "group-pull-request-title-pattern": "chore: release ${branch}",
-  "changelog-types": "[{\"type\":\"feat\",\"section\":\"Features\",\"hidden\":false},{\"type\":\"fix\",\"section\":\"Bug Fixes\",\"hidden\":false},{\"type\":\"docs\",\"section\":\"Documentation\",\"hidden\":false},{\"type\":\"chore\",\"section\":\"Miscellaneous\",\"hidden\":false},{ \"type\": \"revert\", \"section\": \"Reverts\", \"hidden\": false }]",
+  "changelog-sections": "[{\"type\":\"feat\",\"section\":\"Features\",\"hidden\":false},{\"type\":\"fix\",\"section\":\"Bug Fixes\",\"hidden\":false},{\"type\":\"docs\",\"section\":\"Documentation\",\"hidden\":false},{\"type\":\"chore\",\"section\":\"Miscellaneous\",\"hidden\":false},{ \"type\": \"revert\", \"section\": \"Reverts\", \"hidden\": false }]",
   "packages": {
     ".": {
       "package-name": "monorepo",
@@ -23,8 +23,7 @@
     "packages/stylelint-config": {},
     "packages/typescript-config": {},
     "packages/ui": {
-      "release-as": "0.0.1-beta2",
-      "changelog-types": "[{\"type\":\"feat\",\"section\":\"Features\",\"hidden\":false},{\"type\":\"fix\",\"section\":\"Bug Fixes\",\"hidden\":false},{\"type\":\"docs\",\"section\":\"Documentation\",\"hidden\":false},{\"type\":\"chore\",\"section\":\"Miscellaneous\",\"hidden\":false},{ \"type\": \"revert\", \"section\": \"Reverts\", \"hidden\": false }]"
+      "release-as": "0.0.1-beta2"
     }
   }
 }
