@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.8-beta0](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.7-beta0...monorepo-v0.0.8-beta0) (2024-06-19)
+
+
+### Miscellaneous
+
+* trying to fix outputs ([dc73576](https://github.com/monerium/js-monorepo/commit/dc73576040fd762aa50c451b5169c72f1e12b9a3))
+* trying to fix outputs ([f3673df](https://github.com/monerium/js-monorepo/commit/f3673df6a316ad05cee1f9dacfae759cef007a07))
+
 ## [0.0.7-beta0](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.6-beta0...monorepo-v0.0.7-beta0) (2024-06-19)
 
 
