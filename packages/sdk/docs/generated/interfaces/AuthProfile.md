@@ -1,8 +1,8 @@
-[**Monerium SDK v2.12.1**](../README.md) • **Docs**
+[**Monerium SDK v2.12.1-beta0**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.12.1](../README.md) / AuthProfile
+[Monerium SDK v2.12.1-beta0](../README.md) / AuthProfile
 
 # Interface: AuthProfile
 
@@ -14,7 +14,7 @@
 
 #### Source
 
-[types.ts:192](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L192)
+[types.ts:192](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L192)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[types.ts:194](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L194)
+[types.ts:194](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L194)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[types.ts:195](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L195)
+[types.ts:195](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L195)
 
 ---
 
@@ -44,4 +44,4 @@
 
 #### Source
 
-[types.ts:193](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L193)
+[types.ts:193](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L193)

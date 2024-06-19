@@ -1,8 +1,8 @@
-[**Monerium SDK v2.12.1**](../README.md) • **Docs**
+[**Monerium SDK v2.12.1-beta0**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.12.1](../README.md) / Fee
+[Monerium SDK v2.12.1-beta0](../README.md) / Fee
 
 # Interface: Fee
 
@@ -14,7 +14,7 @@
 
 #### Source
 
-[types.ts:298](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L298)
+[types.ts:298](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L298)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[types.ts:297](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L297)
+[types.ts:297](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L297)
 
 ---
 
@@ -34,4 +34,4 @@
 
 #### Source
 
-[types.ts:296](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L296)
+[types.ts:296](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L296)

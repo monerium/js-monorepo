@@ -1,8 +1,8 @@
-[**Monerium SDK v2.12.1**](../README.md) • **Docs**
+[**Monerium SDK v2.12.1-beta0**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.12.1](../README.md) / Profile
+[Monerium SDK v2.12.1-beta0](../README.md) / Profile
 
 # Interface: Profile
 
@@ -14,7 +14,7 @@
 
 #### Source
 
-[types.ts:264](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L264)
+[types.ts:264](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L264)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[types.ts:261](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L261)
+[types.ts:261](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L261)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[types.ts:259](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L259)
+[types.ts:259](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L259)
 
 ---
 
@@ -44,7 +44,7 @@
 
 #### Source
 
-[types.ts:263](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L263)
+[types.ts:263](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L263)
 
 ---
 
@@ -54,7 +54,7 @@
 
 #### Source
 
-[types.ts:262](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L262)
+[types.ts:262](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L262)
 
 ---
 
@@ -64,4 +64,4 @@
 
 #### Source
 
-[types.ts:260](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L260)
+[types.ts:260](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L260)

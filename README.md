@@ -57,7 +57,21 @@ cd js-monorepo
 pnpm dev
 ```
 
+Note: use `pnpm dev --log-order stream` for a more traditional log output.
+
 ### Pipeline
+
+We use [Release please](https://github.com/googleapis/release-please), for automated releases. The configuration file is located at `release-please-config.json`, and the manifest file is at `.release-please-manifest.json`. In general, you don't need to manually update the manifest file because the release-please action automatically updates it.
+
+If you need to adjust a package version, you can update the `release-please-config.json` file with `"release-as": "0.0.1"` for that package. Just remember to remove it after the release.
+
+To trigger a release, you merge a PR into the main branch. The release process will create a new release branch and a PR. When you merge this PR into the main branch, a release will be created.
+
+The pipeline will automatically publish the following packages if there are changes when a release is created:
+
+- `@monerium/sdk` at 'packages/sdk'
+- `@monerium/sdk-react-provider` at 'packages/sdk-react-provider'
+- TBD: `@repo/ui` at 'packages/ui'
 
 #### Useful links
 

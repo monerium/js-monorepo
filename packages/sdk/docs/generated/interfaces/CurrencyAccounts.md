@@ -1,8 +1,8 @@
-[**Monerium SDK v2.12.1**](../README.md) • **Docs**
+[**Monerium SDK v2.12.1-beta0**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.12.1](../README.md) / CurrencyAccounts
+[Monerium SDK v2.12.1-beta0](../README.md) / CurrencyAccounts
 
 # Interface: CurrencyAccounts
 
@@ -18,7 +18,7 @@
 
 #### Source
 
-[types.ts:439](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L439)
+[types.ts:439](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L439)
 
 ---
 
@@ -28,7 +28,7 @@
 
 #### Source
 
-[types.ts:440](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L440)
+[types.ts:440](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L440)
 
 ---
 
@@ -38,7 +38,7 @@
 
 #### Source
 
-[types.ts:441](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L441)
+[types.ts:441](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L441)
 
 ---
 
@@ -52,4 +52,4 @@
 
 #### Source
 
-[types.ts:437](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L437)
+[types.ts:437](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L437)

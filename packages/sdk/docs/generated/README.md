@@ -1,8 +1,8 @@
-**Monerium SDK v2.12.1** • **Docs**
+**Monerium SDK v2.12.1-beta0** • **Docs**
 
 ---
 
-# Monerium SDK v2.12.1
+# Monerium SDK v2.12.1-beta0
 
 ## Classes
 

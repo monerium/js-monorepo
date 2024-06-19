@@ -1,8 +1,8 @@
-[**Monerium SDK v2.12.1**](../README.md) • **Docs**
+[**Monerium SDK v2.12.1-beta0**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.12.1](../README.md) / AuthCodeRequest
+[Monerium SDK v2.12.1-beta0](../README.md) / AuthCodeRequest
 
 # Interface: AuthCodeRequest
 
@@ -18,7 +18,7 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Source
 
-[types.ts:97](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L97)
+[types.ts:97](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L97)
 
 ---
 
@@ -28,7 +28,7 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Source
 
-[types.ts:98](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L98)
+[types.ts:98](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L98)
 
 ---
 
@@ -38,7 +38,7 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Source
 
-[types.ts:99](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L99)
+[types.ts:99](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L99)
 
 ---
 
@@ -48,7 +48,7 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Source
 
-[types.ts:96](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L96)
+[types.ts:96](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L96)
 
 ---
 
@@ -58,7 +58,7 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Source
 
-[types.ts:100](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L100)
+[types.ts:100](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L100)
 
 ---
 
@@ -68,4 +68,4 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Source
 
-[types.ts:101](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L101)
+[types.ts:101](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L101)

@@ -1,8 +1,8 @@
-[**Monerium SDK v2.12.1**](../README.md) • **Docs**
+[**Monerium SDK v2.12.1-beta0**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.12.1](../README.md) / AuthFlowOptions
+[Monerium SDK v2.12.1-beta0](../README.md) / AuthFlowOptions
 
 # Interface: AuthFlowOptions
 
@@ -14,7 +14,7 @@
 
 #### Source
 
-[types.ts:486](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L486)
+[types.ts:486](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L486)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[types.ts:488](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L488)
+[types.ts:488](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L488)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[types.ts:484](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L484)
+[types.ts:484](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L484)
 
 ---
 
@@ -44,7 +44,7 @@
 
 #### Source
 
-[types.ts:485](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L485)
+[types.ts:485](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L485)
 
 ---
 
@@ -54,7 +54,7 @@
 
 #### Source
 
-[types.ts:487](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L487)
+[types.ts:487](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L487)
 
 ---
 
@@ -64,4 +64,4 @@
 
 #### Source
 
-[types.ts:489](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L489)
+[types.ts:489](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L489)

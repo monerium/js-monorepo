@@ -1,8 +1,8 @@
-[**Monerium SDK v2.12.1**](../README.md) • **Docs**
+[**Monerium SDK v2.12.1-beta0**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.12.1](../README.md) / placeOrderMessage
+[Monerium SDK v2.12.1-beta0](../README.md) / placeOrderMessage
 
 # Function: placeOrderMessage()
 
@@ -28,4 +28,4 @@ string
 
 ## Source
 
-[utils.ts:41](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/utils.ts#L41)
+[utils.ts:41](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/utils.ts#L41)

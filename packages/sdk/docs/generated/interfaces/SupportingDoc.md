@@ -1,8 +1,8 @@
-[**Monerium SDK v2.12.1**](../README.md) • **Docs**
+[**Monerium SDK v2.12.1-beta0**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.12.1](../README.md) / SupportingDoc
+[Monerium SDK v2.12.1-beta0](../README.md) / SupportingDoc
 
 # Interface: SupportingDoc
 
@@ -14,7 +14,7 @@
 
 #### Source
 
-[types.ts:429](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L429)
+[types.ts:429](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L429)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[types.ts:425](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L425)
+[types.ts:425](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L425)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[types.ts:430](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L430)
+[types.ts:430](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L430)
 
 ---
 
@@ -44,7 +44,7 @@
 
 #### Source
 
-[types.ts:426](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L426)
+[types.ts:426](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L426)
 
 ---
 
@@ -54,7 +54,7 @@
 
 #### Source
 
-[types.ts:428](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L428)
+[types.ts:428](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L428)
 
 ---
 
@@ -64,4 +64,4 @@
 
 #### Source
 
-[types.ts:427](https://github.com/monerium/js-monorepo/blob/d7b4845046d718e3ed53164705f9a159eb0876ba/packages/sdk/src/types.ts#L427)
+[types.ts:427](https://github.com/monerium/js-monorepo/blob/5652214d02f5add3c0253df8e24a10c8f67836ad/packages/sdk/src/types.ts#L427)
