@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.0.2-beta0](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.1-beta0...monorepo-v0.0.2-beta0) (2024-06-19)
+
+
+### Bug Fixes
+
+* fix ([ee2d315](https://github.com/monerium/js-monorepo/commit/ee2d315544df26deb91dbaba6226b85143881ea8))
+
+
+### Miscellaneous
+
+* chore is not working ([56f6299](https://github.com/monerium/js-monorepo/commit/56f629948627b6316809e73c7ed30f64c19d4c8f))
+* chore is not working ([4a0521f](https://github.com/monerium/js-monorepo/commit/4a0521f7f9c924fc918aba92c85e866677d0c212))
+* fix format ([00beb1e](https://github.com/monerium/js-monorepo/commit/00beb1e21a2777a53532a57a6a69401049280ecb))
+* init ([b9be23c](https://github.com/monerium/js-monorepo/commit/b9be23c933e8857572e8de33e1f8a78cd0bd65df))
+* its called sections in the new action ([78389a7](https://github.com/monerium/js-monorepo/commit/78389a7df1b03500f789531db8e377887bb10354))
+* update ui test ([543cc29](https://github.com/monerium/js-monorepo/commit/543cc2996dbfca3732294367f1e539987a22cf18))
+* was it hidden because of chore ([a783316](https://github.com/monerium/js-monorepo/commit/a783316bbba0ff4294a415acc22f0b63baa038ef))
+* was it hidden because of chore ([ef44734](https://github.com/monerium/js-monorepo/commit/ef4473438d297d3487459e0cfb039a1698e5bc00))
+* will chore work now? ([ae7c79c](https://github.com/monerium/js-monorepo/commit/ae7c79c1ccb3fedb8a4f51e720a65cc7b211c23f))
+
 ## [0.0.1-beta0](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.2...monorepo-v0.0.1-beta0) (2024-06-19)
 
 
