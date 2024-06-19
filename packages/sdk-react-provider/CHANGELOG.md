@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.10-beta3](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10-beta2...sdk-react-provider-v0.0.10-beta3) (2024-06-19)
+
+
+### Miscellaneous
+
+* trigger action ([971c265](https://github.com/monerium/js-monorepo/commit/971c265296f05ec6c1dc3949e2f98f01f7123678))
+
 ## [0.0.10-beta2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10-beta1...sdk-react-provider-v0.0.10-beta2) (2024-06-19)
 
 
