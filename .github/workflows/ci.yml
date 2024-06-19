@@ -25,7 +25,7 @@ jobs:
 
       - name: echo values
         run: |
-          echo "Release outputs: ${{ steps.rp.outputs }}"
+          echo "Release outputs: ${{ toJson(steps.rp.outputs) }}"
           echo "Release created SDK: ${{ steps.rp.outputs.release_created_sdk }}"
           echo "Release created React Provider: ${{ steps.rp.outputs.release_created_sdk_react_provider }}"
           echo "Release created: ${{ steps.rp.outputs.release_created }}"
