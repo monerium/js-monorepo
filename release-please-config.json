@@ -5,12 +5,10 @@
   "packages": {
     ".": {
       "package-name": "monorepo",
-      "exclude-paths": ["packages", "apps"],
-      "release-as": "0.0.1-beta0"
+      "exclude-paths": ["packages", "apps"]
     },
     "apps/customer": {
-      "package-name": "customer",
-      "release-as": "0.0.1-beta0"
+      "package-name": "customer"
     },
     "packages/sdk": {
       "package-name": "@monerium/sdk",
@@ -20,20 +18,12 @@
       "package-name": "@monerium/sdk-react-provider",
       "release-as": "0.0.10-beta0"
     },
-    "packages/eslint-config": {
-      "release-as": "0.0.1-beta0"
-    },
-    "packages/postcss-config": {
-      "release-as": "0.0.1-beta0"
-    },
-    "packages/stylelint-config": {
-      "release-as": "0.0.1-beta0"
-    },
-    "packages/typescript-config": {
-      "release-as": "0.0.1-beta0"
-    },
+    "packages/eslint-config": {},
+    "packages/postcss-config": {},
+    "packages/stylelint-config": {},
+    "packages/typescript-config": {},
     "packages/ui": {
-      "release-as": "0.0.1-beta0"
+      "release-as": "0.0.1-beta1"
     }
   }
 }
