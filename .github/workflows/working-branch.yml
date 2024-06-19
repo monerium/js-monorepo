@@ -36,7 +36,7 @@ jobs:
       #         ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build
+      - name: TurboBuild
         run: pnpm build
       # uses: ./.github/actions/cache-pnpm
   build:
