@@ -8,7 +8,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
       - name: Install pnpm
         uses: pnpm/action-setup@v4
       - name: Install Node.js
@@ -19,6 +25,8 @@ jobs:
       # - uses: actions/cache@v4
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
         # uses: ./.github/actions/cache-pnpm
       #   name: Restore pnpm cache
       #   with:
