@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7-beta0](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.6-beta0...monorepo-v0.0.7-beta0) (2024-06-19)
+
+
+### Miscellaneous
+
+* trigger action ([e48e086](https://github.com/monerium/js-monorepo/commit/e48e0861bed1ad32dd7c876bcb1f186bc4086e84))
+
 ## [0.0.6-beta0](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.5-beta0...monorepo-v0.0.6-beta0) (2024-06-19)
 
 
