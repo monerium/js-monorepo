@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "chore/my-please-release-testbranch"]
   pull_request:
     types: [opened, synchronize]
 
@@ -21,7 +21,7 @@ jobs:
         id: rp
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          # target-branch: chore/my-please-release-testbranch
+          target-branch: chore/my-please-release-testbranch
 
       - name: echo values
         run: |
