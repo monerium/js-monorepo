@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.10-beta4](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10-beta3...sdk-react-provider-v0.0.10-beta4) (2024-06-19)
+
+
+### Miscellaneous
+
+* trying to fix outputs ([dc73576](https://github.com/monerium/js-monorepo/commit/dc73576040fd762aa50c451b5169c72f1e12b9a3))
+
 ## [0.0.10-beta3](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10-beta2...sdk-react-provider-v0.0.10-beta3) (2024-06-19)
 
 
