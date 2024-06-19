@@ -35,3 +35,5 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install
+      - name: Build
+        uses: ./.github/workflows/build.yml
