@@ -27,7 +27,11 @@
     },
     "packages/eslint-config": {},
     "packages/postcss-config": {},
-    "packages/stylelint-config": {},
+    "packages/stylelint-config": {
+      "component": "stylelint",
+      "package-name": "stylelint-config",
+      "release-as": "0.0.1-beta0"
+    },
     "packages/typescript-config": {},
     "packages/ui": {
       "release-as": "0.0.1-beta2"
