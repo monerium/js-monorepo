@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.10-beta0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10...sdk-react-provider-v0.0.10-beta0) (2024-06-19)
+
+
+### Features
+
+* **sdk-react-provider:** export loadingAuth ([a265da2](https://github.com/monerium/js-monorepo/commit/a265da24220e16c5c07490dbe313f5c65aef07f3))
+
+
+### Bug Fixes
+
+* add token types to sdk, + adjust data fetching sdk-provider ([f745348](https://github.com/monerium/js-monorepo/commit/f745348e761372b146aae7d395c6574f30715dec))
+* cleanup ([ca0722f](https://github.com/monerium/js-monorepo/commit/ca0722fde7eb03ee578ee0d228433af359b74fc2))
+
 ## [0.0.10](https://github.com/monerium/public-monorepo/compare/sdk-react-provider-v0.0.9...sdk-react-provider-v0.0.10) (2023-11-17)
 
 ### Bug Fixes

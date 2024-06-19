@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.12.1-beta0](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1...sdk-v2.12.1-beta0) (2024-06-19)
+
+
+### Features
+
+* **sdk-react-provider:** export loadingAuth ([a265da2](https://github.com/monerium/js-monorepo/commit/a265da24220e16c5c07490dbe313f5c65aef07f3))
+* **sdk:** opening auth flow should not replace history location, just push it ([21a7a07](https://github.com/monerium/js-monorepo/commit/21a7a07e26c2e9a469980165885436e19b888770))
+
+
+### Bug Fixes
+
+* add token types to sdk, + adjust data fetching sdk-provider ([f745348](https://github.com/monerium/js-monorepo/commit/f745348e761372b146aae7d395c6574f30715dec))
+* docs for constants ([515ec2a](https://github.com/monerium/js-monorepo/commit/515ec2ae63f91c2d4c94739f8890ac37fdab4e7a))
+* landing page not rerouting with valid refresh token ([1eb3391](https://github.com/monerium/js-monorepo/commit/1eb3391b2ba944121f8e73a50dfa6b61262375f2))
+* **sdk:** reduce usage of network ([ccddeaf](https://github.com/monerium/js-monorepo/commit/ccddeafc72d800143d24d4e4079de76a955ed0fb))
+
 ## [2.12.0](https://github.com/monerium/js-sdk/compare/sdk-v2.11.1...sdk-v2.12.0) (2024-03-12)
 
 ### Bug Fixes
