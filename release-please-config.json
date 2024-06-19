@@ -23,7 +23,7 @@
     },
     "packages/sdk-react-provider": {
       "package-name": "@monerium/sdk-react-provider",
-      "release-as": "0.0.10-beta2"
+      "release-as": "0.0.10-beta3"
     },
     "packages/eslint-config": {},
     "packages/postcss-config": {},
