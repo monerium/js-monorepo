@@ -2,7 +2,7 @@
 
 ## Installation
 
-```sh
+```
 pnpm add @monerium/sdk-react-provider
 ```
 

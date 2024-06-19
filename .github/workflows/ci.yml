@@ -25,9 +25,8 @@ jobs:
 
       - name: echo values
         run: |
-          echo "Release outputs: ${{ toJson(steps.release.outputs) }}"
-          echo "Release created SDK: ${{ steps.release.outputs.release_created_sdk }}"
-          echo "Release created React Provider: ${{ steps.release.outputs.release_created_sdk_react_provider }}"
+          echo "Release created SDK: ${{ steps.release.outputs['packages/sdk--release_created']  }}"
+          echo "Release created React Provider: ${{ steps.release.outputs['packages/sdk-react-provider--release_created'] }}"
           echo "Release created: ${{ steps.release.outputs.release_created }}"
           echo "Release tag_name: ${{ steps.release.outputs.tag_name }}"
           echo "Release sha: ${{ steps.release.outputs.sha }}"
@@ -40,6 +39,8 @@ jobs:
         run: |
           echo "Release created: ${{ needs.release-please.outputs.release_created }}"
           echo "Releases created: ${{ needs.release-please.outputs.releases_created }}"
+          echo "Release created SDK: ${{ needs.release-please.outputs.release_created_sdk }}"
+          echo "Release created React: ${{ needs.release-please.outputs.release_created_sdk_react_provider }}"
           echo "Release sha: ${{ needs.release-please.outputs.sha }}"
   build:
     needs: [release-please]
