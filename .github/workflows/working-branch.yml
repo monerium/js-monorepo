@@ -12,30 +12,8 @@ jobs:
       matrix:
         node-version: [20]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        # with:
-        #   version: 9.2.0
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-        #   cache: "pnpm"
-      #   - name: Set PNPM cache dir
-      #     run: pnpm config set store-dir .pnpm-store
-      #   - name: Setup PNPM cache
-      #     uses: actions/cache@v4
-      #     with:
-      #       path: .pnpm-store
-      #       key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-      #       restore-keys: |
-      #         ${{ runner.os }}-pnpm-store-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup
+        uses: ./.github/actions/cache-setup.yml
       - name: TurboBuild
         run: pnpm build
       # uses: ./.github/actions/cache-pnpm
