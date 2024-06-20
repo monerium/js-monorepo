@@ -3,8 +3,8 @@ name: CI
 on:
   push:
     branches:
-      - main
-      #- chore/my-please-release-testbranch
+      # - main
+      - test/release-please
   pull_request:
     types: [opened, synchronize]
 
@@ -24,7 +24,7 @@ jobs:
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          # target-branch: chore/my-please-release-testbranch
+          target-branch: test/release-please
 
       - name: echo values
         run: |

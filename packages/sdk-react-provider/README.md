@@ -62,5 +62,3 @@ https://codesandbox.io/s/monerium-sdk-react-provider-pntvgs?file=/src/index.js
 ## Running unit tests
 
 Run `turbo --filter @monerium/sdk-react-provider test` to execute the unit tests
-
-####
