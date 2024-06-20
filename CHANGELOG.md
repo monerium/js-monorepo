@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.0.11](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.10...monorepo-v0.0.11) (2024-06-20)
+
+
+### Miscellaneous
+
+* add node-workspace plugin ([ff8e8ff](https://github.com/monerium/js-monorepo/commit/ff8e8ffa07605f27cd36f176a591345f19016121))
+* cleanup, remove TODO file ([bc45a43](https://github.com/monerium/js-monorepo/commit/bc45a43ff421a849b782e53748035fe3ffce3aee))
+* how to skip readme ([55fa978](https://github.com/monerium/js-monorepo/commit/55fa978d6ffee32bf6b39b68684f89c2d0e03d6b))
+* remove beta from all package versions ([62e6af3](https://github.com/monerium/js-monorepo/commit/62e6af37cfc6c6bd288bb1609719122bb5954ad0))
+* test ([82613d4](https://github.com/monerium/js-monorepo/commit/82613d4d8e568cd352261454330c1384172c1808))
+* test sperated prs only for chosen parts ([7f1be9b](https://github.com/monerium/js-monorepo/commit/7f1be9b1d061ea3f451684871890f65f93aa2065))
+* try excluding readme ([6003383](https://github.com/monerium/js-monorepo/commit/60033832d98ac084c98b76dbce494572e77b560a))
+* try expanding the path for excluded ([4b3a20a](https://github.com/monerium/js-monorepo/commit/4b3a20a8560553457b77edb0188f70037dbe5af4))
+* use component instead of scope ([d6af780](https://github.com/monerium/js-monorepo/commit/d6af7805f9879f0ed8b694a785ef40a512bb3337))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @repo/eslint-config bumped to 0.1.0
+    * @repo/typescript-config bumped to 0.1.0
+
 ## [0.0.10](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.9...monorepo-v0.0.10) (2024-06-20)
 
 
