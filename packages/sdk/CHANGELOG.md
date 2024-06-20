@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.13.1](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.0...sdk-v2.13.1) (2024-06-20)
+
+
+### Documentation
+
+* update generated docs ([2f27b1f](https://github.com/monerium/js-monorepo/commit/2f27b1ff9aa6f19b1af96cf637f19d31235b7fb8))
+
+
+### Miscellaneous
+
+* revert sdk readme changes ([f7c2ffa](https://github.com/monerium/js-monorepo/commit/f7c2ffa2e95297455eb3c40952de7ce28d8f7b8f))
+* test ([82613d4](https://github.com/monerium/js-monorepo/commit/82613d4d8e568cd352261454330c1384172c1808))
+* update sdk ([9821a92](https://github.com/monerium/js-monorepo/commit/9821a921a0a9cf259f9319559be4569c77f7363b))
+
 ## [2.13.0](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1...sdk-v2.13.0) (2024-06-20)
 
 
