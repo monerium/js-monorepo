@@ -1,8 +1,8 @@
 {
-  ".": "0.0.6",
+  ".": "0.0.7",
   "apps/customer": "0.0.1-beta0",
-  "packages/sdk": "2.12.1-beta.3",
-  "packages/sdk-react-provider": "0.0.10-beta.3",
+  "packages/sdk": "2.12.1-beta.4",
+  "packages/sdk-react-provider": "0.0.10-beta.4",
   "packages/eslint-config": "0.0.1-beta0",
   "packages/postcss-config": "0.0.1-beta0",
   "packages/stylelint-config": "0.0.1-beta0",

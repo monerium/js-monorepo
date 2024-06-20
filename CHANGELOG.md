@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.6...monorepo-v0.0.7) (2024-06-20)
+
+
+### Miscellaneous
+
+* adjust npmrc and add minor change to trigger publish ([a32680e](https://github.com/monerium/js-monorepo/commit/a32680e32a3b933bc5aefd5cb8eceb2d409ef312))
+
 ## [0.0.6](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.5-beta.3...monorepo-v0.0.6) (2024-06-20)
 
 
