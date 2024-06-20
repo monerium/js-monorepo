@@ -22,13 +22,13 @@
       "release-type": "node"
     },
     "packages/sdk": {
-      "exclude-paths": ["README.md", "docs"],
+      "exclude-paths": ["packages/sdk/README.md", "packages/sdk/docs"],
       "package-name": "@monerium/sdk",
       "bump-minor-pre-major": true,
       "release-type": "node"
     },
     "packages/sdk-react-provider": {
-      "exclude-paths": ["README.md"],
+      "exclude-paths": ["packages/sdk-react-provider/README.md"],
       "package-name": "@monerium/sdk-react-provider",
       "bump-minor-pre-major": true,
       "release-type": "node"
