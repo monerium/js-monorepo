@@ -5,6 +5,15 @@
 
 ### Miscellaneous
 
+* attempt to publish package through ci ([74fee41](https://github.com/monerium/js-monorepo/commit/74fee414c11b6a8c3c2fc541e62783605b20f5de))
+* bumo monerium sdk version ([3545e23](https://github.com/monerium/js-monorepo/commit/3545e230d0617fa428ac3d78e2f8af90685f5ac1))
+* minor change to sdk to trigger release ([1eb2c2f](https://github.com/monerium/js-monorepo/commit/1eb2c2f0a30ab922e1552410d766df196a3b3c49))
+
+## [0.0.5-beta.3](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.5-beta.3...monorepo-v0.0.5-beta.3) (2024-06-20)
+
+
+### Miscellaneous
+
 * bumo monerium sdk version ([3545e23](https://github.com/monerium/js-monorepo/commit/3545e230d0617fa428ac3d78e2f8af90685f5ac1))
 
 ## [0.0.5-beta.3](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.5-beta.1...monorepo-v0.0.5-beta.3) (2024-06-20)

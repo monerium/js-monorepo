@@ -1,6 +1,6 @@
 {
   "name": "@monerium/sdk",
-  "version": "2.12.1-beta1",
+  "version": "2.12.1-beta.2",
   "description": "Essential tools to interact with the Monerium API, an electronic money issuer.",
   "repository": {
     "type": "git",
