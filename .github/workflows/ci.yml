@@ -44,6 +44,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
+
       - name: Cache PNPM install and Turbo
         uses: ./.github/actions/cache-setup
 
@@ -57,14 +58,15 @@ jobs:
         run: pnpm lint
 
       - name: PrePublish SDK
-        run: pnpm --filter @monerium/sdk pub:pre
-        # run: pnpm --filter @monerium/sdk publish --access public
+        #run: pnpm --filter @monerium/sdk pub:pre
+        run: pnpm --filter @monerium/sdk publish --access public
         if: ${{ needs.release-please.outputs.release_created_sdk }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
       - name: PrePublish React Provider
-        run: pnpm --filter @monerium/sdk-react-provider pub:pre
-        # run: pnpm --filter @monerium/sdk-react-provider publish --access public
+        # run: pnpm --filter @monerium/sdk-react-provider pub:pre
+        run: pnpm --filter @monerium/sdk-react-provider publish --access public
         if: ${{ needs.release-please.outputs.release_created_sdk_react_provider }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
