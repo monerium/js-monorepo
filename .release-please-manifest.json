@@ -1,11 +1,11 @@
 {
-  ".": "0.0.10",
+  ".": "0.0.11",
   "apps/customer": "0.0.2",
   "packages/sdk": "2.13.0",
   "packages/sdk-react-provider": "0.1.2",
-  "packages/eslint-config": "0.0.1",
-  "packages/postcss-config": "0.0.1",
-  "packages/stylelint-config": "0.0.1",
-  "packages/typescript-config": "0.0.1",
-  "packages/ui": "0.0.1"
+  "packages/eslint-config": "0.1.0",
+  "packages/postcss-config": "0.0.2",
+  "packages/stylelint-config": "0.0.2",
+  "packages/typescript-config": "0.1.0",
+  "packages/ui": "0.1.0"
 }
