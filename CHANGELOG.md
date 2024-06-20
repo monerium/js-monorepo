@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.8](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.7...monorepo-v0.0.8) (2024-06-20)
+
+
+### Miscellaneous
+
+* attempt to add always-auth ([c6ba226](https://github.com/monerium/js-monorepo/commit/c6ba226485e82e6ab75c3c121d98454c041d8f75))
+* minor change to trigger publish ([a07da03](https://github.com/monerium/js-monorepo/commit/a07da035d4909af918c5f6f5ef53b59084fc6dd5))
+
 ## [0.0.7](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.6...monorepo-v0.0.7) (2024-06-20)
 
 

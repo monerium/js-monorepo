@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.1-beta.6](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1-beta.4...sdk-v2.12.1-beta.6) (2024-06-20)
+
+
+### Miscellaneous
+
+* minor change to trigger publish ([a07da03](https://github.com/monerium/js-monorepo/commit/a07da035d4909af918c5f6f5ef53b59084fc6dd5))
+
 ## [2.12.1-beta.4](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1-beta.3...sdk-v2.12.1-beta.4) (2024-06-20)
 
 
