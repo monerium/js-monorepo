@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.0.11](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.10...monorepo-v0.0.11) (2024-06-20)
+
+
+### Miscellaneous
+
+* add node-workspace plugin ([ff8e8ff](https://github.com/monerium/js-monorepo/commit/ff8e8ffa07605f27cd36f176a591345f19016121))
+* cleanup, remove TODO file ([bc45a43](https://github.com/monerium/js-monorepo/commit/bc45a43ff421a849b782e53748035fe3ffce3aee))
+* remove beta from all package versions ([62e6af3](https://github.com/monerium/js-monorepo/commit/62e6af37cfc6c6bd288bb1609719122bb5954ad0))
+* test ([82613d4](https://github.com/monerium/js-monorepo/commit/82613d4d8e568cd352261454330c1384172c1808))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @repo/eslint-config bumped to 0.1.0
+    * @repo/typescript-config bumped to 0.1.0
+
 ## [0.0.10](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.9...monorepo-v0.0.10) (2024-06-20)
 
 
