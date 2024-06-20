@@ -22,7 +22,13 @@
       "release-type": "node"
     },
     "packages/sdk": {
-      "exclude-paths": ["packages/sdk/README.md", "packages/sdk/docs"],
+      "exclude-paths": [
+        "packages/sdk/README.md",
+        "packages/sdk/docs",
+        "sdk/README.md",
+        "./README.md",
+        "README.md"
+      ],
       "package-name": "@monerium/sdk",
       "bump-minor-pre-major": true,
       "release-type": "node"
