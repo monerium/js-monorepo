@@ -1,7 +1,7 @@
 {
   "name": "js-monorepo",
   "private": true,
-  "version": "0.0.5-beta.1",
+  "version": "0.0.5-beta.3",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",

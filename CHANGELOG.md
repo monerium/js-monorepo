@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.5-beta.3](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.5-beta.1...monorepo-v0.0.5-beta.3) (2024-06-20)
+
+
+### Miscellaneous
+
+* add release-type as node ([3c3d8bc](https://github.com/monerium/js-monorepo/commit/3c3d8bc9e6e8b253baf4be260d4a9b4098dc351b))
+* adjust release ([e64ae60](https://github.com/monerium/js-monorepo/commit/e64ae60fad82f5875af2fd1e87742c4dcf350ad5))
+* clean up root CHANGELOG ([0b35478](https://github.com/monerium/js-monorepo/commit/0b35478d538a0aa9d6c0d45bf9b4c22f4eda8f76))
+* remove component from release config ([612a733](https://github.com/monerium/js-monorepo/commit/612a733783b0c2a32bfc8107102d4cc2174fad2d))
+* remove release-as to see if correct prerelease version is used ([21d13e6](https://github.com/monerium/js-monorepo/commit/21d13e6ef77e2ea632b094b5571ca7095e7cf2cf))
+* update React Provider README & adjust GH action workflow ([#31](https://github.com/monerium/js-monorepo/issues/31)) ([b5a68c1](https://github.com/monerium/js-monorepo/commit/b5a68c19f6b4636df093bd3eb398b8b2dd9e132d))
+
 ## [0.0.5-beta.1](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.5-beta0...monorepo-v0.0.5-beta.1) (2024-06-19)
 
 
