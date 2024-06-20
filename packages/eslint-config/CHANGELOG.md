@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.0](https://github.com/monerium/js-monorepo/compare/eslint-config-v0.0.1...eslint-config-v0.1.0) (2024-06-20)
+## [0.0.1](https://github.com/monerium/js-monorepo/compare/eslint-config-v0.0.1...eslint-config-v0.0.1) (2024-06-20)
 
 
 ### Features
