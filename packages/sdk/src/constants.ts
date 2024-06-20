@@ -11,4 +11,9 @@ export default {
    * The key used to store the refresh token in the local storage.
    */
   STORAGE_REFRESH_TOKEN: 'monerium.sdk.refresh_token',
+  /**
+   * TEst
+   */
+  TEST_VARIABLE:
+    'just seeing what sdk react provider does with release please if sdk is updated',
 };
