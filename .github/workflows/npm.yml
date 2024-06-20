@@ -17,6 +17,8 @@ jobs:
 
       - name: Echo pnpm config list
         run: pnpm config list
+      - name: Echo hashed NPM_TOKEN
+        run: echo "${{ secrets.NPM_TOKEN }}" | sha256sum
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: Publish React Provider
