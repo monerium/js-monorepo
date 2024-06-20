@@ -26,6 +26,10 @@
     "dist/index.mjs",
     "dist/index.d.ts"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
