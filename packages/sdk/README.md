@@ -214,7 +214,7 @@ API documentation:
 It's important to understand when interacting with a blockchain, the user needs to provide a signature in their wallet.
 This signature is used to verify that the user is the owner of the wallet address.
 
-We recommend Viem as an Ethereum interface; see: https://viem.sh/docs/actions/wallet/signMessage.html
+We recommend Viem as an Ethereum interface, see: https://viem.sh/docs/actions/wallet/signMessage.html
 
 ```ts
 
