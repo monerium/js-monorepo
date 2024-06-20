@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.1](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.0...sdk-v2.13.1) (2024-06-20)
+
+
+### Miscellaneous
+
+* test ([82613d4](https://github.com/monerium/js-monorepo/commit/82613d4d8e568cd352261454330c1384172c1808))
+
 ## [2.13.0](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1...sdk-v2.13.0) (2024-06-20)
 
 
