@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.9](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.8...monorepo-v0.0.9) (2024-06-20)
+
+
+### Miscellaneous
+
+* publish should work now, preparing for new versions of sdk and sdk-react-provider ([7e93031](https://github.com/monerium/js-monorepo/commit/7e930313fb54636afb71cd69d7ab860ed571ea6d))
+
 ## [0.0.8](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.7...monorepo-v0.0.8) (2024-06-20)
 
 

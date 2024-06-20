@@ -1,5 +1,50 @@
 # Changelog
 
+## [2.13.0](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1...sdk-v2.13.0) (2024-06-20)
+
+
+### Features
+
+* **sdk-react-provider:** export loadingAuth ([a265da2](https://github.com/monerium/js-monorepo/commit/a265da24220e16c5c07490dbe313f5c65aef07f3))
+* **sdk:** opening auth flow should not replace history location, just push it ([21a7a07](https://github.com/monerium/js-monorepo/commit/21a7a07e26c2e9a469980165885436e19b888770))
+
+
+### Bug Fixes
+
+* add token types to sdk, + adjust data fetching sdk-provider ([f745348](https://github.com/monerium/js-monorepo/commit/f745348e761372b146aae7d395c6574f30715dec))
+* docs for constants ([515ec2a](https://github.com/monerium/js-monorepo/commit/515ec2ae63f91c2d4c94739f8890ac37fdab4e7a))
+* landing page not rerouting with valid refresh token ([1eb3391](https://github.com/monerium/js-monorepo/commit/1eb3391b2ba944121f8e73a50dfa6b61262375f2))
+* **sdk:** reduce usage of network ([ccddeaf](https://github.com/monerium/js-monorepo/commit/ccddeafc72d800143d24d4e4079de76a955ed0fb))
+
+
+### Documentation
+
+* update ([80a85dd](https://github.com/monerium/js-monorepo/commit/80a85ddfbe6e3fd746c707f0eec33f21c4d00bb7))
+
+
+### Miscellaneous
+
+* add prepublish script ([7d8e225](https://github.com/monerium/js-monorepo/commit/7d8e2250c6b5ce6ece34bc6e0e625a948f104b42))
+* add sdk and sdk-react-provider ([89c318a](https://github.com/monerium/js-monorepo/commit/89c318af3a5948c7ab6616d9b59a7367f87457e4))
+* add typedoc ([5fda91f](https://github.com/monerium/js-monorepo/commit/5fda91f95d4a7935be7ec580e05eb73520a9a0dd))
+* adjust npmrc and add minor change to trigger publish ([a32680e](https://github.com/monerium/js-monorepo/commit/a32680e32a3b933bc5aefd5cb8eceb2d409ef312))
+* auto sort import + prettier ([69ace9d](https://github.com/monerium/js-monorepo/commit/69ace9d62af48fb501e298af804a1703e9928d86))
+* change output folder ([63219fd](https://github.com/monerium/js-monorepo/commit/63219fde0f935acb35ce19f47571455bbfc0ffa7))
+* enhance docs ([95da1ee](https://github.com/monerium/js-monorepo/commit/95da1ee68c22ee2a6c87ac928b307c8f3825242a))
+* markdown typedoc ([69aafbf](https://github.com/monerium/js-monorepo/commit/69aafbf665e06fb1fab9775ca5ee0ba5fb9dbc84))
+* minor change to sdk to trigger release ([1eb2c2f](https://github.com/monerium/js-monorepo/commit/1eb2c2f0a30ab922e1552410d766df196a3b3c49))
+* minor change to trigger publish ([a07da03](https://github.com/monerium/js-monorepo/commit/a07da035d4909af918c5f6f5ef53b59084fc6dd5))
+* publish should work now, preparing for new versions of sdk and sdk-react-provider ([7e93031](https://github.com/monerium/js-monorepo/commit/7e930313fb54636afb71cd69d7ab860ed571ea6d))
+* release main ([5eed941](https://github.com/monerium/js-monorepo/commit/5eed941e5db57c14c297f8f63b35d59c1742ed50))
+* **sdk:** add decleration maps ([dd13bbf](https://github.com/monerium/js-monorepo/commit/dd13bbf17909aedb97df8e2ee693b034efb230c9))
+* switch to npm ([3c07134](https://github.com/monerium/js-monorepo/commit/3c07134e148e96df0fad519dde97b64cc5a12e33))
+* try adding npmrc to the root of every package, pnpm publish is failing in ci ([33cdd57](https://github.com/monerium/js-monorepo/commit/33cdd57dedf4d6d73baeeb4222856a1c825c0e28))
+* update docs ([ec7249b](https://github.com/monerium/js-monorepo/commit/ec7249bd7316a7137c1991a68930b69e0cfc24b1))
+* update packes packagejson + cleanup ([71ac566](https://github.com/monerium/js-monorepo/commit/71ac5662b4604154ecdd1d560ae1201aa852eb0e))
+* update React Provider README & adjust GH action workflow ([#31](https://github.com/monerium/js-monorepo/issues/31)) ([b5a68c1](https://github.com/monerium/js-monorepo/commit/b5a68c19f6b4636df093bd3eb398b8b2dd9e132d))
+* wip commitlint ([6812fb2](https://github.com/monerium/js-monorepo/commit/6812fb2c1ac0197a1531705f7c3285b8700a747f))
+* working tests for sdk + remove network ([086d856](https://github.com/monerium/js-monorepo/commit/086d8561a8a2a61c884c50f63488327a6a2a5574))
+
 ## [2.12.0](https://github.com/monerium/js-sdk/compare/sdk-v2.11.1...sdk-v2.12.0) (2024-03-12)
 
 ### Bug Fixes

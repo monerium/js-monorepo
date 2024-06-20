@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2-beta0](https://github.com/monerium/js-monorepo/compare/customer-v0.0.1-beta0...customer-v0.0.2-beta0) (2024-06-20)
+
+
+### Miscellaneous
+
+* publish should work now, preparing for new versions of sdk and sdk-react-provider ([7e93031](https://github.com/monerium/js-monorepo/commit/7e930313fb54636afb71cd69d7ab860ed571ea6d))
+
 ## 0.0.1-beta0 (2024-06-19)
 
 
