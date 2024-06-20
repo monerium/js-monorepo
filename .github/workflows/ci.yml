@@ -5,8 +5,8 @@ on:
     branches:
       - main
       #- chore/my-please-release-testbranch
-  # pull_request:
-  #   types: [opened, synchronize]
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   release-please:
@@ -16,6 +16,7 @@ jobs:
       release_created_sdk_react_provider: ${{ steps.release.outputs['packages/sdk-react-provider--release_created'] }}
       release_created: ${{ steps.release.outputs.release_created }}
       releases_created: ${{ steps.release.outputs.releases_created }}
+      pr_created: ${{ steps.release.outputs.prs_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
       sha: ${{ steps.release.outputs.sha }}
     steps:
@@ -30,21 +31,9 @@ jobs:
           echo "Release created SDK: ${{ steps.release.outputs['packages/sdk--release_created']  }}"
           echo "Release created React Provider: ${{ steps.release.outputs['packages/sdk-react-provider--release_created'] }}"
           echo "Releases created: ${{ steps.release.outputs.releases_created }}"
-          echo "Release created: ${{ steps.release.outputs.release_created }}"
+          echo "PR created: ${{ steps.release.outputs.prs_created }}"
           echo "Release tag_name: ${{ steps.release.outputs.tag_name }}"
           echo "Release sha: ${{ steps.release.outputs.sha }}"
-  release-values:
-    name: "Release values"
-    needs: [release-please]
-    runs-on: ubuntu-latest
-    steps:
-      - name: echo outputs
-        run: |
-          echo "Release created: ${{ needs.release-please.outputs.release_created }}"
-          echo "Releases created: ${{ needs.release-please.outputs.releases_created }}"
-          echo "Release created SDK: ${{ needs.release-please.outputs.release_created_sdk }}"
-          echo "Release created React: ${{ needs.release-please.outputs.release_created_sdk_react_provider }}"
-          echo "Release sha: ${{ needs.release-please.outputs.sha }}"
   build:
     needs: [release-please]
     name: Build and Test
