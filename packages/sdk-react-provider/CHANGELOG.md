@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.1.0...sdk-react-provider-v0.1.1) (2024-06-20)
+
+
+### Miscellaneous
+
+* cleanup ([4a46c4c](https://github.com/monerium/js-monorepo/commit/4a46c4c6ed7e651418376609f9efa1353c0b2840))
+
 ## [0.1.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10...sdk-react-provider-v0.1.0) (2024-06-20)
 
 
