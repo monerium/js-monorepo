@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.0](https://github.com/monerium/js-monorepo/compare/customer-v0.0.2...customer-v0.1.0) (2024-06-20)
+## [0.0.2](https://github.com/monerium/js-monorepo/compare/customer-v0.0.2...customer-v0.0.2) (2024-06-20)
 
 
 ### Features
