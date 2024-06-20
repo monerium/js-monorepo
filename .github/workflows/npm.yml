@@ -23,6 +23,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: Publish React Provider
         # run: pnpm --filter @monerium/sdk-react-provider pub:pre
-        run: pnpm publish --filter @monerium/sdk-react-provider --access public
+        run: pnpm publish --filter @monerium/sdk-react-provider --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
