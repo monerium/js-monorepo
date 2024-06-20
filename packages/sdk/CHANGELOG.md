@@ -7,6 +7,13 @@
 
 * update React Provider README & adjust GH action workflow ([#31](https://github.com/monerium/js-monorepo/issues/31)) ([b5a68c1](https://github.com/monerium/js-monorepo/commit/b5a68c19f6b4636df093bd3eb398b8b2dd9e132d))
 
+## [2.12.1-beta0](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1-beta0...sdk-v2.12.1-beta0) (2024-06-20)
+
+
+### Miscellaneous
+
+* update React Provider README & adjust GH action workflow ([#31](https://github.com/monerium/js-monorepo/issues/31)) ([b5a68c1](https://github.com/monerium/js-monorepo/commit/b5a68c19f6b4636df093bd3eb398b8b2dd9e132d))
+
 ## [2.12.1-beta0](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1...sdk-v2.12.1-beta0) (2024-06-19)
 
 
