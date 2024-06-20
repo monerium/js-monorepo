@@ -1,0 +1,15 @@
+name: NPM
+
+on:
+  push:
+
+jobs:
+  echo-stuff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Echo pnpm config list
+        run: pnpm config list
