@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.11](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.10...monorepo-v0.0.11) (2024-06-20)
+
+
+### Miscellaneous
+
+* cleanup, remove TODO file ([bc45a43](https://github.com/monerium/js-monorepo/commit/bc45a43ff421a849b782e53748035fe3ffce3aee))
+* remove beta from all package versions ([62e6af3](https://github.com/monerium/js-monorepo/commit/62e6af37cfc6c6bd288bb1609719122bb5954ad0))
+
 ## [0.0.10](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.9...monorepo-v0.0.10) (2024-06-20)
 
 
