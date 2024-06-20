@@ -19,3 +19,5 @@ jobs:
           cache: "pnpm"
       - name: Echo pnpm config list
         run: pnpm config list
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
