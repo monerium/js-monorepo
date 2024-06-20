@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.10-beta.3](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10-beta2...sdk-react-provider-v0.0.10-beta.3) (2024-06-20)
+
+
+### Miscellaneous
+
+* try adding npmrc to the root of every package, pnpm publish is failing in ci ([33cdd57](https://github.com/monerium/js-monorepo/commit/33cdd57dedf4d6d73baeeb4222856a1c825c0e28))
+
 ## [0.0.10-beta2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10-beta1...sdk-react-provider-v0.0.10-beta2) (2024-06-19)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.1-beta.3](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1-beta.2...sdk-v2.12.1-beta.3) (2024-06-20)
+
+
+### Miscellaneous
+
+* try adding npmrc to the root of every package, pnpm publish is failing in ci ([33cdd57](https://github.com/monerium/js-monorepo/commit/33cdd57dedf4d6d73baeeb4222856a1c825c0e28))
+
 ## [2.12.1-beta.2](https://github.com/monerium/js-monorepo/compare/sdk-v2.12.1-beta1...sdk-v2.12.1-beta.2) (2024-06-20)
 
 
