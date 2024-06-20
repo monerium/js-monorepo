@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.5-beta.3](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.5-beta.3...monorepo-v0.0.5-beta.3) (2024-06-20)
+
+
+### Miscellaneous
+
+* bumo monerium sdk version ([3545e23](https://github.com/monerium/js-monorepo/commit/3545e230d0617fa428ac3d78e2f8af90685f5ac1))
+
 ## [0.0.5-beta.3](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.5-beta.1...monorepo-v0.0.5-beta.3) (2024-06-20)
 
 

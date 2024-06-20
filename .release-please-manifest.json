@@ -1,7 +1,7 @@
 {
   ".": "0.0.5-beta.3",
   "apps/customer": "0.0.1-beta0",
-  "packages/sdk": "2.12.1-beta0",
+  "packages/sdk": "2.12.1-beta1",
   "packages/sdk-react-provider": "0.0.10-beta2",
   "packages/eslint-config": "0.0.1-beta0",
   "packages/postcss-config": "0.0.1-beta0",
