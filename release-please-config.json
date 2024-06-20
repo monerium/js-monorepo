@@ -12,20 +12,20 @@
   ],
   "packages": {
     ".": {
-      "pull-request-title-pattern": "Release ${scope} ${version} :rocket:",
+      "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
       "package-name": "monorepo",
       "exclude-paths": ["packages", "apps"],
       "release-type": "node"
     },
     "apps/customer": {
       "separate-pull-requests": true,
-      "pull-request-title-pattern": "Release ${scope} ${version} :rocket:",
+      "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
       "package-name": "customer",
       "release-type": "node"
     },
     "packages/sdk": {
       "separate-pull-requests": true,
-      "pull-request-title-pattern": "Release ${scope} ${version} :rocket:",
+      "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
       "release-type": "node",
       "bump-minor-pre-major": true,
       "package-name": "@monerium/sdk"
@@ -33,7 +33,7 @@
     "packages/sdk-react-provider": {
       "separate-pull-requests": true,
       "pull-request-header": ":warning: Make sure to also update the SDK package! :warning:",
-      "pull-request-title-pattern": "Release ${scope} ${version} :rocket:",
+      "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
       "release-type": "node",
       "bump-minor-pre-major": true,
       "package-name": "@monerium/sdk-react-provider"
