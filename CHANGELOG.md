@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.10](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.9...monorepo-v0.0.10) (2024-06-20)
+
+
+### Miscellaneous
+
+* force new release sdk-react-provider ([382d968](https://github.com/monerium/js-monorepo/commit/382d96823976d34071b02aabc834cf582c099d02))
+
 ## [0.0.9](https://github.com/monerium/js-monorepo/compare/monorepo-v0.0.8...monorepo-v0.0.9) (2024-06-20)
 
 

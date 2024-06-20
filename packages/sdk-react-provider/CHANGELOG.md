@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.1.1...sdk-react-provider-v0.1.2) (2024-06-20)
+
+
+### Miscellaneous
+
+* force new release sdk-react-provider ([382d968](https://github.com/monerium/js-monorepo/commit/382d96823976d34071b02aabc834cf582c099d02))
+
 ## [0.1.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.0.10...sdk-react-provider-v0.1.0) (2024-06-20)
 
 ### Features
