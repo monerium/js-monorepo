@@ -1,5 +1,5 @@
 {
-  "group-pull-request-title-pattern": "Release ${branch} :rocket:",
+  "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
   "pull-request-header": ":robot: I have created a release *beep* *boop*",
   "separate-pull-requests": true,
   "plugins": ["node-workspace"],
@@ -11,24 +11,18 @@
     { "type": "refactor", "section": "Refactors", "hidden": false },
     { "type": "revert", "section": "Revert", "hidden": false }
   ],
+  "release-type": "node",
+  "bump-minor-pre-major": true,
   "packages": {
     "apps/customer": {
-      "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
-      "release-type": "node",
-      "bump-minor-pre-major": true,
       "package-name": "customer"
     },
     "packages/sdk": {
-      "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
-      "release-type": "node",
-      "bump-minor-pre-major": true,
       "package-name": "@monerium/sdk"
     },
     "packages/sdk-react-provider": {
-      "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
-      "release-type": "node",
-      "bump-minor-pre-major": true,
       "package-name": "@monerium/sdk-react-provider"
     }
-  }
+  },
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/v16.10.2/schemas/config.json"
 }
