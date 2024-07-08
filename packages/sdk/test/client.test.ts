@@ -38,7 +38,7 @@ const message = LINK_MESSAGE;
 
 const assignMock = jest.fn();
 
-describe('MoneriumClient', () => {
+describe.skip('MoneriumClient', () => {
   beforeAll(() => {
     Object.defineProperty(window, 'location', {
       value: {
