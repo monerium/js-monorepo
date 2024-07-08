@@ -27,8 +27,8 @@
     "wagmi": "^2.9.8"
   },
   "devDependencies": {
-    "@monerium/sdk": "workspace:*",
-    "@monerium/sdk-react-provider": "workspace:*",
+    "@monerium/sdk": "workspace:latest",
+    "@monerium/sdk-react-provider": "workspace:latest",
     "@repo/eslint-config": "workspace:*",
     "@repo/postcss-config": "workspace:*",
     "@repo/stylelint-config": "workspace:*",

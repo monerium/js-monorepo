@@ -35,7 +35,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@monerium/sdk": "workspace:*"
+    "@monerium/sdk": "workspace:latest"
   },
   "peerDependencies": {
     "@types/react": "^18.2.61",

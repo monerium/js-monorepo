@@ -2,11 +2,8 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      #- chore/my-please-release-testbranch
-  pull_request:
-    types: [opened, synchronize]
+    branches-ignore:
+      - "release-please*"
 
 jobs:
   release-please:
