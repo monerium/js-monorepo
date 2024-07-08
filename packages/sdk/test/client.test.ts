@@ -316,7 +316,7 @@ describe('MoneriumClient', () => {
 
     const expected = [
       {
-        address: '0xd58C5Db52B5B3Eb24EE38AF287d2cb0F424172A5',
+        address: '0x67b34b93ac295c985e856E5B8A20D83026b580Eb',
         chain: 'ethereum',
         currency: 'eur',
         decimals: 18,
