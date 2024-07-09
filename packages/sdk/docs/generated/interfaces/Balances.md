@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK v2.13.1**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / Balances
+[Monerium SDK v2.13.1](../README.md) / Balances
 
 # Interface: Balances
 
@@ -14,7 +14,7 @@
 
 #### Source
 
-[types.ts:275](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L275)
+[types.ts:275](https://github.com/monerium/js-monorepo/blob/d7dd2f31ee14faec91d785d992389ffb611f1f1f/packages/sdk/src/types.ts#L275)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Source
 
-[types.ts:278](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L278)
+[types.ts:278](https://github.com/monerium/js-monorepo/blob/d7dd2f31ee14faec91d785d992389ffb611f1f1f/packages/sdk/src/types.ts#L278)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Source
 
-[types.ts:276](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L276)
+[types.ts:276](https://github.com/monerium/js-monorepo/blob/d7dd2f31ee14faec91d785d992389ffb611f1f1f/packages/sdk/src/types.ts#L276)
 
 ---
 
@@ -44,7 +44,7 @@
 
 #### Source
 
-[types.ts:274](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L274)
+[types.ts:274](https://github.com/monerium/js-monorepo/blob/d7dd2f31ee14faec91d785d992389ffb611f1f1f/packages/sdk/src/types.ts#L274)
 
 ---
 
@@ -54,4 +54,4 @@
 
 #### Source
 
-[types.ts:277](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L277)
+[types.ts:277](https://github.com/monerium/js-monorepo/blob/d7dd2f31ee14faec91d785d992389ffb611f1f1f/packages/sdk/src/types.ts#L277)
