@@ -12,6 +12,11 @@ const MONERIUM_CONFIG: Config = {
       web: 'https://sandbox.monerium.dev',
       wss: 'wss://api.monerium.dev',
     },
+    development: {
+      api: 'http://localhost:4000/external-api',
+      web: 'http://localhost:3000',
+      wss: 'ws://localhost:4000/external-api',
+    },
   },
 };
 

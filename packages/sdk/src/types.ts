@@ -3,16 +3,20 @@
 export type Environment = { api: string; web: string; wss: string };
 
 export type Config = {
-  environments: { production: Environment; sandbox: Environment };
+  environments: {
+    production: Environment;
+    sandbox: Environment;
+    development: Environment;
+  };
 };
 
-export type ENV = 'sandbox' | 'production';
+export type ENV = 'sandbox' | 'production' | 'development';
 
 export type EthereumTestnet = 'sepolia';
 export type GnosisTestnet = 'chiado';
 export type PolygonTestnet = 'amoy';
 
-export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'gnosismainnet';
+export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'gnosismainnet' | 'noble';
 export type Networks =
   | EthereumTestnet
   | GnosisTestnet
@@ -23,10 +27,10 @@ export type Networks =
 export type NetworkSemiStrict<C extends Chain> = C extends 'ethereum'
   ? EthereumTestnet | 'mainnet'
   : C extends 'gnosis'
-    ? GnosisTestnet | 'mainnet'
-    : C extends 'polygon'
-      ? PolygonTestnet | 'mainnet'
-      : never;
+  ? GnosisTestnet | 'mainnet'
+  : C extends 'polygon'
+  ? PolygonTestnet | 'mainnet'
+  : never;
 
 export type NetworkStrict<
   C extends Chain,
@@ -34,14 +38,14 @@ export type NetworkStrict<
 > = E extends 'production'
   ? 'mainnet'
   : E extends 'sandbox'
-    ? C extends 'ethereum'
-      ? EthereumTestnet
-      : C extends 'gnosis'
-        ? GnosisTestnet
-        : C extends 'polygon'
-          ? PolygonTestnet
-          : never
-    : never;
+  ? C extends 'ethereum'
+  ? EthereumTestnet
+  : C extends 'gnosis'
+  ? GnosisTestnet
+  : C extends 'polygon'
+  ? PolygonTestnet
+  : never
+  : never;
 
 /*
  * -- isValid:
@@ -59,8 +63,8 @@ export type Network<
   E extends ENV = ENV,
 > = C extends Chain
   ? E extends ENV
-    ? NetworkStrict<C, E> & NetworkSemiStrict<C>
-    : never
+  ? NetworkStrict<C, E> & NetworkSemiStrict<C>
+  : never
   : never;
 
 export type ChainId = number | 1 | 11155111 | 100 | 137 | 10200 | 80002;
