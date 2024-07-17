@@ -3,16 +3,20 @@
 export type Environment = { api: string; web: string; wss: string };
 
 export type Config = {
-  environments: { production: Environment; sandbox: Environment };
+  environments: {
+    production: Environment;
+    sandbox: Environment;
+    development: Environment;
+  };
 };
 
-export type ENV = 'sandbox' | 'production';
+export type ENV = 'sandbox' | 'production' | 'development';
 
 export type EthereumTestnet = 'sepolia';
 export type GnosisTestnet = 'chiado';
 export type PolygonTestnet = 'amoy';
 
-export type Chain = 'ethereum' | 'gnosis' | 'polygon';
+export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'noble';
 export type Networks =
   | EthereumTestnet
   | GnosisTestnet
