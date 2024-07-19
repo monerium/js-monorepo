@@ -453,6 +453,17 @@ export interface LinkAddress {
   chainId?: ChainId;
 }
 
+export interface LinkedAddress {
+  id: string;
+  profile: string;
+  address: string;
+  message: string;
+  meta: {
+    linkedBy: string;
+    linkedAt: string;
+  };
+}
+
 // -- Notifications
 
 export interface OrderNotification {
