@@ -437,7 +437,7 @@ export interface CurrencyAccounts {
   network?: Network;
   /** @deprecated - Use 'chainId' */
   chain?: Chain;
-  chainId: ChainId;
+  chainId?: ChainId;
   currency: Currency;
 }
 
