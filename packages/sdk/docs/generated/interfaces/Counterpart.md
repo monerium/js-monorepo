@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / Counterpart
+[Monerium SDK](../README.md) / Counterpart
 
 # Interface: Counterpart
 
@@ -12,9 +12,9 @@
 
 > **details**: [`Individual`](Individual.md) \| [`Corporation`](Corporation.md)
 
-#### Source
+#### Defined in
 
-[types.ts:335](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L335)
+[types.ts:335](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L335)
 
 ---
 
@@ -22,6 +22,6 @@
 
 > **identifier**: [`IBAN`](IBAN.md) \| [`CrossChain`](CrossChain.md) \| [`SCAN`](SCAN.md)
 
-#### Source
+#### Defined in
 
-[types.ts:334](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L334)
+[types.ts:334](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L334)

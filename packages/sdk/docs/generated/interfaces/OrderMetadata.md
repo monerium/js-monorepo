@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / OrderMetadata
+[Monerium SDK](../README.md) / OrderMetadata
 
 # Interface: OrderMetadata
 
@@ -12,9 +12,9 @@
 
 > **approvedAt**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:339](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L339)
+[types.ts:339](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L339)
 
 ---
 
@@ -22,9 +22,9 @@
 
 > **placedAt**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:344](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L344)
+[types.ts:344](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L344)
 
 ---
 
@@ -32,9 +32,9 @@
 
 > **placedBy**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:343](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L343)
+[types.ts:343](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L343)
 
 ---
 
@@ -42,9 +42,9 @@
 
 > **processedAt**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:340](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L340)
+[types.ts:340](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L340)
 
 ---
 
@@ -52,9 +52,9 @@
 
 > **receivedAmount**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:345](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L345)
+[types.ts:345](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L345)
 
 ---
 
@@ -62,9 +62,9 @@
 
 > **rejectedAt**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:341](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L341)
+[types.ts:341](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L341)
 
 ---
 
@@ -72,9 +72,9 @@
 
 > **sentAmount**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:346](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L346)
+[types.ts:346](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L346)
 
 ---
 
@@ -82,6 +82,6 @@
 
 > **state**: [`OrderState`](../enumerations/OrderState.md)
 
-#### Source
+#### Defined in
 
-[types.ts:342](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L342)
+[types.ts:342](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L342)

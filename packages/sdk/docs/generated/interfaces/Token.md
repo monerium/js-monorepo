@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / Token
+[Monerium SDK](../README.md) / Token
 
 # Interface: Token
 
@@ -16,9 +16,9 @@ Information about the EURe token on different networks.
 
 The address of the EURe contract on this network
 
-#### Source
+#### Defined in
 
-[types.ts:386](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L386)
+[types.ts:386](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L386)
 
 ---
 
@@ -26,9 +26,9 @@ The address of the EURe contract on this network
 
 > **chain**: [`Chain`](../type-aliases/Chain.md)
 
-#### Source
+#### Defined in
 
-[types.ts:383](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L383)
+[types.ts:383](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L383)
 
 ---
 
@@ -36,9 +36,9 @@ The address of the EURe contract on this network
 
 > **currency**: [`Currency`](../enumerations/Currency.md)
 
-#### Source
+#### Defined in
 
-[types.ts:380](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L380)
+[types.ts:380](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L380)
 
 ---
 
@@ -48,9 +48,9 @@ The address of the EURe contract on this network
 
 How many decimals this token supports
 
-#### Source
+#### Defined in
 
-[types.ts:388](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L388)
+[types.ts:388](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L388)
 
 ---
 
@@ -58,9 +58,9 @@ How many decimals this token supports
 
 > **network**: `"sepolia"` \| `"chiado"` \| `"amoy"` \| `"mainnet"`
 
-#### Source
+#### Defined in
 
-[types.ts:384](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L384)
+[types.ts:384](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L384)
 
 ---
 
@@ -68,9 +68,9 @@ How many decimals this token supports
 
 > **symbol**: [`TokenSymbol`](../type-aliases/TokenSymbol.md)
 
-#### Source
+#### Defined in
 
-[types.ts:382](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L382)
+[types.ts:382](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L382)
 
 ---
 
@@ -78,6 +78,6 @@ How many decimals this token supports
 
 > **ticker**: [`Ticker`](../type-aliases/Ticker.md)
 
-#### Source
+#### Defined in
 
-[types.ts:381](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L381)
+[types.ts:381](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L381)

@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / BearerProfile
+[Monerium SDK](../README.md) / BearerProfile
 
 # Interface: BearerProfile
 
@@ -12,9 +12,9 @@
 
 > **access_token**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:127](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L127)
+[types.ts:127](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L127)
 
 ---
 
@@ -22,9 +22,9 @@
 
 > **expires_in**: `number`
 
-#### Source
+#### Defined in
 
-[types.ts:129](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L129)
+[types.ts:129](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L129)
 
 ---
 
@@ -32,9 +32,9 @@
 
 > **profile**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:131](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L131)
+[types.ts:131](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L131)
 
 ---
 
@@ -42,9 +42,9 @@
 
 > **refresh_token**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:130](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L130)
+[types.ts:130](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L130)
 
 ---
 
@@ -52,9 +52,9 @@
 
 > **token_type**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:128](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L128)
+[types.ts:128](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L128)
 
 ---
 
@@ -62,6 +62,6 @@
 
 > **userId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:132](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L132)
+[types.ts:132](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L132)

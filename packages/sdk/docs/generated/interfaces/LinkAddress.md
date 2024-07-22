@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / LinkAddress
+[Monerium SDK](../README.md) / LinkAddress
 
 # Interface: LinkAddress
 
@@ -12,9 +12,9 @@
 
 > **accounts**: [`CurrencyAccounts`](CurrencyAccounts.md)[]
 
-#### Source
+#### Defined in
 
-[types.ts:448](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L448)
+[types.ts:448](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L448)
 
 ---
 
@@ -22,9 +22,9 @@
 
 > **address**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:445](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L445)
+[types.ts:445](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L445)
 
 ---
 
@@ -36,9 +36,9 @@
 
 - Use 'chainId'
 
-#### Source
+#### Defined in
 
-[types.ts:452](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L452)
+[types.ts:452](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L452)
 
 ---
 
@@ -46,9 +46,9 @@
 
 > `optional` **chainId**: `number`
 
-#### Source
+#### Defined in
 
-[types.ts:453](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L453)
+[types.ts:453](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L453)
 
 ---
 
@@ -56,9 +56,9 @@
 
 > **message**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:446](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L446)
+[types.ts:446](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L446)
 
 ---
 
@@ -70,9 +70,9 @@
 
 - Use 'chainId'
 
-#### Source
+#### Defined in
 
-[types.ts:450](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L450)
+[types.ts:450](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L450)
 
 ---
 
@@ -80,6 +80,6 @@
 
 > **signature**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:447](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L447)
+[types.ts:447](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L447)

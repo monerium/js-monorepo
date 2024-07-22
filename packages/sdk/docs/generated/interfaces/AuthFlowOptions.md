@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / AuthFlowOptions
+[Monerium SDK](../README.md) / AuthFlowOptions
 
 # Interface: AuthFlowOptions
 
@@ -12,9 +12,9 @@
 
 > `optional` **address**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:486](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L486)
+[types.ts:497](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L497)
 
 ---
 
@@ -22,9 +22,9 @@
 
 > `optional` **chainId**: `number`
 
-#### Source
+#### Defined in
 
-[types.ts:488](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L488)
+[types.ts:499](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L499)
 
 ---
 
@@ -32,9 +32,9 @@
 
 > `optional` **clientId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:484](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L484)
+[types.ts:495](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L495)
 
 ---
 
@@ -42,9 +42,9 @@
 
 > `optional` **redirectUrl**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:485](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L485)
+[types.ts:496](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L496)
 
 ---
 
@@ -52,9 +52,9 @@
 
 > `optional` **signature**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:487](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L487)
+[types.ts:498](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L498)
 
 ---
 
@@ -62,6 +62,6 @@
 
 > `optional` **state**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:489](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L489)
+[types.ts:500](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L500)
