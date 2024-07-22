@@ -1,14 +1,12 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / placeOrderMessage
+[Monerium SDK](../README.md) / placeOrderMessage
 
 # Function: placeOrderMessage()
 
 > **placeOrderMessage**(`amount`, `receiver`, `chainId`?, `currency`?): `string`
-
-The message to be signed when placing an order.
 
 ## Parameters
 
@@ -26,6 +24,6 @@ The message to be signed when placing an order.
 
 string
 
-## Source
+## Defined in
 
-[utils.ts:41](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/utils.ts#L41)
+[utils.ts:41](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/utils.ts#L41)

@@ -1,8 +1,14 @@
-**Monerium SDK v2.13.0** • **Docs**
+**Monerium SDK** • **Docs**
 
 ---
 
-# Monerium SDK v2.13.0
+# Monerium SDK
+
+## References
+
+### default
+
+Renames and re-exports [MoneriumClient](classes/MoneriumClient.md)
 
 ## Classes
 
@@ -42,6 +48,7 @@
 - [Individual](interfaces/Individual.md)
 - [KYC](interfaces/KYC.md)
 - [LinkAddress](interfaces/LinkAddress.md)
+- [LinkedAddress](interfaces/LinkedAddress.md)
 - [NewOrderByAccountId](interfaces/NewOrderByAccountId.md)
 - [NewOrderByAddress](interfaces/NewOrderByAddress.md)
 - [NewOrderCommon](interfaces/NewOrderCommon.md)
@@ -94,9 +101,3 @@
 - [PaymentStandard](enumerations/PaymentStandard.md)
 - [Permission](enumerations/Permission.md)
 - [ProfileType](enumerations/ProfileType.md)
-
-## References
-
-### default
-
-Renames and re-exports [MoneriumClient](classes/MoneriumClient.md)

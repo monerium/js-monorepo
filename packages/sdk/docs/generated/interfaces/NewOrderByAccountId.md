@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / NewOrderByAccountId
+[Monerium SDK](../README.md) / NewOrderByAccountId
 
 # Interface: NewOrderByAccountId
 
@@ -16,9 +16,9 @@
 
 > **accountId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:413](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L413)
+[types.ts:413](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L413)
 
 ---
 
@@ -30,9 +30,9 @@
 
 [`NewOrderCommon`](NewOrderCommon.md).[`amount`](NewOrderCommon.md#amount)
 
-#### Source
+#### Defined in
 
-[types.ts:396](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L396)
+[types.ts:396](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L396)
 
 ---
 
@@ -44,9 +44,9 @@
 
 [`NewOrderCommon`](NewOrderCommon.md).[`counterpart`](NewOrderCommon.md#counterpart)
 
-#### Source
+#### Defined in
 
-[types.ts:399](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L399)
+[types.ts:399](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L399)
 
 ---
 
@@ -58,9 +58,9 @@
 
 [`NewOrderCommon`](NewOrderCommon.md).[`currency`](NewOrderCommon.md#currency)
 
-#### Source
+#### Defined in
 
-[types.ts:398](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L398)
+[types.ts:398](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L398)
 
 ---
 
@@ -72,9 +72,9 @@
 
 [`NewOrderCommon`](NewOrderCommon.md).[`memo`](NewOrderCommon.md#memo)
 
-#### Source
+#### Defined in
 
-[types.ts:401](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L401)
+[types.ts:401](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L401)
 
 ---
 
@@ -86,9 +86,9 @@
 
 [`NewOrderCommon`](NewOrderCommon.md).[`message`](NewOrderCommon.md#message)
 
-#### Source
+#### Defined in
 
-[types.ts:400](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L400)
+[types.ts:400](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L400)
 
 ---
 
@@ -100,9 +100,9 @@
 
 [`NewOrderCommon`](NewOrderCommon.md).[`signature`](NewOrderCommon.md#signature)
 
-#### Source
+#### Defined in
 
-[types.ts:397](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L397)
+[types.ts:397](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L397)
 
 ---
 
@@ -114,6 +114,6 @@
 
 [`NewOrderCommon`](NewOrderCommon.md).[`supportingDocumentId`](NewOrderCommon.md#supportingdocumentid)
 
-#### Source
+#### Defined in
 
-[types.ts:402](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L402)
+[types.ts:402](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L402)

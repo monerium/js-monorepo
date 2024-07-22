@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / constants
+[Monerium SDK](../README.md) / constants
 
 # Variable: constants
 
@@ -28,6 +28,6 @@ The key used to store the code verifier in the local storage.
 
 The key used to store the refresh token in the local storage.
 
-## Source
+## Defined in
 
-[constants.ts:1](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/constants.ts#L1)
+[constants.ts:1](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/constants.ts#L1)

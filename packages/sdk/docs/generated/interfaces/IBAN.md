@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / IBAN
+[Monerium SDK](../README.md) / IBAN
 
 # Interface: IBAN
 
@@ -20,9 +20,9 @@
 
 [`Identifier`](Identifier.md).[`bic`](Identifier.md#bic)
 
-#### Source
+#### Defined in
 
-[types.ts:242](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L242)
+[types.ts:242](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L242)
 
 ---
 
@@ -30,9 +30,9 @@
 
 > **iban**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:303](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L303)
+[types.ts:303](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L303)
 
 ---
 
@@ -44,6 +44,6 @@
 
 [`Identifier`](Identifier.md).[`standard`](Identifier.md#standard)
 
-#### Source
+#### Defined in
 
-[types.ts:302](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L302)
+[types.ts:302](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L302)

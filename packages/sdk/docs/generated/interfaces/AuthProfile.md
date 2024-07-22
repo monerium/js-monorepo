@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / AuthProfile
+[Monerium SDK](../README.md) / AuthProfile
 
 # Interface: AuthProfile
 
@@ -12,9 +12,9 @@
 
 > **id**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:192](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L192)
+[types.ts:192](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L192)
 
 ---
 
@@ -22,9 +22,9 @@
 
 > **name**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:194](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L194)
+[types.ts:194](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L194)
 
 ---
 
@@ -32,9 +32,9 @@
 
 > **perms**: [`Permission`](../enumerations/Permission.md)[]
 
-#### Source
+#### Defined in
 
-[types.ts:195](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L195)
+[types.ts:195](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L195)
 
 ---
 
@@ -42,6 +42,6 @@
 
 > **type**: [`ProfileType`](../enumerations/ProfileType.md)
 
-#### Source
+#### Defined in
 
-[types.ts:193](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L193)
+[types.ts:193](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L193)

@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
 ---
 
-[Monerium SDK v2.13.0](../README.md) / SupportingDoc
+[Monerium SDK](../README.md) / SupportingDoc
 
 # Interface: SupportingDoc
 
@@ -12,9 +12,9 @@
 
 > **hash**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:429](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L429)
+[types.ts:429](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L429)
 
 ---
 
@@ -22,9 +22,9 @@
 
 > **id**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:425](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L425)
+[types.ts:425](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L425)
 
 ---
 
@@ -32,9 +32,9 @@
 
 > **meta**: [`SupportingDocMetadata`](SupportingDocMetadata.md)
 
-#### Source
+#### Defined in
 
-[types.ts:430](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L430)
+[types.ts:430](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L430)
 
 ---
 
@@ -42,9 +42,9 @@
 
 > **name**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:426](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L426)
+[types.ts:426](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L426)
 
 ---
 
@@ -52,9 +52,9 @@
 
 > **size**: `number`
 
-#### Source
+#### Defined in
 
-[types.ts:428](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L428)
+[types.ts:428](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L428)
 
 ---
 
@@ -62,6 +62,6 @@
 
 > **type**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:427](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L427)
+[types.ts:427](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L427)
