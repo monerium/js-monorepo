@@ -350,10 +350,10 @@ export class MoneriumClient {
    * {@link https://monerium.dev/api-docs#operation/post-orders}
    * @category Orders
    */
-  placeOrder(order: NewOrder, profileId?: string): Promise<Order> {
+  placeOrder(order: NewOrder): Promise<Order> {
+    console.log('order', order);
     const body = {
       kind: 'redeem',
-      currency: 'eur',
       ...mapChainIdToChain(order),
       counterpart: {
         ...order.counterpart,
@@ -361,15 +361,7 @@ export class MoneriumClient {
       },
     };
 
-    if (profileId) {
-      return this.#api<Order>(
-        'post',
-        `profiles/${profileId}/orders`,
-        JSON.stringify(body)
-      );
-    } else {
-      return this.#api<Order>('post', `orders`, JSON.stringify(body));
-    }
+    return this.#api<Order>('post', `orders`, JSON.stringify(body));
   }
 
   /**
