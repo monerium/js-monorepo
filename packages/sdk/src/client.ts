@@ -310,7 +310,8 @@ export class MoneriumClient {
    */
   getOrders(filter?: OrderFilter): Promise<Order[]> {
     const searchParams = urlEncoded(filter as Record<string, string>);
-    return this.#api<Order[]>('get', `orders?${searchParams}`);
+    const url = searchParams ? `orders?${searchParams}` : 'orders';
+    return this.#api<Order[]>('get', url);
   }
   /**
    * {@link https://monerium.dev/api-docs#operation/order}
