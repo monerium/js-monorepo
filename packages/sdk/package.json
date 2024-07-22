@@ -44,8 +44,6 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-localstorage-mock": "^2.4.26",
     "timezone-mock": "^1.3.6",
-    "typedoc": "^0.25.13",
-    "typedoc-plugin-markdown": "^4.0.3",
     "typescript": "latest"
   },
   "engines": {

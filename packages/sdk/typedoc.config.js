@@ -11,7 +11,7 @@ module.exports = {
   out: 'docs/generated',
   readme: 'none',
   // githubPages: true,
-  includeVersion: true,
+  // includeVersion: true, // is this always updating every single page!??!
   cleanOutputDir: true,
   searchInComments: true,
   // entryPoints: [
