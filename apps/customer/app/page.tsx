@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { useMonerium } from '@monerium/sdk-react-provider';
+import { useAuth } from '@monerium/sdk-react-provider';
 
 import { MoneriumConnect } from 'components/MoneriumConnect/MoneriumConnect';
 import { LoadingScreen } from 'src/components/LoadingScreen';
@@ -14,7 +14,7 @@ import { LoadingScreen } from 'src/components/LoadingScreen';
 import s from './page.module.scss';
 
 export default function Home() {
-  const { isAuthorized, loadingAuth } = useMonerium();
+  const { isAuthorized, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function Home() {
     }
   }, [isAuthorized]);
 
-  if (!loadingAuth && !isAuthorized) {
+  if (!isLoading && !isAuthorized) {
     return (
       <Container component="main" maxWidth="md">
         <Box className={s.logoWrapper}>

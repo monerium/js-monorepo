@@ -6,6 +6,8 @@ import {
   useEffect,
   useState,
 } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ListItemText } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
@@ -16,7 +18,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
 
 import { Balances, Currency } from '@monerium/sdk';
-import { useMonerium } from '@monerium/sdk-react-provider';
+import { useBalances } from '@monerium/sdk-react-provider';
 
 import { Account, ChainSelection } from '../types';
 import { flattenSortAndSumBalances } from './utils';
@@ -31,11 +33,16 @@ const WalletList = memo(
     selectedCurrency: Currency;
     setTotalBalance: Dispatch<SetStateAction<number>>;
   }) => {
+    const router = useRouter();
     const [filteredList, setFilteredList] = useState<Account[]>();
-    const { balances, loadingBalances } = useMonerium();
+    const { balances, isLoading: loadingBalances } = useBalances({
+      query: {
+        refetchOnWindowFocus: false,
+      },
+    });
 
     const handleBalanceFiltering = useCallback(() => {
-      let filtered: Balances[] | null = balances;
+      let filtered: Balances[] | undefined = balances;
 
       if (!filtered) return;
       if (selectedChain !== 'all') {
@@ -64,7 +71,10 @@ const WalletList = memo(
             ) : (
               <>
                 {filteredList?.map((account, i) => (
-                  <ListItemButton key={i + account.id}>
+                  <ListItemButton
+                    key={i + account.id}
+                    onClick={() => router.push(`/wallet/${account.address}`)}
+                  >
                     <ListItemAvatar>
                       <Avatar
                         alt="Currency"

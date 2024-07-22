@@ -3,11 +3,11 @@ import React from 'react';
 import Image from 'next/image';
 import Button from '@mui/material/Button';
 
-import { useMonerium } from '@monerium/sdk-react-provider';
+import { useAuth } from '@monerium/sdk-react-provider';
 
 import s from './MoneriumConnect.module.scss';
 export const MoneriumConnect = () => {
-  const { authorize } = useMonerium();
+  const { authorize } = useAuth();
 
   return (
     <div className={s.wrapper}>

@@ -27,20 +27,24 @@
     "dist/index.d.ts"
   ],
   "scripts": {
-    "dev": "tsup --watch",
     "build": "tsup",
+    "dev": "tsup --watch --onSuccess 'pnpm type-map'",
+    "docs": "typedoc",
+    "docs:watch": "typedoc  --watch",
     "lint": "eslint . --fix",
     "pub:pre": "pnpm publish --no-git-checks --dry-run",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "type-map": "tsc --emitDeclarationOnly --declaration"
   },
   "dependencies": {
     "@monerium/sdk": "workspace:latest"
   },
   "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
     "@types/react": "^18.2.61",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.1.0",

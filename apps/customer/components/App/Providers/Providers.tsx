@@ -6,7 +6,6 @@ import { MoneriumProvider } from '@monerium/sdk-react-provider';
 
 import StyleProviders from './Style/StyleProviders';
 import WalletProviders from './Wallet/WalletProviders';
-
 function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WalletProviders>

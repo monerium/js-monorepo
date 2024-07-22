@@ -7,9 +7,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import config from './wagmi.config';
 
-const queryClient = new QueryClient();
-
 function WalletProviders({ children }: { children: React.ReactNode }) {
+  const [queryClient] = React.useState(() => new QueryClient());
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
