@@ -53,7 +53,14 @@ function useSdk(): MoneriumClient | undefined {
  * @example
  * ```ts
  * const { authorize, isAuthorized, isLoading, error } = useAuth();
+ *
+ * authorize(); // Redirects to the Monerium auth flow.
  * ```
+ * @returns {UseAuthReturn}
+ * - `authorize`  - Redirects to the Monerium auth flow.
+ * - `isAuthorized` - Whether the user is authorized.
+ * - `isLoading` - Whether the auth flow is loading.
+ * - `error` - Error message if the auth flow fails.
  */
 export function useAuth(): UseAuthReturn {
   const context = useContext(MoneriumContext);

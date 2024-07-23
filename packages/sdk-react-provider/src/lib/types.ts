@@ -257,8 +257,6 @@ export type {
   AuthContext,
   Balances,
   LinkAddress,
-  LinkedAddress,
-  NewOrder,
   Order,
   OrderState,
   Profile,

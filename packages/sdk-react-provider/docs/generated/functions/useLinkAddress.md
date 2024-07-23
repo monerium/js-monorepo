@@ -2,7 +2,7 @@
 
 # Function: useLinkAddress()
 
-> **useLinkAddress**(`param`: \{`mutation`: [`MutationOptions`](../type-aliases/MutationOptions.md)\<[`LinkedAddress`](../interfaces/LinkedAddress.md), `Error`, [`LinkAddress`](../interfaces/LinkAddress.md)\>;`profileId`: `string`; \}): [`MutationResult`](../type-aliases/MutationResult.md)\<`"linkAddress"`, [`LinkedAddress`](../interfaces/LinkedAddress.md), `Error`, [`LinkAddress`](../interfaces/LinkAddress.md)\>
+> **useLinkAddress**(`param`: \{`mutation`: [`MutationOptions`](../type-aliases/MutationOptions.md)\<`LinkedAddress`, `Error`, [`LinkAddress`](../interfaces/LinkAddress.md)\>;`profileId`: `string`; \}): [`MutationResult`](../type-aliases/MutationResult.md)\<`"linkAddress"`, `LinkedAddress`, `Error`, [`LinkAddress`](../interfaces/LinkAddress.md)\>
 
 # Add address to profile.
 
@@ -10,15 +10,15 @@ When the address has been linked, the relevant profile query will be invalidated
 
 ## Parameters
 
-| Parameter         | Type                                                                                                                                                                 | Description                                                                                                               |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `param`           | `object`                                                                                                                                                             |                                                                                                                           |
-| `param.mutation`? | [`MutationOptions`](../type-aliases/MutationOptions.md)\<[`LinkedAddress`](../interfaces/LinkedAddress.md), `Error`, [`LinkAddress`](../interfaces/LinkAddress.md)\> | See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options. |
-| `param.profileId` | `string`                                                                                                                                                             | Which profile to link the address.                                                                                        |
+| Parameter         | Type                                                                                                                               | Description                                                                                                               |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `param`           | `object`                                                                                                                           |                                                                                                                           |
+| `param.mutation`? | [`MutationOptions`](../type-aliases/MutationOptions.md)\<`LinkedAddress`, `Error`, [`LinkAddress`](../interfaces/LinkAddress.md)\> | See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options. |
+| `param.profileId` | `string`                                                                                                                           | Which profile to link the address.                                                                                        |
 
 ## Returns
 
-[`MutationResult`](../type-aliases/MutationResult.md)\<`"linkAddress"`, [`LinkedAddress`](../interfaces/LinkedAddress.md), `Error`, [`LinkAddress`](../interfaces/LinkAddress.md)\>
+[`MutationResult`](../type-aliases/MutationResult.md)\<`"linkAddress"`, `LinkedAddress`, `Error`, [`LinkAddress`](../interfaces/LinkAddress.md)\>
 
 ## Example
 
@@ -41,4 +41,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:561](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L561)
+[sdk-react-provider/src/lib/hooks.tsx:568](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L568)

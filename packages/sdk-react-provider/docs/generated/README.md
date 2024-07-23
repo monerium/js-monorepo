@@ -26,7 +26,6 @@
 - [AuthContext](interfaces/AuthContext.md)
 - [Balances](interfaces/Balances.md)
 - [LinkAddress](interfaces/LinkAddress.md)
-- [LinkedAddress](interfaces/LinkedAddress.md)
 - [Order](interfaces/Order.md)
 - [Profile](interfaces/Profile.md)
 - [Token](interfaces/Token.md)
@@ -35,7 +34,6 @@
 
 - [MutationOptions](type-aliases/MutationOptions.md)
 - [MutationResult](type-aliases/MutationResult.md)
-- [NewOrder](type-aliases/NewOrder.md)
 - [QueryOptions](type-aliases/QueryOptions.md)
 - [QueryResult](type-aliases/QueryResult.md)
 - [SdkInstance](type-aliases/SdkInstance.md)
