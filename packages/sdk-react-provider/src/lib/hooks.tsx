@@ -26,7 +26,7 @@ import {
 // Query keys
 const keys = {
   getAuthContext: ['monerium-auth-context'],
-  getProfile: ['monerium-profile'],
+  getProfile: (profileId: string) => ['monerium-profile', profileId],
   getProfiles: ['monerium-profiles'],
   getBalances: ['monerium-balances'],
   getTokens: ['monerium-tokens'],
@@ -155,10 +155,17 @@ export function useProfile({
 } = {}): QueryResult<'profile', Profile> {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
+  const { authContext } = useAuthContext();
+
+  const profileIdToUse = profileId || authContext?.defaultProfile;
+
+  if (!profileIdToUse) {
+    throw new Error('Profile id is required');
+  }
 
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getProfile,
+    queryKey: keys.getProfile(profileIdToUse),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -166,14 +173,8 @@ export function useProfile({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      if (!profileId) {
-        const { authContext } = useAuthContext();
-        if (!authContext) {
-          throw new Error('Auth context is not available');
-        }
-        return sdk.getProfile(authContext.defaultProfile);
-      }
-      return sdk.getProfile(profileId);
+
+      return sdk.getProfile(profileIdToUse);
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
@@ -448,6 +449,7 @@ export function useOrders({
 
 /**
  * # Place an order.
+ * When the order has been placed, the orders query will be invalidated and re-fetched.
  *
  * If the order amount is above 15000, a supporting document is required.
  * @group Hooks
@@ -533,6 +535,7 @@ export function usePlaceOrder({
 }
 /**
  * # Add address to profile.
+ * When the address has been linked, the relevant profile query will be invalidated and re-fetched.
  *
  * @group Hooks
  * @param param
@@ -557,7 +560,6 @@ export function usePlaceOrder({
  */
 export function useLinkAddress({
   profileId,
-  // TODO: add missing parameters
   mutation,
 }: {
   profileId: string;
@@ -582,7 +584,7 @@ export function useLinkAddress({
     onSuccess(data, variables, context) {
       // Refetch all orders on success.
       queryClient.invalidateQueries({
-        queryKey: keys.getProfile,
+        queryKey: keys.getProfile(profileId),
       });
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
