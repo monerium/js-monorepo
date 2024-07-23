@@ -1,9 +1,12 @@
+import { createElement } from 'react';
 import '@testing-library/jest-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // eslint-disable-next-line no-redeclare
 import { screen } from '@testing-library/dom';
 import { render, waitFor } from '@testing-library/react';
+import { wrap } from 'module';
 
-import { useMonerium } from './hook';
+import { useAuth, useProfile } from './hooks';
 import { MoneriumProvider } from './provider';
 
 jest.mock('../../../sdk/dist', () => {
@@ -39,9 +42,9 @@ const TestConsumerComponent = () => {
   const {
     authorize,
     isAuthorized,
-    profile,
     // include other pieces of context you want to test
-  } = useMonerium();
+  } = useAuth();
+  const { profile } = useProfile();
 
   return (
     <div>
@@ -55,10 +58,13 @@ const TestConsumerComponent = () => {
 
 describe('MoneriumProvider', () => {
   test('provides context to consumer and allows function calls', async () => {
+    const queryClient = new QueryClient();
     render(
-      <MoneriumProvider>
-        <TestConsumerComponent />
-      </MoneriumProvider>
+      <QueryClientProvider client={queryClient}>
+        <MoneriumProvider>
+          <TestConsumerComponent />
+        </MoneriumProvider>
+      </QueryClientProvider>
     );
 
     // Test initial state
