@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import '@testing-library/jest-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react';
-import console from 'console';
 
 import { LinkAddress, NewOrder } from '@monerium/sdk';
 
@@ -11,9 +10,11 @@ import {
   useAuthContext,
   useBalances,
   useLinkAddress,
+  useOrder,
   useOrders,
   usePlaceOrder,
   useProfile,
+  useProfiles,
   useTokens,
 } from './hooks';
 import { MoneriumProvider } from './provider';
@@ -40,7 +41,9 @@ jest.mock('@monerium/sdk', () => {
     disconnect: jest.fn(),
     getAuthContext: mockHook('mockedAuthContext'),
     getOrders: mockHook('mockedOrders'),
+    getOrder: mockHook('mockedOrder'),
     getProfile: mockHook('mockedProfile'),
+    getProfiles: mockHook('mockedProfiles'),
     getTokens: mockHook('mockedTokens'),
     getBalances: mockHook('mockedBalances'),
     placeOrder: mockHook('mockedPlacedOrder'),
@@ -121,6 +124,41 @@ describe('useAuthContext', () => {
     });
   });
 });
+describe('useOrder', () => {
+  test('returns the order', async () => {
+    const { result } = renderHook(() => useOrder({ orderId: '1234' }), {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.order).toBe('mockedOrder');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+  test('throws an error when trying to skip orderId', async () => {
+    let error = null;
+    renderHook(
+      () => {
+        try {
+          (useOrder as any)();
+        } catch (e) {
+          error = e;
+        }
+      },
+      {
+        wrapper,
+      }
+    );
+    expect((error as unknown as Error).message).toEqual(
+      "Cannot destructure property 'orderId' of 'undefined' as it is undefined."
+    );
+  });
+});
 describe('useOrders', () => {
   test('returns the orders', async () => {
     const { result } = renderHook(() => useOrders(), {
@@ -140,7 +178,7 @@ describe('useOrders', () => {
 });
 describe('useProfile', () => {
   test('returns the profile', async () => {
-    const { result } = renderHook(() => useProfile(), {
+    const { result } = renderHook(() => useProfile({ profileId: '1234' }), {
       wrapper,
     });
 
@@ -150,6 +188,23 @@ describe('useProfile', () => {
 
     await waitFor(() => {
       expect(result.current.profile).toBe('mockedProfile');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+describe('useProfiles', () => {
+  test('returns profiles', async () => {
+    const { result } = renderHook(() => useProfiles(), {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.profiles).toBe('mockedProfiles');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });

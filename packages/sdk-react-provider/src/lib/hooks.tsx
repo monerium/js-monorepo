@@ -27,8 +27,10 @@ import {
 const keys = {
   getAuthContext: ['monerium-auth-context'],
   getProfile: ['monerium-profile'],
+  getProfiles: ['monerium-profiles'],
   getBalances: ['monerium-balances'],
   getTokens: ['monerium-tokens'],
+  getOrder: (orderId: string) => ['monerium-order', orderId],
   getOrders: (filter?: unknown) =>
     filter ? ['monerium-orders', filter] : ['monerium-orders'],
   placeOrder: ['monerium-place-order'],
@@ -65,23 +67,6 @@ export function useAuth(): UseAuthReturn {
     isLoading: context.isLoading,
     error: context.error,
   };
-}
-
-export type Test = {
-  query?: QueryOptions<unknown>;
-};
-/**
- * Testesss
- * @param {Test} params No required parameters.
- * @param {QueryOptions<unknown>} params.query No required parameters.
- */
-export function test({
-  /**
-   * test
-   */
-  query,
-}: Test) {
-  return null;
 }
 
 /**
@@ -128,17 +113,20 @@ export function useAuthContext({
       }
       return sdk.getAuthContext();
     },
-    enabled: !!sdk && isAuthorized && (query?.enabled ?? true),
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
   return {
     authContext: data,
     ...rest,
   };
 }
+
 /**
- * # Get profile
+ * # Get single profile
+ * If no `profileId` is provided, the default profile is used.
  * @group Hooks
- * @param {Object} [params] No required parameters.
+ * @param {Object} params
+ * @param {string} [params.profileId] The id of the profile.
  * @param {QueryOptions<Profile>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
@@ -159,13 +147,14 @@ export function useAuthContext({
  * [Profile interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Profile.md)
  */
 export function useProfile({
+  profileId,
   query,
 }: {
+  profileId?: string;
   query?: QueryOptions<Profile>;
 } = {}): QueryResult<'profile', Profile> {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
-  const { authContext } = useAuthContext();
 
   const { data, ...rest } = useQuery({
     ...query,
@@ -177,25 +166,72 @@ export function useProfile({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      if (!authContext) {
-        throw new Error('Auth context is not available');
+      if (!profileId) {
+        const { authContext } = useAuthContext();
+        if (!authContext) {
+          throw new Error('Auth context is not available');
+        }
+        return sdk.getProfile(authContext.defaultProfile);
       }
-      return sdk.getProfile(authContext.defaultProfile);
+      return sdk.getProfile(profileId);
     },
-    enabled: !!sdk && isAuthorized && !!authContext && (query?.enabled ?? true),
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
   return {
     profile: data,
     ...rest,
   };
 }
-
 /**
- * TODO useProfiles
+ * # Get profiles
+ * @group Hooks
+ * @param {Object} [params] No required parameters.
+ * @param {QueryOptions<Profile[]>} [params.query] {@inheritDoc QueryOptions}
  *
- * TODO change useProfile to accept profileId
- */
+ * @example
+ * ```ts
+ * const {
+ *    profiles, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useProfiles();
+ * ```
 
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs#operation/profiles)
+ *
+ * [Profile interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Profile.md)
+ */
+export function useProfiles({
+  query,
+}: {
+  query?: QueryOptions<Profile[]>;
+} = {}): QueryResult<'profiles', Profile[]> {
+  const { isAuthorized } = useAuth();
+  const sdk = useSdk();
+
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getProfiles,
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+      return sdk.getProfiles();
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+  return {
+    profiles: data,
+    ...rest,
+  };
+}
 /**
  * # Get tokens
  * @group Hooks
@@ -236,7 +272,7 @@ export function useTokens({
       }
       return sdk.getTokens();
     },
-    enabled: !!sdk && isAuthorized && (query?.enabled ?? true),
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
   return {
     tokens: data,
@@ -286,7 +322,7 @@ export function useBalances({
       }
       return sdk.getBalances();
     },
-    enabled: !!sdk && isAuthorized && (query?.enabled ?? true),
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
   return {
     balances: data,
@@ -295,25 +331,71 @@ export function useBalances({
 }
 
 /**
- * TODO: useOrder
+ * # Get single order
+ * @group Hooks
+ * @param {Object} params
+ * @param {Object} params.orderId The id of the order.
+ * @param {QueryOptions<Order>} [params.query] {@inheritDoc QueryOptions}
+ * @example
+ * ```ts
+ * const {
+ *    order, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useOrder();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs#operation/order)
+ *
+ * [Order interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Order.md)
  */
+export function useOrder({
+  orderId,
+  query = {},
+}: {
+  orderId: string;
+  query?: QueryOptions<Order>;
+}): QueryResult<'order', Order> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getOrder(orderId),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+      if (!orderId) {
+        throw new Error('Order id is required');
+      }
 
-type UseOrdersParameters = {
-  orderId?: string;
-  address?: string;
-  txHash?: string;
-  profile?: string;
-  memo?: string;
-  state?: OrderState;
-};
+      return sdk.getOrder(orderId);
+    },
+    enabled: Boolean(sdk && isAuthorized && orderId && (query.enabled ?? true)),
+  });
+  return {
+    order: data,
+    ...rest,
+  };
+}
 
 /**
  * # Get orders
  * @group Hooks
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
- * TODO FILTERS
-
+ * @param {Object} [params.address] Filter based on the blockchain address associated with the order.
+ * @param {Object} [params.memo] Filter by the payment memo/reference..
+ * @param {Object} [params.profile] Filter based on the profile ID associated with the order.
+ * @param {Object} [params.state] Filter based on the state of the order.
+ * @param {Object} [params.txHash] Filter based on the blockchain transaction hash.
+ * @param {QueryOptions<Order[]>} [params.query] {@inheritDoc QueryOptions}
+ *
  * @example
  * ```ts
  * const {
@@ -332,17 +414,20 @@ type UseOrdersParameters = {
  */
 export function useOrders({
   query = {},
-  ...parameters
-}: UseOrdersParameters & {
-  // TODO: destruct filters when I move orderId out to useOrder
-  query?: QueryOptions<Order | Order[]>;
-} = {}): QueryResult<'orders', Order | Order[]> {
-  const { orderId, ...filters } = parameters;
+  ...filters
+}: {
+  query?: QueryOptions<Order[]>;
+  address?: string;
+  txHash?: string;
+  profile?: string;
+  memo?: string;
+  state?: OrderState;
+} = {}): QueryResult<'orders', Order[]> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getOrders(parameters),
+    queryKey: keys.getOrders(filters),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -351,12 +436,9 @@ export function useOrders({
         throw new Error('User not authorized');
       }
 
-      if (orderId) {
-        return sdk.getOrder(orderId);
-      }
       return sdk.getOrders(filters);
     },
-    enabled: !!sdk && isAuthorized && (query.enabled ?? true),
+    enabled: Boolean(sdk && isAuthorized && (query.enabled ?? true)),
   });
   return {
     orders: data,

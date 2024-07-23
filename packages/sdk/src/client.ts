@@ -351,7 +351,6 @@ export class MoneriumClient {
    * @category Orders
    */
   placeOrder(order: NewOrder): Promise<Order> {
-    console.log('order', order);
     const body = {
       kind: 'redeem',
       ...mapChainIdToChain(order),
