@@ -1,11 +1,4 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import {
-  Query,
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
 
 import { MoneriumClient } from '@monerium/sdk';
 
