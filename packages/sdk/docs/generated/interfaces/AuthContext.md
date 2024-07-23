@@ -26,7 +26,7 @@
 
 #### Defined in
 
-[types.ts:203](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L203)
+[types.ts:203](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L203)
 
 ---
 
@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[types.ts:204](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L204)
+[types.ts:204](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L204)
 
 ---
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[types.ts:200](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L200)
+[types.ts:200](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L200)
 
 ---
 
@@ -56,7 +56,7 @@
 
 #### Defined in
 
-[types.ts:201](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L201)
+[types.ts:201](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L201)
 
 ---
 
@@ -66,7 +66,7 @@
 
 #### Defined in
 
-[types.ts:205](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L205)
+[types.ts:205](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L205)
 
 ---
 
@@ -76,7 +76,7 @@
 
 #### Defined in
 
-[types.ts:202](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L202)
+[types.ts:202](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L202)
 
 ---
 
@@ -86,4 +86,4 @@
 
 #### Defined in
 
-[types.ts:199](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/types.ts#L199)
+[types.ts:199](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L199)

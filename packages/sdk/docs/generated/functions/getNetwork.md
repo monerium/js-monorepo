@@ -20,4 +20,4 @@ The Network
 
 ## Defined in
 
-[utils.ts:101](https://github.com/monerium/js-monorepo/blob/b10be252d44a0e68c58bc7ef6fab8947911e4a7a/packages/sdk/src/utils.ts#L101)
+[utils.ts:101](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/utils.ts#L101)
