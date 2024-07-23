@@ -396,7 +396,7 @@ export function usePlaceOrder({
 }: {
   supportingDocument?: File;
   mutation?: MutationOptions<Order, Error, NewOrder>;
-}): MutationResult<'placeOrder', Order, Error, NewOrder> {
+} = {}): MutationResult<'placeOrder', Order, Error, NewOrder> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const queryClient = useQueryClient();

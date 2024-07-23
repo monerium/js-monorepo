@@ -1,51 +1,50 @@
 import { ReactNode } from 'react';
 import '@testing-library/jest-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// eslint-disable-next-line no-redeclare
-import {
-  act,
-  render,
-  renderHook,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
+import console from 'console';
 
-import { useAuth, useAuthContext, useOrders } from './hooks';
+import { LinkAddress, NewOrder } from '@monerium/sdk';
+
+import {
+  useAuth,
+  useAuthContext,
+  useBalances,
+  useLinkAddress,
+  useOrders,
+  usePlaceOrder,
+  useProfile,
+  useTokens,
+} from './hooks';
 import { MoneriumProvider } from './provider';
 
-// import { useMonerium } from './hooks';
-// import { MoneriumProvider } from './provider';
-
 const MS_DELAY = 150;
+
 /**
  * Added a 150ms delay to consistently catch the isLoading state.
  */
 jest.mock('@monerium/sdk', () => {
+  const mockHook = (response: unknown) => {
+    return jest
+      .fn()
+      .mockImplementation(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(() => resolve(response), MS_DELAY)
+          )
+      );
+  };
   const mockMoneriumClient = {
-    authorize: jest.fn().mockResolvedValue(true),
-    getAccess: jest
-      .fn()
-      .mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve(true), 150))
-      ),
+    // authorize: jest.fn().mockResolvedValue(true),
+    getAccess: mockHook(true),
     disconnect: jest.fn(),
-
-    getAuthContext: jest
-      .fn()
-      .mockImplementation(
-        () =>
-          new Promise((resolve) =>
-            setTimeout(() => resolve('mockedAuthContext'), 150)
-          )
-      ),
-    getOrders: jest
-      .fn()
-      .mockImplementation(
-        () =>
-          new Promise((resolve) =>
-            setTimeout(() => resolve('mockedOrders'), 150)
-          )
-      ),
+    getAuthContext: mockHook('mockedAuthContext'),
+    getOrders: mockHook('mockedOrders'),
+    getProfile: mockHook('mockedProfile'),
+    getTokens: mockHook('mockedTokens'),
+    getBalances: mockHook('mockedBalances'),
+    placeOrder: mockHook('mockedPlacedOrder'),
+    linkAddress: mockHook('mockedLinkedAddress'),
   };
 
   return {
@@ -54,16 +53,6 @@ jest.mock('@monerium/sdk', () => {
   };
 });
 
-// const renderWithProvider = (component: React.ReactNode) => {
-//   const queryClient = new QueryClient();
-//   return render(
-//     <MoneriumProvider>
-//       <QueryClientProvider client={queryClient}>
-//         {component}
-//       </QueryClientProvider>
-//     </MoneriumProvider>
-//   );
-// };
 const Providers = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -79,15 +68,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// const UseAuth = () => {
-//   const context = useAuth();
-
-//   return (
-//     <div>
-//       <p data-testid="context">{JSON.stringify(context)}</p>
-//     </div>
-//   );
-// };
 const wrapper = ({ children }: { children: ReactNode }) => (
   <Providers>{children}</Providers>
 );
@@ -109,24 +89,18 @@ describe('useAuth', () => {
   });
 
   test('throws an error when used outside a MoneriumProvider', async () => {
-    // Suppress console error for this test
-    const consoleError = console.error;
-    console.error = jest.fn();
-
     let error = null;
-    try {
-      renderHook(() => useAuth());
-    } catch (e) {
-      error = e;
-    }
-
+    renderHook(() => {
+      try {
+        useAuth();
+      } catch (e) {
+        error = e;
+      }
+    });
     expect(error).toBeDefined();
-    expect((error as Error)?.message).toMatch(
+    expect((error as unknown as Error).message).toEqual(
       'useAuth must be used within a MoneriumProvider'
     );
-
-    // Restore console error
-    console.error = consoleError;
   });
 });
 
@@ -136,7 +110,6 @@ describe('useAuthContext', () => {
       wrapper,
     });
 
-    console.log('result', result.current);
     await waitFor(() => {
       expect(result.current.isLoading).toBe(true);
     });
@@ -149,12 +122,11 @@ describe('useAuthContext', () => {
   });
 });
 describe('useOrders', () => {
-  test('returns the auth context', async () => {
+  test('returns the orders', async () => {
     const { result } = renderHook(() => useOrders(), {
       wrapper,
     });
 
-    console.log('result', result.current);
     await waitFor(() => {
       expect(result.current.isLoading).toBe(true);
     });
@@ -163,6 +135,111 @@ describe('useOrders', () => {
       expect(result.current.orders).toBe('mockedOrders');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+describe('useProfile', () => {
+  test('returns the profile', async () => {
+    const { result } = renderHook(() => useProfile(), {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.profile).toBe('mockedProfile');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+describe('useTokens', () => {
+  test('returns the profile', async () => {
+    const { result } = renderHook(() => useTokens(), {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.tokens).toBe('mockedTokens');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+describe('useBalances', () => {
+  test('returns the profile', async () => {
+    const { result } = renderHook(() => useBalances(), {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.balances).toBe('mockedBalances');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+
+describe('usePlaceOrder', () => {
+  test('places order', async () => {
+    const { result } = renderHook(() => usePlaceOrder(), {
+      wrapper,
+    });
+    const { result: authResult } = renderHook(() => useAuth(), {
+      wrapper,
+    });
+    await waitFor(() => {
+      expect(authResult.current.isAuthorized).toBe(true);
+    });
+
+    result.current.placeOrder({} as NewOrder);
+
+    await waitFor(() => {
+      expect(result.current.isPending).toBe(true);
+      expect(result.current.isSuccess).toBe(false);
+    });
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isPending).toBe(false);
+      expect(result.current.data).toBe('mockedPlacedOrder');
+    });
+  });
+});
+describe('useLinkAddress', () => {
+  test('links address', async () => {
+    const { result } = renderHook(
+      () => useLinkAddress({ profileId: 'profileId-12345' }),
+      {
+        wrapper,
+      }
+    );
+    const { result: authResult } = renderHook(() => useAuth(), {
+      wrapper,
+    });
+    await waitFor(() => {
+      expect(authResult.current.isAuthorized).toBe(true);
+    });
+
+    result.current.linkAddress({} as LinkAddress);
+
+    await waitFor(() => {
+      expect(result.current.isPending).toBe(true);
+      expect(result.current.isSuccess).toBe(false);
+    });
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isPending).toBe(false);
+      expect(result.current.data).toBe('mockedLinkedAddress');
     });
   });
 });
