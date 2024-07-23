@@ -2,7 +2,7 @@
 
 # Function: usePlaceOrder()
 
-> **usePlaceOrder**(`param`: \{`mutation`: [`MutationOptions`](../type-aliases/MutationOptions.md)\<[`Order`](../interfaces/Order.md), `Error`, [`NewOrder`](../type-aliases/NewOrder.md)\>;`supportingDocument`: `File`; \}): [`MutationResult`](../type-aliases/MutationResult.md)\<`"placeOrder"`, [`Order`](../interfaces/Order.md), `Error`, [`NewOrder`](../type-aliases/NewOrder.md)\>
+> **usePlaceOrder**(`param`: \{`mutation`: [`MutationOptions`](../type-aliases/MutationOptions.md)\<[`Order`](../interfaces/Order.md), `Error`, `NewOrder`\>;`supportingDocument`: `File`; \}): [`MutationResult`](../type-aliases/MutationResult.md)\<`"placeOrder"`, [`Order`](../interfaces/Order.md), `Error`, `NewOrder`\>
 
 # Place an order.
 
@@ -12,15 +12,15 @@ If the order amount is above 15000, a supporting document is required.
 
 ## Parameters
 
-| Parameter                   | Type                                                                                                                                             | Description                                                                                                               |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| `param`                     | `object`                                                                                                                                         |                                                                                                                           |
-| `param.mutation`?           | [`MutationOptions`](../type-aliases/MutationOptions.md)\<[`Order`](../interfaces/Order.md), `Error`, [`NewOrder`](../type-aliases/NewOrder.md)\> | See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options. |
-| `param.supportingDocument`? | `File`                                                                                                                                           | Supporting document file.                                                                                                 |
+| Parameter                   | Type                                                                                                              | Description                                                                                                               |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `param`                     | `object`                                                                                                          |                                                                                                                           |
+| `param.mutation`?           | [`MutationOptions`](../type-aliases/MutationOptions.md)\<[`Order`](../interfaces/Order.md), `Error`, `NewOrder`\> | See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options. |
+| `param.supportingDocument`? | `File`                                                                                                            | Supporting document file.                                                                                                 |
 
 ## Returns
 
-[`MutationResult`](../type-aliases/MutationResult.md)\<`"placeOrder"`, [`Order`](../interfaces/Order.md), `Error`, [`NewOrder`](../type-aliases/NewOrder.md)\>
+[`MutationResult`](../type-aliases/MutationResult.md)\<`"placeOrder"`, [`Order`](../interfaces/Order.md), `Error`, `NewOrder`\>
 
 ## Example
 
@@ -43,4 +43,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:477](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L477)
+[sdk-react-provider/src/lib/hooks.tsx:484](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L484)
