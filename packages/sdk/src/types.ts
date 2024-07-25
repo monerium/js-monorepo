@@ -306,7 +306,7 @@ export interface IBAN extends Identifier {
 export interface CrossChain extends Identifier {
   standard: PaymentStandard.chain;
   address: string;
-  chainId: ChainId;
+  chainId?: ChainId;
   /** @deprecated - Use chainId */
   chain?: Chain;
   /** @deprecated - Use chainId */
@@ -498,6 +498,7 @@ export interface AuthFlowOptions {
   signature?: string;
   chainId?: ChainId;
   state?: string;
+  scope?: string; // TODO: 'orders:write' and what more?
 }
 
 export interface ClientCredentials {

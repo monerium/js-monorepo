@@ -37,7 +37,7 @@ import type {
   SupportingDoc,
   Token,
 } from './types';
-import { mapChainIdToChain, urlEncoded } from './utils';
+import { getChain, getNetwork, mapChainIdToChain, urlEncoded } from './utils';
 
 // import pjson from "../package.json";
 const { STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } = constants;
@@ -147,6 +147,7 @@ export class MoneriumClient {
       signature: client?.signature,
       chainId: client?.chainId,
       state: client?.state,
+      scope: client?.scope,
     });
 
     // Redirect to the authFlow

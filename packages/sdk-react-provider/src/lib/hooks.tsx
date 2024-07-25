@@ -69,12 +69,18 @@ function useSdk(): MoneriumClient | undefined {
  * const { authorize, isAuthorized, isLoading, error } = useAuth();
  *
  * authorize(); // Redirects to the Monerium auth flow.
+ *
+ * // To opt-in to automated wallet linking, pass the address, signature and chainId.
+ * authorize({ address, signature, chainId }).
  * ```
+ *
  * @returns {UseAuthReturn}
  * - `authorize`  - Redirects to the Monerium auth flow.
  * - `isAuthorized` - Whether the user is authorized.
  * - `isLoading` - Whether the auth flow is loading.
  * - `error` - Error message if the auth flow fails.
+ * - `disconnect` - Disconnect the user.
+ * - `revokeAccess` - Revoke the user's access.
  */
 export function useAuth(): UseAuthReturn {
   const context = useContext(MoneriumContext);
@@ -87,6 +93,8 @@ export function useAuth(): UseAuthReturn {
     authorize: context.authorize,
     isLoading: context.isLoading,
     error: context.error,
+    disconnect: context.disconnect,
+    revokeAccess: context.revokeAccess,
   };
 }
 

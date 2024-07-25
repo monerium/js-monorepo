@@ -6,17 +6,23 @@ import {
 } from '@tanstack/react-query';
 
 import type MoneriumClient from '@monerium/sdk';
+import { ChainId } from '@monerium/sdk';
 
 export type SdkInstance = {
   /** Monerium SDK instance. */
   sdk?: MoneriumClient;
 };
 
+export type AuthorizeParams =
+  | { address: string; signature: string; chainId?: ChainId }
+  | { state?: string; scope?: string }
+  | {};
+
 export type UseAuthReturn = {
   /**
    * Constructs the url and redirects to the Monerium auth flow.
    */
-  authorize: () => Promise<void>;
+  authorize: (params?: AuthorizeParams) => Promise<void>;
   /**
    * Indicates whether the SDK is authorized.
    */
@@ -27,6 +33,9 @@ export type UseAuthReturn = {
   isLoading: boolean;
 
   error: unknown;
+
+  disconnect: () => Promise<void>;
+  revokeAccess: () => Promise<void>;
 };
 
 /**
