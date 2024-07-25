@@ -361,15 +361,7 @@ export class MoneriumClient {
       },
     };
 
-    if (profileId) {
-      return this.#api<Order>(
-        'post',
-        `profiles/${profileId}/orders`,
-        JSON.stringify(body)
-      );
-    } else {
-      return this.#api<Order>('post', `orders`, JSON.stringify(body));
-    }
+    return this.#api<Order>('post', `orders`, JSON.stringify(body));
   }
 
   /**
