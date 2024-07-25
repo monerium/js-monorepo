@@ -12,7 +12,7 @@ export type EthereumTestnet = 'sepolia';
 export type GnosisTestnet = 'chiado';
 export type PolygonTestnet = 'amoy';
 
-export type Chain = 'ethereum' | 'gnosis' | 'polygon';
+export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'gnosismainnet';
 export type Networks =
   | EthereumTestnet
   | GnosisTestnet
