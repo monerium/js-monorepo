@@ -284,6 +284,13 @@ export class MoneriumClient {
     return this.#api<Profile>('get', `profiles/${profileId}`);
   }
   /**
+   * {@link https://monerium.dev/api-docs#operation/profiles}
+   * @category Profiles
+   */
+  getProfiles(): Promise<Profile[]> {
+    return this.#api<Profile[]>('get', `profiles`);
+  }
+  /**
    * {@link https://monerium.dev/api-docs#operation/profile-balances}
    * @param {string=} profileId - the id of the profile to fetch balances.
    * @category Accounts
