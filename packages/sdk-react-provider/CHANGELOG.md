@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.1.2...sdk-react-provider-v0.2.0) (2024-07-25)
+
+
+### Features
+
+* **sdk-react-provider:** complete refactor to use react-query async state management ([8bda8a7](https://github.com/monerium/js-monorepo/commit/8bda8a7cc6a6fe42449990825db14090c3948f69))
+
 ## [0.1.2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.1.1...sdk-react-provider-v0.1.2) (2024-06-20)
 
 
