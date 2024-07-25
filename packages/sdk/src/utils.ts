@@ -35,21 +35,27 @@ export const rfc3339 = (d: Date) => {
 
 /**
  * The message to be signed when placing an order.
- *
+ * @param amount The amount to be sent
+ * @param currency The currency to be sent
+ * @param receiver The receiver of the funds
+ * @param chain The chainId of the network if it's a cross-chain transaction
  * @returns string
  */
 export const placeOrderMessage = (
   amount: string | number,
+  currency: 'eur' | 'gbp' | 'usd' | 'isk',
   receiver: string,
-  chainId?: number,
-  currency?: 'eur' | 'gbp' | 'usd' | 'isk'
+  chain?: ChainId | Chain
 ) => {
   const curr = `${currency?.toUpperCase() || 'EUR'}`;
 
+  let chainId = chain;
+
+  if (typeof chain === 'number') {
+    chainId = getChain(chain);
+  }
   if (chainId) {
-    return `Send ${curr} ${amount} to ${receiver} on ${getChain(
-      chainId
-    )} at ${rfc3339(new Date())}`;
+    return `Send ${curr} ${amount} to ${receiver} on ${chainId} at ${rfc3339(new Date())}`;
   }
   return `Send ${curr} ${amount} to ${receiver} at ${rfc3339(new Date())}`;
 };

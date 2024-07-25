@@ -54,7 +54,11 @@ describe('rfc3339', () => {
 
 describe('getMessage', () => {
   test('should format message with valid inputs', () => {
-    const message = placeOrderMessage(100, 'DE89370400440532013000');
+    const message = placeOrderMessage(
+      100,
+      'eur' as Currency,
+      'DE89370400440532013000'
+    );
     expect(message).toMatch(
       /^Send EUR 100 to DE89370400440532013000 at \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[-+]\d{2}:\d{2})$/
     );
@@ -236,7 +240,7 @@ describe('placeOrderMessage', () => {
   test('should format message with valid inputs', () => {
     const amount = 100;
     const iban = 'DE89370400440532013000';
-    const message = placeOrderMessage(amount, iban);
+    const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
       new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
     );
@@ -245,7 +249,7 @@ describe('placeOrderMessage', () => {
   test('should handle string amount', () => {
     const amount = '100';
     const iban = 'DE89370400440532013000';
-    const message = placeOrderMessage(amount, iban);
+    const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
       new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
     );
@@ -254,7 +258,7 @@ describe('placeOrderMessage', () => {
   test('should handle number amount', () => {
     const amount = 100;
     const iban = 'DE89370400440532013000';
-    const message = placeOrderMessage(amount, iban);
+    const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
       new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
     );
@@ -263,7 +267,12 @@ describe('placeOrderMessage', () => {
     const amount = 100;
     const receiver = 'DE89370400440532013000';
     const chainId = 137;
-    const message = placeOrderMessage(amount, receiver, chainId);
+    const message = placeOrderMessage(
+      amount,
+      'eur' as Currency,
+      receiver,
+      chainId
+    );
     expect(message).toMatch(
       new RegExp(
         `^Send EUR ${amount} to ${receiver} on polygon at ${timestampRegex}$`
@@ -275,8 +284,12 @@ describe('placeOrderMessage', () => {
     const amount = 100;
     const receiver = 'DE89370400440532013000';
     const chainId = 137;
-    const currency = 'gbp';
-    const message = placeOrderMessage(amount, receiver, chainId, currency);
+    const message = placeOrderMessage(
+      amount,
+      'gbp' as Currency,
+      receiver,
+      chainId
+    );
     expect(message).toMatch(
       new RegExp(
         `^Send GBP ${amount} to ${receiver} on polygon at ${timestampRegex}$`
