@@ -14,7 +14,7 @@
 
 #### Defined in
 
-[types.ts:127](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L127)
+[types.ts:127](https://github.com/monerium/js-monorepo/blob/daf0515eb0b1bfcdd9bd49ef605447668fdb0f6a/packages/sdk/src/types.ts#L127)
 
 ---
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[types.ts:129](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L129)
+[types.ts:129](https://github.com/monerium/js-monorepo/blob/daf0515eb0b1bfcdd9bd49ef605447668fdb0f6a/packages/sdk/src/types.ts#L129)
 
 ---
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[types.ts:131](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L131)
+[types.ts:131](https://github.com/monerium/js-monorepo/blob/daf0515eb0b1bfcdd9bd49ef605447668fdb0f6a/packages/sdk/src/types.ts#L131)
 
 ---
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[types.ts:130](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L130)
+[types.ts:130](https://github.com/monerium/js-monorepo/blob/daf0515eb0b1bfcdd9bd49ef605447668fdb0f6a/packages/sdk/src/types.ts#L130)
 
 ---
 
@@ -54,7 +54,7 @@
 
 #### Defined in
 
-[types.ts:128](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L128)
+[types.ts:128](https://github.com/monerium/js-monorepo/blob/daf0515eb0b1bfcdd9bd49ef605447668fdb0f6a/packages/sdk/src/types.ts#L128)
 
 ---
 
@@ -64,4 +64,4 @@
 
 #### Defined in
 
-[types.ts:132](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/types.ts#L132)
+[types.ts:132](https://github.com/monerium/js-monorepo/blob/daf0515eb0b1bfcdd9bd49ef605447668fdb0f6a/packages/sdk/src/types.ts#L132)

@@ -63,4 +63,4 @@ See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework
 
 ## Defined in
 
-[sdk-react-provider/src/lib/types.ts:140](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/types.ts#L140)
+[sdk-react-provider/src/lib/types.ts:149](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/types.ts#L149)

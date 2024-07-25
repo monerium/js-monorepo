@@ -14,6 +14,8 @@
 - `isAuthorized` - Whether the user is authorized.
 - `isLoading` - Whether the auth flow is loading.
 - `error` - Error message if the auth flow fails.
+- `disconnect` - Disconnect the user.
+- `revokeAccess` - Revoke the user's access.
 
 ## Example
 
@@ -25,4 +27,4 @@ authorize(); // Redirects to the Monerium auth flow.
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:65](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L65)
+[sdk-react-provider/src/lib/hooks.tsx:82](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L82)
