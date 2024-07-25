@@ -545,6 +545,17 @@ export class MoneriumClient {
       this.#socket = undefined;
     }
   }
+  // -- Deprecated methods
+
+  /**
+   * @deprecated since v2.6.4, will be removed in 2.7.2+, use {@link authorize} instead.
+   * @hidden
+   */
+  getAuthFlowURI = (args: PKCERequestArgs): string => {
+    const url = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, args);
+    this.codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER) as string;
+    return url;
+  };
 
   // -- Getters (mainly for testing)
   /**
