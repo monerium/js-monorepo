@@ -65,9 +65,9 @@ const Providers = ({ children }: { children: ReactNode }) => {
     },
   });
   return (
-    <MoneriumProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </MoneriumProvider>
+    <QueryClientProvider client={queryClient}>
+      <MoneriumProvider>{children}</MoneriumProvider>
+    </QueryClientProvider>
   );
 };
 
