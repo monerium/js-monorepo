@@ -17,10 +17,15 @@
       "package-name": "customer"
     },
     "packages/sdk": {
-      "package-name": "@monerium/sdk"
+      "package-name": "@monerium/sdk",
+      "exclude-paths": ["packages/sdk/docs", "packages/sdk/README.md"]
     },
     "packages/sdk-react-provider": {
-      "package-name": "@monerium/sdk-react-provider"
+      "package-name": "@monerium/sdk-react-provider",
+      "exclude-paths": [
+        "packages/sdk-react-provider/docs",
+        "packages/sdk-react-provider/README.md"
+      ]
     }
   },
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/v16.10.2/schemas/config.json"

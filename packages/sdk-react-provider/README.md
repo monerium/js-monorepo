@@ -75,16 +75,16 @@ root.render(
 
 The following hooks are now available within your application:
 
-[useAuth](./docs/generated/functions/useAuth.md)</br>
-[useAuthContext](./docs/generated/functions/useAuthContext.md)</br>
-[useBalances](./docs/generated/functions/useBalances.md)</br>
-[useLinkAddress](./docs/generated/functions/useLinkAddress.md)</br>
-[useOrder](./docs/generated/functions/useOrder.md)</br>
-[useOrders](./docs/generated/functions/useOrders.md)</br>
-[usePlaceOrder](./docs/generated/functions/usePlaceOrder.md)</br>
-[useProfile](./docs/generated/functions/useProfile.md)</br>
-[useProfiles](./docs/generated/functions/useProfiles.md)</br>
-[useTokens](./docs/generated/functions/useTokens.md)</br>
+- [useAuth](./docs/generated/functions/useAuth.md)</br>
+- [useAuthContext](./docs/generated/functions/useAuthContext.md)</br>
+- [useBalances](./docs/generated/functions/useBalances.md)</br>
+- [useLinkAddress](./docs/generated/functions/useLinkAddress.md)</br>
+- [useOrder](./docs/generated/functions/useOrder.md)</br>
+- [useOrders](./docs/generated/functions/useOrders.md)</br>
+- [usePlaceOrder](./docs/generated/functions/usePlaceOrder.md)</br>
+- [useProfile](./docs/generated/functions/useProfile.md)</br>
+- [useProfiles](./docs/generated/functions/useProfiles.md)</br>
+- [useTokens](./docs/generated/functions/useTokens.md)</br>
 
 ### Example
 
