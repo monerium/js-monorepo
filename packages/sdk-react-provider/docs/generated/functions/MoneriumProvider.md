@@ -20,4 +20,4 @@
 
 ## Defined in
 
-[sdk-react-provider/src/lib/provider.tsx:17](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/provider.tsx#L17)
+[sdk-react-provider/src/lib/provider.tsx:20](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/provider.tsx#L20)

@@ -2,16 +2,17 @@
 
 # Function: useBalances()
 
-> **useBalances**(`params`?: \{`query`: [`QueryOptions`](../type-aliases/QueryOptions.md)\<[`Balances`](../interfaces/Balances.md)[]\>; \}): [`QueryResult`](../type-aliases/QueryResult.md)\<`"balances"`, [`Balances`](../interfaces/Balances.md)[]\>
+> **useBalances**(`params`?: \{`profileId`: `string`;`query`: [`QueryOptions`](../type-aliases/QueryOptions.md)\<[`Balances`](../interfaces/Balances.md)[]\>; \}): [`QueryResult`](../type-aliases/QueryResult.md)\<`"balances"`, [`Balances`](../interfaces/Balances.md)[]\>
 
 # Get balances
 
 ## Parameters
 
-| Parameter       | Type                                                                                           | Description                                                                                                         |
-| --------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `params`?       | `object`                                                                                       | No required parameters.                                                                                             |
-| `params.query`? | [`QueryOptions`](../type-aliases/QueryOptions.md)\<[`Balances`](../interfaces/Balances.md)[]\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+| Parameter           | Type                                                                                           | Description                                                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `params`?           | `object`                                                                                       | No required parameters.                                                                                             |
+| `params.profileId`? | `string`                                                                                       | Fetch balances for a specific profile.                                                                              |
+| `params.query`?     | [`QueryOptions`](../type-aliases/QueryOptions.md)\<[`Balances`](../interfaces/Balances.md)[]\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
 
 ## Returns
 
@@ -38,4 +39,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:313](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L313)
+[sdk-react-provider/src/lib/hooks.tsx:334](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L334)

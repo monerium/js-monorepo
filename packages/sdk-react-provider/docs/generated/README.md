@@ -20,6 +20,7 @@
 ## Variables
 
 - [MoneriumContext](variables/MoneriumContext.md)
+- [keys](variables/keys.md)
 
 ## Interfaces
 
@@ -32,6 +33,7 @@
 
 ## Type Aliases
 
+- [AuthorizeParams](type-aliases/AuthorizeParams.md)
 - [MutationOptions](type-aliases/MutationOptions.md)
 - [MutationResult](type-aliases/MutationResult.md)
 - [QueryOptions](type-aliases/QueryOptions.md)

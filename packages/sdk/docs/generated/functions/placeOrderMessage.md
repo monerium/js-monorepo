@@ -6,17 +6,17 @@
 
 # Function: placeOrderMessage()
 
-> **placeOrderMessage**(`amount`, `receiver`, `chainId`?, `currency`?): `string`
+> **placeOrderMessage**(`amount`, `currency`, `receiver`, `chain`?): `string`
 
 ## Parameters
 
 • **amount**: `string` \| `number`
 
+• **currency**: [`Currency`](../enumerations/Currency.md)
+
 • **receiver**: `string`
 
-• **chainId?**: `number`
-
-• **currency?**: `"eur"` \| `"usd"` \| `"gbp"` \| `"isk"`
+• **chain?**: `number` \| [`Chain`](../type-aliases/Chain.md)
 
 ## Returns
 
@@ -26,4 +26,4 @@ string
 
 ## Defined in
 
-[utils.ts:41](https://github.com/monerium/js-monorepo/blob/6fd0ad80ad4e8d991580cbeedf4372ce7e758e51/packages/sdk/src/utils.ts#L41)
+[utils.ts:41](https://github.com/monerium/js-monorepo/blob/daf0515eb0b1bfcdd9bd49ef605447668fdb0f6a/packages/sdk/src/utils.ts#L41)
