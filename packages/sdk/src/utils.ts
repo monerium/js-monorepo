@@ -43,7 +43,7 @@ export const rfc3339 = (d: Date) => {
  */
 export const placeOrderMessage = (
   amount: string | number,
-  currency: 'eur' | 'gbp' | 'usd' | 'isk',
+  currency: Currency,
   receiver: string,
   chain?: ChainId | Chain
 ) => {
