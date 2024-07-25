@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.13.2](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.1...sdk-v2.13.2) (2024-07-25)
+
+
+### Bug Fixes
+
+* crypto-js import ([#77](https://github.com/monerium/js-monorepo/issues/77)) ([c4fe4a7](https://github.com/monerium/js-monorepo/commit/c4fe4a7aa6e4691e65550aa0d5ac7a00c6cdd2e3))
+* reenable tests ([8374e12](https://github.com/monerium/js-monorepo/commit/8374e1294c137cf0b30049a7876bd28bd1221ec6))
+* **sdk:** expect the v2 address ([c9d5c82](https://github.com/monerium/js-monorepo/commit/c9d5c82c64106342ceb8c1429ab330ef6599e171))
+* **sdk:** skip all client.tests, probably failing because of recent ddos attack ([ea2475b](https://github.com/monerium/js-monorepo/commit/ea2475b65af751b449eb9456baf99319dd3ff589))
+* **sdk:** skip bundle smpke test, probably not working in pipeline because of recent ddos attacks ([d7dd2f3](https://github.com/monerium/js-monorepo/commit/d7dd2f31ee14faec91d785d992389ffb611f1f1f))
+
 ## [2.13.1](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.0...sdk-v2.13.1) (2024-06-20)
 
 
