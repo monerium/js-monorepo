@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-/** @namespace */
 import MoneriumClient, {
   AuthContext,
   Balances,
@@ -164,11 +163,7 @@ export function useProfile({
   const sdk = useSdk();
   const { authContext } = useAuthContext();
 
-  const profileIdToUse = profileId || authContext?.defaultProfile;
-
-  if (!profileIdToUse) {
-    throw new Error('Profile id is required');
-  }
+  const profileIdToUse = profileId || (authContext?.defaultProfile as string);
 
   const { data, ...rest } = useQuery({
     ...query,
@@ -180,10 +175,15 @@ export function useProfile({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
+      if (!profileIdToUse) {
+        throw new Error('Profile Id is required');
+      }
 
       return sdk.getProfile(profileIdToUse);
     },
-    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+    enabled: Boolean(
+      sdk && isAuthorized && profileIdToUse && (query?.enabled ?? true)
+    ),
   });
   return {
     profile: data,
