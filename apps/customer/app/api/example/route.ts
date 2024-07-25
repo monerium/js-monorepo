@@ -1,6 +1,6 @@
-import { cookies } from 'next/headers';
+// import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import cookie from 'cookie';
+// import cookie from 'cookie';´
 
 export async function POST(req: NextRequest) {
   const requestBody = await req.json();
@@ -24,10 +24,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const { 'session-id': sessionId, ...cookieOptions } = cookie.parse(
-      response.headers.get('set-cookie')
-    );
-    cookies().set('session-id', sessionId, cookieOptions);
+    // const { 'session-id': sessionId, ...cookieOptions } = cookie.parse(
+    //   response.headers.get('set-cookie')
+    // );
+    // cookies().set('session-id', sessionId, cookieOptions);
 
     return new NextResponse(JSON.stringify(response), {
       status: 200,
