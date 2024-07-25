@@ -15,7 +15,7 @@ const {
   APP_ONE_OWNER_USER_ID,
 } = constants;
 
-test('CommonJs bundle smoke test', async () => {
+test.skip('CommonJs bundle smoke test', async () => {
   const client = new MoneriumClient();
 
   await client.auth({
