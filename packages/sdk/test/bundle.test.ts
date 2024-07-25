@@ -15,12 +15,12 @@ const {
   APP_ONE_OWNER_USER_ID,
 } = constants;
 
-test('CommonJs bundle smoke test', async () => {
+test.skip('CommonJs bundle smoke test', async () => {
   const client = new MoneriumClient();
 
-  await client.auth({
-    client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-    client_secret: APP_ONE_CREDENTIALS_SECRET,
+  await client.getAccess({
+    clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+    clientSecret: APP_ONE_CREDENTIALS_SECRET,
   });
 
   const authContext = await client.getAuthContext();

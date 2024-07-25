@@ -3,17 +3,43 @@
 
 # Monerium SDK Documentation
 
+  <a href="https://monerium.dev/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7">
+      <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge">
+    </picture>
+  </a>
+  <a href="https://monerium.dev/api-docs">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7">
+      <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge">
+    </picture>
+  </a>
+  </br>
+    <a href="https://www.npmjs.com/package/@monerium/sdk">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=2c6ca7&colorB=21262d">
+      <img src="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=f6f8fa&colorB=f6f8fa" alt="Version">
+    </picture>
+  </a>
+  <a href="https://github.com/monerium/js-monorepo/issues>
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d">
+      <img src="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d" alt="Version">
+    </picture>
+  </a>
+
+## Introduction
+
 Monerium connects your web3 wallet to any euro bank account with your personal IBAN.
 All incoming euro payments are automatically minted as EURe tokens to your wallet.
 Sending EURe to traditional bank accounts is just as easy.
 With a single signature from your wallet, your EURe is burned and sent as Euros to any bank account.
 
-## Useful resources
+## Documentation
 
 - [Documentation](./docs/generated/README.md)
-- [API Documentation](https://monerium.dev/api-docs)
-- [Developer portal](https://monerium.dev/')
-- [NPM](https://www.npmjs.com/package/@monerium/sdk)
+- [Documentation - MoneriumClient](./docs/generated/classes/MoneriumClient.md)
 
 ## Table of Contents
 
@@ -85,8 +111,8 @@ const { access_token, refresh_token } = monerium.bearerProfile as BearerProfile;
 
 Interfaces:
 
-- {@link client.MoneriumClient}
-- {@link types.BearerProfile}
+- [MoneriumClient](./docs/generated/classes/MoneriumClient.md)
+- [BearerProfile](./docs/generated/interfaces/BearerProfile.md)
 
 API documentation:
 
@@ -157,8 +183,8 @@ export function App() {
 
 Interfaces:
 
-- {@link types.AuthCodeRequest}
-- {@link types.BearerProfile}
+- [AuthCodeRequest](./docs/generated/interfaces/AuthCodeRequest.md)
+- [BearerProfile](./docs/generated/interfaces/BearerProfile.md)
 
 API documentation:
 
@@ -183,9 +209,9 @@ const balances: Balances = await monerium.getBalances(profileId);
 
 Interfaces:
 
-- {@link types.AuthContext}
-- {@link types.Profile}
-- {@link types.Balances}
+- [AuthContext](./docs/generated/interfaces/AuthContext.md)
+- [Profile](./docs/generated/interfaces/Profile.md)
+- [Balances](./docs/generated/interfaces/Balances.md)
 
 API documentation:
 
@@ -203,7 +229,7 @@ const tokens: Token[] = await monerium.getTokens();
 
 Interfaces:
 
-- {@link types.Token}
+- [Token](./docs/generated/interfaces/Token.md)
 
 API documentation:
 
@@ -234,15 +260,15 @@ await monerium.linkAddress(profileId, {
   message: LINK_MESSAGE
   signature,
   accounts: [
-    {"currency":"eur","chain":"ethereum","network":"sepolia"},
-    {"currency":"eur","chain":"gnosis","network":"chiado"}
+    {"currency":"eur","chain":"ethereum"},
+    {"currency":"eur","chain":"gnosis"}
   ],
 } as LinkAddress);
 ```
 
 Interfaces:
 
-- {@link types.LinkAddress}
+- [LinkAddress](./docs/generated/interfaces/LinkAddress.md)
 
 API documentation:
 
@@ -264,7 +290,7 @@ const amount = '100'; // replace with the amount in EUR
 const iban = 'EE12341234123412341234'; // replace with requested IBAN
 
 // First you have to form the message that will be signed by the user
-const message = placeOrderMessage(amount, iban);
+const message = placeOrderMessage(amount, 'eur', iban);
 
 // The message should look like this, with the current date and time in RFC3339 format:
 // Send EUR 100 to EE12341234123412341234 at Thu, 29 Dec 2022 14:58:29Z
@@ -278,6 +304,7 @@ const signature = await walletClient.signMessage({
 const order = await monerium.placeOrder({
   amount,
   signature,
+  currency: 'eur',
   address: '0xUserAddress72413Fa92980B889A1eCE84dD', // user wallet address
   counterpart: {
     identifier: {
@@ -300,8 +327,8 @@ const order = await monerium.placeOrder({
 
 Interfaces:
 
-- {@link types.Order}
-- {@link types.PaymentStandard}
+- [Order](./docs/generated/interfaces/Order.md)
+- [PaymentStandard](./docs/generated/enumerations/PaymentStandard.md)
 
 API documentation:
 
@@ -320,7 +347,7 @@ const supportingDocumentId: SupportingDoc =
 
 Interfaces:
 
-- {@link types.SupportingDoc}
+- [SupportingDoc](./docs/generated/interfaces/SupportingDoc.md)
 
 API documentation:
 
@@ -382,8 +409,6 @@ pnpm build
 ### Documentation
 
 Refer to [Typedocs](https://typedoc.org/) syntaxes to use for this [documentation](https://monerium.github.io/js-monorepo/).
-
-There is a Github action that will automatically run on the successful release of the SDK. It will generate a static output of the documentation and push it to the `gh-pages` branch. The documentation is then available at https://monerium.github.io/js-monorepo/.
 
 #### Publishing
 

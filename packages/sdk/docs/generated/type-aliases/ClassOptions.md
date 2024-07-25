@@ -1,10 +1,10 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / ClassOptions
+[Monerium SDK](../README.md) / ClassOptions
 
-# Type alias: ClassOptions
+# Type Alias: ClassOptions
 
 > **ClassOptions**: `object` & [`BearerTokenCredentials`](BearerTokenCredentials.md)
 
@@ -14,6 +14,6 @@
 
 > `optional` **environment**: [`ENV`](ENV.md)
 
-## Source
+## Defined in
 
-[types.ts:479](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L479)
+[types.ts:485](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L485)

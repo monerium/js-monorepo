@@ -1,13 +1,13 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / BearerTokenCredentials
+[Monerium SDK](../README.md) / BearerTokenCredentials
 
-# Type alias: BearerTokenCredentials
+# Type Alias: BearerTokenCredentials
 
 > **BearerTokenCredentials**: [`ClientCredentials`](../interfaces/ClientCredentials.md) \| [`AuthorizationCodeCredentials`](../interfaces/AuthorizationCodeCredentials.md)
 
-## Source
+## Defined in
 
-[types.ts:502](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L502)
+[types.ts:509](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L509)

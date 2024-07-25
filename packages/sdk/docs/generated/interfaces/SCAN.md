@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / SCAN
+[Monerium SDK](../README.md) / SCAN
 
 # Interface: SCAN
 
@@ -16,11 +16,11 @@
 
 > **accountNumber**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:319](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L319)
+[types.ts:317](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L317)
 
----
+***
 
 ### bic?
 
@@ -30,21 +30,21 @@
 
 [`Identifier`](Identifier.md).[`bic`](Identifier.md#bic)
 
-#### Source
+#### Defined in
 
-[types.ts:242](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L242)
+[types.ts:241](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L241)
 
----
+***
 
 ### sortCode
 
 > **sortCode**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:318](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L318)
+[types.ts:316](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L316)
 
----
+***
 
 ### standard
 
@@ -54,6 +54,6 @@
 
 [`Identifier`](Identifier.md).[`standard`](Identifier.md#standard)
 
-#### Source
+#### Defined in
 
-[types.ts:317](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L317)
+[types.ts:315](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L315)

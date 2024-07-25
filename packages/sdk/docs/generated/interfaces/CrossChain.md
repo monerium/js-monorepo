@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / CrossChain
+[Monerium SDK](../README.md) / CrossChain
 
 # Interface: CrossChain
 
@@ -16,11 +16,11 @@
 
 > **address**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:308](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L308)
+[types.ts:307](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L307)
 
----
+***
 
 ### bic?
 
@@ -30,35 +30,31 @@
 
 [`Identifier`](Identifier.md).[`bic`](Identifier.md#bic)
 
-#### Source
+#### Defined in
 
-[types.ts:242](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L242)
+[types.ts:241](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L241)
 
----
+***
 
-### ~~chain?~~
+### chain?
 
 > `optional` **chain**: [`Chain`](../type-aliases/Chain.md)
 
-#### Deprecated
+#### Defined in
 
-- Use chainId
+[types.ts:309](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L309)
 
-#### Source
+***
 
-[types.ts:311](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L311)
+### chainId?
 
----
+> `optional` **chainId**: `number`
 
-### chainId
+#### Defined in
 
-> **chainId**: `number`
+[types.ts:308](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L308)
 
-#### Source
-
-[types.ts:309](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L309)
-
----
+***
 
 ### ~~network?~~
 
@@ -66,13 +62,13 @@
 
 #### Deprecated
 
-- Use chainId
+- Use 'chainId' or 'chain'
 
-#### Source
+#### Defined in
 
-[types.ts:313](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L313)
+[types.ts:311](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L311)
 
----
+***
 
 ### standard
 
@@ -82,6 +78,6 @@
 
 [`Identifier`](Identifier.md).[`standard`](Identifier.md#standard)
 
-#### Source
+#### Defined in
 
-[types.ts:307](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L307)
+[types.ts:306](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L306)

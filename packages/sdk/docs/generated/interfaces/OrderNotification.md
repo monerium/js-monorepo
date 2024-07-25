@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / OrderNotification
+[Monerium SDK](../README.md) / OrderNotification
 
 # Interface: OrderNotification
 
@@ -12,136 +12,136 @@
 
 > **accountId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:461](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L461)
+[types.ts:467](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L467)
 
----
+***
 
 ### address
 
 > **address**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:462](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L462)
+[types.ts:468](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L468)
 
----
+***
 
 ### amount
 
 > **amount**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:464](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L464)
+[types.ts:470](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L470)
 
----
+***
 
 ### counterpart
 
 > **counterpart**: [`Counterpart`](Counterpart.md)
 
-#### Source
+#### Defined in
 
-[types.ts:468](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L468)
+[types.ts:474](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L474)
 
----
+***
 
 ### currency
 
 > **currency**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:465](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L465)
+[types.ts:471](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L471)
 
----
+***
 
 ### fees
 
 > **fees**: [`Fee`](Fee.md)[]
 
-#### Source
+#### Defined in
 
-[types.ts:467](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L467)
+[types.ts:473](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L473)
 
----
+***
 
 ### id
 
 > **id**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:459](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L459)
+[types.ts:465](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L465)
 
----
+***
 
 ### kind
 
 > **kind**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:463](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L463)
+[types.ts:469](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L469)
 
----
+***
 
 ### memo
 
 > **memo**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:469](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L469)
+[types.ts:475](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L475)
 
----
+***
 
 ### meta
 
 > **meta**: [`OrderMetadata`](OrderMetadata.md)
 
-#### Source
+#### Defined in
 
-[types.ts:472](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L472)
+[types.ts:478](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L478)
 
----
+***
 
 ### profile
 
 > **profile**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:460](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L460)
+[types.ts:466](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L466)
 
----
+***
 
 ### rejectedReason
 
 > **rejectedReason**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:470](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L470)
+[types.ts:476](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L476)
 
----
+***
 
 ### supportingDocumentId
 
 > **supportingDocumentId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:471](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L471)
+[types.ts:477](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L477)
 
----
+***
 
 ### totalFee
 
 > **totalFee**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:466](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L466)
+[types.ts:472](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L472)

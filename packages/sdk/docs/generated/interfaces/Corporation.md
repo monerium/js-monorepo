@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Corporation
+[Monerium SDK](../README.md) / Corporation
 
 # Interface: Corporation
 
@@ -12,16 +12,16 @@
 
 > **companyName**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:329](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L329)
+[types.ts:327](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L327)
 
----
+***
 
 ### country
 
 > **country**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:330](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L330)
+[types.ts:328](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L328)

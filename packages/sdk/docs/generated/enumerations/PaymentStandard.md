@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / PaymentStandard
+[Monerium SDK](../README.md) / PaymentStandard
 
 # Enumeration: PaymentStandard
 
@@ -12,26 +12,26 @@
 
 > **chain**: `"chain"`
 
-#### Source
+#### Defined in
 
-[types.ts:237](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L237)
+[types.ts:236](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L236)
 
----
+***
 
 ### iban
 
 > **iban**: `"iban"`
 
-#### Source
+#### Defined in
 
-[types.ts:235](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L235)
+[types.ts:234](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L234)
 
----
+***
 
 ### scan
 
 > **scan**: `"scan"`
 
-#### Source
+#### Defined in
 
-[types.ts:236](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L236)
+[types.ts:235](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L235)

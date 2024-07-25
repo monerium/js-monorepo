@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Method
+[Monerium SDK](../README.md) / Method
 
 # Enumeration: Method
 
@@ -12,36 +12,36 @@
 
 > **apiKey**: `"apiKey"`
 
-#### Source
+#### Defined in
 
-[types.ts:178](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L178)
+[types.ts:177](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L177)
 
----
+***
 
 ### jwt
 
 > **jwt**: `"jwt"`
 
-#### Source
+#### Defined in
 
-[types.ts:177](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L177)
+[types.ts:176](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L176)
 
----
+***
 
 ### password
 
 > **password**: `"password"`
 
-#### Source
+#### Defined in
 
-[types.ts:175](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L175)
+[types.ts:174](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L174)
 
----
+***
 
 ### resource
 
 > **resource**: `"resource"`
 
-#### Source
+#### Defined in
 
-[types.ts:176](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L176)
+[types.ts:175](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L175)

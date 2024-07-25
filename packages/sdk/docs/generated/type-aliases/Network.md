@@ -1,19 +1,19 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Network
+[Monerium SDK](../README.md) / Network
 
-# Type alias: Network\<C, E\>
+# Type Alias: Network\<C, E\>
 
-> **Network**\<`C`, `E`\>: `C` _extends_ [`Chain`](Chain.md) ? `E` _extends_ [`ENV`](ENV.md) ? [`NetworkStrict`](NetworkStrict.md)\<`C`, `E`\> & [`NetworkSemiStrict`](NetworkSemiStrict.md)\<`C`\> : `never` : `never`
+> **Network**\<`C`, `E`\>: `C` *extends* [`Chain`](Chain.md) ? `E` *extends* [`ENV`](ENV.md) ? [`NetworkStrict`](NetworkStrict.md)\<`C`, `E`\> & [`NetworkSemiStrict`](NetworkSemiStrict.md)\<`C`\> : `never` : `never`
 
-## Type parameters
+## Type Parameters
 
-• **C** _extends_ [`Chain`](Chain.md) = [`Chain`](Chain.md)
+• **C** *extends* [`Chain`](Chain.md) = [`Chain`](Chain.md)
 
-• **E** _extends_ [`ENV`](ENV.md) = [`ENV`](ENV.md)
+• **E** *extends* [`ENV`](ENV.md) = [`ENV`](ENV.md)
 
-## Source
+## Defined in
 
-[types.ts:57](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L57)
+[types.ts:57](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L57)

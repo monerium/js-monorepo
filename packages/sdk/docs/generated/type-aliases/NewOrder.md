@@ -1,13 +1,13 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / NewOrder
+[Monerium SDK](../README.md) / NewOrder
 
-# Type alias: NewOrder
+# Type Alias: NewOrder
 
 > **NewOrder**: [`NewOrderByAddress`](../interfaces/NewOrderByAddress.md) \| [`NewOrderByAccountId`](../interfaces/NewOrderByAccountId.md)
 
-## Source
+## Defined in
 
-[types.ts:393](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L393)
+[types.ts:391](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L391)

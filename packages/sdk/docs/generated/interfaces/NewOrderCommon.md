@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / NewOrderCommon
+[Monerium SDK](../README.md) / NewOrderCommon
 
 # Interface: NewOrderCommon
 
@@ -17,66 +17,66 @@
 
 > **amount**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:396](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L396)
+[types.ts:394](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L394)
 
----
+***
 
 ### counterpart
 
 > **counterpart**: [`Counterpart`](Counterpart.md)
 
-#### Source
+#### Defined in
 
-[types.ts:399](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L399)
+[types.ts:397](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L397)
 
----
+***
 
-### currency?
+### currency
 
-> `optional` **currency**: [`Currency`](../enumerations/Currency.md)
+> **currency**: [`Currency`](../enumerations/Currency.md)
 
-#### Source
+#### Defined in
 
-[types.ts:398](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L398)
+[types.ts:396](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L396)
 
----
+***
 
 ### memo?
 
 > `optional` **memo**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:401](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L401)
+[types.ts:399](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L399)
 
----
+***
 
 ### message
 
 > **message**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:400](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L400)
+[types.ts:398](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L398)
 
----
+***
 
 ### signature
 
 > **signature**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:397](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L397)
+[types.ts:395](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L395)
 
----
+***
 
 ### supportingDocumentId?
 
 > `optional` **supportingDocumentId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:402](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L402)
+[types.ts:400](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L400)

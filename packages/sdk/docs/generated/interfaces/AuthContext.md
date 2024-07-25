@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / AuthContext
+[Monerium SDK](../README.md) / AuthContext
 
 # Interface: AuthContext
 
@@ -24,66 +24,66 @@
 
 > **verified**: `boolean`
 
-#### Source
+#### Defined in
 
-[types.ts:203](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L203)
+[types.ts:202](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L202)
 
----
+***
 
 ### defaultProfile
 
 > **defaultProfile**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:204](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L204)
+[types.ts:203](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L203)
 
----
+***
 
 ### email
 
 > **email**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:200](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L200)
+[types.ts:199](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L199)
 
----
+***
 
 ### name
 
 > **name**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:201](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L201)
+[types.ts:200](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L200)
 
----
+***
 
 ### profiles
 
 > **profiles**: [`AuthProfile`](AuthProfile.md)[]
 
-#### Source
+#### Defined in
 
-[types.ts:205](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L205)
+[types.ts:204](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L204)
 
----
+***
 
 ### roles
 
 > **roles**: `"admin"`[]
 
-#### Source
+#### Defined in
 
-[types.ts:202](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L202)
+[types.ts:201](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L201)
 
----
+***
 
 ### userId
 
 > **userId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:199](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L199)
+[types.ts:198](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L198)

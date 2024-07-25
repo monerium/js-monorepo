@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / AccountState
+[Monerium SDK](../README.md) / AccountState
 
 # Enumeration: AccountState
 
@@ -12,26 +12,26 @@
 
 > **approved**: `"approved"`
 
-#### Source
+#### Defined in
 
-[types.ts:225](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L225)
+[types.ts:224](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L224)
 
----
+***
 
 ### pending
 
 > **pending**: `"pending"`
 
-#### Source
+#### Defined in
 
-[types.ts:226](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L226)
+[types.ts:225](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L225)
 
----
+***
 
 ### requested
 
 > **requested**: `"requested"`
 
-#### Source
+#### Defined in
 
-[types.ts:224](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L224)
+[types.ts:223](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L223)

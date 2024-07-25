@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / OrderFilter
+[Monerium SDK](../README.md) / OrderFilter
 
 # Interface: OrderFilter
 
@@ -12,56 +12,56 @@
 
 > `optional` **accountId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:354](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L354)
+[types.ts:352](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L352)
 
----
+***
 
 ### address?
 
 > `optional` **address**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:350](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L350)
+[types.ts:348](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L348)
 
----
+***
 
 ### memo?
 
 > `optional` **memo**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:353](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L353)
+[types.ts:351](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L351)
 
----
+***
 
 ### profile?
 
 > `optional` **profile**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:352](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L352)
+[types.ts:350](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L350)
 
----
+***
 
 ### state?
 
 > `optional` **state**: [`OrderState`](../enumerations/OrderState.md)
 
-#### Source
+#### Defined in
 
-[types.ts:355](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L355)
+[types.ts:353](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L353)
 
----
+***
 
 ### txHash?
 
 > `optional` **txHash**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:351](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L351)
+[types.ts:349](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L349)

@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 
-import { useMonerium } from '@monerium/sdk-react-provider';
+import { useAuth } from '@monerium/sdk-react-provider';
 
 import { LoadingScreen } from 'components/LoadingScreen';
 import BottomNavigation from 'components/Navigation/BottomNavigation';
@@ -13,14 +13,14 @@ export default function AuthorizedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isAuthorized, loadingAuth } = useMonerium();
+  const { isAuthorized, isLoading } = useAuth();
   const router = useRouter();
 
-  if (loadingAuth) {
+  if (isLoading) {
     return <LoadingScreen />;
   }
 
-  if (!loadingAuth && !isAuthorized) {
+  if (!isLoading && !isAuthorized) {
     router.push('/');
   }
 

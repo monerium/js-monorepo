@@ -1,13 +1,13 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Ticker
+[Monerium SDK](../README.md) / Ticker
 
-# Type alias: Ticker
+# Type Alias: Ticker
 
 > **Ticker**: `"EUR"` \| `"GBP"` \| `"USD"` \| `"ISK"`
 
-## Source
+## Defined in
 
-[types.ts:76](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L76)
+[types.ts:76](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L76)

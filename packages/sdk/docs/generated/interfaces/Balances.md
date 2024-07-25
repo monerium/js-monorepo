@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Balances
+[Monerium SDK](../README.md) / Balances
 
 # Interface: Balances
 
@@ -12,46 +12,46 @@
 
 > **address**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:275](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L275)
+[types.ts:274](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L274)
 
----
+***
 
 ### balances
 
 > **balances**: [`Balance`](Balance.md)[]
 
-#### Source
+#### Defined in
 
-[types.ts:278](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L278)
+[types.ts:277](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L277)
 
----
+***
 
 ### chain
 
 > **chain**: [`Chain`](../type-aliases/Chain.md)
 
-#### Source
+#### Defined in
 
-[types.ts:276](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L276)
+[types.ts:275](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L275)
 
----
+***
 
 ### id
 
 > **id**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:274](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L274)
+[types.ts:273](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L273)
 
----
+***
 
 ### network
 
 > **network**: `"sepolia"` \| `"chiado"` \| `"amoy"` \| `"mainnet"`
 
-#### Source
+#### Defined in
 
-[types.ts:277](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L277)
+[types.ts:276](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L276)

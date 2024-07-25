@@ -279,17 +279,29 @@ describe('placeOrderMessage', () => {
       )
     );
   });
+  test('should format message with chainId as string', () => {
+    const amount = 100;
+    const receiver = 'DE89370400440532013000';
+    const chainId = 'gnosis';
+    const message = placeOrderMessage(
+      amount,
+      'eur' as Currency,
+      receiver,
+      chainId
+    );
+    expect(message).toMatch(
+      new RegExp(
+        `^Send EUR ${amount} to ${receiver} on gnosis at ${timestampRegex}$`
+      )
+    );
+  });
 
   test('should format message with currency', () => {
     const amount = 100;
     const receiver = 'DE89370400440532013000';
     const chainId = 137;
-    const message = placeOrderMessage(
-      amount,
-      'gbp' as Currency,
-      receiver,
-      chainId
-    );
+    const currency = 'gbp' as Currency;
+    const message = placeOrderMessage(amount, currency, receiver, chainId);
     expect(message).toMatch(
       new RegExp(
         `^Send GBP ${amount} to ${receiver} on polygon at ${timestampRegex}$`

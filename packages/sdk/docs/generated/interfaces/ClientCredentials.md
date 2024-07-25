@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / ClientCredentials
+[Monerium SDK](../README.md) / ClientCredentials
 
 # Interface: ClientCredentials
 
@@ -12,16 +12,16 @@
 
 > **clientId**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:493](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L493)
+[types.ts:500](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L500)
 
----
+***
 
 ### clientSecret
 
 > **clientSecret**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:494](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L494)
+[types.ts:501](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L501)

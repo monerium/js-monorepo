@@ -1,13 +1,13 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / TokenSymbol
+[Monerium SDK](../README.md) / TokenSymbol
 
-# Type alias: TokenSymbol
+# Type Alias: TokenSymbol
 
 > **TokenSymbol**: `"EURe"` \| `"GBPe"` \| `"USDe"` \| `"ISKe"`
 
-## Source
+## Defined in
 
-[types.ts:75](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L75)
+[types.ts:75](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L75)

@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Permission
+[Monerium SDK](../README.md) / Permission
 
 # Enumeration: Permission
 
@@ -12,16 +12,16 @@
 
 > **read**: `"read"`
 
-#### Source
+#### Defined in
 
-[types.ts:187](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L187)
+[types.ts:186](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L186)
 
----
+***
 
 ### write
 
 > **write**: `"write"`
 
-#### Source
+#### Defined in
 
-[types.ts:188](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L188)
+[types.ts:187](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L187)

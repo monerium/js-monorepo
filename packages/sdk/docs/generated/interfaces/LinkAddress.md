@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / LinkAddress
+[Monerium SDK](../README.md) / LinkAddress
 
 # Interface: LinkAddress
 
@@ -12,55 +12,51 @@
 
 > **accounts**: [`CurrencyAccounts`](CurrencyAccounts.md)[]
 
-#### Source
+#### Defined in
 
-[types.ts:448](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L448)
+[types.ts:444](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L444)
 
----
+***
 
 ### address
 
 > **address**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:445](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L445)
+[types.ts:441](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L441)
 
----
+***
 
-### ~~chain?~~
+### chain?
 
 > `optional` **chain**: [`Chain`](../type-aliases/Chain.md)
 
-#### Deprecated
+#### Defined in
 
-- Use 'chainId'
+[types.ts:447](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L447)
 
-#### Source
-
-[types.ts:452](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L452)
-
----
+***
 
 ### chainId?
 
 > `optional` **chainId**: `number`
 
-#### Source
+#### Defined in
 
-[types.ts:453](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L453)
+[types.ts:448](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L448)
 
----
+***
 
 ### message
 
 > **message**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:446](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L446)
+[types.ts:442](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L442)
 
----
+***
 
 ### ~~network?~~
 
@@ -68,18 +64,18 @@
 
 #### Deprecated
 
-- Use 'chainId'
+- Use 'chainId' or 'chain'
 
-#### Source
+#### Defined in
 
-[types.ts:450](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L450)
+[types.ts:446](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L446)
 
----
+***
 
 ### signature
 
 > **signature**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:447](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L447)
+[types.ts:443](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L443)

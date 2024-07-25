@@ -1,13 +1,13 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / OpenArgs
+[Monerium SDK](../README.md) / OpenArgs
 
-# Type alias: OpenArgs
+# Type Alias: OpenArgs
 
 > **OpenArgs**: `Omit`\<[`AuthCodeRequest`](../interfaces/AuthCodeRequest.md), `"grant_type"` \| `"code"` \| `"code_verifier"`\> \| `Omit`\<[`RefreshTokenRequest`](../interfaces/RefreshTokenRequest.md), `"grant_type"`\> \| `Omit`\<[`ClientCredentialsRequest`](../interfaces/ClientCredentialsRequest.md), `"grant_type"`\> \| [`PKCERequestArgs`](PKCERequestArgs.md)
 
-## Source
+## Defined in
 
-[types.ts:85](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L85)
+[types.ts:85](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L85)

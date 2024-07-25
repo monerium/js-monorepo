@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Identifier
+[Monerium SDK](../README.md) / Identifier
 
 # Interface: Identifier
 
@@ -18,16 +18,16 @@
 
 > `optional` **bic**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:242](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L242)
+[types.ts:241](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L241)
 
----
+***
 
 ### standard
 
 > **standard**: [`PaymentStandard`](../enumerations/PaymentStandard.md)
 
-#### Source
+#### Defined in
 
-[types.ts:241](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L241)
+[types.ts:240](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L240)

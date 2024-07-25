@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / AuthCodeRequest
+[Monerium SDK](../README.md) / AuthCodeRequest
 
 # Interface: AuthCodeRequest
 
@@ -12,60 +12,60 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 ## Properties
 
-### client_id
+### client\_id
 
-> **client_id**: `string`
+> **client\_id**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:97](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L97)
+[types.ts:97](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L97)
 
----
+***
 
 ### code
 
 > **code**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:98](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L98)
+[types.ts:98](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L98)
 
----
+***
 
-### code_verifier
+### code\_verifier
 
-> **code_verifier**: `string`
+> **code\_verifier**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:99](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L99)
+[types.ts:99](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L99)
 
----
+***
 
-### grant_type
+### grant\_type
 
-> **grant_type**: `"authorization_code"`
+> **grant\_type**: `"authorization_code"`
 
-#### Source
+#### Defined in
 
-[types.ts:96](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L96)
+[types.ts:96](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L96)
 
----
+***
 
-### redirect_uri
+### redirect\_uri
 
-> **redirect_uri**: `string`
+> **redirect\_uri**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:100](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L100)
+[types.ts:100](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L100)
 
----
+***
 
 ### scope?
 
 > `optional` **scope**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:101](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L101)
+[types.ts:101](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L101)

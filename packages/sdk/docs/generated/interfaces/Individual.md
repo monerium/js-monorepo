@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Individual
+[Monerium SDK](../README.md) / Individual
 
 # Interface: Individual
 
@@ -12,26 +12,26 @@
 
 > `optional` **country**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:325](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L325)
+[types.ts:323](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L323)
 
----
+***
 
 ### firstName
 
 > **firstName**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:323](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L323)
+[types.ts:321](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L321)
 
----
+***
 
 ### lastName
 
 > **lastName**: `string`
 
-#### Source
+#### Defined in
 
-[types.ts:324](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L324)
+[types.ts:322](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L322)

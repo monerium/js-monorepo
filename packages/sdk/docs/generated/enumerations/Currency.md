@@ -1,8 +1,8 @@
-[**Monerium SDK v2.13.0**](../README.md) • **Docs**
+[**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
-[Monerium SDK v2.13.0](../README.md) / Currency
+[Monerium SDK](../README.md) / Currency
 
 # Enumeration: Currency
 
@@ -12,36 +12,36 @@
 
 > **eur**: `"eur"`
 
-#### Source
+#### Defined in
 
-[types.ts:69](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L69)
+[types.ts:69](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L69)
 
----
+***
 
 ### gbp
 
 > **gbp**: `"gbp"`
 
-#### Source
+#### Defined in
 
-[types.ts:71](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L71)
+[types.ts:71](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L71)
 
----
+***
 
 ### isk
 
 > **isk**: `"isk"`
 
-#### Source
+#### Defined in
 
-[types.ts:72](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L72)
+[types.ts:72](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L72)
 
----
+***
 
 ### usd
 
 > **usd**: `"usd"`
 
-#### Source
+#### Defined in
 
-[types.ts:70](https://github.com/monerium/js-monorepo/blob/4397cd6d6b171e9f3bbb7c9a2278e6782b814c1a/packages/sdk/src/types.ts#L70)
+[types.ts:70](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L70)
