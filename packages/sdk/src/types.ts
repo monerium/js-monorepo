@@ -446,11 +446,21 @@ export interface LinkAddress {
   message: string;
   signature: string;
   accounts: CurrencyAccounts[];
-  /** @deprecated - Use 'chainId' */
+  /** @deprecated - Use 'chainId' or 'chain' */
   network?: Network;
-  /** @deprecated - Use 'chainId' */
   chain?: Chain;
   chainId?: ChainId;
+}
+
+export interface LinkedAddress {
+  id: string;
+  profile: string;
+  address: string;
+  message: string;
+  meta: {
+    linkedBy: string;
+    linkedAt: string;
+  };
 }
 
 // -- Notifications

@@ -23,6 +23,7 @@ import type {
   ENV,
   Environment,
   LinkAddress,
+  LinkedAddress,
   MoneriumEvent,
   MoneriumEventListener,
   NewOrder,
@@ -334,7 +335,7 @@ export class MoneriumClient {
    * {@link https://monerium.dev/api-docs#operation/profile-addresses}
    * @category Accounts
    */
-  linkAddress(profileId: string, body: LinkAddress) {
+  linkAddress(profileId: string, body: LinkAddress): Promise<LinkedAddress> {
     body = mapChainIdToChain(body);
     body.accounts = body.accounts.map((account) => mapChainIdToChain(account));
 
