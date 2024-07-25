@@ -404,6 +404,7 @@ describe.skip('MoneriumClient', () => {
       .placeOrder({
         amount: '10',
         signature: placeOrderSignatureHash,
+        currency: Currency.eur,
         address: PUBLIC_KEY,
         counterpart: {
           identifier: {
@@ -443,6 +444,7 @@ describe.skip('MoneriumClient', () => {
         {
           amount: '10',
           signature: placeOrderSignatureHash,
+          currency: Currency.eur,
           address: PUBLIC_KEY,
           counterpart: {
             identifier: {

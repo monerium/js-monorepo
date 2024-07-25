@@ -351,10 +351,9 @@ export class MoneriumClient {
    * {@link https://monerium.dev/api-docs#operation/post-orders}
    * @category Orders
    */
-  placeOrder(order: NewOrder, profileId?: string): Promise<Order> {
+  placeOrder(order: NewOrder): Promise<Order> {
     const body = {
       kind: 'redeem',
-      currency: 'eur',
       ...mapChainIdToChain(order),
       counterpart: {
         ...order.counterpart,

@@ -82,6 +82,7 @@ describe('MoneriumClient', () => {
       .placeOrder({
         amount: '10',
         signature: placeOrderSignatureHash,
+        currency: Currency.eur,
         address: PUBLIC_KEY,
         counterpart: {
           identifier: {
@@ -107,9 +108,9 @@ describe('MoneriumClient', () => {
         method: 'post',
         body: JSON.stringify({
           kind: 'redeem',
-          currency: 'eur',
           amount: '10',
           signature: placeOrderSignatureHash,
+          currency: 'eur',
           address: PUBLIC_KEY,
           counterpart: {
             identifier: {
@@ -138,6 +139,7 @@ describe('MoneriumClient', () => {
       .placeOrder({
         amount: '10',
         signature: placeOrderSignatureHash,
+        currency: Currency.eur,
         address: PUBLIC_KEY,
         counterpart: {
           identifier: {
@@ -165,9 +167,9 @@ describe('MoneriumClient', () => {
         method: 'post',
         body: JSON.stringify({
           kind: 'redeem',
-          currency: 'eur',
           amount: '10',
           signature: placeOrderSignatureHash,
+          currency: 'eur',
           address: PUBLIC_KEY,
           counterpart: {
             identifier: {
@@ -199,6 +201,7 @@ describe('MoneriumClient', () => {
         client.placeOrder({
           amount: '10',
           signature: placeOrderSignatureHash,
+          currency: Currency.eur,
           address: PUBLIC_KEY,
           counterpart: {
             identifier: {
