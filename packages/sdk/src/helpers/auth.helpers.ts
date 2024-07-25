@@ -1,5 +1,5 @@
-import encodeBase64Url from 'crypto-js/enc-base64url';
-import SHA256 from 'crypto-js/sha256';
+import encodeBase64Url from 'crypto-js/enc-base64url.js';
+import SHA256 from 'crypto-js/sha256.js';
 
 import constants from '../constants';
 import {
