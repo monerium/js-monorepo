@@ -37,7 +37,7 @@ import type {
   SupportingDoc,
   Token,
 } from './types';
-import { getChain, getNetwork, mapChainIdToChain, urlEncoded } from './utils';
+import { mapChainIdToChain, urlEncoded } from './utils';
 
 // import pjson from "../package.json";
 const { STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } = constants;
