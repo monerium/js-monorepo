@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / LinkAddress
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:448](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L448)
+[types.ts:444](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L444)
 
----
+***
 
 ### address
 
@@ -24,23 +24,19 @@
 
 #### Defined in
 
-[types.ts:445](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L445)
+[types.ts:441](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L441)
 
----
+***
 
-### ~~chain?~~
+### chain?
 
 > `optional` **chain**: [`Chain`](../type-aliases/Chain.md)
 
-#### Deprecated
-
-- Use 'chainId'
-
 #### Defined in
 
-[types.ts:452](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L452)
+[types.ts:447](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L447)
 
----
+***
 
 ### chainId?
 
@@ -48,9 +44,9 @@
 
 #### Defined in
 
-[types.ts:453](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L453)
+[types.ts:448](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L448)
 
----
+***
 
 ### message
 
@@ -58,9 +54,9 @@
 
 #### Defined in
 
-[types.ts:446](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L446)
+[types.ts:442](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L442)
 
----
+***
 
 ### ~~network?~~
 
@@ -68,13 +64,13 @@
 
 #### Deprecated
 
-- Use 'chainId'
+- Use 'chainId' or 'chain'
 
 #### Defined in
 
-[types.ts:450](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L450)
+[types.ts:446](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L446)
 
----
+***
 
 ### signature
 
@@ -82,4 +78,4 @@
 
 #### Defined in
 
-[types.ts:447](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L447)
+[types.ts:443](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L443)

@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / constants
 
@@ -10,24 +10,24 @@
 
 ## Type declaration
 
-### LINK_MESSAGE
+### LINK\_MESSAGE
 
-> **LINK_MESSAGE**: `string` = `'I hereby declare that I am the address owner.'`
+> **LINK\_MESSAGE**: `string` = `'I hereby declare that I am the address owner.'`
 
 The message used to link addresses.
 
-### STORAGE_CODE_VERIFIER
+### STORAGE\_CODE\_VERIFIER
 
-> **STORAGE_CODE_VERIFIER**: `string` = `'monerium.sdk.code_verifier'`
+> **STORAGE\_CODE\_VERIFIER**: `string` = `'monerium.sdk.code_verifier'`
 
 The key used to store the code verifier in the local storage.
 
-### STORAGE_REFRESH_TOKEN
+### STORAGE\_REFRESH\_TOKEN
 
-> **STORAGE_REFRESH_TOKEN**: `string` = `'monerium.sdk.refresh_token'`
+> **STORAGE\_REFRESH\_TOKEN**: `string` = `'monerium.sdk.refresh_token'`
 
 The key used to store the refresh token in the local storage.
 
 ## Defined in
 
-[constants.ts:1](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/constants.ts#L1)
+[constants.ts:1](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/constants.ts#L1)

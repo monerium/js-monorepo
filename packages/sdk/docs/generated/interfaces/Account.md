@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / Account
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:246](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L246)
+[types.ts:245](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L245)
 
----
+***
 
 ### chain
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:253](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L253)
+[types.ts:252](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L252)
 
----
+***
 
 ### currency
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:247](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L247)
+[types.ts:246](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L246)
 
----
+***
 
 ### iban?
 
@@ -44,9 +44,9 @@
 
 #### Defined in
 
-[types.ts:249](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L249)
+[types.ts:248](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L248)
 
----
+***
 
 ### id?
 
@@ -54,9 +54,9 @@
 
 #### Defined in
 
-[types.ts:254](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L254)
+[types.ts:253](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L253)
 
----
+***
 
 ### network?
 
@@ -64,9 +64,9 @@
 
 #### Defined in
 
-[types.ts:252](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L252)
+[types.ts:251](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L251)
 
----
+***
 
 ### standard
 
@@ -74,9 +74,9 @@
 
 #### Defined in
 
-[types.ts:248](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L248)
+[types.ts:247](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L247)
 
----
+***
 
 ### state?
 
@@ -84,4 +84,4 @@
 
 #### Defined in
 
-[types.ts:255](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L255)
+[types.ts:254](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L254)

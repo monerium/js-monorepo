@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / KYCOutcome
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:218](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L218)
+[types.ts:217](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L217)
 
----
+***
 
 ### rejected
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:219](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L219)
+[types.ts:218](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L218)
 
----
+***
 
 ### unknown
 
@@ -34,4 +34,4 @@
 
 #### Defined in
 
-[types.ts:220](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L220)
+[types.ts:219](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L219)

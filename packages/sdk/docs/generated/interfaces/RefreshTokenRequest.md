@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / RefreshTokenRequest
 
@@ -12,35 +12,35 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 ## Properties
 
-### client_id
+### client\_id
 
-> **client_id**: `string`
-
-#### Defined in
-
-[types.ts:110](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L110)
-
----
-
-### grant_type
-
-> **grant_type**: `"refresh_token"`
+> **client\_id**: `string`
 
 #### Defined in
 
-[types.ts:109](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L109)
+[types.ts:110](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L110)
 
----
+***
 
-### refresh_token
+### grant\_type
 
-> **refresh_token**: `string`
+> **grant\_type**: `"refresh_token"`
 
 #### Defined in
 
-[types.ts:111](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L111)
+[types.ts:109](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L109)
 
----
+***
+
+### refresh\_token
+
+> **refresh\_token**: `string`
+
+#### Defined in
+
+[types.ts:111](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L111)
+
+***
 
 ### scope?
 
@@ -48,4 +48,4 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:112](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L112)
+[types.ts:112](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L112)

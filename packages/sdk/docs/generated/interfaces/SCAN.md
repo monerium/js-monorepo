@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / SCAN
 
@@ -18,9 +18,9 @@
 
 #### Defined in
 
-[types.ts:319](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L319)
+[types.ts:317](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L317)
 
----
+***
 
 ### bic?
 
@@ -32,9 +32,9 @@
 
 #### Defined in
 
-[types.ts:242](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L242)
+[types.ts:241](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L241)
 
----
+***
 
 ### sortCode
 
@@ -42,9 +42,9 @@
 
 #### Defined in
 
-[types.ts:318](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L318)
+[types.ts:316](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L316)
 
----
+***
 
 ### standard
 
@@ -56,4 +56,4 @@
 
 #### Defined in
 
-[types.ts:317](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L317)
+[types.ts:315](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L315)

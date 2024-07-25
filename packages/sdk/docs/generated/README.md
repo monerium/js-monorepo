@@ -1,6 +1,6 @@
 **Monerium SDK** • **Docs**
 
----
+***
 
 # Monerium SDK
 
@@ -21,7 +21,6 @@ Renames and re-exports [MoneriumClient](classes/MoneriumClient.md)
 ## Functions
 
 - [getChain](functions/getChain.md)
-- [getNetwork](functions/getNetwork.md)
 - [placeOrderMessage](functions/placeOrderMessage.md)
 - [rfc3339](functions/rfc3339.md)
 

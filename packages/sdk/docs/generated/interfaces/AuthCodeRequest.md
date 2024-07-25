@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / AuthCodeRequest
 
@@ -12,15 +12,15 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 ## Properties
 
-### client_id
+### client\_id
 
-> **client_id**: `string`
+> **client\_id**: `string`
 
 #### Defined in
 
-[types.ts:97](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L97)
+[types.ts:97](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L97)
 
----
+***
 
 ### code
 
@@ -28,39 +28,39 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:98](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L98)
+[types.ts:98](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L98)
 
----
+***
 
-### code_verifier
+### code\_verifier
 
-> **code_verifier**: `string`
-
-#### Defined in
-
-[types.ts:99](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L99)
-
----
-
-### grant_type
-
-> **grant_type**: `"authorization_code"`
+> **code\_verifier**: `string`
 
 #### Defined in
 
-[types.ts:96](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L96)
+[types.ts:99](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L99)
 
----
+***
 
-### redirect_uri
+### grant\_type
 
-> **redirect_uri**: `string`
+> **grant\_type**: `"authorization_code"`
 
 #### Defined in
 
-[types.ts:100](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L100)
+[types.ts:96](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L96)
 
----
+***
+
+### redirect\_uri
+
+> **redirect\_uri**: `string`
+
+#### Defined in
+
+[types.ts:100](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L100)
+
+***
 
 ### scope?
 
@@ -68,4 +68,4 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:101](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L101)
+[types.ts:101](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L101)

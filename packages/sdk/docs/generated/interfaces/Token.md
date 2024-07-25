@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / Token
 
@@ -18,9 +18,9 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:386](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L386)
+[types.ts:384](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L384)
 
----
+***
 
 ### chain
 
@@ -28,9 +28,9 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:383](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L383)
+[types.ts:381](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L381)
 
----
+***
 
 ### currency
 
@@ -38,9 +38,9 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:380](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L380)
+[types.ts:378](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L378)
 
----
+***
 
 ### decimals
 
@@ -50,9 +50,9 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:388](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L388)
+[types.ts:386](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L386)
 
----
+***
 
 ### network
 
@@ -60,9 +60,9 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:384](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L384)
+[types.ts:382](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L382)
 
----
+***
 
 ### symbol
 
@@ -70,9 +70,9 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:382](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L382)
+[types.ts:380](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L380)
 
----
+***
 
 ### ticker
 
@@ -80,4 +80,4 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:381](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L381)
+[types.ts:379](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L379)

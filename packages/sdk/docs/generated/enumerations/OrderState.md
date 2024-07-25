@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / OrderState
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:290](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L290)
+[types.ts:289](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L289)
 
----
+***
 
 ### placed
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:289](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L289)
+[types.ts:288](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L288)
 
----
+***
 
 ### processed
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:291](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L291)
+[types.ts:290](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L290)
 
----
+***
 
 ### rejected
 
@@ -44,4 +44,4 @@
 
 #### Defined in
 
-[types.ts:292](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L292)
+[types.ts:291](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L291)

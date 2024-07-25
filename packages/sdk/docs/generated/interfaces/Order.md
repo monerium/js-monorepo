@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / Order
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:361](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L361)
+[types.ts:359](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L359)
 
----
+***
 
 ### address
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:362](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L362)
+[types.ts:360](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L360)
 
----
+***
 
 ### amount
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:364](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L364)
+[types.ts:362](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L362)
 
----
+***
 
 ### counterpart
 
@@ -44,9 +44,9 @@
 
 #### Defined in
 
-[types.ts:368](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L368)
+[types.ts:366](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L366)
 
----
+***
 
 ### currency
 
@@ -54,9 +54,9 @@
 
 #### Defined in
 
-[types.ts:365](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L365)
+[types.ts:363](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L363)
 
----
+***
 
 ### fees
 
@@ -64,9 +64,9 @@
 
 #### Defined in
 
-[types.ts:367](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L367)
+[types.ts:365](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L365)
 
----
+***
 
 ### id
 
@@ -74,9 +74,9 @@
 
 #### Defined in
 
-[types.ts:359](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L359)
+[types.ts:357](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L357)
 
----
+***
 
 ### kind
 
@@ -84,9 +84,9 @@
 
 #### Defined in
 
-[types.ts:363](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L363)
+[types.ts:361](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L361)
 
----
+***
 
 ### memo
 
@@ -94,9 +94,9 @@
 
 #### Defined in
 
-[types.ts:369](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L369)
+[types.ts:367](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L367)
 
----
+***
 
 ### meta
 
@@ -104,9 +104,9 @@
 
 #### Defined in
 
-[types.ts:372](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L372)
+[types.ts:370](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L370)
 
----
+***
 
 ### profile
 
@@ -114,9 +114,9 @@
 
 #### Defined in
 
-[types.ts:360](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L360)
+[types.ts:358](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L358)
 
----
+***
 
 ### rejectedReason
 
@@ -124,9 +124,9 @@
 
 #### Defined in
 
-[types.ts:370](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L370)
+[types.ts:368](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L368)
 
----
+***
 
 ### supportingDocumentId
 
@@ -134,9 +134,9 @@
 
 #### Defined in
 
-[types.ts:371](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L371)
+[types.ts:369](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L369)
 
----
+***
 
 ### totalFee
 
@@ -144,4 +144,4 @@
 
 #### Defined in
 
-[types.ts:366](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L366)
+[types.ts:364](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L364)

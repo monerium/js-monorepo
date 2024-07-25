@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / LinkedAddress
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:459](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L459)
+[types.ts:454](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L454)
 
----
+***
 
 ### id
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:457](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L457)
+[types.ts:452](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L452)
 
----
+***
 
 ### message
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:460](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L460)
+[types.ts:455](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L455)
 
----
+***
 
 ### meta
 
@@ -52,9 +52,9 @@
 
 #### Defined in
 
-[types.ts:461](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L461)
+[types.ts:456](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L456)
 
----
+***
 
 ### profile
 
@@ -62,4 +62,4 @@
 
 #### Defined in
 
-[types.ts:458](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L458)
+[types.ts:453](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L453)

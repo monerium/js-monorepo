@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / OrderFilter
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:354](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L354)
+[types.ts:352](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L352)
 
----
+***
 
 ### address?
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:350](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L350)
+[types.ts:348](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L348)
 
----
+***
 
 ### memo?
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:353](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L353)
+[types.ts:351](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L351)
 
----
+***
 
 ### profile?
 
@@ -44,9 +44,9 @@
 
 #### Defined in
 
-[types.ts:352](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L352)
+[types.ts:350](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L350)
 
----
+***
 
 ### state?
 
@@ -54,9 +54,9 @@
 
 #### Defined in
 
-[types.ts:355](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L355)
+[types.ts:353](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L353)
 
----
+***
 
 ### txHash?
 
@@ -64,4 +64,4 @@
 
 #### Defined in
 
-[types.ts:351](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L351)
+[types.ts:349](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L349)

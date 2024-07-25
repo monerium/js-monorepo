@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / CrossChain
 
@@ -18,9 +18,9 @@
 
 #### Defined in
 
-[types.ts:308](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L308)
+[types.ts:307](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L307)
 
----
+***
 
 ### bic?
 
@@ -32,23 +32,19 @@
 
 #### Defined in
 
-[types.ts:242](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L242)
+[types.ts:241](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L241)
 
----
+***
 
-### ~~chain?~~
+### chain?
 
 > `optional` **chain**: [`Chain`](../type-aliases/Chain.md)
 
-#### Deprecated
-
-- Use chainId
-
 #### Defined in
 
-[types.ts:311](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L311)
+[types.ts:309](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L309)
 
----
+***
 
 ### chainId?
 
@@ -56,9 +52,9 @@
 
 #### Defined in
 
-[types.ts:309](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L309)
+[types.ts:308](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L308)
 
----
+***
 
 ### ~~network?~~
 
@@ -66,13 +62,13 @@
 
 #### Deprecated
 
-- Use chainId
+- Use 'chainId' or 'chain'
 
 #### Defined in
 
-[types.ts:313](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L313)
+[types.ts:311](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L311)
 
----
+***
 
 ### standard
 
@@ -84,4 +80,4 @@
 
 #### Defined in
 
-[types.ts:307](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L307)
+[types.ts:306](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L306)

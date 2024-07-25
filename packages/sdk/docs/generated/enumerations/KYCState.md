@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / KYCState
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:211](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L211)
+[types.ts:210](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L210)
 
----
+***
 
 ### confirmed
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:214](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L214)
+[types.ts:213](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L213)
 
----
+***
 
 ### pending
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:213](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L213)
+[types.ts:212](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L212)
 
----
+***
 
 ### submitted
 
@@ -44,4 +44,4 @@
 
 #### Defined in
 
-[types.ts:212](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L212)
+[types.ts:211](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L211)

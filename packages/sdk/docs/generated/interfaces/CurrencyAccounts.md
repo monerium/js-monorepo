@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / CurrencyAccounts
 
@@ -8,19 +8,15 @@
 
 ## Properties
 
-### ~~chain?~~
+### chain?
 
 > `optional` **chain**: [`Chain`](../type-aliases/Chain.md)
 
-#### Deprecated
-
-- Use 'chainId'
-
 #### Defined in
 
-[types.ts:439](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L439)
+[types.ts:435](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L435)
 
----
+***
 
 ### chainId?
 
@@ -28,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:440](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L440)
+[types.ts:436](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L436)
 
----
+***
 
 ### currency
 
@@ -38,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:441](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L441)
+[types.ts:437](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L437)
 
----
+***
 
 ### ~~network?~~
 
@@ -48,8 +44,8 @@
 
 #### Deprecated
 
-- Use 'chainId'
+- Use 'chainId' or 'chain'
 
 #### Defined in
 
-[types.ts:437](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L437)
+[types.ts:434](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L434)

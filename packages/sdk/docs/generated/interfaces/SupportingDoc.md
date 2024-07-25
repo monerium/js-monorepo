@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / SupportingDoc
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:429](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L429)
+[types.ts:426](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L426)
 
----
+***
 
 ### id
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:425](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L425)
+[types.ts:422](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L422)
 
----
+***
 
 ### meta
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:430](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L430)
+[types.ts:427](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L427)
 
----
+***
 
 ### name
 
@@ -44,9 +44,9 @@
 
 #### Defined in
 
-[types.ts:426](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L426)
+[types.ts:423](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L423)
 
----
+***
 
 ### size
 
@@ -54,9 +54,9 @@
 
 #### Defined in
 
-[types.ts:428](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L428)
+[types.ts:425](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L425)
 
----
+***
 
 ### type
 
@@ -64,4 +64,4 @@
 
 #### Defined in
 
-[types.ts:427](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L427)
+[types.ts:424](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L424)

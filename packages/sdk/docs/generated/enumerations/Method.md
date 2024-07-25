@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / Method
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:178](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L178)
+[types.ts:177](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L177)
 
----
+***
 
 ### jwt
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:177](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L177)
+[types.ts:176](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L176)
 
----
+***
 
 ### password
 
@@ -34,9 +34,9 @@
 
 #### Defined in
 
-[types.ts:175](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L175)
+[types.ts:174](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L174)
 
----
+***
 
 ### resource
 
@@ -44,4 +44,4 @@
 
 #### Defined in
 
-[types.ts:176](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L176)
+[types.ts:175](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L175)

@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / SupportingDocMetadata
 
@@ -14,9 +14,9 @@
 
 #### Defined in
 
-[types.ts:420](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L420)
+[types.ts:417](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L417)
 
----
+***
 
 ### updatedAt
 
@@ -24,9 +24,9 @@
 
 #### Defined in
 
-[types.ts:421](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L421)
+[types.ts:418](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L418)
 
----
+***
 
 ### uploadedBy
 
@@ -34,4 +34,4 @@
 
 #### Defined in
 
-[types.ts:419](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L419)
+[types.ts:416](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L416)

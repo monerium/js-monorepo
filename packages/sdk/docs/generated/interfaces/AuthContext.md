@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / AuthContext
 
@@ -26,9 +26,9 @@
 
 #### Defined in
 
-[types.ts:203](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L203)
+[types.ts:202](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L202)
 
----
+***
 
 ### defaultProfile
 
@@ -36,9 +36,9 @@
 
 #### Defined in
 
-[types.ts:204](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L204)
+[types.ts:203](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L203)
 
----
+***
 
 ### email
 
@@ -46,9 +46,9 @@
 
 #### Defined in
 
-[types.ts:200](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L200)
+[types.ts:199](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L199)
 
----
+***
 
 ### name
 
@@ -56,9 +56,9 @@
 
 #### Defined in
 
-[types.ts:201](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L201)
+[types.ts:200](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L200)
 
----
+***
 
 ### profiles
 
@@ -66,9 +66,9 @@
 
 #### Defined in
 
-[types.ts:205](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L205)
+[types.ts:204](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L204)
 
----
+***
 
 ### roles
 
@@ -76,9 +76,9 @@
 
 #### Defined in
 
-[types.ts:202](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L202)
+[types.ts:201](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L201)
 
----
+***
 
 ### userId
 
@@ -86,4 +86,4 @@
 
 #### Defined in
 
-[types.ts:199](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L199)
+[types.ts:198](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L198)

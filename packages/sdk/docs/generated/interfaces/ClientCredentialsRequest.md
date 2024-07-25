@@ -1,6 +1,6 @@
 [**Monerium SDK**](../README.md) • **Docs**
 
----
+***
 
 [Monerium SDK](../README.md) / ClientCredentialsRequest
 
@@ -12,35 +12,35 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 ## Properties
 
-### client_id
+### client\_id
 
-> **client_id**: `string`
-
-#### Defined in
-
-[types.ts:121](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L121)
-
----
-
-### client_secret
-
-> **client_secret**: `string`
+> **client\_id**: `string`
 
 #### Defined in
 
-[types.ts:122](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L122)
+[types.ts:121](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L121)
 
----
+***
 
-### grant_type
+### client\_secret
 
-> **grant_type**: `"client_credentials"`
+> **client\_secret**: `string`
 
 #### Defined in
 
-[types.ts:120](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L120)
+[types.ts:122](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L122)
 
----
+***
+
+### grant\_type
+
+> **grant\_type**: `"client_credentials"`
+
+#### Defined in
+
+[types.ts:120](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L120)
+
+***
 
 ### scope?
 
@@ -48,4 +48,4 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:123](https://github.com/monerium/js-monorepo/blob/132ae6f6b7d189aad355aa9ba25793222c11aea9/packages/sdk/src/types.ts#L123)
+[types.ts:123](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L123)
