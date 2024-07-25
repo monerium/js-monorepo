@@ -11,7 +11,7 @@ module.exports = {
   out: 'docs/generated',
   readme: 'none',
   // githubPages: true,
-  includeVersion: true,
+  // includeVersion: true,
   cleanOutputDir: true,
   searchInComments: true,
   // entryPoints: [

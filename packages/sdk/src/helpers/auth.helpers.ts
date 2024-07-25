@@ -12,7 +12,7 @@ import {
 } from '../types';
 import { getChain, urlEncoded } from '../utils';
 
-/** Structure the Auth Flow params, support for ChainId instead of chain & network */
+/** Structure the Auth Flow params, support for ChainId instead of chain */
 export const getAuthFlowParams = (
   args: PKCERequestArgs,
   codeChallenge: string
@@ -23,9 +23,9 @@ export const getAuthFlowParams = (
     scope,
     state,
     chainId,
-    chain,
     address,
     signature,
+    chain,
   } = args;
 
   const autoLink = address

@@ -113,12 +113,11 @@ export class MoneriumClient {
           clientSecret: clientSecret as string,
         };
       }
-      // this.getAccess();
     }
   }
 
   /**
-   * Construct the url to the authorization code flow,
+   * Construct the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chainId`
    * @returns string
@@ -546,22 +545,13 @@ export class MoneriumClient {
       this.#socket = undefined;
     }
   }
-  // -- Deprecated methods
 
+  // -- Getters (mainly for testing)
   /**
-   * @deprecated since v2.6.4, will be removed in 2.7.2+, use {@link getAccess} instead.
    * @hidden
    */
-  auth = async (args: AuthArgs) => await this.#grantAccess(args);
-
+  getEnvironment = (): Environment => this.#env;
   /**
-   * @deprecated since v2.7.1, will be removed in 2.7.2+, use {@link getAccess} instead.
-   * @hidden
-   */
-  connect = async (args: AuthArgs) => await this.#grantAccess(args);
-
-  /**
-   * @deprecated since v2.6.4, will be removed in 2.7.2+, use {@link authorize} instead.
    * @hidden
    */
   getAuthFlowURI = (args: PKCERequestArgs): string => {
@@ -569,16 +559,4 @@ export class MoneriumClient {
     this.codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER) as string;
     return url;
   };
-
-  /**
-   * @deprecated since v2.0.7, will be removed in 2.7.2+, use {@link getAuthFlowURI} instead.
-   * @hidden
-   */
-  pkceRequest = (args: PKCERequestArgs) => this.getAuthFlowURI(args);
-
-  // -- Getters (mainly for testing)
-  /**
-   * @hidden
-   */
-  getEnvironment = (): Environment => this.#env;
 }
