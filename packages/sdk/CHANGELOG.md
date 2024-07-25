@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.3](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.2...sdk-v2.13.3) (2024-07-25)
+
+
+### Bug Fixes
+
+* disable tests failing in pipeline ([666b100](https://github.com/monerium/js-monorepo/commit/666b100313e928eeda97eff6c9debc544af93645))
+
 ## [2.13.2](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.1...sdk-v2.13.2) (2024-07-25)
 
 
