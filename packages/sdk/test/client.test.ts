@@ -107,9 +107,9 @@ describe.skip('MoneriumClient', () => {
   test('authenticate with client credentials', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const authContext = await client.getAuthContext();
@@ -172,9 +172,9 @@ describe.skip('MoneriumClient', () => {
   test('link address', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const authContext = await client.getAuthContext();
@@ -216,9 +216,9 @@ describe.skip('MoneriumClient', () => {
   test('get profile', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const authContext = await client.getAuthContext();
@@ -234,9 +234,9 @@ describe.skip('MoneriumClient', () => {
   test('get balances', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const balances = await client.getBalances();
@@ -256,9 +256,9 @@ describe.skip('MoneriumClient', () => {
   test.skip('get orders', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const orders = await client.getOrders();
@@ -274,9 +274,9 @@ describe.skip('MoneriumClient', () => {
   test('get orders by profileId', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const orders = await client.getOrders({
@@ -292,9 +292,9 @@ describe.skip('MoneriumClient', () => {
   test.skip('get order', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const order = await client.getOrder('18c8a048-c474-11ee-b9e4-76cca206b674');
@@ -307,9 +307,9 @@ describe.skip('MoneriumClient', () => {
   test('get tokens', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const tokens = await client.getTokens();
@@ -388,9 +388,9 @@ describe.skip('MoneriumClient', () => {
   test('place order signature error', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const date = new Date().toISOString();
@@ -404,6 +404,7 @@ describe.skip('MoneriumClient', () => {
       .placeOrder({
         amount: '10',
         signature: placeOrderSignatureHash,
+        currency: Currency.eur,
         address: PUBLIC_KEY,
         counterpart: {
           identifier: {
@@ -428,9 +429,9 @@ describe.skip('MoneriumClient', () => {
   test('place order timestamp error', async () => {
     const client = new MoneriumClient();
 
-    await client.auth({
-      client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-      client_secret: APP_ONE_CREDENTIALS_SECRET,
+    await client.getAccess({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
     const date = 'Thu, 29 Dec 2022 14:58 +00:00';
