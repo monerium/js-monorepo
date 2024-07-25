@@ -12,7 +12,7 @@ export type EthereumTestnet = 'sepolia';
 export type GnosisTestnet = 'chiado';
 export type PolygonTestnet = 'amoy';
 
-export type Chain = 'ethereum' | 'gnosis' | 'polygon';
+export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'gnosismainnet';
 export type Networks =
   | EthereumTestnet
   | GnosisTestnet
@@ -161,9 +161,8 @@ export type PKCERequest = {
   address?: string;
   /** the signature of the wallet to automatically link */
   signature?: string;
-  /** @deprecated - Use chainId  */
+  /** @deprecated - Use 'chainId' or 'chain' */
   network?: Network;
-  /** @deprecated - Use chainId */
   chain?: Chain;
   /** The network of the wallet to automatically link  */
   chainId?: ChainId;
@@ -306,10 +305,9 @@ export interface IBAN extends Identifier {
 export interface CrossChain extends Identifier {
   standard: PaymentStandard.chain;
   address: string;
-  chainId: ChainId;
-  /** @deprecated - Use chainId */
+  chainId?: ChainId;
   chain?: Chain;
-  /** @deprecated - Use chainId */
+  /** @deprecated - Use 'chainId' or 'chain' */
   network?: Network;
 }
 
@@ -403,11 +401,10 @@ export interface NewOrderCommon {
 }
 export interface NewOrderByAddress extends NewOrderCommon {
   address: string;
-  /** @deprecated - Use 'chainId' */
   chain?: Chain;
-  /** @deprecated - Use 'chainId' */
+  /** @deprecated - Use 'chainId' or 'chain' */
   network?: Network;
-  chainId: ChainId;
+  chainId?: ChainId;
 }
 export interface NewOrderByAccountId extends NewOrderCommon {
   accountId: string;
@@ -433,11 +430,10 @@ export interface SupportingDoc {
 // -- linkAddress
 
 export interface CurrencyAccounts {
-  /** @deprecated - Use 'chainId' */
+  /** @deprecated - Use 'chainId' or 'chain' */
   network?: Network;
-  /** @deprecated - Use 'chainId' */
   chain?: Chain;
-  chainId: ChainId;
+  chainId?: ChainId;
   currency: Currency;
 }
 
