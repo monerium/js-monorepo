@@ -19,7 +19,7 @@ import {
   PaymentStandard,
 } from '../src/types';
 import { rfc3339 } from '../src/utils';
-import { getChain, getNetwork } from '../src/utils';
+import { getChain } from '../src/utils';
 import {
   APP_ONE_AUTH_FLOW_CLIENT_ID,
   APP_ONE_CREDENTIALS_CLIENT_ID,
@@ -468,9 +468,6 @@ describe.skip('MoneriumClient', () => {
     expect(getChain(1)).toBe('ethereum');
     expect(getChain(137)).toBe('polygon');
     expect(getChain(80002)).toBe('polygon');
-    expect(getNetwork(1)).toBe('mainnet');
-    expect(getNetwork(137)).toBe('mainnet');
-    expect(getNetwork(10200)).toBe('chiado');
   });
 });
 
