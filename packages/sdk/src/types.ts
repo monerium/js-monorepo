@@ -306,6 +306,10 @@ export interface CrossChain extends Identifier {
   standard: PaymentStandard.chain;
   address: string;
   chainId?: ChainId;
+<<<<<<< HEAD
+=======
+  /** @deprecated - Use chainId */
+>>>>>>> 5050787 (fix: authorization, offer auto link and revoking access)
   chain?: Chain;
   /** @deprecated - Use 'chainId' or 'chain' */
   network?: Network;

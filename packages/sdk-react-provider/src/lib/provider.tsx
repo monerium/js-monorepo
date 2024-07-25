@@ -1,8 +1,10 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { MoneriumClient } from '@monerium/sdk';
 
 import { MoneriumContext } from './context';
+import { AuthorizeParams } from './types';
 
 /**
  * Place this provider at the root of your application.
@@ -25,6 +27,8 @@ export const MoneriumProvider = ({
   redirectUrl?: string;
   environment?: 'sandbox' | 'production';
 }) => {
+  const queryClient = useQueryClient();
+
   const [sdk, setSdk] = useState<MoneriumClient>();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [error, setError] = useState<Error | unknown | null>(null);
@@ -62,16 +66,33 @@ export const MoneriumProvider = ({
     };
   }, [sdk]);
 
-  const authorize = useCallback(async () => {
+  const authorize = useCallback(
+    async (params?: AuthorizeParams) => {
+      try {
+        if (sdk) {
+          await sdk.authorize(params);
+        }
+      } catch (err) {
+        console.error('Error during authorization:', err);
+        setError(err);
+      }
+    },
+    [sdk]
+  );
+
+  const revokeAccess = async () => {
     try {
       if (sdk) {
-        await sdk.authorize();
+        await sdk.revokeAccess();
       }
     } catch (err) {
-      console.error('Error during authorization:', err);
+      console.error('Error during revoking access:', err);
       setError(err);
+    } finally {
+      queryClient.clear();
+      setIsAuthorized(false);
     }
-  }, [sdk]);
+  };
 
   return (
     <MoneriumContext.Provider
@@ -81,6 +102,8 @@ export const MoneriumProvider = ({
         isAuthorized,
         isLoading: loadingAuth,
         error,
+        disconnect: async () => sdk?.disconnect(),
+        revokeAccess: async () => revokeAccess(),
       }}
     >
       {children}
