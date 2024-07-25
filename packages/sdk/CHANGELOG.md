@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.14.0](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.3...sdk-v2.14.0) (2024-07-25)
+
+
+### Features
+
+* add getProfiles ([02b35ed](https://github.com/monerium/js-monorepo/commit/02b35ed6a786a0ce016b794ca98faef065ea02ad))
+* currency is now required in placeOrder ([6ece5b7](https://github.com/monerium/js-monorepo/commit/6ece5b763e31c4848841b2e774b63e392db8ba2d))
+* currency now required in placeOrderMessage, chain can be id or moneriumid ([d117785](https://github.com/monerium/js-monorepo/commit/d1177859d5594205e6fa0a98d965479292a07d58))
+* **sdk-react-provider:** complete refactor to use react-query async state management ([8bda8a7](https://github.com/monerium/js-monorepo/commit/8bda8a7cc6a6fe42449990825db14090c3948f69))
+
+
+### Bug Fixes
+
+* add chain gnosismainnet and allow either chain or chainId ([33c4b4a](https://github.com/monerium/js-monorepo/commit/33c4b4af3e42b00e5788c4cd9a19751f8a833662))
+* add scope to authorize args ([60698bf](https://github.com/monerium/js-monorepo/commit/60698bfca4f6e8ae348ec7e46e263d4b30b25833))
+* cleanup ([03e373c](https://github.com/monerium/js-monorepo/commit/03e373c205118f6ef2c3d13a540326c2b6359a2c))
+* remove profileId from placeOrder ([06bc58d](https://github.com/monerium/js-monorepo/commit/06bc58df714cfa40015f7ad4a2b0c2168e07b4ec))
+* remove trailing questionmark in url ([e800510](https://github.com/monerium/js-monorepo/commit/e800510ab9b41f2fb3d36f9dbc2825fa1e1d0eed))
+* type linkAddress return ([e2d28c5](https://github.com/monerium/js-monorepo/commit/e2d28c50542f0d0ff840bdabf24a6cb361d1bc7f))
+
 ## [2.13.3](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.2...sdk-v2.13.3) (2024-07-25)
 
 
