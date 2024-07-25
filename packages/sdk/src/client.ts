@@ -147,6 +147,7 @@ export class MoneriumClient {
       signature: client?.signature,
       chainId: client?.chainId,
       state: client?.state,
+      scope: client?.scope,
     });
 
     // Redirect to the authFlow

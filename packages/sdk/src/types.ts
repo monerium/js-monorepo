@@ -497,6 +497,7 @@ export interface AuthFlowOptions {
   signature?: string;
   chainId?: ChainId;
   state?: string;
+  scope?: string; // TODO: type 'orders:write' etc.
 }
 
 export interface ClientCredentials {
