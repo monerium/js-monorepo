@@ -292,6 +292,7 @@ export function useTokens({
  * # Get balances
  * @group Hooks
  * @param {Object} [params] No required parameters.
+ * @param {QueryOptions<Balances[]>} [params.profileId] Fetch balances for a specific profile.
  * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
 
  * @example
@@ -311,8 +312,10 @@ export function useTokens({
  * [Balances interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Balances.md)
  */
 export function useBalances({
+  profileId,
   query,
 }: {
+  profileId?: string;
   query?: QueryOptions<Balances[]>;
 } = {}): QueryResult<'balances', Balances[]> {
   const sdk = useSdk();
@@ -320,7 +323,7 @@ export function useBalances({
 
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getBalances,
+    queryKey: keys.getBalances(profileId),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -328,7 +331,7 @@ export function useBalances({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.getBalances();
+      return sdk.getBalances(profileId);
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
