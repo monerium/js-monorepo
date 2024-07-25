@@ -97,28 +97,6 @@ export const getChain = (chainId: number): Chain => {
   }
 };
 
-/**
- * Get the corresponding Monerium SDK Network from the current chain id
- * @returns The Network
- * @deprecated network will be removed from Monerium API in the near future.
- */
-export const getNetwork = (chainId: number): Networks => {
-  switch (chainId) {
-    case 1:
-    case 100:
-    case 137:
-      return 'mainnet';
-    case 11155111:
-      return 'sepolia';
-    case 10200:
-      return 'chiado';
-    case 80002:
-      return 'amoy';
-    default:
-      throw new Error(`Network not supported: ${chainId}`);
-  }
-};
-
 export const getIban = (profile: Profile, address: string, chainId: number) => {
   return (
     profile.accounts.find(

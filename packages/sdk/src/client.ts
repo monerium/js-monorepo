@@ -37,7 +37,7 @@ import type {
   SupportingDoc,
   Token,
 } from './types';
-import { getChain, getNetwork, mapChainIdToChain, urlEncoded } from './utils';
+import { mapChainIdToChain, urlEncoded } from './utils';
 
 // import pjson from "../package.json";
 const { STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } = constants;
@@ -113,7 +113,6 @@ export class MoneriumClient {
           clientSecret: clientSecret as string,
         };
       }
-      // this.getAccess();
     }
   }
 
@@ -546,35 +545,6 @@ export class MoneriumClient {
       this.#socket = undefined;
     }
   }
-  // -- Deprecated methods
-
-  /**
-   * @deprecated since v2.6.4, will be removed in 2.7.2+, use {@link getAccess} instead.
-   * @hidden
-   */
-  auth = async (args: AuthArgs) => await this.#grantAccess(args);
-
-  /**
-   * @deprecated since v2.7.1, will be removed in 2.7.2+, use {@link getAccess} instead.
-   * @hidden
-   */
-  connect = async (args: AuthArgs) => await this.#grantAccess(args);
-
-  /**
-   * @deprecated since v2.6.4, will be removed in 2.7.2+, use {@link authorize} instead.
-   * @hidden
-   */
-  getAuthFlowURI = (args: PKCERequestArgs): string => {
-    const url = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, args);
-    this.codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER) as string;
-    return url;
-  };
-
-  /**
-   * @deprecated since v2.0.7, will be removed in 2.7.2+, use {@link getAuthFlowURI} instead.
-   * @hidden
-   */
-  pkceRequest = (args: PKCERequestArgs) => this.getAuthFlowURI(args);
 
   // -- Getters (mainly for testing)
   /**

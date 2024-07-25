@@ -10,9 +10,9 @@ import {
   PKCERequestArgs,
   RefreshTokenRequest,
 } from '../types';
-import { getChain, getNetwork, urlEncoded } from '../utils';
+import { getChain, urlEncoded } from '../utils';
 
-/** Structure the Auth Flow params, support for ChainId instead of chain & network */
+/** Structure the Auth Flow params, support for ChainId instead of chain */
 export const getAuthFlowParams = (
   args: PKCERequestArgs,
   codeChallenge: string
@@ -26,7 +26,6 @@ export const getAuthFlowParams = (
     address,
     signature,
     chain,
-    network,
   } = args;
 
   const autoLink = address
@@ -35,9 +34,6 @@ export const getAuthFlowParams = (
         ...(signature !== undefined ? { signature: signature } : {}),
         ...(chainId !== undefined || chain !== undefined
           ? { chain: chainId ? getChain(chainId) : chain }
-          : {}),
-        ...(chainId !== undefined || network !== undefined
-          ? { network: chainId ? getNetwork(chainId) : network }
           : {}),
       }
     : {};
