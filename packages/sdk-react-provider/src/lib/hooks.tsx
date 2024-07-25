@@ -22,18 +22,33 @@ import {
   UseAuthReturn,
 } from './types';
 
-// Query keys
-const keys = {
-  getAuthContext: ['monerium-auth-context'],
-  getProfile: (profileId: string) => ['monerium-profile', profileId],
-  getProfiles: ['monerium-profiles'],
-  getBalances: ['monerium-balances'],
-  getTokens: ['monerium-tokens'],
-  getOrder: (orderId: string) => ['monerium-order', orderId],
-  getOrders: (filter?: unknown) =>
-    filter ? ['monerium-orders', filter] : ['monerium-orders'],
-  placeOrder: ['monerium-place-order'],
-  linkAddress: ['monerium-link-address'],
+/**
+ * @internal
+ * Query keys
+ * */
+export const keys = {
+  getAll: ['monerium'],
+  getAuthContext: ['monerium', 'auth-context'],
+  getProfile: (profileId: string) => [
+    'monerium',
+    'profile',
+    ...(profileId ? [profileId] : []),
+  ],
+  getProfiles: ['monerium', 'profiles'],
+  getBalances: (profileId?: string) => [
+    'monerium',
+    'balances',
+    ...(profileId ? [profileId] : []),
+  ],
+  getTokens: ['monerium', 'tokens'],
+  getOrder: (orderId: string) => ['monerium', 'order', orderId],
+  getOrders: (filter?: unknown) => [
+    'monerium',
+    'orders',
+    ...(filter ? [filter] : []),
+  ],
+  placeOrder: ['monerium', 'place-order'],
+  linkAddress: ['monerium', 'link-address'],
 };
 
 /** Internal hook to use SDK */
