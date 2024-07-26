@@ -10,31 +10,21 @@ import {
   PKCERequestArgs,
   RefreshTokenRequest,
 } from '../types';
-import { getChain, urlEncoded } from '../utils';
+import { parseChain, urlEncoded } from '../utils';
 
-/** Structure the Auth Flow params, support for ChainId instead of chain */
+/** Structure the Auth Flow params */
 export const getAuthFlowParams = (
   args: PKCERequestArgs,
   codeChallenge: string
 ) => {
-  const {
-    client_id,
-    redirect_uri,
-    scope,
-    state,
-    chainId,
-    address,
-    signature,
-    chain,
-  } = args;
+  const { client_id, redirect_uri, scope, state, address, signature, chain } =
+    args;
 
   const autoLink = address
     ? {
         address: address,
         ...(signature !== undefined ? { signature: signature } : {}),
-        ...(chainId !== undefined || chain !== undefined
-          ? { chain: chainId ? getChain(chainId) : chain }
-          : {}),
+        ...(chain !== undefined ? { chain: parseChain(chain) } : {}),
       }
     : {};
 

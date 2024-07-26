@@ -16,6 +16,7 @@ import {
   getChain,
   getIban,
   mapChainIdToChain,
+  parseChain,
   placeOrderMessage,
   rfc3339,
   urlEncoded,
@@ -266,12 +267,12 @@ describe('placeOrderMessage', () => {
   test('should format message with chainId', () => {
     const amount = 100;
     const receiver = 'DE89370400440532013000';
-    const chainId = 137;
+    const chain = 137;
     const message = placeOrderMessage(
       amount,
       'eur' as Currency,
       receiver,
-      chainId
+      chain
     );
     expect(message).toMatch(
       new RegExp(
@@ -282,12 +283,12 @@ describe('placeOrderMessage', () => {
   test('should format message with chainId as string', () => {
     const amount = 100;
     const receiver = 'DE89370400440532013000';
-    const chainId = 'gnosis';
+    const chain = 'gnosis';
     const message = placeOrderMessage(
       amount,
       'eur' as Currency,
       receiver,
-      chainId
+      chain
     );
     expect(message).toMatch(
       new RegExp(
@@ -299,9 +300,9 @@ describe('placeOrderMessage', () => {
   test('should format message with currency', () => {
     const amount = 100;
     const receiver = 'DE89370400440532013000';
-    const chainId = 137;
+    const chain = 137;
     const currency = 'gbp' as Currency;
-    const message = placeOrderMessage(amount, currency, receiver, chainId);
+    const message = placeOrderMessage(amount, currency, receiver, chain);
     expect(message).toMatch(
       new RegExp(
         `^Send GBP ${amount} to ${receiver} on polygon at ${timestampRegex}$`
@@ -312,7 +313,7 @@ describe('placeOrderMessage', () => {
 
 describe('mapChainIdToChain', () => {
   it('should add network and chain properties and remove chainId if chainId is present', () => {
-    const body = { chainId: 11155111 };
+    const body = { chain: 11155111 };
     const expectedBody = {
       chain: getChain(11155111),
     };
@@ -325,5 +326,16 @@ describe('mapChainIdToChain', () => {
     const expectedBody = { ...body };
 
     expect(mapChainIdToChain(body)).toEqual(expectedBody);
+  });
+});
+describe('parseChain', () => {
+  it('chainIds to should be parsed to monerium chain identifier', () => {
+    expect(parseChain(1)).toBe('ethereum');
+    expect(parseChain(11155111)).toBe('ethereum');
+    expect(parseChain(137)).toBe('polygon');
+    expect(parseChain(80002)).toBe('polygon');
+    expect(parseChain(80002)).toBe('polygon');
+    expect(parseChain('ethereum')).toBe('ethereum');
+    expect(() => parseChain(2)).toThrow('Chain not supported: 2');
   });
 });

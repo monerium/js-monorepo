@@ -146,7 +146,7 @@ export default function Test() {
               country: formData.get('counterpart-details-country') as string,
             },
           },
-          chainId: chainId,
+          chain: chainId,
           message: msg,
           memo: formData.get('memo') as string,
         });
@@ -209,7 +209,7 @@ export default function Test() {
           linkAddress({
             message: constants.LINK_MESSAGE,
             address: address as string,
-            chainId: chainId,
+            chain: chainId,
             signature: signature,
             accounts: accounts,
           });
@@ -265,7 +265,7 @@ export default function Test() {
 
   const autoLink = () => {
     signMessageAsync({ message: constants.LINK_MESSAGE }).then((signature) => {
-      authorize({ address, signature, chainId });
+      authorize({ address, signature, chain: chainId });
     });
   };
 
