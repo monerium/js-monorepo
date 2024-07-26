@@ -30,4 +30,4 @@ The key used to store the refresh token in the local storage.
 
 ## Defined in
 
-[constants.ts:1](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/constants.ts#L1)
+[constants.ts:1](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/constants.ts#L1)
