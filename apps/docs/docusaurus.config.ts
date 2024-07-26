@@ -3,15 +3,17 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  // plugins: [
-  //   [
-  //     'docusaurus-plugin-typedoc',
-  //     // {
-  //     //   entryPoints: ['../../packages/sdk/src/index.ts'],
-  //     //   tsconfig: '../../tsconfig.json',
-  //     // },
-  //   ],
-  // ],
+  plugins: [
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        // id: '1',
+        entryPoints: ['../../packages/sdk/src/index.ts'],
+        tsconfig: '../../packages/sdk/tsconfig.json',
+        // out: 'out/sdk',
+      },
+    ],
+  ],
   title: 'My Site',
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
