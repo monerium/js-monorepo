@@ -434,6 +434,7 @@ export interface LinkAddress {
   message: string;
   signature: string;
   accounts: CurrencyAccounts[];
+  chain?: Chain | ChainId;
 }
 
 export interface LinkedAddress {

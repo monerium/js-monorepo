@@ -209,7 +209,7 @@ export default function Test() {
           linkAddress({
             message: constants.LINK_MESSAGE,
             address: address as string,
-            chainId: chainId,
+            chain: chainId,
             signature: signature,
             accounts: accounts,
           });
