@@ -146,7 +146,7 @@ export default function Test() {
               country: formData.get('counterpart-details-country') as string,
             },
           },
-          chainId: chainId,
+          chain: chainId,
           message: msg,
           memo: formData.get('memo') as string,
         });
