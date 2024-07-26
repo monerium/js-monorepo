@@ -70,8 +70,8 @@ function useSdk(): MoneriumClient | undefined {
  *
  * authorize(); // Redirects to the Monerium auth flow.
  *
- * // To opt-in to automated wallet linking, pass the address, signature and chainId.
- * authorize({ address, signature, chainId }).
+ * // To opt-in to automated wallet linking, pass the address, signature and chain.
+ * authorize({ address, signature, chain }).
  * ```
  *
  * @returns {UseAuthReturn}

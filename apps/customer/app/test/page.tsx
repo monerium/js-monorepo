@@ -265,7 +265,7 @@ export default function Test() {
 
   const autoLink = () => {
     signMessageAsync({ message: constants.LINK_MESSAGE }).then((signature) => {
-      authorize({ address, signature, chainId });
+      authorize({ address, signature, chain: chainId });
     });
   };
 

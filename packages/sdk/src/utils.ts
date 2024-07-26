@@ -34,6 +34,18 @@ export const rfc3339 = (d: Date) => {
 };
 
 /**
+ * This will resolve the chainId number to the corresponding chain name.
+ * @param chain The chainId of the network
+ * @returns chain name, 'ethereum', 'polygon', 'gnosis', etc.
+ */
+export const parseChain = (chain: Chain | ChainId) => {
+  if (typeof chain === 'number') {
+    return getChain(chain);
+  }
+  return chain;
+};
+
+/**
  * The message to be signed when placing an order.
  * @param amount The amount to be sent
  * @param currency The currency to be sent
@@ -49,13 +61,8 @@ export const placeOrderMessage = (
 ) => {
   const curr = `${currency?.toUpperCase() || 'EUR'}`;
 
-  let chainId = chain;
-
-  if (typeof chain === 'number') {
-    chainId = getChain(chain);
-  }
-  if (chainId) {
-    return `Send ${curr} ${amount} to ${receiver} on ${chainId} at ${rfc3339(new Date())}`;
+  if (chain) {
+    return `Send ${curr} ${amount} to ${receiver} on ${parseChain(chain)} at ${rfc3339(new Date())}`;
   }
   return `Send ${curr} ${amount} to ${receiver} at ${rfc3339(new Date())}`;
 };
@@ -99,13 +106,17 @@ export const getChain = (chainId: number): Chain => {
   }
 };
 
-export const getIban = (profile: Profile, address: string, chainId: number) => {
+export const getIban = (
+  profile: Profile,
+  address: string,
+  chain: Chain | ChainId
+) => {
   return (
     profile.accounts.find(
       (account) =>
         account.address === address &&
         account.iban &&
-        account.chain === getChain(chainId)
+        account.chain === parseChain(chain)
     )?.iban ?? ''
   );
 };
@@ -113,28 +124,26 @@ export const getIban = (profile: Profile, address: string, chainId: number) => {
 export const getAmount = (
   balances?: Balances[],
   address?: string,
-  chainId?: ChainId
-  // currency?: Currency,
+  chain?: Chain | ChainId,
+  currency?: Currency
 ): string => {
-  if (!balances || !address || !chainId) return '0';
-  const currency = Currency.eur;
+  if (!balances || !address || !chain) return '0';
+  const curr = currency || Currency.eur;
 
-  const eurBalance = balances.find(
+  const balance = balances.find(
     (account) =>
-      account.address === address && account.chain === getChain(chainId)
+      account.address === address && account.chain === parseChain(chain)
   )?.balances;
 
-  return (
-    eurBalance?.find((balance) => balance.currency === currency)?.amount || '0'
-  );
+  return balance?.find((balance) => balance.currency === curr)?.amount || '0';
 };
 
 export const mapChainIdToChain = (body: any) => {
-  if (body?.chainId) {
-    const { chainId, ...rest } = body;
+  if (body?.chain) {
+    const { chain, ...rest } = body;
     return {
       ...rest,
-      chain: getChain(chainId as number),
+      chain: parseChain(chain),
     };
   }
   return body;

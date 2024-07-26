@@ -25,15 +25,15 @@ describe('MoneriumClient', () => {
       signature: OWNER_SIGNATURE,
       accounts: [
         {
-          chainId: 11155111,
+          chain: 11155111,
           currency: Currency.eur,
         },
         {
-          chainId: 10200,
+          chain: 10200,
           currency: Currency.eur,
         },
         {
-          chainId: 80002,
+          chain: 80002,
           currency: Currency.eur,
         },
       ],
@@ -96,7 +96,7 @@ describe('MoneriumClient', () => {
         },
         message: placeOrderMessage,
         memo: 'Powered by Monerium SDK',
-        chainId: 11155111,
+        chain: 11155111,
       })
       .catch(() => ({}));
 
@@ -145,7 +145,7 @@ describe('MoneriumClient', () => {
           identifier: {
             standard: PaymentStandard.chain,
             address: '0x1234567890123456789012345678901234567890',
-            chainId: 11155111,
+            chain: 11155111,
           },
           details: {
             firstName: 'Mockbank',
@@ -155,7 +155,6 @@ describe('MoneriumClient', () => {
         message: placeOrderMessage,
         memo: 'Powered by Monerium SDK',
         chain: 'ethereum',
-        network: 'sepolia',
       } as NewOrder)
       .catch(() => ({}));
 
@@ -185,7 +184,6 @@ describe('MoneriumClient', () => {
           message: placeOrderMessage,
           memo: 'Powered by Monerium SDK',
           chain: 'ethereum',
-          network: 'sepolia',
         }),
       })
     );
@@ -207,7 +205,7 @@ describe('MoneriumClient', () => {
             identifier: {
               standard: PaymentStandard.chain,
               address: '0x1234567890123456789012345678901234567890',
-              chainId: 7,
+              chain: 7,
             },
             details: {
               firstName: 'Mockbank',

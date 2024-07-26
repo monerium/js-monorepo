@@ -119,7 +119,7 @@ export class MoneriumClient {
   /**
    * Construct the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
-   * For automatic wallet link, add the following properties: `address`, `signature` & `chainId`
+   * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
    * @returns string
    * {@link https://monerium.dev/api-docs#operation/auth}
    * @category Auth
@@ -144,7 +144,7 @@ export class MoneriumClient {
       redirect_uri: redirectUrl,
       address: client?.address,
       signature: client?.signature,
-      chainId: client?.chainId,
+      chain: client?.chain,
       state: client?.state,
       scope: client?.scope,
     });
