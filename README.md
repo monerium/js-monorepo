@@ -6,9 +6,9 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `customer`: a [Next.js](https://nextjs.org/) app, an open source Monerium client
-- `@monerium/sdk`: an SDK for interacting with the Monerium API
-- `@monerium/sdk-react-provider`: a React provider for the Monerium SDK
+- [`customer`](apps/customer): a [Next.js](https://nextjs.org/) app, an open source Monerium client
+- [`@monerium/sdk`](packages/sdk): an SDK for interacting with the Monerium API
+- [`@monerium/sdk-react-provider`](packages/sdk-react-provider): a React provider for the Monerium SDK
 - `@repo/ui`: a sharable stub React component library
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/postcss-config`: `postcss` configurations

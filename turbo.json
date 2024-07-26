@@ -19,6 +19,9 @@
       "dependsOn": ["@monerium/sdk#build"],
       "outputs": ["docs/generated/**"]
     },
+    "@monerium/sdk-react-provider#dev": {
+      "dependsOn": ["@monerium/sdk#type-map"]
+    },
     "lint": {},
     "lint:style": {},
     "pub:pre": {
@@ -34,6 +37,7 @@
       "dependsOn": ["build"],
       "cache": false,
       "persistent": true
-    }
+    },
+    "type-map": {}
   }
 }

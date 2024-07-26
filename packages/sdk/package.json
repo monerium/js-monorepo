@@ -26,7 +26,7 @@
     "dist/index.d.ts"
   ],
   "scripts": {
-    "dev": "tsup --watch --onSuccess 'pnpm type-map && pnpm run docs'",
+    "dev": "tsup --watch --onSuccess 'pnpm run docs'",
     "build": "tsup",
     "docs": "typedoc",
     "docs:watch": "typedoc  --watch",

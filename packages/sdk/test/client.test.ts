@@ -73,7 +73,7 @@ process.env.CI !== 'true' &&
       expect(url).toContain('https://api.monerium.app');
     });
 
-    test('class instance with auth flow auth', async () => {
+    test('clas', async () => {
       const client = new MoneriumClient({
         clientId: 'testClientId',
         redirectUrl: 'http://example.com',
@@ -223,6 +223,7 @@ process.env.CI !== 'true' &&
 
       expect(client.bearerProfile).toBeUndefined();
     });
+  
   });
 
 process.env.CI === 'true' &&
