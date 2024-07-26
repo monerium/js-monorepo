@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[types.ts:403](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L403)
+[types.ts:399](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L399)
 
 ***
 
@@ -32,27 +32,19 @@
 
 #### Defined in
 
-[types.ts:394](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L394)
+[types.ts:390](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L390)
 
 ***
 
-### chain?
+### chain
 
-> `optional` **chain**: [`Chain`](../type-aliases/Chain.md)
+> **chain**: `number` \| [`Chain`](../type-aliases/Chain.md)
 
-#### Defined in
-
-[types.ts:404](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L404)
-
-***
-
-### chainId?
-
-> `optional` **chainId**: `number`
+The senders network
 
 #### Defined in
 
-[types.ts:407](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L407)
+[types.ts:401](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L401)
 
 ***
 
@@ -66,7 +58,7 @@
 
 #### Defined in
 
-[types.ts:397](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L397)
+[types.ts:393](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L393)
 
 ***
 
@@ -80,7 +72,7 @@
 
 #### Defined in
 
-[types.ts:396](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L396)
+[types.ts:392](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L392)
 
 ***
 
@@ -94,7 +86,7 @@
 
 #### Defined in
 
-[types.ts:399](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L399)
+[types.ts:395](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L395)
 
 ***
 
@@ -108,21 +100,7 @@
 
 #### Defined in
 
-[types.ts:398](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L398)
-
-***
-
-### ~~network?~~
-
-> `optional` **network**: `"sepolia"` \| `"chiado"` \| `"amoy"` \| `"mainnet"`
-
-#### Deprecated
-
-- Use 'chainId' or 'chain'
-
-#### Defined in
-
-[types.ts:406](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L406)
+[types.ts:394](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L394)
 
 ***
 
@@ -136,7 +114,7 @@
 
 #### Defined in
 
-[types.ts:395](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L395)
+[types.ts:391](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L391)
 
 ***
 
@@ -150,4 +128,4 @@
 
 #### Defined in
 
-[types.ts:400](https://github.com/monerium/js-monorepo/blob/f9c4f6d23632080dc2f66fc1ef03cdb9951e75af/packages/sdk/src/types.ts#L400)
+[types.ts:396](https://github.com/monerium/js-monorepo/blob/8ffdbde7b0c2c3e7515c531fdf342b90982e6cc9/packages/sdk/src/types.ts#L396)
