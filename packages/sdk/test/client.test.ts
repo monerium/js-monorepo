@@ -124,7 +124,7 @@ describe.skip('MoneriumClient', () => {
       redirect_uri: 'http://example.com',
       client_id: 'testClientId',
       address: '0x',
-      chainId: 11155111,
+      chain: 11155111,
     });
     const codeVerifier = window.localStorage.getItem(STORAGE_CODE_VERIFIER);
     const challenge = generateCodeChallenge(codeVerifier as string);
@@ -142,7 +142,6 @@ describe.skip('MoneriumClient', () => {
       client_id: 'testClientId',
       address: '0x',
       chain: 'ethereum',
-      network: 'sepolia',
     });
 
     const codeVerifier = window.localStorage.getItem(STORAGE_CODE_VERIFIER);
@@ -169,165 +168,6 @@ describe.skip('MoneriumClient', () => {
     );
   });
 
-  test('link address', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const authContext = await client.getAuthContext();
-
-    const res = await client.linkAddress(authContext.defaultProfile, {
-      address: PUBLIC_KEY,
-      message: message,
-      signature: OWNER_SIGNATURE,
-      accounts: [
-        {
-          chain: 'ethereum',
-          network: 'sepolia',
-          currency: Currency.eur,
-        },
-        {
-          chain: 'gnosis',
-          network: 'chiado',
-          currency: Currency.eur,
-        },
-        {
-          chain: 'polygon',
-          network: 'amoy',
-          currency: Currency.eur,
-        },
-      ] as CurrencyAccounts[] /** to bypass typeerror to test backwards compatibility */,
-    });
-
-    expect(res).toMatchObject({
-      address: '0xBd78A5C7efBf7f84C75ef638689A006512E1A6c4',
-      id: 'ebec4eed-6dcb-11ee-8aa6-5273f65ed05b',
-      message: 'I hereby declare that I am the address owner.',
-      meta: {
-        linkedBy: '9fdfd981-6dca-11ee-8aa6-5273f65ed05b',
-      },
-      profile: '9fdfd8f1-6dca-11ee-8aa6-5273f65ed05b',
-    });
-  });
-
-  test('get profile', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const authContext = await client.getAuthContext();
-    const profile = await client.getProfile(
-      authContext.profiles?.[0]?.id as string
-    );
-
-    expect(profile.accounts?.[0]?.id).toBe(
-      'ebedb56e-6dcb-11ee-8aa6-5273f65ed05b'
-    );
-  });
-
-  test('get balances', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const balances = await client.getBalances();
-
-    expect(balances).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          // id: '4b208818-44e3-11ed-adac-b2efc0e6677d',
-          chain: 'ethereum',
-          address: PUBLIC_KEY,
-        }),
-      ])
-    );
-  }, 15000);
-
-  // TODO fix, previous orders were purged from the database
-  test.skip('get orders', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const orders = await client.getOrders();
-    const order = orders.find(
-      (o: Order) => o.memo === 'Powered by Monerium'
-    ) as Order;
-
-    // expect(order.kind).toBe('redeem');
-    // expect(order.amount).toBe('1');
-    expect(order.memo).toBe('Powered by Monerium');
-  });
-
-  test('get orders by profileId', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const orders = await client.getOrders({
-      profile: DEFAULT_PROFILE,
-    });
-
-    orders.map((o: Order) => {
-      expect(DEFAULT_PROFILE).toBe(o.profile);
-    });
-  });
-
-  // TODO fix, previous orders were purged from the database
-  test.skip('get order', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const order = await client.getOrder('18c8a048-c474-11ee-b9e4-76cca206b674');
-
-    expect(order.kind).toBe('issue');
-    expect(order.amount).toBe('3000');
-    expect(order.memo).toBe("Let's make money smarter!");
-  });
-
-  test('get tokens', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const tokens = await client.getTokens();
-
-    const expected = [
-      {
-        address: '0x67b34b93ac295c985e856E5B8A20D83026b580Eb',
-        chain: 'ethereum',
-        currency: 'eur',
-        decimals: 18,
-        network: 'sepolia',
-        symbol: 'EURe',
-        ticker: 'EUR',
-      },
-    ];
-    expect(tokens).toEqual(expect.arrayContaining(expected));
-  });
-
   test('redirect', async () => {
     const client = new MoneriumClient();
 
@@ -352,7 +192,7 @@ describe.skip('MoneriumClient', () => {
       clientId: 'testClientId',
       address: '0x1234',
       signature: '0x5678',
-      chainId: 137,
+      chain: 137,
     });
 
     const codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER);
@@ -384,88 +224,6 @@ describe.skip('MoneriumClient', () => {
     getItemSpy.mockRestore();
   });
 
-  // there is no way to test this without a real time signature, the date is now verified
-  test('place order signature error', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const date = new Date().toISOString();
-    const rfc3339date = rfc3339(new Date(date));
-
-    const placeOrderMessage = `Send EUR 10 to GR1601101250000000012300695 at ${rfc3339date}`;
-    const placeOrderSignatureHash =
-      '0x23bf7e1b240d238b13cb293673c3419915402bb34435af62850b1d8e63f82c564fb73ab19691cf248594423dd01e441bb2ccb38ce2e2ecc514dfc3075bea829e1c';
-
-    await client
-      .placeOrder({
-        amount: '10',
-        signature: placeOrderSignatureHash,
-        currency: Currency.eur,
-        address: PUBLIC_KEY,
-        counterpart: {
-          identifier: {
-            standard: PaymentStandard.iban,
-            iban: 'GR1601101250000000012300695',
-          },
-          details: {
-            firstName: 'Mockbank',
-            lastName: 'Testerson',
-          },
-        },
-        message: placeOrderMessage,
-        memo: 'Powered by Monerium SDK',
-        chainId: 11155111,
-        chain: 'ethereum',
-      })
-      .catch((err) => {
-        expect(err.errors?.signature).toBe('invalid signature');
-      });
-  });
-
-  test('place order timestamp error', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const date = 'Thu, 29 Dec 2022 14:58 +00:00';
-    const placeOrderMessage = `Send EUR 10 to GR1601101250000000012300695 at ${date}`;
-    const placeOrderSignatureHash =
-      '0x23bf7e1b240d238b13cb293673c3419915402bb34435af62850b1d8e63f82c564fb73ab19691cf248594423dd01e441bb2ccb38ce2e2ecc514dfc3075bea829e1c';
-
-    await client
-      .placeOrder(
-        {
-          amount: '10',
-          signature: placeOrderSignatureHash,
-          currency: Currency.eur,
-          address: PUBLIC_KEY,
-          counterpart: {
-            identifier: {
-              standard: PaymentStandard.iban,
-              iban: 'GR1601101250000000012300695',
-            },
-            details: {
-              firstName: 'Mockbank',
-              lastName: 'Testerson',
-            },
-          },
-          message: placeOrderMessage,
-          memo: 'Powered by Monerium SDK',
-          chain: 'ethereum',
-        } as any /** to bypass typeerror for chain and network */
-      )
-      .catch((err) => {
-        expect(err.errors?.message).toBe('timestamp is expired');
-      });
-  });
-
   test('get chain and network from chainId', () => {
     expect(getChain(1)).toBe('ethereum');
     expect(getChain(137)).toBe('polygon');
@@ -473,18 +231,6 @@ describe.skip('MoneriumClient', () => {
   });
 });
 
-// TODO:
-// test("upload supporting document", async () => {
-//   const client = new MoneriumClient();
-
-//   await client.getAccess({
-//     client_id: APP_ONE_CREDENTIALS_CLIENT_ID,
-//     client_secret: APP_ONE_CREDENTIALS_SECRET,
-//   });
-
-//   // const document = client.uploadSupportingDocument();
-//   // assertObjectMatch(document, {});
-// });
 describe('disconnect()', () => {
   it('should remove the codeVerifier from the storage', async () => {
     const localStorageSpy = jest.spyOn(window.localStorage, 'removeItem');
