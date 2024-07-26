@@ -1,4 +1,4 @@
-import { Balances, Chain, ChainId, Currency, Networks, Profile } from './types';
+import { Balances, Chain, ChainId, Currency, Profile } from './types';
 
 export const rfc3339 = (d: Date) => {
   if (d.toString() === 'Invalid Date') {
