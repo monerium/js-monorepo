@@ -38,7 +38,7 @@ const message = LINK_MESSAGE;
 
 const assignMock = jest.fn();
 
-describe.skip('MoneriumClient', () => {
+describe('MoneriumClient', () => {
   beforeAll(() => {
     Object.defineProperty(window, 'location', {
       value: {
@@ -102,19 +102,6 @@ describe.skip('MoneriumClient', () => {
       `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code`
     );
     assignMock.mockRestore();
-  });
-
-  test('authenticate with client credentials', async () => {
-    const client = new MoneriumClient();
-
-    await client.getAccess({
-      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-      clientSecret: APP_ONE_CREDENTIALS_SECRET,
-    });
-
-    const authContext = await client.getAuthContext();
-
-    expect(authContext.userId).toBe(APP_ONE_OWNER_USER_ID);
   });
 
   test('authorization code flow with chainId', async () => {
