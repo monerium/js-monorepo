@@ -33,8 +33,8 @@
     "type-map": "tsc --emitDeclarationOnly --declaration",
     "lint": "eslint . --fix",
     "pub:pre": "pnpm publish --no-git-checks --dry-run",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch"
   },
   "dependencies": {
     "crypto-js": "^4.2.0"

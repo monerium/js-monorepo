@@ -32,6 +32,9 @@ jobs:
           echo "Release tag_name: ${{ steps.release.outputs.tag_name }}"
           echo "Release sha: ${{ steps.release.outputs.sha }}"
   build:
+    env:
+      CI: "true"
+
     needs: [release-please]
     name: Build, Test, Lint and Publish
     timeout-minutes: 15

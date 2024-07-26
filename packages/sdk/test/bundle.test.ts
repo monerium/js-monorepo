@@ -1,8 +1,7 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment node
  */
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const MoneriumClient =
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require('../dist/index.js').MoneriumClient;
@@ -15,15 +14,19 @@ const {
   APP_ONE_OWNER_USER_ID,
 } = constants;
 
-test.skip('CommonJs bundle smoke test', async () => {
-  const client = new MoneriumClient();
-
-  await client.getAccess({
-    clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-    clientSecret: APP_ONE_CREDENTIALS_SECRET,
-  });
-
-  const authContext = await client.getAuthContext();
-
-  expect(authContext.userId).toBe(APP_ONE_OWNER_USER_ID);
+test('should import without throwing', () => {
+  expect(MoneriumClient).toBeDefined();
 });
+process.env.CI !== 'true' &&
+  test('CommonJs bundle smoke test', async () => {
+    const client = new MoneriumClient({
+      clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
+      clientSecret: APP_ONE_CREDENTIALS_SECRET,
+    });
+
+    await client.getAccess();
+
+    const authContext = await client.getAuthContext();
+
+    expect(authContext.userId).toBe(APP_ONE_OWNER_USER_ID);
+  });
