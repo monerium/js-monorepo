@@ -6,11 +6,12 @@ export type Config = {
   environments: {
     production: Environment;
     sandbox: Environment;
+    staging: Environment;
     development: Environment;
   };
 };
 
-export type ENV = 'sandbox' | 'production' | 'development';
+export type ENV = 'sandbox' | 'production' | 'development' | 'staging';
 
 export type EthereumTestnet = 'sepolia';
 export type GnosisTestnet = 'chiado';
