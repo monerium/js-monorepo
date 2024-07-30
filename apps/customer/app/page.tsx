@@ -13,6 +13,7 @@ import { LoadingScreen } from 'src/components/LoadingScreen';
 
 import s from './page.module.scss';
 
+console.log('process.env', process.env);
 if (process.env.URL) {
   console.log('URL:', process.env.URL);
 }
