@@ -11,6 +11,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isStandalone = process.env.STANDALONE === 'true';
 
 const nextConfig = {
+  env: {
+    DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
+    DEPLOY_URL: process.env.DEPLOY_URL,
+    URL: process.env.URL,
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
