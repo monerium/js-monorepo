@@ -27,7 +27,8 @@ function Providers({ children }: { children: React.ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
           <MoneriumProvider
-            clientId="f2cd22fa-2406-11ef-8cfc-fe34ee86fd51"
+            // clientId="f2cd22fa-2406-11ef-8cfc-fe34ee86fd51"
+            clientId="f99e629b-6dca-11ee-8aa6-5273f65ed05b"
             redirectUrl={`${baseUrl}/dashboard`}
             environment="sandbox"
           >
