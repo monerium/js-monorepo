@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[types.ts:399](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L399)
+[types.ts:399](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L399)
 
 ***
 
@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[types.ts:390](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L390)
+[types.ts:390](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L390)
 
 ***
 
@@ -44,7 +44,7 @@ The senders network
 
 #### Defined in
 
-[types.ts:401](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L401)
+[types.ts:401](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L401)
 
 ***
 
@@ -58,7 +58,7 @@ The senders network
 
 #### Defined in
 
-[types.ts:393](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L393)
+[types.ts:393](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L393)
 
 ***
 
@@ -72,7 +72,7 @@ The senders network
 
 #### Defined in
 
-[types.ts:392](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L392)
+[types.ts:392](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L392)
 
 ***
 
@@ -86,7 +86,7 @@ The senders network
 
 #### Defined in
 
-[types.ts:395](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L395)
+[types.ts:395](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L395)
 
 ***
 
@@ -100,7 +100,7 @@ The senders network
 
 #### Defined in
 
-[types.ts:394](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L394)
+[types.ts:394](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L394)
 
 ***
 
@@ -114,7 +114,7 @@ The senders network
 
 #### Defined in
 
-[types.ts:391](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L391)
+[types.ts:391](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L391)
 
 ***
 
@@ -128,4 +128,4 @@ The senders network
 
 #### Defined in
 
-[types.ts:396](https://github.com/monerium/js-monorepo/blob/530606ad090851a47b688b8e1e3b82094f550d72/packages/sdk/src/types.ts#L396)
+[types.ts:396](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L396)
