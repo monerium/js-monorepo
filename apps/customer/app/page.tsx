@@ -13,6 +13,16 @@ import { LoadingScreen } from 'src/components/LoadingScreen';
 
 import s from './page.module.scss';
 
+if (process.env.URL) {
+  console.log('URL:', process.env.URL);
+}
+if (process.env.DEPLOY_URL) {
+  console.log('DEPLOY_URL:', process.env.DEPLOY_URL);
+}
+if (process.env.DEPLOY_PRIME_URL) {
+  console.log('DEPLOY_PRIME_URL:', process.env.DEPLOY_PRIME_URL);
+}
+
 export default function Home() {
   const { isAuthorized, isLoading } = useAuth();
   const router = useRouter();
