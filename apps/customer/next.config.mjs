@@ -11,9 +11,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isStandalone = process.env.STANDALONE === 'true';
 
 const nextConfig = {
-  env: {
-    NEXT_PUBLIC_URL: process.env.URL,
-  },
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
