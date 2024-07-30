@@ -1,0 +1,32 @@
+name: Generate and Push Documentation
+
+on:
+  push:
+    branches:
+      - test/docs # Adjust this to your default branch
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Cache PNPM install and Turbo
+        uses: ./.github/actions/cache-setup
+
+      - name: Generate Documentation
+        run: pnpm run docs
+
+      - name: Deploy Documentation to Branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout --orphan docs
+          git reset --hard
+          git add -A
+          git commit -m "Update documentation"
+          git push -f origin HEAD:docs
