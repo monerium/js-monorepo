@@ -29,6 +29,7 @@
     "wagmi": "^2.9.8"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "5.0.0-rc.8",
     "@repo/eslint-config": "workspace:*",
     "@repo/postcss-config": "workspace:*",
     "@repo/stylelint-config": "workspace:*",

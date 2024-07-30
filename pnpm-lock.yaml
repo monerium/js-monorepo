@@ -121,6 +121,9 @@ importers:
         specifier: ^2.9.8
         version: 2.11.3(@tanstack/query-core@5.51.9)(@tanstack/react-query@5.51.11(react@18.3.1))(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.3(@babel/core@7.24.9)(@babel/preset-env@7.24.8(@babel/core@7.24.9))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(rollup@4.19.0)(typescript@5.5.3)(utf-8-validate@5.0.10)(viem@2.17.9(bufferutil@4.0.8)(typescript@5.5.3)(utf-8-validate@5.0.10))
     devDependencies:
+      '@netlify/plugin-nextjs':
+        specifier: 5.0.0-rc.8
+        version: 5.0.0-rc.8
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -1998,6 +2001,10 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  '@netlify/plugin-nextjs@5.0.0-rc.8':
+    resolution: {integrity: sha512-8hCQrsGcS38+IMW0m+Nz5R5yYYwTnzXoUDATOjXPXNZacspl2WUNYuJ5pwV7le0z4kdhrLu3AAp16hXPlvJqGw==}
+    engines: {node: '>=18.0.0'}
 
   '@next/env@14.2.5':
     resolution: {integrity: sha512-/zZGkrTOsraVfYjGP8uM0p6r0BDT6xWpkjdVbcz66PJVSpwXX3yNiRycxAuDfBKGWBrZBXRuK/YVlkNgxHGwmA==}
@@ -10213,6 +10220,8 @@ snapshots:
       react-is: 18.3.1
     optionalDependencies:
       '@types/react': 18.3.3
+
+  '@netlify/plugin-nextjs@5.0.0-rc.8': {}
 
   '@next/env@14.2.5': {}
 
