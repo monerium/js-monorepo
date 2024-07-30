@@ -13,6 +13,14 @@ import StyleProviders from './Style/StyleProviders';
 
 const queryClient = new QueryClient();
 
+const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+
+console.log(
+  '%c baseUrl',
+  'color:white; padding: 30px; background-color: darkgreen',
+  baseUrl
+);
+
 function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
@@ -20,7 +28,7 @@ function Providers({ children }: { children: React.ReactNode }) {
         <RainbowKitProvider>
           <MoneriumProvider
             clientId="f2cd22fa-2406-11ef-8cfc-fe34ee86fd51"
-            redirectUrl="http://localhost:3000/dashboard"
+            redirectUrl={`${baseUrl}/dashboard`}
             environment="sandbox"
           >
             <StyleProviders>{children}</StyleProviders>
