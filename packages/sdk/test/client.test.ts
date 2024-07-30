@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 
-// Login: monerium-test-sdk@maildrop.cc
-// Password: Passw0rd!
+// For credentials used here,
+// see 'Monerium SDK Test user' in 1Password
 
 // punkWallet: https://punkwallet.io/pk#0x30fa9f64fb85dab6b4bf045443e08315d6570d4eabce7c1363acda96042a6e1a
 
@@ -223,7 +223,6 @@ process.env.CI !== 'true' &&
 
       expect(client.bearerProfile).toBeUndefined();
     });
-  
   });
 
 process.env.CI === 'true' &&
