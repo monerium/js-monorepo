@@ -49,6 +49,8 @@ export class MoneriumClient {
   #env: Environment;
 
   #authorizationHeader?: string;
+
+  #version?: string;
   /**
    * The PKCE code verifier
    * @deprecated, use localStorage, will be removed in v3
@@ -91,6 +93,7 @@ export class MoneriumClient {
     // No arguments, default to sandbox
     if (!envOrOptions) {
       this.#env = MONERIUM_CONFIG.environments['sandbox'];
+      this.#version = 'v2';
       return;
     }
     // String argument
@@ -99,6 +102,7 @@ export class MoneriumClient {
     } else {
       this.#env =
         MONERIUM_CONFIG.environments[envOrOptions.environment || 'sandbox'];
+      this.#version = envOrOptions?.version || 'v2';
 
       if (!isServer) {
         const { clientId, redirectUri } =
@@ -358,15 +362,42 @@ export class MoneriumClient {
    * {@link https://monerium.dev/api-docs#operation/profile-addresses}
    * @category Accounts
    */
-  linkAddress(profileId: string, body: LinkAddress): Promise<LinkedAddress> {
-    body = mapChainIdToChain(body);
-    body.accounts = body.accounts.map((account) => mapChainIdToChain(account));
+  linkAddress(
+    body: Omit<LinkAddress, 'accounts'> & { profile: string }
+  ): Promise<LinkedAddress>;
+  /** @deprecated this function should only take one parameter, body with profile id included  */
+  linkAddress(profileId: string, body: LinkAddress): Promise<LinkedAddress>;
 
-    return this.#api(
-      'post',
-      `profiles/${profileId}/addresses`,
-      JSON.stringify(body)
-    );
+  linkAddress(
+    profileIdOrBody:
+      | string
+      | (Omit<LinkAddress, 'accounts'> & { profile: string }),
+    /** @deprecated this function should only take one parameter, body with profile id included */
+    body?: LinkAddress
+  ): Promise<LinkedAddress> {
+    if (typeof profileIdOrBody === 'string' && body && this.#version === 'v1') {
+      body = mapChainIdToChain(body);
+      if (body?.accounts) {
+        body.accounts = body?.accounts.map((account) =>
+          mapChainIdToChain(account)
+        );
+      }
+
+      return this.#api<LinkedAddress>(
+        'post',
+        `profiles/${profileIdOrBody}/addresses`,
+        JSON.stringify(body)
+      );
+    } else if (typeof profileIdOrBody === 'object' && this.#version === 'v2') {
+      profileIdOrBody = mapChainIdToChain(profileIdOrBody);
+      return this.#api<LinkedAddress>(
+        'post',
+        `addresses`,
+        JSON.stringify(profileIdOrBody)
+      );
+    } else {
+      throw new Error('Invalid arguments');
+    }
   }
 
   /**
@@ -407,16 +438,32 @@ export class MoneriumClient {
     body?: BodyInit | Record<string, string>,
     isFormEncoded?: boolean
   ): Promise<T> {
+    const headers: Record<string, string> = {
+      Authorization: this.#authorizationHeader || '',
+      'Content-Type': `application/${
+        isFormEncoded ? 'x-www-form-urlencoded' : 'json'
+      }`,
+    };
+    if (this.#version === 'v2') {
+      headers['Accept'] = 'application/vnd.monerium.api-v2+json';
+    }
+    console.log(
+      '%c headers',
+      'color:white; padding: 30px; background-color: darkgreen',
+      headers
+    );
+
+    console.log(
+      '%c ${this.#env.api}/${resource}',
+      'color:white; padding: 30px; background-color: darkgreen',
+      `${this.#env.api}/${resource}`
+    );
+
     return rest<T>(
       `${this.#env.api}/${resource}`,
       method,
       isFormEncoded ? urlEncoded(body as Record<string, string>) : body,
-      {
-        Authorization: this.#authorizationHeader || '',
-        'Content-Type': `application/${
-          isFormEncoded ? 'x-www-form-urlencoded' : 'json'
-        }`,
-      }
+      headers
     );
   }
 
