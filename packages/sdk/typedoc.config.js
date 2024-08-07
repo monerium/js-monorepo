@@ -4,11 +4,12 @@
 
 module.exports = {
   $schema: 'https://typedoc.org/schema.json',
-  plugin: ['typedoc-plugin-markdown'],
+  // plugin: ['typedoc-plugin-markdown'],
   tsconfig: 'tsconfig.json',
+  entryFileName: 'Monerium SDK',
   excludePrivate: true,
   name: 'Monerium SDK',
-  out: 'docs/generated',
+  // out: '../../apps/docs/generated/sdk',
   readme: 'none',
   // githubPages: true,
   // includeVersion: true,
@@ -77,5 +78,5 @@ module.exports = {
   //   'API documentation': 'https://monerium.dev/api-docs',
   //   '': '',
   // },
-  entryPointStrategy: 'expand',
+  // entryPointStrategy: 'expand',
 };

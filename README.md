@@ -65,7 +65,8 @@ The pipeline will automatically publish the following packages if there are chan
 
 #### Useful links
 
-[Release please - Github action](https://github.com/marketplace/actions/release-please-action)</br>
+[Release please - Github action](https://github.com/marketplace/actions/release-please-action)
+
 [Release please - Config file options](https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md#configfile)
 
 ### Remote Caching

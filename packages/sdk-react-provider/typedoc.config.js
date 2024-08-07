@@ -4,11 +4,13 @@
 
 module.exports = {
   $schema: 'https://typedoc-plugin-markdown.org/schema.json',
-  plugin: ['typedoc-plugin-markdown'],
+  // entryPointStrategy: 'Packages',
+
   tsconfig: 'tsconfig.json',
+  entryFileName: 'Monerium SDK React Provider',
   excludePrivate: true,
   name: 'Monerium SDK React Provider',
-  out: 'docs/generated',
+  // out: '../../apps/docs/generated/sdk-react-provider',
   readme: 'none',
   cleanOutputDir: true,
   searchInComments: true,
@@ -58,7 +60,7 @@ module.exports = {
   ],
   entryPoints: ['src/index.ts'],
   sortEntryPoints: true,
-  entryPointStrategy: 'Resolve',
+  // entryPointStrategy: 'Resolve',
   expandObjects: true,
   hideParameterTypesInTitle: true,
   expandParameters: true,

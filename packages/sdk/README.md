@@ -5,27 +5,27 @@
 
   <a href="https://monerium.dev/">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7">
-      <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge">
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7"></source>
+      <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge"></img>
     </picture>
   </a>
   <a href="https://monerium.dev/api-docs">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7">
-      <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge">
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7"></source>
+      <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge"></img>
     </picture>
   </a>
-  </br>
+  <br></br>
     <a href="https://www.npmjs.com/package/@monerium/sdk">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=2c6ca7&colorB=21262d">
-      <img src="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=f6f8fa&colorB=f6f8fa" alt="Version">
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=2c6ca7&colorB=21262d"></source>
+      <img src="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=f6f8fa&colorB=f6f8fa" alt="Version"></img>
     </picture>
   </a>
-  <a href="https://github.com/monerium/js-monorepo/issues>
+  <a href="https://github.com/monerium/js-monorepo/issues">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d">
-      <img src="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d" alt="Version">
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d"></source>
+      <img src="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d" alt="Version"></img>
     </picture>
   </a>
 
