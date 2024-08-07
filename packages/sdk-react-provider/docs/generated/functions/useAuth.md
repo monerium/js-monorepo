@@ -23,8 +23,11 @@
 const { authorize, isAuthorized, isLoading, error } = useAuth();
 
 authorize(); // Redirects to the Monerium auth flow.
+
+// To opt-in to automated wallet linking, pass the address, signature and chain.
+authorize({ address, signature, chain }).
 ```
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:82](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L82)
+[sdk-react-provider/src/lib/hooks.tsx:85](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L85)

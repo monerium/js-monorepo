@@ -6,7 +6,7 @@
 
 | Enumeration Member | Value         | Defined in              |
 | ------------------ | ------------- | ----------------------- |
-| `pending`          | `"pending"`   | sdk/dist/index.d.ts:199 |
-| `placed`           | `"placed"`    | sdk/dist/index.d.ts:198 |
-| `processed`        | `"processed"` | sdk/dist/index.d.ts:200 |
-| `rejected`         | `"rejected"`  | sdk/dist/index.d.ts:201 |
+| `pending`          | `"pending"`   | sdk/dist/index.d.ts:195 |
+| `placed`           | `"placed"`    | sdk/dist/index.d.ts:194 |
+| `processed`        | `"processed"` | sdk/dist/index.d.ts:196 |
+| `rejected`         | `"rejected"`  | sdk/dist/index.d.ts:197 |

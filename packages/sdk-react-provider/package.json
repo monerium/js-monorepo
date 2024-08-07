@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch --onSuccess 'pnpm type-map'",
+    "dev": "tsup --watch --onSuccess 'pnpm type-map & pnpm run docs'",
     "docs": "typedoc",
     "docs:watch": "typedoc  --watch",
     "lint": "eslint . --fix",

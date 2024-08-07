@@ -10,19 +10,19 @@ Query keys
 
 ## Type declaration
 
-| Name             | Type                                   | Defined in                                                                                                                                                                         |
-| ---------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getAll`         | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:31](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L31) |
-| `getAuthContext` | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:32](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L32) |
-| `getBalances`    | (`profileId`?: `string`) => `string`[] | [sdk-react-provider/src/lib/hooks.tsx:39](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L39) |
-| `getOrder`       | (`orderId`: `string`) => `string`[]    | [sdk-react-provider/src/lib/hooks.tsx:45](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L45) |
-| `getOrders`      | (`filter`?: `unknown`) => \{\}[]       | [sdk-react-provider/src/lib/hooks.tsx:46](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L46) |
-| `getProfile`     | (`profileId`: `string`) => `string`[]  | [sdk-react-provider/src/lib/hooks.tsx:33](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L33) |
-| `getProfiles`    | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:38](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L38) |
-| `getTokens`      | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:44](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L44) |
-| `linkAddress`    | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:52](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L52) |
-| `placeOrder`     | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:51](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L51) |
+| Name             | Type                                   | Defined in                                                                                                                                     |
+| ---------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getAll`         | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:30](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L30) |
+| `getAuthContext` | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:31](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L31) |
+| `getBalances`    | (`profileId`?: `string`) => `string`[] | [sdk-react-provider/src/lib/hooks.tsx:38](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L38) |
+| `getOrder`       | (`orderId`: `string`) => `string`[]    | [sdk-react-provider/src/lib/hooks.tsx:44](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L44) |
+| `getOrders`      | (`filter`?: `unknown`) => \{\}[]       | [sdk-react-provider/src/lib/hooks.tsx:45](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L45) |
+| `getProfile`     | (`profileId`: `string`) => `string`[]  | [sdk-react-provider/src/lib/hooks.tsx:32](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L32) |
+| `getProfiles`    | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:37](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L37) |
+| `getTokens`      | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:43](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L43) |
+| `linkAddress`    | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:51](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L51) |
+| `placeOrder`     | `string`[]                             | [sdk-react-provider/src/lib/hooks.tsx:50](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L50) |
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:30](https://github.com/monerium/js-monorepo/blob/ae1055c12538e860127a655bc059162d414323b3/packages/sdk-react-provider/src/lib/hooks.tsx#L30)
+[sdk-react-provider/src/lib/hooks.tsx:29](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L29)

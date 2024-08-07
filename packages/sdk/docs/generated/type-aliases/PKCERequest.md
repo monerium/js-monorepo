@@ -72,4 +72,4 @@ the state of the application
 
 ## Defined in
 
-[types.ts:145](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L145)
+[types.ts:145](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L145)

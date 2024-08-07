@@ -10,4 +10,4 @@
 
 ## Defined in
 
-[types.ts:80](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L80)
+[types.ts:80](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L80)

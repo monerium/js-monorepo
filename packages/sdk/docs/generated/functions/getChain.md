@@ -20,4 +20,4 @@ The Chain
 
 ## Defined in
 
-[utils.ts:93](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/utils.ts#L93)
+[utils.ts:93](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L93)

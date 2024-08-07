@@ -14,7 +14,7 @@
 
 #### Defined in
 
-[types.ts:483](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L483)
+[types.ts:483](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L483)
 
 ***
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[types.ts:485](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L485)
+[types.ts:485](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L485)
 
 ***
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[types.ts:479](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L479)
+[types.ts:479](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L479)
 
 ***
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[types.ts:480](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L480)
+[types.ts:480](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L480)
 
 ***
 
@@ -58,7 +58,7 @@ use redirectUri
 
 #### Defined in
 
-[types.ts:482](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L482)
+[types.ts:482](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L482)
 
 ***
 
@@ -68,7 +68,7 @@ use redirectUri
 
 #### Defined in
 
-[types.ts:487](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L487)
+[types.ts:487](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L487)
 
 ***
 
@@ -78,7 +78,7 @@ use redirectUri
 
 #### Defined in
 
-[types.ts:484](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L484)
+[types.ts:484](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L484)
 
 ***
 
@@ -88,4 +88,4 @@ use redirectUri
 
 #### Defined in
 
-[types.ts:486](https://github.com/monerium/js-monorepo/blob/90e863940da8623462a29ce3ac59bdfdcf20271e/packages/sdk/src/types.ts#L486)
+[types.ts:486](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L486)
