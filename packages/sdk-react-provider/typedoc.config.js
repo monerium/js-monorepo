@@ -65,7 +65,6 @@ module.exports = {
     '*',
     'Other',
   ],
-
   expandObjects: true,
   hideParameterTypesInTitle: true,
   expandParameters: true,
