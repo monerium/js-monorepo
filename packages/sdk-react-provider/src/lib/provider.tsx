@@ -12,7 +12,7 @@ import { AuthorizeParams } from './types';
  * @param params
  * @param params.children - Rest of the application.
  * @param params.clientId - Monerium auth flow client id.
- * @param params.redirectUrl - Monerium auth flow redirect url.
+ * @param params.redirectUri - Monerium auth flow redirect url.
  * @param params.environment - Monerium environment.
  * @returns
  */
