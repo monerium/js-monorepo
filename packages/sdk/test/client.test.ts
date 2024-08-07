@@ -73,23 +73,6 @@ process.env.CI !== 'true' &&
       expect(url).toContain('https://api.monerium.app');
     });
 
-    test('clas', async () => {
-      const client = new MoneriumClient({
-        clientId: 'testClientId',
-        redirectUrl: 'http://example.com',
-      });
-
-      await client.authorize();
-
-      const codeVerifier = window.localStorage.getItem(STORAGE_CODE_VERIFIER);
-      const challenge = generateCodeChallenge(codeVerifier as string);
-
-      expect(assignMock).toHaveBeenCalledWith(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code`
-      );
-      assignMock.mockRestore();
-    });
-
     test('authorization code flow with chainId', async () => {
       const client = new MoneriumClient();
 
@@ -158,11 +141,14 @@ process.env.CI !== 'true' &&
       assignMock.mockRestore();
     });
     test('redirect w auto-link', async () => {
-      const client = new MoneriumClient();
+      const client = new MoneriumClient({
+        clientId: 'testClientId',
+        redirectUrl: 'http://example.com',
+      });
 
       await client.authorize({
-        redirectUrl: 'http://example.com',
-        clientId: 'testClientId',
+        // redirectUrl: 'http://example.com',
+        // clientId: 'testClientId',
         address: '0x1234',
         signature: '0x5678',
         chain: 137,
@@ -186,7 +172,7 @@ process.env.CI !== 'true' &&
       try {
         await client.getAccess({
           clientId: APP_ONE_AUTH_FLOW_CLIENT_ID,
-          redirectUrl: APP_ONE_REDIRECT_URL,
+          redirectUri: APP_ONE_REDIRECT_URL,
         });
       } catch (err) {
         expect((err as Error).message).toBe(

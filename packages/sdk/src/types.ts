@@ -473,6 +473,7 @@ export type MoneriumEventListener = (notification: OrderNotification) => void;
 
 export type ClassOptions = {
   environment?: ENV;
+  version?: 'v1' | 'v2';
 } & BearerTokenCredentials;
 
 export interface AuthFlowOptions {
