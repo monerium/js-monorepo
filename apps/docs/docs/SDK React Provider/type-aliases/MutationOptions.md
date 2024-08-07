@@ -25,6 +25,7 @@ The variables used in the mutation.
 ## Options
 
 > `mutationKey` and `mutationFn` are used internally and therefore not included in the options.
+
 ```diff
 mutation: {
    gcTime,
@@ -41,21 +42,21 @@ mutation: {
    scope,
    throwOnError,
 }
- ```
+```
 
 ## Example
 
 ```ts
 useMutationHook({
- mutation: {
-   onSuccess: (data, variables) => {
-     console.log('onSuccess callback', data, variables);
-   },
-   onError: (error) => {
-     console.log('onError callback', error);
-   },
- },
-})
+  mutation: {
+    onSuccess: (data, variables) => {
+      console.log('onSuccess callback', data, variables);
+    },
+    onError: (error) => {
+      console.log('onError callback', error);
+    },
+  },
+});
 ```
 
 ## Used By

@@ -7,6 +7,8 @@
  */
 module.exports = {
   $schema: 'https://typedoc-plugin-markdown.org/schema.json',
+  gitRevision: 'main',
+  plugin: ['typedoc-plugin-markdown'],
 
   // See: apps/docs/docusaurus.config.js
 
@@ -65,6 +67,10 @@ module.exports = {
     '*',
     'Other',
   ],
+<<<<<<< HEAD
+=======
+
+>>>>>>> 02f7ec5 (chore: decent condition)
   expandObjects: true,
   hideParameterTypesInTitle: true,
   expandParameters: true,

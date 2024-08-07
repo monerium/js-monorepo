@@ -9,6 +9,7 @@ module.exports = {
   $schema: 'https://typedoc.org/schema.json',
   gitRevision: 'main',
   plugin: ['typedoc-plugin-markdown'],
+
   tsconfig: 'tsconfig.json',
   entryFileName: 'index',
   excludePrivate: true,
