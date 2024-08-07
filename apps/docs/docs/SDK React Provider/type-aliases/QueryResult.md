@@ -6,7 +6,7 @@ See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework
 
 ## Type Parameters
 
-• **TVarName** *extends* `string`
+• **TVarName** _extends_ `string`
 
 The name of the variable that returns the data.
 
@@ -21,6 +21,7 @@ The data returned.
 ## Example
 
 > `data` is renamed according to the `TVarName` and therefore not included in the result.
+
 ```diff
 {
 -   data,
@@ -47,7 +48,7 @@ The data returned.
    refetch,
    status,
 }
- ```
+```
 
 ## Used By
 
@@ -63,4 +64,4 @@ The data returned.
 
 ## Defined in
 
-[types.ts:149](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk-react-provider/src/lib/types.ts#L149)
+[sdk-react-provider/src/lib/types.ts:149](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L149)

@@ -28,4 +28,4 @@ string
 
 ## Defined in
 
-[utils.ts:56](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/utils.ts#L56)
+[utils.ts:56](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L56)

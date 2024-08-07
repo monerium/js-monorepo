@@ -6,9 +6,9 @@
  * @see https://typedoc-plugin-markdown.org/schema.json
  */
 module.exports = {
-  // $schema: 'https://typedoc.org/schema.json',
-  // plugin: ['typedoc-plugin-markdown'],
-  // entryPointStrategy: 'Packages',
+  $schema: 'https://typedoc.org/schema.json',
+  gitRevision: 'main',
+  plugin: ['typedoc-plugin-markdown'],
   tsconfig: 'tsconfig.json',
   entryFileName: 'index',
   excludePrivate: true,
