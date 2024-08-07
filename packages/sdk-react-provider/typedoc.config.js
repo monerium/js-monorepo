@@ -1,19 +1,26 @@
-/** @type {import('typedoc').TypeDocOptions} */
+// typedoc.config.js
 
-// https://typedoc.org/options/
-
+// @ts-check
+/**
+ * @type {import('typedoc').TypeDocOptions}
+ * @see https://typedoc-plugin-markdown.org/schema.json
+ */
 module.exports = {
   $schema: 'https://typedoc-plugin-markdown.org/schema.json',
-  // entryPointStrategy: 'Packages',
+
+  // See: apps/docs/docusaurus.config.js
+
+  entryPoints: ['src/index.ts'],
 
   tsconfig: 'tsconfig.json',
-  entryFileName: 'Monerium SDK React Provider',
-  excludePrivate: true,
-  name: 'Monerium SDK React Provider',
-  // out: '../../apps/docs/generated/sdk-react-provider',
+  entryFileName: 'index',
+  name: 'SDK React Provider',
+  // sortEntryPoints: true,
+  // mergeReadme: true,
   readme: 'none',
+
   cleanOutputDir: true,
-  searchInComments: true,
+  excludePrivate: true,
 
   kindSortOrder: [
     'Class',
@@ -58,9 +65,7 @@ module.exports = {
     '*',
     'Other',
   ],
-  entryPoints: ['src/index.ts'],
-  sortEntryPoints: true,
-  // entryPointStrategy: 'Resolve',
+
   expandObjects: true,
   hideParameterTypesInTitle: true,
   expandParameters: true,
@@ -74,8 +79,4 @@ module.exports = {
   propertyMembersFormat: 'table',
 
   hidePageHeader: true,
-
-  compilerOptions: {
-    noEmit: true,
-  },
 };

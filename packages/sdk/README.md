@@ -217,7 +217,7 @@ API documentation:
 
 - [/auth/context](https://monerium.dev/api-docs#operation/auth-context)
 - [/profile](https://monerium.dev/api-docs#operation/profile)
-- [/profile/{profiledId}/balances](https://monerium.dev/api-docs#operation/profile-balances)
+- [/profile/&#123;profileId&#123;/balances](https://monerium.dev/api-docs#operation/profile-balances)
 
 #### Get token information
 
@@ -272,7 +272,7 @@ Interfaces:
 
 API documentation:
 
-- [/profile/{profiledId}/addresses](https://monerium.dev/api-docs#operation/profile-addresses)
+- [/profile/&#123;profileId&#123;/addresses](https://monerium.dev/api-docs#operation/profile-addresses)
 
 #### Get and place orders
 

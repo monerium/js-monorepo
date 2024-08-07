@@ -261,13 +261,3 @@ export type MutationResult<
     TContext
   >['mutateAsync'];
 };
-
-export type {
-  AuthContext,
-  Balances,
-  LinkAddress,
-  Order,
-  OrderState,
-  Profile,
-  Token,
-} from '@monerium/sdk';

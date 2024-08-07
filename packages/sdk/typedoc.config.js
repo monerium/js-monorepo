@@ -1,20 +1,24 @@
-/** @type {import('typedoc').TypeDocOptions} */
+// typedoc.config.js
 
-// https://typedoc.org/options/
-
+// @ts-check
+/**
+ * @type {import('typedoc').TypeDocOptions}
+ * @see https://typedoc-plugin-markdown.org/schema.json
+ */
 module.exports = {
-  $schema: 'https://typedoc.org/schema.json',
+  // $schema: 'https://typedoc.org/schema.json',
   // plugin: ['typedoc-plugin-markdown'],
+  // entryPointStrategy: 'Packages',
   tsconfig: 'tsconfig.json',
-  entryFileName: 'Monerium SDK',
+  entryFileName: 'index',
   excludePrivate: true,
-  name: 'Monerium SDK',
-  // out: '../../apps/docs/generated/sdk',
+  name: 'SDK',
+  // out: '../../apps/docs/sdk',
   readme: 'none',
   // githubPages: true,
   // includeVersion: true,
   cleanOutputDir: true,
-  searchInComments: true,
+  // searchInComments: true,
   // entryPoints: [
   //   'src/client.ts',
   //   'src/types.ts',

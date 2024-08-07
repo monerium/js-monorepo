@@ -1,0 +1,31 @@
+# Function: placeOrderMessage()
+
+> **placeOrderMessage**(`amount`, `currency`, `receiver`, `chain`?): `string`
+
+## Parameters
+
+• **amount**: `string` \| `number`
+
+The amount to be sent
+
+• **currency**: [`Currency`](/docs/SDK/enumerations/Currency.md)
+
+The currency to be sent
+
+• **receiver**: `string`
+
+The receiver of the funds
+
+• **chain?**: `number` \| [`Chain`](/docs/SDK/type-aliases/Chain.md)
+
+The chainId of the network if it's a cross-chain transaction
+
+## Returns
+
+`string`
+
+string
+
+## Defined in
+
+[utils.ts:56](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/utils.ts#L56)

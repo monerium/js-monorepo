@@ -1,6 +1,9 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import i18n, { locales } from '@generated/i18n';
+import sdkReactProviderTypedocs from '../../packages/sdk-react-provider/typedoc.config.js';
+import sdkTypedocs from '../../packages/sdk/typedoc.config.js';
 
 const config: Config = {
   title: 'My Site',
@@ -16,6 +19,44 @@ const config: Config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'facebook', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
+  plugins: [
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        entryPointStrategy: 'Packages',
+        entryPoints: [
+          '../../packages/sdk/',
+          '../../packages/sdk-react-provider/',
+        ],
+        gitRevision: 'main',
+        out: 'docs',
+        cleanOutputDir: true,
+        publicPath: '/docs/',
+        watch: process.env.TYPEDOC_WATCH,
+        readme: 'none',
+      },
+    ],
+    // [
+    //   'docusaurus-plugin-typedoc',
+    //   {
+    //     ...sdkTypedocs,
+    //     id: 'sdk',
+    //     entryPoints: ['../../packages/sdk/src/index.ts'],
+    //     tsconfig: '../../packages/sdk/tsconfig.json',
+    //     out: 'docs/sdk',
+    //   },
+    // ],
+    // [
+    //   'docusaurus-plugin-typedoc',
+    //   {
+    //     ...sdkReactProviderTypedocs,
+    //     id: 'sdk-react-provider',
+    //     out: 'docs/sdk-react-provider',
+    //     entryPoints: ['../../packages/sdk-react-provider/src/index.ts'],
+    //     tsconfig: '../../packages/sdk-react-provider/tsconfig.json',
+    //   },
+    // ],
+  ],
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -36,8 +77,8 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // editUrl:
+          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -50,10 +91,10 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'Monerium',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Monerium Logo',
+        src: 'img/logo.png',
       },
       items: [
         // {
@@ -62,9 +103,9 @@ const config: Config = {
         //   position: 'left',
         //   label: 'Tutorial',
         // },
-        { to: '/docs/packages', label: 'Packages', position: 'left' },
+        { to: '/docs', label: 'Docs', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/monerium/js-monorepo',
           label: 'GitHub',
           position: 'right',
         },
@@ -74,46 +115,54 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Development',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Developer Portal',
+              href: 'https://monerium.dev/',
+            },
+            {
+              label: 'API Documentation',
+              href: 'https://monerium.dev/api-docs',
+            },
+            {
+              label: 'Issues',
+              href: 'https://github.com/monerium/js-monorepo/issues',
+            },
+            {
+              label: 'Telegram Group',
+              href: 'https://t.me/+W7efXd4p4zQyZjFk',
             },
           ],
         },
         {
-          title: 'Community',
+          title: 'Monerium',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Monerium.com',
+              href: 'https://monerium.com/',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              label: 'Monerium.app',
+              href: 'https://monerium.app/',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'NPM Packages',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
+              label: '@monerium/sdk',
+              href: 'https://www.npmjs.com/package/@monerium/sdk',
             },
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: '@monerium/sdk-react-provider',
+              href: 'https://www.npmjs.com/package/@monerium/sdk-react-provider',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `${new Date().getFullYear()} Monerium.`,
     },
     prism: {
       theme: prismThemes.github,
