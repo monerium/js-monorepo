@@ -20,6 +20,7 @@ import type {
   ClassOptions,
   ClientCredentials,
   ClientCredentialsRequest,
+  DeprecatedAuthorizationCodeCredentials,
   ENV,
   Environment,
   LinkAddress,
@@ -83,7 +84,7 @@ export class MoneriumClient {
    * new MoneriumClient({
    *  environment: 'sandbox',
    *  clientId: 'your-client-id',
-   *  redirectUrl: 'your-redirect-url'
+   *  redirectUri: 'your-redirect-url'
    * })
    * */
   constructor(envOrOptions?: ENV | ClassOptions) {
@@ -100,11 +101,13 @@ export class MoneriumClient {
         MONERIUM_CONFIG.environments[envOrOptions.environment || 'sandbox'];
 
       if (!isServer) {
-        const { clientId, redirectUrl } =
+        const { clientId, redirectUri } =
           envOrOptions as AuthorizationCodeCredentials;
+        const { redirectUrl } =
+          envOrOptions as DeprecatedAuthorizationCodeCredentials;
         this.#client = {
           clientId: clientId as string,
-          redirectUrl: redirectUrl as string,
+          redirectUri: redirectUri || (redirectUrl as string),
         };
       } else {
         const { clientId, clientSecret } = envOrOptions as ClientCredentials;
@@ -128,20 +131,21 @@ export class MoneriumClient {
     const clientId =
       client?.clientId ||
       (this.#client as AuthorizationCodeCredentials)?.clientId;
-    const redirectUrl =
+    const redirectUri =
+      client?.redirectUri ||
       client?.redirectUrl ||
-      (this.#client as AuthorizationCodeCredentials)?.redirectUrl;
+      (this.#client as AuthorizationCodeCredentials)?.redirectUri;
 
     if (!clientId) {
       throw new Error('Missing ClientId');
     }
-    if (!redirectUrl) {
-      throw new Error('Missing RedirectUrl');
+    if (!redirectUri) {
+      throw new Error('Missing RedirectUri');
     }
 
     const authFlowUrl = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, {
       client_id: clientId,
-      redirect_uri: redirectUrl,
+      redirect_uri: redirectUri,
       address: client?.address,
       signature: client?.signature,
       chain: client?.chain,
@@ -160,7 +164,10 @@ export class MoneriumClient {
    * @category Auth
    */
   async getAccess(
-    client?: AuthorizationCodeCredentials | ClientCredentials
+    client?:
+      | AuthorizationCodeCredentials
+      | ClientCredentials
+      | DeprecatedAuthorizationCodeCredentials
   ): Promise<boolean> {
     const clientId = client?.clientId || this.#client?.clientId;
     const clientSecret =
@@ -177,9 +184,10 @@ export class MoneriumClient {
       return !!this.bearerProfile;
     }
 
-    const redirectUrl =
-      (client as AuthorizationCodeCredentials)?.redirectUrl ||
-      (this.#client as AuthorizationCodeCredentials)?.redirectUrl;
+    const redirectUri =
+      (client as AuthorizationCodeCredentials)?.redirectUri ||
+      (client as DeprecatedAuthorizationCodeCredentials)?.redirectUrl ||
+      (this.#client as AuthorizationCodeCredentials)?.redirectUri;
 
     if (!clientId) {
       throw new Error('Missing ClientId');
@@ -201,7 +209,12 @@ export class MoneriumClient {
     if (refreshToken) {
       await this.#refreshTokenAuthorization(clientId, refreshToken);
     } else if (authCode) {
-      await this.#authCodeAuthorization(clientId, redirectUrl, authCode, state);
+      await this.#authCodeAuthorization(
+        clientId,
+        redirectUri as string,
+        authCode,
+        state
+      );
     }
 
     return !!this.bearerProfile;
@@ -405,7 +418,7 @@ export class MoneriumClient {
    */
   #authCodeAuthorization = async (
     clientId: string,
-    redirectUrl: string,
+    redirectUri: string,
     authCode: string,
     state?: string
   ) => {
@@ -425,7 +438,7 @@ export class MoneriumClient {
     // Remove auth code from URL.
     return await this.#grantAccess({
       code: authCode,
-      redirect_uri: redirectUrl as string,
+      redirect_uri: redirectUri as string,
       client_id: clientId,
       code_verifier: codeVerifier,
     });

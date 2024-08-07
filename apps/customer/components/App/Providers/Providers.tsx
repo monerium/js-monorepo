@@ -22,7 +22,7 @@ function Providers({ children }: { children: React.ReactNode }) {
         <RainbowKitProvider>
           <MoneriumProvider
             clientId="f99e629b-6dca-11ee-8aa6-5273f65ed05b"
-            redirectUrl={`${baseUrl}/dashboard`}
+            redirectUri={`${baseUrl}/dashboard`}
             environment="sandbox"
           >
             <StyleProviders>{children}</StyleProviders>

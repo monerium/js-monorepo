@@ -14,14 +14,14 @@
 
 #### Defined in
 
-[types.ts:494](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L494)
+[types.ts:496](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L496)
 
 ***
 
-### redirectUrl
+### redirectUri
 
-> **redirectUrl**: `string`
+> **redirectUri**: `string`
 
 #### Defined in
 
-[types.ts:495](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L495)
+[types.ts:497](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L497)

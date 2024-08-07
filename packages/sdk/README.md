@@ -137,7 +137,7 @@ export function App() {
     const sdk = new MoneriumClient({
       environment: 'sandbox',
       clientId: 'f99e629b-6dca-11ee-8aa6-5273f65ed05b',
-      redirectUrl: 'http://localhost:4200',
+      redirectUri: 'http://localhost:4200',
     });
     setMonerium(sdk);
   }, []);

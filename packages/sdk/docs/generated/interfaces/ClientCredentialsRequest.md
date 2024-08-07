@@ -18,7 +18,7 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:121](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L121)
+[types.ts:121](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L121)
 
 ***
 
@@ -28,7 +28,7 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:122](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L122)
+[types.ts:122](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L122)
 
 ***
 
@@ -38,7 +38,7 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:120](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L120)
+[types.ts:120](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L120)
 
 ***
 
@@ -48,4 +48,4 @@ One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:123](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L123)
+[types.ts:123](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L123)

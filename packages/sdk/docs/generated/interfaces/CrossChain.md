@@ -20,7 +20,7 @@ The receivers address
 
 #### Defined in
 
-[types.ts:305](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L305)
+[types.ts:305](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L305)
 
 ***
 
@@ -34,7 +34,7 @@ The receivers address
 
 #### Defined in
 
-[types.ts:238](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L238)
+[types.ts:238](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L238)
 
 ***
 
@@ -46,7 +46,7 @@ The receivers network
 
 #### Defined in
 
-[types.ts:307](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L307)
+[types.ts:307](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L307)
 
 ***
 
@@ -60,4 +60,4 @@ The receivers network
 
 #### Defined in
 
-[types.ts:303](https://github.com/monerium/js-monorepo/blob/294e3704bc2735fba770b1d2fbba8f31f3bfa306/packages/sdk/src/types.ts#L303)
+[types.ts:303](https://github.com/monerium/js-monorepo/blob/4f2ccbbab3654810f24287d973126d95378140bb/packages/sdk/src/types.ts#L303)

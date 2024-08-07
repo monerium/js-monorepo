@@ -41,7 +41,7 @@ pnpm add @monerium/sdk-react-provider @tanstack/react-query
 
 Wrap your app in the `QueryClientProvider` React Context Provider and pass a new `QueryClient` instance to the `client` property
 
-Inside the `QueryClientProvider`, wrap your app in the `MoneriumProvider` React Context Provider and pass the auth flow's `clientId`, `redirectUrl`, and `environment` configuration.
+Inside the `QueryClientProvider`, wrap your app in the `MoneriumProvider` React Context Provider and pass the auth flow's `clientId`, `redirectUri`, and `environment` configuration.
 
 ```tsx
 import { StrictMode } from 'react';
@@ -61,7 +61,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <MoneriumProvider
         clientId="f99e629b-6dca-11ee-8aa6-5273f65ed05b"
-        redirectUrl="https://pntvgs.csb.app/"
+        redirectUri="https://pntvgs.csb.app/"
         environment="sandbox"
       >
         <App />

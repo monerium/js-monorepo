@@ -477,6 +477,8 @@ export type ClassOptions = {
 
 export interface AuthFlowOptions {
   clientId?: string;
+  redirectUri?: string;
+  /** @deprecated use redirectUri */
   redirectUrl?: string;
   address?: string;
   signature?: string;
@@ -492,9 +494,16 @@ export interface ClientCredentials {
 
 export interface AuthorizationCodeCredentials {
   clientId: string;
-  redirectUrl: string;
+  redirectUri: string;
+}
+/** @deprecated use redirectUri */
+export interface DeprecatedAuthorizationCodeCredentials {
+  clientId?: string;
+  /** @deprecated use redirectUri */
+  redirectUrl?: string;
 }
 
 export type BearerTokenCredentials =
   | ClientCredentials
-  | AuthorizationCodeCredentials;
+  | AuthorizationCodeCredentials
+  | DeprecatedAuthorizationCodeCredentials;

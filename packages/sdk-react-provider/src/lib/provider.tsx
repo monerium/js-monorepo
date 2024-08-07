@@ -18,12 +18,15 @@ import { AuthorizeParams } from './types';
  */
 export const MoneriumProvider = ({
   children,
-  clientId = 'f99e629b-6dca-11ee-8aa6-5273f65ed05b',
-  redirectUrl = 'http://localhost:5173',
+  clientId,
+  redirectUrl,
+  redirectUri,
   environment = 'sandbox',
 }: {
   children: ReactNode;
-  clientId?: string;
+  clientId: string;
+  redirectUri: string;
+  /** @deprecated use redirectUri */
   redirectUrl?: string;
   environment?: 'sandbox' | 'production';
 }) => {
@@ -39,7 +42,7 @@ export const MoneriumProvider = ({
     const sdkInstance = new MoneriumClient({
       environment: environment,
       clientId,
-      redirectUrl,
+      redirectUri: redirectUri || redirectUrl,
     });
     setSdk(sdkInstance);
   }, []);

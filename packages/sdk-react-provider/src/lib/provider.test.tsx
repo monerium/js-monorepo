@@ -61,7 +61,7 @@ describe('MoneriumProvider', () => {
     const queryClient = new QueryClient();
     render(
       <QueryClientProvider client={queryClient}>
-        <MoneriumProvider>
+        <MoneriumProvider clientId="testClient" redirectUri="testRedirectUri">
           <TestConsumerComponent />
         </MoneriumProvider>
       </QueryClientProvider>
