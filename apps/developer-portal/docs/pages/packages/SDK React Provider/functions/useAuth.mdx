@@ -1,0 +1,37 @@
+[**SDK React Provider**](../index.mdx) • **Docs**
+
+***
+
+[Documentation](../../index.mdx) / [SDK React Provider](../index.mdx) / useAuth
+
+# Function: useAuth()
+
+> **useAuth**(): [`UseAuthReturn`](../type-aliases/UseAuthReturn.mdx)
+
+# Redirect to the Monerium auth flow.
+
+## Returns
+
+[`UseAuthReturn`](../type-aliases/UseAuthReturn.mdx)
+
+- `authorize`  - Redirects to the Monerium auth flow.
+- `isAuthorized` - Whether the user is authorized.
+- `isLoading` - Whether the auth flow is loading.
+- `error` - Error message if the auth flow fails.
+- `disconnect` - Disconnect the user.
+- `revokeAccess` - Revoke the user's access.
+
+## Example
+
+```ts
+const { authorize, isAuthorized, isLoading, error } = useAuth();
+
+authorize(); // Redirects to the Monerium auth flow.
+
+// To opt-in to automated wallet linking, pass the address, signature and chain.
+authorize({ address, signature, chain }).
+```
+
+## Defined in
+
+[hooks.tsx:85](https://github.com/monerium/js-monorepo/blob/1f07b3662d18c631941e215c70068d205e95c304/packages/sdk-react-provider/src/lib/hooks.tsx#L85)

@@ -1,0 +1,48 @@
+[**SDK React Provider**](../index.mdx) • **Docs**
+
+***
+
+[Documentation](../../index.mdx) / [SDK React Provider](../index.mdx) / useAuthContext
+
+# Function: useAuthContext()
+
+> **useAuthContext**(`params`?): [`QueryResult`](../type-aliases/QueryResult.mdx)\<`"authContext"`, `AuthContext`\>
+
+# Get the authentication context.
+
+## Parameters
+
+• **params?** = `{}`
+
+No required parameters.
+
+• **params.query?**: [`QueryOptions`](../type-aliases/QueryOptions.mdx)\<`AuthContext`\>
+
+See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
+
+## Returns
+
+[`QueryResult`](../type-aliases/QueryResult.mdx)\<`"authContext"`, `AuthContext`\>
+
+## Example
+
+```ts
+const {
+   authContext, // useQuery's `data` property
+   isLoading,
+   isError,
+   error,
+   refetch,
+   ...moreUseQueryResults
+} = useAuthContext();
+```
+
+## See
+
+[API Documentation](https://monerium.dev/api-docs#operation/auth-context)
+
+[AuthContext interface](/docs/SDK/interfaces/AuthContext.md)
+
+## Defined in
+
+[hooks.tsx:125](https://github.com/monerium/js-monorepo/blob/1f07b3662d18c631941e215c70068d205e95c304/packages/sdk-react-provider/src/lib/hooks.tsx#L125)

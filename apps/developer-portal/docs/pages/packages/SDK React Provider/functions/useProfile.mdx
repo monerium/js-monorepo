@@ -1,0 +1,51 @@
+[**SDK React Provider**](../index.mdx) • **Docs**
+
+***
+
+[Documentation](../../index.mdx) / [SDK React Provider](../index.mdx) / useProfile
+
+# Function: useProfile()
+
+> **useProfile**(`params`): [`QueryResult`](../type-aliases/QueryResult.mdx)\<`"profile"`, `Profile`\>
+
+# Get single profile
+If no `profileId` is provided, the default profile is used.
+
+## Parameters
+
+• **params** = `{}`
+
+• **params.profileId?**: `string`
+
+The id of the profile.
+
+• **params.query?**: [`QueryOptions`](../type-aliases/QueryOptions.mdx)\<`Profile`\>
+
+See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
+
+## Returns
+
+[`QueryResult`](../type-aliases/QueryResult.mdx)\<`"profile"`, `Profile`\>
+
+## Example
+
+```ts
+const {
+   profile, // useQuery's `data` property
+   isLoading,
+   isError,
+   error,
+   refetch,
+   ...moreUseQueryResults
+} = useProfile();
+```
+
+## See
+
+[API Documentation](https://monerium.dev/api-docs#operation/profile)
+
+[Profile interface](/docs/SDK/interfaces/Profile.md)
+
+## Defined in
+
+[hooks.tsx:178](https://github.com/monerium/js-monorepo/blob/1f07b3662d18c631941e215c70068d205e95c304/packages/sdk-react-provider/src/lib/hooks.tsx#L178)

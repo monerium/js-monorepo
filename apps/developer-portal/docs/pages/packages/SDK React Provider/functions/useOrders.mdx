@@ -1,0 +1,68 @@
+[**SDK React Provider**](../index.mdx) • **Docs**
+
+***
+
+[Documentation](../../index.mdx) / [SDK React Provider](../index.mdx) / useOrders
+
+# Function: useOrders()
+
+> **useOrders**(`params`?): [`QueryResult`](../type-aliases/QueryResult.mdx)\<`"orders"`, `Order`[]\>
+
+# Get orders
+
+## Parameters
+
+• **params?** = `{}`
+
+No required parameters.
+
+• **params.address?**: `string`
+
+Filter based on the blockchain address associated with the order.
+
+• **params.memo?**: `string`
+
+Filter by the payment memo/reference..
+
+• **params.profile?**: `string`
+
+Filter based on the profile ID associated with the order.
+
+• **params.query?**: [`QueryOptions`](../type-aliases/QueryOptions.mdx)\<`Order`[]\> = `{}`
+
+See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
+
+• **params.state?**: `OrderState`
+
+Filter based on the state of the order.
+
+• **params.txHash?**: `string`
+
+Filter based on the blockchain transaction hash.
+
+## Returns
+
+[`QueryResult`](../type-aliases/QueryResult.mdx)\<`"orders"`, `Order`[]\>
+
+## Example
+
+```ts
+const {
+   orders, // useQuery's `data` property
+   isLoading,
+   isError,
+   error,
+   refetch,
+   ...moreUseQueryResults
+} = useOrders();
+```
+
+## See
+
+[API Documentation](https://monerium.dev/api-docs#operation/orders)
+
+[Order interface](/docs/SDK/interfaces/Order.md)
+
+## Defined in
+
+[hooks.tsx:449](https://github.com/monerium/js-monorepo/blob/1f07b3662d18c631941e215c70068d205e95c304/packages/sdk-react-provider/src/lib/hooks.tsx#L449)

@@ -1,0 +1,51 @@
+[**SDK React Provider**](../index.mdx) • **Docs**
+
+***
+
+[Documentation](../../index.mdx) / [SDK React Provider](../index.mdx) / useLinkAddress
+
+# Function: useLinkAddress()
+
+> **useLinkAddress**(`param`): [`MutationResult`](../type-aliases/MutationResult.mdx)\<`"linkAddress"`, `LinkedAddress`, `Error`, `LinkAddress`\>
+
+# Add address to profile.
+When the address has been linked, the relevant profile query will be invalidated and re-fetched.
+
+## Parameters
+
+• **param**
+
+• **param.mutation?**: [`MutationOptions`](../type-aliases/MutationOptions.mdx)\<`LinkedAddress`, `Error`, `LinkAddress`\>
+
+See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options.
+
+• **param.profileId**: `string`
+
+Which profile to link the address.
+
+## Returns
+
+[`MutationResult`](../type-aliases/MutationResult.mdx)\<`"linkAddress"`, `LinkedAddress`, `Error`, `LinkAddress`\>
+
+## Example
+
+```ts
+const {
+   linkAddress, // useMutation's `mutateAsync` property
+   isPending,
+   isError,
+   error,
+   status,
+   ...moreUseMutationResults
+} = useLinkAddress();
+```
+
+## See
+
+[API Documentation](https://monerium.dev/api-docs#operation/profile-addresses)
+
+[LinkAddress interface](/docs/SDK/interfaces/AuthContext.md)
+
+## Defined in
+
+[hooks.tsx:594](https://github.com/monerium/js-monorepo/blob/1f07b3662d18c631941e215c70068d205e95c304/packages/sdk-react-provider/src/lib/hooks.tsx#L594)

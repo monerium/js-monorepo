@@ -1,0 +1,52 @@
+[**SDK React Provider**](../index.mdx) • **Docs**
+
+***
+
+[Documentation](../../index.mdx) / [SDK React Provider](../index.mdx) / useBalances
+
+# Function: useBalances()
+
+> **useBalances**(`params`?): [`QueryResult`](../type-aliases/QueryResult.mdx)\<`"balances"`, `Balances`[]\>
+
+# Get balances
+
+## Parameters
+
+• **params?** = `{}`
+
+No required parameters.
+
+• **params.profileId?**: `string`
+
+Fetch balances for a specific profile.
+
+• **params.query?**: [`QueryOptions`](../type-aliases/QueryOptions.mdx)\<`Balances`[]\>
+
+See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
+
+## Returns
+
+[`QueryResult`](../type-aliases/QueryResult.mdx)\<`"balances"`, `Balances`[]\>
+
+## Example
+
+```ts
+const {
+   balances, // useQuery's `data` property
+   isLoading,
+   isError,
+   error,
+   refetch,
+   ...moreUseQueryResults
+} = useBalances();
+```
+
+## See
+
+[API Documentation](https://monerium.dev/api-docs#operation/profile-balances)
+
+[Balances interface](/docs/SDK/interfaces/Balances.md)
+
+## Defined in
+
+[hooks.tsx:337](https://github.com/monerium/js-monorepo/blob/1f07b3662d18c631941e215c70068d205e95c304/packages/sdk-react-provider/src/lib/hooks.tsx#L337)
