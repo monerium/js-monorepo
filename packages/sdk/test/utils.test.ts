@@ -139,102 +139,102 @@ describe('url params', () => {
     });
   });
 
-  describe('getIban', () => {
-    test('should return the correct IBAN for a given address and chain', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013001',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'gnosis',
-            network: 'mainnet',
-          },
-        ],
-      };
+  //   describe('getIban', () => {
+  //     test('should return the correct IBAN for a given address and chain', () => {
+  //       const profile: Profile = {
+  //         id: 'testId',
+  //         name: 'testName',
+  //         kyc: {} as KYC,
+  //         email: 'testEmail',
+  //         kind: 'personal' as ProfileType,
+  //         accounts: [
+  //           {
+  //             address: 'testAddress1',
+  //             iban: 'DE89370400440532013000',
+  //             currency: Currency.eur,
+  //             standard: 'iban' as PaymentStandard,
+  //             chain: 'ethereum',
+  //             network: 'mainnet',
+  //           },
+  //           {
+  //             address: 'testAddress1',
+  //             iban: 'DE89370400440532013001',
+  //             currency: Currency.eur,
+  //             standard: 'iban' as PaymentStandard,
+  //             chain: 'gnosis',
+  //             network: 'mainnet',
+  //           },
+  //         ],
+  //       };
 
-      const result = getIban(profile, 'testAddress1', 100);
+  //       const result = getIban(profile, 'testAddress1', 100);
 
-      expect(result).toBe('DE89370400440532013001');
-    });
+  //       expect(result).toBe('DE89370400440532013001');
+  //     });
 
-    test('should return an empty string if no account with the given address exists', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-          {
-            address: 'testAddress2',
-            iban: 'DE89370400440532013001',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-        ],
-      };
+  //     test('should return an empty string if no account with the given address exists', () => {
+  //       const profile: Profile = {
+  //         id: 'testId',
+  //         name: 'testName',
+  //         kyc: {} as KYC,
+  //         email: 'testEmail',
+  //         kind: 'personal' as ProfileType,
+  //         accounts: [
+  //           {
+  //             address: 'testAddress1',
+  //             iban: 'DE89370400440532013000',
+  //             currency: Currency.eur,
+  //             standard: 'iban' as PaymentStandard,
+  //             chain: 'ethereum',
+  //             network: 'mainnet',
+  //           },
+  //           {
+  //             address: 'testAddress2',
+  //             iban: 'DE89370400440532013001',
+  //             currency: Currency.eur,
+  //             standard: 'iban' as PaymentStandard,
+  //             chain: 'ethereum',
+  //             network: 'mainnet',
+  //           },
+  //         ],
+  //       };
 
-      const result = getIban(profile, 'testAddress3', 1);
+  //       const result = getIban(profile, 'testAddress3', 1);
 
-      expect(result).toBe('');
-    });
+  //       expect(result).toBe('');
+  //     });
 
-    test('should return an empty string if the account with the given address does not have an IBAN', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'sepolia',
-          },
-          {
-            address: 'testAddress2',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'sepolia',
-          },
-        ],
-      };
+  //     test('should return an empty string if the account with the given address does not have an IBAN', () => {
+  //       const profile: Profile = {
+  //         id: 'testId',
+  //         name: 'testName',
+  //         kyc: {} as KYC,
+  //         email: 'testEmail',
+  //         kind: 'personal' as ProfileType,
+  //         accounts: [
+  //           {
+  //             address: 'testAddress1',
+  //             iban: 'DE89370400440532013000',
+  //             currency: Currency.eur,
+  //             standard: 'iban' as PaymentStandard,
+  //             chain: 'ethereum',
+  //             network: 'sepolia',
+  //           },
+  //           {
+  //             address: 'testAddress2',
+  //             currency: Currency.eur,
+  //             standard: 'iban' as PaymentStandard,
+  //             chain: 'ethereum',
+  //             network: 'sepolia',
+  //           },
+  //         ],
+  //       };
 
-      const result = getIban(profile, 'testAddress2', 11155111);
+  //       const result = getIban(profile, 'testAddress2', 11155111);
 
-      expect(result).toBe('');
-    });
-  });
+  //       expect(result).toBe('');
+  //     });
+  //   });
 });
 
 describe('placeOrderMessage', () => {

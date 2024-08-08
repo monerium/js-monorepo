@@ -78,49 +78,46 @@ export type Ticker = 'EUR' | 'GBP' | 'USD' | 'ISK';
 // -- auth
 
 export type AuthArgs =
-  | Omit<AuthCodeRequest, 'grant_type'>
-  | Omit<RefreshTokenRequest, 'grant_type'>
-  | Omit<ClientCredentialsRequest, 'grant_type'>;
+  | Omit<AuthCodePayload, 'grant_type'>
+  | Omit<RefreshTokenPayload, 'grant_type'>
+  | Omit<ClientCredentialsPayload, 'grant_type'>;
 
 export type OpenArgs =
-  | Omit<AuthCodeRequest, 'grant_type' | 'code' | 'code_verifier'>
-  | Omit<RefreshTokenRequest, 'grant_type'>
-  | Omit<ClientCredentialsRequest, 'grant_type'>
+  | Omit<AuthCodePayload, 'grant_type' | 'code' | 'code_verifier'>
+  | Omit<RefreshTokenPayload, 'grant_type'>
+  | Omit<ClientCredentialsPayload, 'grant_type'>
   | PKCERequestArgs;
 
 /** One of the options for the {@link AuthArgs}.
  *
  * [Auth endpoint in API documentation:](https://monerium.dev/api-docs#operation/auth).
  * */
-export interface AuthCodeRequest {
+export interface AuthCodePayload {
   grant_type: 'authorization_code';
   client_id: string;
   code: string;
   code_verifier: string;
   redirect_uri: string;
-  scope?: string;
 }
 
 /** One of the options for the {@link AuthArgs}.
  *
  * [Auth endpoint in API documentation:](https://monerium.dev/api-docs#operation/auth).
  * */
-export interface RefreshTokenRequest {
+export interface RefreshTokenPayload {
   grant_type: 'refresh_token';
   client_id: string;
   refresh_token: string;
-  scope?: string;
 }
 
 /** One of the options for the {@link AuthArgs}.
  *
  * [Auth endpoint in API documentation:](https://monerium.dev/api-docs#operation/auth).
  * */
-export interface ClientCredentialsRequest {
+export interface ClientCredentialsPayload {
   grant_type: 'client_credentials';
   client_id: string;
   client_secret: string;
-  scope?: string;
 }
 
 export interface BearerProfile {
@@ -163,6 +160,8 @@ export type PKCERequest = {
   signature?: string;
   /** The network of the wallet to automatically link  */
   chain?: Chain | ChainId;
+  /** You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization */
+  skipCreateAccount?: boolean;
 };
 
 // -- authContext
@@ -203,6 +202,19 @@ export interface AuthContext {
 
 // -- getProfile
 
+export enum ProfileState {
+  /** The profile has been created but no details have been submitted.*/
+  created = 'created',
+  /** The details have been submitted and are being processed. */
+  pending = 'pending',
+  /** The profile is active and all Monerium services are supported.*/
+  approved = 'approved',
+  /**The applicant details did not meet the compliance requirements of Monerium. Details can be fixed and re-submitted for processing.*/
+  rejected = 'rejected',
+  /**Monerium is unable to offer the applicant services because of compliance reasons. Details cannot be re-submitted.*/
+  blocked = 'blocked',
+}
+
 export enum KYCState {
   absent = 'absent',
   submitted = 'submitted',
@@ -232,6 +244,15 @@ export enum PaymentStandard {
   scan = 'scan',
   chain = 'chain',
 }
+/**
+ * The type of ID document. Passports, National ID cards, and driving licenses are supported.
+ * The ID document must verify the person's name, birthday, and nationality
+ */
+export enum IdDocumentKind {
+  passport = 'passport',
+  nationalIdentityCard = 'nationalIdentityCard',
+  drivingLicense = 'drivingLicense',
+}
 
 export interface Identifier {
   standard: PaymentStandard;
@@ -251,13 +272,90 @@ export interface Account {
   state?: AccountState;
 }
 
+export interface ProfilesResponse {
+  profiles: Profile[];
+}
 export interface Profile {
   id: string;
   name: string;
-  email: string;
-  kyc: KYC;
   kind: ProfileType;
-  accounts: Account[];
+  state: ProfileState;
+}
+
+export interface ProfilesQueryParam {
+  state?: ProfileState;
+  kind?: ProfileType;
+}
+
+export interface PersonalProfileDetails {
+  idDocument: {
+    number: string;
+    kind: IdDocumentKind;
+  };
+  firstName: string;
+  lastName: string;
+  address: string;
+  postalCode: number;
+  city: string;
+  country: string;
+  countryState?: string;
+  nationality: string;
+  birthday: string;
+}
+
+export interface PersonalProfileDetailsRequest {
+  personal: PersonalProfileDetails;
+}
+
+export type Representative = PersonalProfileDetails;
+export type Beneficiary = Omit<PersonalProfileDetails, 'idDocument'> & {
+  /** Ownership in % that is between 25% and 100%. */
+  ownershipPercentage: number;
+};
+export type Director = Omit<PersonalProfileDetails, 'idDocument'>;
+
+export interface CorporateProfileDetails {
+  name: string;
+  registrationNumber: string;
+  address: string;
+  postalCode: number;
+  city: string;
+  country: string;
+  countryState: string;
+  /** List of individuals representing the company and authorized to act on it's behalf. */
+  representatives: Representative[];
+  /** List of beneficial owner that owns 25% or more in a corporation. */
+  finalBeneficiaries: Beneficiary[];
+  /** List of Individual who has powers to legally bind the company (power of procuration). */
+  directors: Director[];
+}
+export interface CorporateProfileDetailsRequest {
+  corporate: CorporateProfileDetails;
+}
+
+export type SubmitProfileDetailsPayload =
+  | PersonalProfileDetailsRequest
+  | CorporateProfileDetailsRequest;
+
+// -- getAddresses
+export interface AddressesQueryParams {
+  /** Filter the list on profile ID */
+  profile?: string;
+  /** Filter the list on the chain */
+  chain?: Chain | ChainId;
+}
+// export interface AddressFilters {
+//   /** The public key of the blockchain account.*/
+//   address: string;
+// }
+
+export interface Address {
+  profile: string;
+  chains: Chain[];
+}
+
+export interface AddressesResponse {
+  addresses: Address[];
 }
 
 // -- getBalances
@@ -270,7 +368,6 @@ export interface Balances {
   id: string;
   address: string;
   chain: Chain;
-  network: Network;
   balances: Balance[];
 }
 
@@ -421,32 +518,61 @@ export interface SupportingDoc {
   meta: SupportingDocMetadata;
 }
 
-// -- linkAddress
+// -- signUp
 
-export interface CurrencyAccounts {
-  /** The accounts network  */
-  chain: Chain | ChainId;
-  currency: Currency;
+export interface SignUpPayload {
+  email: string;
+}
+export interface SignUpResponse {
+  email: string;
+  profile: string;
 }
 
+// -- linkAddress
+
+// export interface CurrencyAccounts {
+//   /** The accounts network  */
+//   chain: Chain | ChainId;
+//   currency: Currency;
+// }
+
 export interface LinkAddress {
+  /** Profile ID that owns the address. */
+  profile?: string;
+  /** The public key of the blockchain account. */
   address: string;
+  /**
+   * Fixed message to be signed with the private key corresponding to the given address.
+   *
+   * `I hereby declare that I am the address owner.`
+   */
   message: string;
+  /**
+   * The signature hash of signing the `message` with the private key associated with the given address.
+   * For signing on-chain with ERC1271 contracts, use `0x`, visit the documentation for further details.
+   * https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address
+   */
   signature: string;
-  accounts: CurrencyAccounts[];
   chain?: Chain | ChainId;
 }
 
-export interface LinkedAddress {
-  id: string;
-  profile: string;
+// export interface LinkedAddress {
+//   id: string;
+//   profile: string;
+//   address: string;
+//   message: string;
+//   meta: {
+//     linkedBy: string;
+//     linkedAt: string;
+//   };
+// }
+
+// -- IBANs
+
+export type RequestIbanPayload = {
   address: string;
-  message: string;
-  meta: {
-    linkedBy: string;
-    linkedAt: string;
-  };
-}
+  chain: Chain | ChainId;
+};
 
 // -- Notifications
 
@@ -473,19 +599,16 @@ export type MoneriumEventListener = (notification: OrderNotification) => void;
 
 export type ClassOptions = {
   environment?: ENV;
-  version?: 'v1' | 'v2';
 } & BearerTokenCredentials;
 
 export interface AuthFlowOptions {
   clientId?: string;
   redirectUri?: string;
-  /** @deprecated use redirectUri */
-  redirectUrl?: string;
   address?: string;
   signature?: string;
   chain?: Chain | ChainId;
   state?: string;
-  scope?: string; // TODO: type 'orders:write' etc.
+  skipCreateAccount?: boolean;
 }
 
 export interface ClientCredentials {
@@ -497,14 +620,12 @@ export interface AuthorizationCodeCredentials {
   clientId: string;
   redirectUri: string;
 }
-/** @deprecated use redirectUri */
-export interface DeprecatedAuthorizationCodeCredentials {
-  clientId?: string;
-  /** @deprecated use redirectUri */
-  redirectUrl?: string;
-}
 
 export type BearerTokenCredentials =
   | ClientCredentials
-  | AuthorizationCodeCredentials
-  | DeprecatedAuthorizationCodeCredentials;
+  | AuthorizationCodeCredentials;
+
+export type ResponseStatus = {
+  status: number;
+  statusText: string;
+};

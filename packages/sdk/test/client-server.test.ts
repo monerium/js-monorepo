@@ -11,13 +11,7 @@ import 'jest-localstorage-mock';
 
 import constants from '../src/constants';
 import { MoneriumClient } from '../src/index';
-import {
-  Currency,
-  CurrencyAccounts,
-  Individual,
-  Order,
-  PaymentStandard,
-} from '../src/types';
+import { Currency, Individual, Order, PaymentStandard } from '../src/types';
 import { rfc3339 } from '../src/utils';
 import {
   APP_ONE_CREDENTIALS_CLIENT_ID,
@@ -40,7 +34,7 @@ process.env.CI !== 'true' &&
     client = new MoneriumClient({
       clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
       clientSecret: APP_ONE_CREDENTIALS_SECRET,
-      version: 'v1',
+      // version: 'v2',
     });
     try {
       await client.getAccess();
@@ -56,38 +50,22 @@ process.env.CI !== 'true' &&
 
       expect(authContext.userId).toBe(APP_ONE_OWNER_USER_ID);
     });
-
+    // TODO:
+    // something off with this endpoint
     test('link address', async () => {
       const authContext = await client.getAuthContext();
 
-      const res = await client.linkAddress(authContext.defaultProfile, {
+      const res = await client.linkAddress({
+        profile: authContext.defaultProfile as string,
         address: PUBLIC_KEY,
         message: message,
+        chain: 11155111,
         signature: OWNER_SIGNATURE,
-        accounts: [
-          {
-            chain: 'ethereum',
-            currency: Currency.eur,
-          },
-          {
-            chain: 'gnosis',
-            currency: Currency.eur,
-          },
-          {
-            chain: 'polygon',
-            currency: Currency.eur,
-          },
-        ] as CurrencyAccounts[] /** to bypass typeerror to test backwards compatibility */,
       });
 
       expect(res).toMatchObject({
-        address: '0xBd78A5C7efBf7f84C75ef638689A006512E1A6c4',
-        id: 'ebec4eed-6dcb-11ee-8aa6-5273f65ed05b',
-        message: 'I hereby declare that I am the address owner.',
-        meta: {
-          linkedBy: '9fdfd981-6dca-11ee-8aa6-5273f65ed05b',
-        },
-        profile: '9fdfd8f1-6dca-11ee-8aa6-5273f65ed05b',
+        status: 201,
+        statusText: 'Created',
       });
     });
 
@@ -101,7 +79,8 @@ process.env.CI !== 'true' &&
     });
 
     test('get balances', async () => {
-      const balances = await client.getBalances();
+      const authContext = await client.getAuthContext();
+      const balances = await client.getBalances(authContext.defaultProfile);
 
       expect(balances).toEqual(
         expect.arrayContaining([
