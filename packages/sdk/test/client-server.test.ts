@@ -40,7 +40,6 @@ process.env.CI !== 'true' &&
     client = new MoneriumClient({
       clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
       clientSecret: APP_ONE_CREDENTIALS_SECRET,
-      version: 'v1',
     });
     try {
       await client.getAccess();
