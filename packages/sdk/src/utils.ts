@@ -106,20 +106,20 @@ export const getChain = (chainId: number): Chain => {
   }
 };
 
-export const getIban = (
-  profile: Profile,
-  address: string,
-  chain: Chain | ChainId
-) => {
-  return (
-    profile.accounts.find(
-      (account) =>
-        account.address === address &&
-        account.iban &&
-        account.chain === parseChain(chain)
-    )?.iban ?? ''
-  );
-};
+// export const getIban = (
+//   profile: Profile,
+//   address: string,
+//   chain: Chain | ChainId
+// ) => {
+//   return (
+//     profile.accounts.find(
+//       (account) =>
+//         account.address === address &&
+//         account.iban &&
+//         account.chain === parseChain(chain)
+//     )?.iban ?? ''
+//   );
+// };
 
 export const getAmount = (
   balances?: Balances[],

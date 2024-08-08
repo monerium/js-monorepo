@@ -4,11 +4,11 @@ import SHA256 from 'crypto-js/sha256.js';
 import constants from '../constants';
 import {
   AuthArgs,
-  AuthCodeRequest,
-  ClientCredentialsRequest,
+  AuthCodePayload,
+  ClientCredentialsPayload,
   PKCERequest,
   PKCERequestArgs,
-  RefreshTokenRequest,
+  RefreshTokenPayload,
 } from '../types';
 import { parseChain, urlEncoded } from '../utils';
 
@@ -93,16 +93,16 @@ export const cleanQueryString = () => {
   }
 };
 
-export const isAuthCode = (args: AuthArgs): args is AuthCodeRequest => {
-  return (args as AuthCodeRequest).code != undefined;
+export const isAuthCode = (args: AuthArgs): args is AuthCodePayload => {
+  return (args as AuthCodePayload).code != undefined;
 };
 
-export const isRefreshToken = (args: AuthArgs): args is RefreshTokenRequest => {
-  return (args as RefreshTokenRequest).refresh_token != undefined;
+export const isRefreshToken = (args: AuthArgs): args is RefreshTokenPayload => {
+  return (args as RefreshTokenPayload).refresh_token != undefined;
 };
 
 export const isClientCredentials = (
   args: AuthArgs
-): args is ClientCredentialsRequest => {
-  return (args as ClientCredentialsRequest).client_secret != undefined;
+): args is ClientCredentialsPayload => {
+  return (args as ClientCredentialsPayload).client_secret != undefined;
 };
