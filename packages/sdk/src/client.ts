@@ -401,6 +401,10 @@ export class MoneriumClient {
     return this.#api<Order>('post', `orders`, JSON.stringify(body));
   }
 
+  /**
+   * {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban}
+   * @category IBANs
+   */
   requestIban({ address, chain }: RequestIbanPayload): Promise<ResponseStatus> {
     return this.#api<ResponseStatus>(
       'post',
