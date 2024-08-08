@@ -128,7 +128,7 @@ process.env.CI !== 'true' &&
       const client = new MoneriumClient();
 
       await client.authorize({
-        redirectUrl: 'http://example.com',
+        redirectUri: 'http://example.com',
         clientId: 'testClientId',
       });
 
@@ -143,12 +143,10 @@ process.env.CI !== 'true' &&
     test('redirect w auto-link', async () => {
       const client = new MoneriumClient({
         clientId: 'testClientId',
-        redirectUrl: 'http://example.com',
+        redirectUri: 'http://example.com',
       });
 
       await client.authorize({
-        // redirectUrl: 'http://example.com',
-        // clientId: 'testClientId',
         address: '0x1234',
         signature: '0x5678',
         chain: 137,
@@ -215,3 +213,11 @@ process.env.CI === 'true' &&
   it('SKIPPED', () => {
     expect(true).toBe(true);
   });
+
+// TODO:
+// test getAddresses
+// test getAddress
+// test getBalances
+// test signUp
+// test submitProfileDetails
+// test requestIban

@@ -6,11 +6,15 @@ import {
   isAuthCode,
   isClientCredentials,
   isRefreshToken,
+  queryParams,
   rest,
 } from './helpers';
 import type {
+  Address,
+  AddressesQueryParams,
+  AddressesResponse,
   AuthArgs,
-  AuthCodeRequest,
+  AuthCodePayload,
   AuthContext,
   AuthFlowOptions,
   AuthorizationCodeCredentials,
@@ -19,12 +23,10 @@ import type {
   BearerTokenCredentials,
   ClassOptions,
   ClientCredentials,
-  ClientCredentialsRequest,
-  DeprecatedAuthorizationCodeCredentials,
+  ClientCredentialsPayload,
   ENV,
   Environment,
   LinkAddress,
-  LinkedAddress,
   MoneriumEvent,
   MoneriumEventListener,
   NewOrder,
@@ -34,11 +36,18 @@ import type {
   OrderState,
   PKCERequestArgs,
   Profile,
-  RefreshTokenRequest,
+  ProfilesQueryParam,
+  ProfilesResponse,
+  RefreshTokenPayload,
+  RequestIbanPayload,
+  ResponseStatus,
+  SignUpPayload,
+  SignUpResponse,
+  SubmitProfileDetailsPayload,
   SupportingDoc,
   Token,
 } from './types';
-import { mapChainIdToChain, urlEncoded } from './utils';
+import { mapChainIdToChain, parseChain, urlEncoded } from './utils';
 
 // import pjson from "../package.json";
 const { STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } = constants;
@@ -49,8 +58,6 @@ export class MoneriumClient {
   #env: Environment;
 
   #authorizationHeader?: string;
-
-  #version?: string;
   /**
    * The PKCE code verifier
    * @deprecated, use localStorage, will be removed in v3
@@ -93,7 +100,6 @@ export class MoneriumClient {
     // No arguments, default to sandbox
     if (!envOrOptions) {
       this.#env = MONERIUM_CONFIG.environments['sandbox'];
-      this.#version = 'v2';
       return;
     }
     // String argument
@@ -102,16 +108,13 @@ export class MoneriumClient {
     } else {
       this.#env =
         MONERIUM_CONFIG.environments[envOrOptions.environment || 'sandbox'];
-      this.#version = envOrOptions?.version || 'v2';
 
       if (!isServer) {
         const { clientId, redirectUri } =
           envOrOptions as AuthorizationCodeCredentials;
-        const { redirectUrl } =
-          envOrOptions as DeprecatedAuthorizationCodeCredentials;
         this.#client = {
-          clientId: clientId as string,
-          redirectUri: redirectUri || (redirectUrl as string),
+          clientId,
+          redirectUri,
         };
       } else {
         const { clientId, clientSecret } = envOrOptions as ClientCredentials;
@@ -129,7 +132,7 @@ export class MoneriumClient {
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
    * @returns string
    * {@link https://monerium.dev/api-docs#operation/auth}
-   * @category Auth
+   * @category Authentication
    */
   async authorize(client?: AuthFlowOptions) {
     const clientId =
@@ -137,14 +140,10 @@ export class MoneriumClient {
       (this.#client as AuthorizationCodeCredentials)?.clientId;
     const redirectUri =
       client?.redirectUri ||
-      client?.redirectUrl ||
       (this.#client as AuthorizationCodeCredentials)?.redirectUri;
 
     if (!clientId) {
       throw new Error('Missing ClientId');
-    }
-    if (!redirectUri) {
-      throw new Error('Missing RedirectUri');
     }
 
     const authFlowUrl = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, {
@@ -154,7 +153,7 @@ export class MoneriumClient {
       signature: client?.signature,
       chain: client?.chain,
       state: client?.state,
-      scope: client?.scope,
+      skipCreateAccount: client?.skipCreateAccount,
     });
 
     // Redirect to the authFlow
@@ -165,7 +164,7 @@ export class MoneriumClient {
    * Will redirect to the authorization code flow and store the code verifier in the local storage
    * @param {AuthorizationCodeCredentials | ClientCredentials} client - the client credentials
    * @returns boolean to indicate if access has been granted
-   * @category Auth
+   * @category Authentication
    * @example
    *   import { MoneriumClient } from '@monerium/sdk';
    *  // Initialize the client with credentials
@@ -178,10 +177,7 @@ export class MoneriumClient {
    * await monerium.getAccess();
    */
   async getAccess(
-    client?:
-      | AuthorizationCodeCredentials
-      | ClientCredentials
-      | DeprecatedAuthorizationCodeCredentials
+    client?: AuthorizationCodeCredentials | ClientCredentials
   ): Promise<boolean> {
     const clientId = client?.clientId || this.#client?.clientId;
     const clientSecret =
@@ -200,7 +196,6 @@ export class MoneriumClient {
 
     const redirectUri =
       (client as AuthorizationCodeCredentials)?.redirectUri ||
-      (client as DeprecatedAuthorizationCodeCredentials)?.redirectUrl ||
       (this.#client as AuthorizationCodeCredentials)?.redirectUri;
 
     if (!clientId) {
@@ -239,19 +234,19 @@ export class MoneriumClient {
    */
   async #grantAccess(args: AuthArgs): Promise<BearerProfile> {
     let params:
-      | AuthCodeRequest
-      | RefreshTokenRequest
-      | ClientCredentialsRequest;
+      | AuthCodePayload
+      | RefreshTokenPayload
+      | ClientCredentialsPayload;
 
     if (isAuthCode(args)) {
-      params = { ...args, grant_type: 'authorization_code' } as AuthCodeRequest;
+      params = { ...args, grant_type: 'authorization_code' } as AuthCodePayload;
     } else if (isRefreshToken(args)) {
-      params = { ...args, grant_type: 'refresh_token' } as RefreshTokenRequest;
+      params = { ...args, grant_type: 'refresh_token' } as RefreshTokenPayload;
     } else if (isClientCredentials(args)) {
       params = {
         ...args,
         grant_type: 'client_credentials',
-      } as ClientCredentialsRequest;
+      } as ClientCredentialsPayload;
     } else {
       throw new Error('Authorization grant type could not be detected.');
     }
@@ -297,7 +292,7 @@ export class MoneriumClient {
   // -- Read Methods
   /**
    * {@link https://monerium.dev/api-docs#operation/auth-context}
-   * @category Auth
+   * @category Authentication
    */
   getAuthContext(): Promise<AuthContext> {
     return this.#api<AuthContext>('get', `auth/context`);
@@ -305,30 +300,52 @@ export class MoneriumClient {
 
   /**
    * {@link https://monerium.dev/api-docs#operation/profile}
-   * @param {string} profileId - the id of the profile to fetch.
+   * @param {string} profile - the id of the profile to fetch.
    * @category Profiles
    */
-  getProfile(profileId: string): Promise<Profile> {
-    return this.#api<Profile>('get', `profiles/${profileId}`);
+  getProfile(profile: string): Promise<Profile> {
+    return this.#api<Profile>('get', `profiles/${profile}`);
   }
   /**
    * {@link https://monerium.dev/api-docs#operation/profiles}
    * @category Profiles
    */
-  getProfiles(): Promise<Profile[]> {
-    return this.#api<Profile[]>('get', `profiles`);
+  getProfiles(params?: ProfilesQueryParam): Promise<ProfilesResponse> {
+    return this.#api<ProfilesResponse>('get', `profiles${queryParams(params)}`);
+  }
+
+  /**
+   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses}
+   * @param {string} profile - the id of the profile to filter.
+   * @param {Chain | ChainId} chain - the chain to filter.
+   * @category Addresses
+   */
+  getAddresses({
+    profile,
+    chain,
+  }: AddressesQueryParams): Promise<AddressesResponse> {
+    const params = queryParams({
+      profile,
+      chain: chain ? parseChain(chain) : chain,
+    });
+    return this.#api<AddressesResponse>('get', `addresses${params}`);
   }
   /**
-   * {@link https://monerium.dev/api-docs#operation/profile-balances}
-   * @param {string=} profileId - the id of the profile to fetch balances.
-   * @category Accounts
+   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address}
+   * @param {string} address - The public key of the blockchain account.
+   * @category Addresses
    */
-  getBalances(profileId?: string): Promise<Balances[]> {
-    if (profileId) {
-      return this.#api<Balances[]>('get', `profiles/${profileId}/balances`);
-    } else {
-      return this.#api<Balances[]>('get', `balances`);
-    }
+  getAddress(address: string): Promise<Address> {
+    return this.#api<Address>('get', `addresses/${address}`);
+  }
+
+  /**
+   * {@link https://monerium.dev/api-docs#operation/profile-balances}
+   * @param {string} profileId - the id of the profile to fetch balances.
+   * @category Addresses
+   */
+  getBalances(profile: string): Promise<Balances[]> {
+    return this.#api<Balances[]>('get', `profiles/${profile}/balances`);
   }
 
   /**
@@ -360,44 +377,11 @@ export class MoneriumClient {
 
   /**
    * {@link https://monerium.dev/api-docs#operation/profile-addresses}
-   * @category Accounts
+   * @category Addresses
    */
-  linkAddress(
-    body: Omit<LinkAddress, 'accounts'> & { profile: string }
-  ): Promise<LinkedAddress>;
-  /** @deprecated this function should only take one parameter, body with profile id included  */
-  linkAddress(profileId: string, body: LinkAddress): Promise<LinkedAddress>;
-
-  linkAddress(
-    profileIdOrBody:
-      | string
-      | (Omit<LinkAddress, 'accounts'> & { profile: string }),
-    /** @deprecated this function should only take one parameter, body with profile id included */
-    body?: LinkAddress
-  ): Promise<LinkedAddress> {
-    if (typeof profileIdOrBody === 'string' && body && this.#version === 'v1') {
-      body = mapChainIdToChain(body);
-      if (body?.accounts) {
-        body.accounts = body?.accounts.map((account) =>
-          mapChainIdToChain(account)
-        );
-      }
-
-      return this.#api<LinkedAddress>(
-        'post',
-        `profiles/${profileIdOrBody}/addresses`,
-        JSON.stringify(body)
-      );
-    } else if (typeof profileIdOrBody === 'object' && this.#version === 'v2') {
-      profileIdOrBody = mapChainIdToChain(profileIdOrBody);
-      return this.#api<LinkedAddress>(
-        'post',
-        `addresses`,
-        JSON.stringify(profileIdOrBody)
-      );
-    } else {
-      throw new Error('Invalid arguments');
-    }
+  linkAddress(body: LinkAddress): Promise<ResponseStatus> {
+    body = mapChainIdToChain(body);
+    return this.#api<ResponseStatus>('post', `addresses`, JSON.stringify(body));
   }
 
   /**
@@ -415,6 +399,41 @@ export class MoneriumClient {
     };
 
     return this.#api<Order>('post', `orders`, JSON.stringify(body));
+  }
+
+  requestIban({ address, chain }: RequestIbanPayload): Promise<ResponseStatus> {
+    return this.#api<ResponseStatus>(
+      'post',
+      `ibans`,
+      JSON.stringify({ address, chain: parseChain(chain) })
+    );
+  }
+
+  /**
+   * {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth-signup}
+   * @category Authentication
+   */
+  signUp(body: SignUpPayload): Promise<SignUpResponse> {
+    return this.#api<SignUpResponse>(
+      'post',
+      `auth/signup`,
+      JSON.stringify(body)
+    );
+  }
+
+  /**
+   * {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details}
+   * @category Profiles
+   */
+  submitProfileDetails(
+    profile: string,
+    body: SubmitProfileDetailsPayload
+  ): Promise<ResponseStatus> {
+    return this.#api<ResponseStatus>(
+      'put',
+      `profiles/${profile}/details`,
+      JSON.stringify(body)
+    );
   }
 
   /**
@@ -440,24 +459,11 @@ export class MoneriumClient {
   ): Promise<T> {
     const headers: Record<string, string> = {
       Authorization: this.#authorizationHeader || '',
+      Accept: 'application/vnd.monerium.api-v2+json',
       'Content-Type': `application/${
         isFormEncoded ? 'x-www-form-urlencoded' : 'json'
       }`,
     };
-    if (this.#version === 'v2') {
-      headers['Accept'] = 'application/vnd.monerium.api-v2+json';
-    }
-    console.log(
-      '%c headers',
-      'color:white; padding: 30px; background-color: darkgreen',
-      headers
-    );
-
-    console.log(
-      '%c ${this.#env.api}/${resource}',
-      'color:white; padding: 30px; background-color: darkgreen',
-      `${this.#env.api}/${resource}`
-    );
 
     return rest<T>(
       `${this.#env.api}/${resource}`,
@@ -567,7 +573,7 @@ export class MoneriumClient {
   };
   /**
    * Cleanups the socket and the subscriptions
-   * @category Auth
+   * @category Authentication
    */
   async disconnect() {
     if (!isServer) {
@@ -580,7 +586,7 @@ export class MoneriumClient {
   }
   /**
    * Revokes access
-   * @category Auth
+   * @category Authentication
    */
   async revokeAccess() {
     if (!isServer) {
