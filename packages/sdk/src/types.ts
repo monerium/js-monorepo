@@ -13,55 +13,6 @@ export type GnosisTestnet = 'chiado';
 export type PolygonTestnet = 'amoy';
 
 export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'gnosismainnet';
-export type Networks =
-  | EthereumTestnet
-  | GnosisTestnet
-  | PolygonTestnet
-  | 'mainnet';
-
-// -- Commons
-export type NetworkSemiStrict<C extends Chain> = C extends 'ethereum'
-  ? EthereumTestnet | 'mainnet'
-  : C extends 'gnosis'
-    ? GnosisTestnet | 'mainnet'
-    : C extends 'polygon'
-      ? PolygonTestnet | 'mainnet'
-      : never;
-
-export type NetworkStrict<
-  C extends Chain,
-  E extends ENV,
-> = E extends 'production'
-  ? 'mainnet'
-  : E extends 'sandbox'
-    ? C extends 'ethereum'
-      ? EthereumTestnet
-      : C extends 'gnosis'
-        ? GnosisTestnet
-        : C extends 'polygon'
-          ? PolygonTestnet
-          : never
-    : never;
-
-/*
- * -- isValid:
- * const network: Network<'ethereum', 'sandbox'> = 'sepolia';
- * const network: Network<'ethereum'> = 'mainnet';
- * const network: Network<'ethereum'> = 'sepolia'
- * const network: Network = 'chiado'
- *
- * -- isInValid:
- * const network: Network<'ethereum', 'sandbox'> = 'chiado';
- * const network: Network<'ethereum'> = 'chiado';
- */
-export type Network<
-  C extends Chain = Chain,
-  E extends ENV = ENV,
-> = C extends Chain
-  ? E extends ENV
-    ? NetworkStrict<C, E> & NetworkSemiStrict<C>
-    : never
-  : never;
 
 export type ChainId = number | 1 | 11155111 | 100 | 137 | 10200 | 80002;
 
@@ -182,24 +133,6 @@ export enum Permission {
   read = 'read',
   write = 'write',
 }
-
-export interface AuthProfile {
-  id: string;
-  type: ProfileType;
-  name: string;
-  perms: Permission[];
-}
-
-export interface AuthContext {
-  userId: string;
-  email: string;
-  name: string;
-  roles: 'admin'[];
-  auth: { method: Method; subject: string; verified: boolean };
-  defaultProfile: string;
-  profiles: AuthProfile[];
-}
-
 // -- getProfile
 
 export enum ProfileState {
@@ -259,30 +192,24 @@ export interface Identifier {
   bic?: string;
 }
 
-export interface Account {
-  address: string;
-  currency: Currency;
-  standard: PaymentStandard;
-  iban?: string;
-  // sortCode?: string;
-  // accountNumber?: string;
-  network?: Network;
-  chain: Chain;
-  id?: string;
-  state?: AccountState;
+export interface ProfilePermissions {
+  id: string;
+  kind: ProfileType;
+  name: string;
+  perms: Permission[];
 }
-
 export interface ProfilesResponse {
-  profiles: Profile[];
+  profiles: ProfilePermissions[];
 }
 export interface Profile {
   id: string;
   name: string;
   kind: ProfileType;
   state: ProfileState;
+  kyc: KYC;
 }
 
-export interface ProfilesQueryParam {
+export interface ProfilesQueryParams {
   state?: ProfileState;
   kind?: ProfileType;
 }
@@ -351,15 +278,16 @@ export interface AddressesQueryParams {
 
 export interface Address {
   profile: string;
+  address: string;
   chains: Chain[];
 }
 
-export interface AddressesResponse {
+export interface Addresses {
   addresses: Address[];
 }
 
 // -- getBalances
-export interface Balance {
+export interface CurrencyBalance {
   currency: Currency;
   amount: string;
 }
@@ -368,7 +296,7 @@ export interface Balances {
   id: string;
   address: string;
   chain: Chain;
-  balances: Balance[];
+  balances: CurrencyBalance[];
 }
 
 // --getOrders
@@ -391,12 +319,12 @@ export interface Fee {
   amount: string;
 }
 
-export interface IBAN extends Identifier {
+export interface IBANIdentifier extends Identifier {
   standard: PaymentStandard.iban;
   iban: string;
 }
 
-export interface CrossChain extends Identifier {
+export interface CrossChainIdentifier extends Identifier {
   standard: PaymentStandard.chain;
   /** The receivers address */
   address: string;
@@ -404,7 +332,7 @@ export interface CrossChain extends Identifier {
   chain: Chain | ChainId;
 }
 
-export interface SCAN extends Identifier {
+export interface SCANIdentifier extends Identifier {
   standard: PaymentStandard.scan;
   sortCode: string;
   accountNumber: string;
@@ -422,7 +350,7 @@ export interface Corporation {
 }
 
 export interface Counterpart {
-  identifier: IBAN | SCAN | CrossChain;
+  identifier: IBANIdentifier | SCANIdentifier | CrossChainIdentifier;
   details: Individual | Corporation;
 }
 
@@ -472,7 +400,6 @@ export interface Token {
   ticker: Ticker;
   symbol: TokenSymbol;
   chain: Chain;
-  network: Network;
   /** The address of the EURe contract on this network */
   address: string;
   /** How many decimals this token supports */
@@ -530,12 +457,6 @@ export interface SignUpResponse {
 
 // -- linkAddress
 
-// export interface CurrencyAccounts {
-//   /** The accounts network  */
-//   chain: Chain | ChainId;
-//   currency: Currency;
-// }
-
 export interface LinkAddress {
   /** Profile ID that owns the address. */
   profile?: string;
@@ -556,23 +477,34 @@ export interface LinkAddress {
   chain?: Chain | ChainId;
 }
 
-// export interface LinkedAddress {
-//   id: string;
-//   profile: string;
-//   address: string;
-//   message: string;
-//   meta: {
-//     linkedBy: string;
-//     linkedAt: string;
-//   };
-// }
-
 // -- IBANs
 
-export type RequestIbanPayload = {
+export interface RequestIbanPayload {
   address: string;
   chain: Chain | ChainId;
-};
+}
+
+export interface IbansQueryParams {
+  profile?: string;
+  chain?: Chain | ChainId;
+}
+
+export interface IBAN {
+  iban: string;
+  bic: string;
+  profile: string;
+  address: string;
+  chain: Chain;
+}
+
+export interface IBANsResponse {
+  ibans: IBAN[];
+}
+
+export interface MoveIbanPayload {
+  address: string;
+  chain: Chain | ChainId;
+}
 
 // -- Notifications
 
@@ -591,6 +523,11 @@ export interface OrderNotification {
   rejectedReason: string;
   supportingDocumentId: string;
   meta: OrderMetadata;
+}
+
+export interface OrderNotificationQueryParams {
+  state?: OrderState;
+  profile?: string;
 }
 
 export type MoneriumEvent = OrderState;
