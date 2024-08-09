@@ -309,21 +309,6 @@ export class MoneriumClient {
   getProfiles(params?: ProfilesQueryParams): Promise<ProfilesResponse> {
     return this.#api<ProfilesResponse>('get', `profiles${queryParams(params)}`);
   }
-
-  /**
-   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses}
-   * @param {string} profile - the id of the profile to filter.
-   * @param {Chain | ChainId} chain - the chain to filter.
-   * @category Addresses
-   */
-  getAddresses(queryParameters?: AddressesQueryParams): Promise<Addresses> {
-    const { profile, chain } = queryParameters || {};
-    const params = queryParams({
-      profile,
-      chain: chain ? parseChain(chain) : chain,
-    });
-    return this.#api<Addresses>('get', `addresses${params}`);
-  }
   /**
    * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address}
    * @param {string} address - The public key of the blockchain account.
@@ -331,6 +316,23 @@ export class MoneriumClient {
    */
   getAddress(address: string): Promise<Address> {
     return this.#api<Address>('get', `addresses/${address}`);
+  }
+
+  /**
+   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses}
+   * @param {string} profile - the id of the profile to filter.
+   * @param {Chain | ChainId} chain - the chain to filter.
+   * @category Addresses
+   */
+  getAddresses({
+    profile,
+    chain,
+  }: AddressesQueryParams = {}): Promise<Addresses> {
+    const params = queryParams({
+      profile,
+      chain: chain ? parseChain(chain) : chain,
+    });
+    return this.#api<Addresses>('get', `addresses${params}`);
   }
 
   /**
@@ -367,9 +369,7 @@ export class MoneriumClient {
    * @category Orders
    */
   getOrders(filter?: OrderFilter): Promise<Order[]> {
-    const searchParams = urlEncoded(filter as Record<string, string>);
-    const url = searchParams ? `orders?${searchParams}` : 'orders';
-    return this.#api<Order[]>('get', url);
+    return this.#api<Order[]>('get', `orders${queryParams(filter)}`);
   }
   /**
    * {@link https://monerium.dev/api-docs-v2#tag/order}
