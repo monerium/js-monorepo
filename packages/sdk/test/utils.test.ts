@@ -103,7 +103,6 @@ describe('url params', () => {
           id: 'testId',
           address: 'testAddress',
           chain: 'ethereum',
-          network: 'mainnet',
           balances: [
             {
               currency: Currency.eur,
@@ -123,7 +122,6 @@ describe('url params', () => {
           id: 'testId',
           address: 'testAddress',
           chain: 'polygon',
-          network: 'mainnet',
           balances: [
             {
               currency: Currency.eur,

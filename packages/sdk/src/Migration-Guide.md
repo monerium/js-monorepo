@@ -1,6 +1,14 @@
 Migration Guide.
 
+- `getAuthContext` removed, use `getProfiles` instead.
+
 - Use `redirectUri` instead of `redirectUrl` for consistency with OAuth 2.0.
+
+- `Network` has been completely removed.
+
+- `Balance` renamed to `CurrencyBalance`.
+
+- `IBAN`, `SCAN` and `CrossChain` interfaces renamed to `IBANIdentifier`, `SCANIdentifier` and `CrossChainIdentifier`.
 
 - `linkAddress` now only accepts one argument, the profile id has been added to the body.
 
@@ -21,6 +29,20 @@ Migration Guide.
 - Interface `ClientCredentialsRequest` renamed to `ClientCredentialsPayload`
 - Interface `AuthCodeRequest` renamed to `AuthCodePayload`
 - Interface `RefreshTokenRequest` renamed to `RefreshTokenPayload`
+
+## TODO: TEST ORDER NOTIFICATIONS
+
+- Do I need to add profile to #subscriptions ?
+
+---
+
+---
+
+---
+
+---
+
+---
 
 TODO: when there is only one arg, should it be an object??
 
