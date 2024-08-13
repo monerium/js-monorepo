@@ -11,7 +11,7 @@ const constants = require('./constants');
 const {
   APP_ONE_CREDENTIALS_SECRET,
   APP_ONE_CREDENTIALS_CLIENT_ID,
-  APP_ONE_OWNER_USER_ID,
+  DEFAULT_PROFILE,
 } = constants;
 
 test('should import without throwing', () => {
@@ -25,8 +25,7 @@ process.env.CI !== 'true' &&
     });
 
     await client.getAccess();
+    const { profiles } = await client.getProfiles();
 
-    const authContext = await client.getAuthContext();
-
-    expect(authContext.userId).toBe(APP_ONE_OWNER_USER_ID);
+    expect(profiles?.[0]?.id).toBe(DEFAULT_PROFILE);
   });

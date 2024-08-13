@@ -2,14 +2,14 @@ import { useContext } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import MoneriumClient, {
-  AuthContext,
   Balances,
   LinkAddress,
-  LinkedAddress,
   NewOrder,
   Order,
   OrderState,
   Profile,
+  ProfilePermissions,
+  ProfilesResponse,
   Token,
 } from '@monerium/sdk';
 
@@ -28,7 +28,6 @@ import {
  * */
 export const keys = {
   getAll: ['monerium'],
-  getAuthContext: ['monerium', 'auth-context'],
   getProfile: (profileId: string) => [
     'monerium',
     'profile',
@@ -99,58 +98,6 @@ export function useAuth(): UseAuthReturn {
 }
 
 /**
- * # Get the authentication context.
- * @group Hooks
- *
- * @param {Object} [params] No required parameters.
- * @param {QueryOptions<AuthContext>} [params.query] {@inheritDoc QueryOptions}
- *
- * @example
- * ```ts
- * const {
- *    authContext, // useQuery's `data` property
- *    isLoading,
- *    isError,
- *    error,
- *    refetch,
- *    ...moreUseQueryResults
- * } = useAuthContext();
- * ```
- *
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/auth-context)
- *
- * [AuthContext interface](/docs/packages/SDK/interfaces/AuthContext.md)
- */
-export function useAuthContext({
-  query,
-}: {
-  query?: QueryOptions<AuthContext>;
-} = {}): QueryResult<'authContext', AuthContext> {
-  const { isAuthorized } = useAuth();
-  const sdk = useSdk();
-
-  const { data, ...rest } = useQuery({
-    ...query,
-    queryKey: keys.getAuthContext,
-    queryFn: async () => {
-      if (!sdk) {
-        throw new Error('No SDK instance available');
-      }
-      if (!isAuthorized) {
-        throw new Error('User not authorized');
-      }
-      return sdk.getAuthContext();
-    },
-    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
-  });
-  return {
-    authContext: data,
-    ...rest,
-  };
-}
-
-/**
  * # Get single profile
  * If no `profileId` is provided, the default profile is used.
  * @group Hooks
@@ -176,21 +123,21 @@ export function useAuthContext({
  * [Profile interface](/docs/packages/SDK/interfaces/Profile.md)
  */
 export function useProfile({
-  profileId,
+  profile,
   query,
 }: {
-  profileId?: string;
+  profile?: string;
   query?: QueryOptions<Profile>;
 } = {}): QueryResult<'profile', Profile> {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
-  const { authContext } = useAuthContext();
+  const { profiles } = useProfiles();
 
-  const profileIdToUse = profileId || (authContext?.defaultProfile as string);
+  const profileToUse = profile || (profiles?.[0]?.id as string);
 
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getProfile(profileIdToUse),
+    queryKey: keys.getProfile(profileToUse),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -198,14 +145,14 @@ export function useProfile({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      if (!profileIdToUse) {
+      if (!profileToUse) {
         throw new Error('Profile Id is required');
       }
 
-      return sdk.getProfile(profileIdToUse);
+      return sdk.getProfile(profileToUse);
     },
     enabled: Boolean(
-      sdk && isAuthorized && profileIdToUse && (query?.enabled ?? true)
+      sdk && isAuthorized && profileToUse && (query?.enabled ?? true)
     ),
   });
   return {
@@ -217,7 +164,7 @@ export function useProfile({
  * # Get profiles
  * @group Hooks
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Profile[]>} [params.query] {@inheritDoc QueryOptions}
+ * @param {QueryOptions<ProfilesResponse>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
@@ -239,8 +186,8 @@ export function useProfile({
 export function useProfiles({
   query,
 }: {
-  query?: QueryOptions<Profile[]>;
-} = {}): QueryResult<'profiles', Profile[]> {
+  query?: QueryOptions<ProfilePermissions[]>;
+} = {}): QueryResult<'profiles', ProfilePermissions[]> {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
 
@@ -254,7 +201,8 @@ export function useProfiles({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.getProfiles();
+      const { profiles } = await sdk.getProfiles();
+      return profiles;
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
@@ -335,18 +283,18 @@ export function useTokens({
  * [Balances interface](/docs/packages/SDK/interfaces/Balances.md)
  */
 export function useBalances({
-  profileId,
+  profile,
   query,
 }: {
-  profileId?: string;
+  profile: string;
   query?: QueryOptions<Balances[]>;
-} = {}): QueryResult<'balances', Balances[]> {
+}): QueryResult<'balances', Balances[]> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
 
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getBalances(profileId),
+    queryKey: keys.getBalances(profile),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -354,7 +302,8 @@ export function useBalances({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.getBalances(profileId);
+
+      return sdk.getBalances(profile);
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
@@ -591,13 +540,23 @@ export function usePlaceOrder({
  *
  * [LinkAddress interface](/docs/packages/SDK/interfaces/LinkAddress.md)
  */
+
 export function useLinkAddress({
   profileId,
   mutation,
 }: {
   profileId: string;
-  mutation?: MutationOptions<LinkedAddress, Error, LinkAddress>;
-}): MutationResult<'linkAddress', LinkedAddress, Error, LinkAddress> {
+  mutation?: MutationOptions<
+    { status: number; statusText: string },
+    Error,
+    LinkAddress
+  >;
+}): MutationResult<
+  'linkAddress',
+  { status: number; statusText: string },
+  Error,
+  LinkAddress
+> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const queryClient = useQueryClient();
@@ -612,7 +571,7 @@ export function useLinkAddress({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.linkAddress(profileId, body);
+      return sdk.linkAddress({ profile: profileId, ...body });
     },
     onSuccess(data, variables, context) {
       // Refetch all orders on success.

@@ -26,7 +26,7 @@ describe('Sockets', () => {
     client.subscribeToOrderNotifications();
 
     expect(WebSocket).toHaveBeenCalledWith(
-      'wss://api.monerium.dev/profiles/123/orders?access_token=accessToken'
+      'wss://api.monerium.dev/orders?access_token=accessToken'
     );
   });
 });

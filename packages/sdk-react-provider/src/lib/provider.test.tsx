@@ -44,7 +44,7 @@ const TestConsumerComponent = () => {
     isAuthorized,
     // include other pieces of context you want to test
   } = useAuth();
-  const { profile } = useProfile();
+  const { profile } = useProfile({ profile: 'testProfileId' });
 
   return (
     <div>

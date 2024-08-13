@@ -1,4 +1,5 @@
 import { ResponseStatus } from '../types';
+import { consoleCurl } from './internal.helpers';
 
 export const rest = async <T = ResponseStatus>(
   url: string,
@@ -11,6 +12,8 @@ export const rest = async <T = ResponseStatus>(
     headers,
     body: body as unknown as BodyInit,
   });
+
+  // consoleCurl(method, url, body, headers);
 
   let response;
   const text = await res.text();

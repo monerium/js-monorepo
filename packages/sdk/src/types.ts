@@ -222,7 +222,7 @@ export interface PersonalProfileDetails {
   firstName: string;
   lastName: string;
   address: string;
-  postalCode: number;
+  postalCode: string;
   city: string;
   country: string;
   countryState?: string;
@@ -245,7 +245,7 @@ export interface CorporateProfileDetails {
   name: string;
   registrationNumber: string;
   address: string;
-  postalCode: number;
+  postalCode: string;
   city: string;
   country: string;
   countryState: string;
@@ -482,6 +482,7 @@ export interface LinkAddress {
 export interface RequestIbanPayload {
   address: string;
   chain: Chain | ChainId;
+  emailNotifications: boolean;
 }
 
 export interface IbansQueryParams {

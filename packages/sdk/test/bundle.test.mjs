@@ -2,7 +2,7 @@ import { MoneriumClient } from '../dist/index.mjs';
 import {
   APP_ONE_CREDENTIALS_CLIENT_ID,
   APP_ONE_CREDENTIALS_SECRET,
-  APP_ONE_OWNER_USER_ID,
+  DEFAULT_PROFILE,
 } from './constants.js';
 
 test('should import without throwing', () => {
@@ -15,9 +15,13 @@ process.env.CI !== 'true' &&
       clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
-    await client.getAccess();
+    try {
+      await client.getAccess();
+    } catch (error) {
+      console.log(error);
+    }
 
-    const authContext = await client.getAuthContext();
+    const { profiles } = await client.getProfiles();
 
-    expect(authContext.userId).toBe(APP_ONE_OWNER_USER_ID);
+    expect(profiles?.[0]?.id).toBe(DEFAULT_PROFILE);
   });

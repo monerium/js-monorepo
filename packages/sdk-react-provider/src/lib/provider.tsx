@@ -42,7 +42,7 @@ export const MoneriumProvider = ({
     const sdkInstance = new MoneriumClient({
       environment: environment,
       clientId,
-      redirectUri: redirectUri || redirectUrl,
+      redirectUri: redirectUri,
     });
     setSdk(sdkInstance);
   }, []);
