@@ -113,7 +113,8 @@ export class MoneriumClient {
       this.#env =
         MONERIUM_CONFIG.environments[envOrOptions.environment || 'sandbox'];
 
-      if (!isServer) {
+      // if (!isServer) {
+      if (!(envOrOptions as ClientCredentials)?.clientSecret) {
         const { clientId, redirectUri } =
           envOrOptions as AuthorizationCodeCredentials;
         this.#client = {
@@ -121,6 +122,10 @@ export class MoneriumClient {
           redirectUri,
         };
       } else {
+        console.error(
+          '\x1b[31m%s\x1b[0m',
+          'Use client credentials only on the server where the secret is secure!'
+        );
         const { clientId, clientSecret } = envOrOptions as ClientCredentials;
         this.#client = {
           clientId: clientId as string,
@@ -189,9 +194,11 @@ export class MoneriumClient {
       (this.#client as ClientCredentials)?.clientSecret;
 
     if (clientSecret) {
-      if (!isServer) {
-        throw new Error('Only use client credentials on server side');
-      }
+      console.error(
+        '\x1b[31m%s\x1b[0m',
+        'Use client credentials only on the server where the secret is secure!'
+      );
+
       await this.#clientCredentialsAuthorization(
         this.#client as ClientCredentials
       );
@@ -349,7 +356,7 @@ export class MoneriumClient {
    * @category IBANs
    */
   getIban(iban: string): Promise<IBAN> {
-    return this.#api<IBAN>('get', `ibans/${iban}`);
+    return this.#api<IBAN>('get', `ibans/${encodeURI(iban)}`);
   }
   /**
    * {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans}
@@ -433,11 +440,15 @@ export class MoneriumClient {
    * {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban}
    * @category IBANs
    */
-  requestIban({ address, chain }: RequestIbanPayload): Promise<ResponseStatus> {
+  requestIban({
+    address,
+    chain,
+    emailNotifications = true, // TODO: needs documentation
+  }: RequestIbanPayload): Promise<ResponseStatus> {
     return this.#api<ResponseStatus>(
       'post',
       `ibans`,
-      JSON.stringify({ address, chain: parseChain(chain) })
+      JSON.stringify({ address, chain: parseChain(chain), emailNotifications })
     );
   }
 

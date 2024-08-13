@@ -1,5 +1,5 @@
 'use client';
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useQueryClient } from '@tanstack/react-query';
@@ -8,13 +8,13 @@ import {
   Chain,
   constants,
   Currency,
-  CurrencyAccounts,
   PaymentStandard,
   placeOrderMessage,
 } from '@monerium/sdk';
 import {
+  MoneriumContext,
   useAuth,
-  useAuthContext,
+  // useAuthContext,
   useBalances,
   useLinkAddress,
   useOrder,
@@ -35,11 +35,12 @@ export default function Test() {
   /**
    * Monerium queries
    */
+  const context = useContext(MoneriumContext);
   const { isAuthorized, authorize, revokeAccess, error: authError } = useAuth();
 
   const { profile } = useProfile();
 
-  const { authContext } = useAuthContext();
+  // const { authContext } = useAuthContext();
 
   const { orders } = useOrders();
 
@@ -48,13 +49,10 @@ export default function Test() {
   });
 
   const { balances } = useBalances({
+    profile: profile?.id as string,
     query: {
       refetchOnWindowFocus: true,
     },
-  });
-
-  const { balances: profileBalances } = useBalances({
-    profileId: profile?.id as string,
   });
 
   const { tokens } = useTokens();
@@ -101,6 +99,46 @@ export default function Test() {
           defaultValue={defaultValue}
         />
       </div>
+    );
+  };
+
+  const UploadSupportingDocument = () => {
+    const [file, setFile] = useState<File>();
+
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        setFile(e.target.files[0]);
+      }
+    };
+
+    const handleUploadClick = () => {
+      if (!file) {
+        return;
+      }
+      context?.sdk?.uploadSupportingDocument(file);
+      // 👇 Uploading the file using the fetch API to the server
+      // fetch('https://httpbin.org/post', {
+      //   method: 'POST',
+      //   body: file,
+      //   // 👇 Set headers manually for single file upload
+      //   headers: {
+      //     'content-type': file.type,
+      //     'content-length': `${file.size}`, // 👈 Headers need to be a string
+      //   },
+      // })
+      //   .then((res) => res.json())
+      //   .then((data) => console.log(data))
+      //   .catch((err) => console.error(err));
+    };
+
+    return (
+      <>
+        <input type="file" onChange={handleFileChange} />
+
+        <div>{file && `${file.name} - ${file.type}`}</div>
+
+        <button onClick={handleUploadClick}>Upload</button>
+      </>
     );
   };
 
@@ -194,15 +232,6 @@ export default function Test() {
       if (chains.length === 0) {
         chains.push('ethereum');
       }
-      let accounts = [] as CurrencyAccounts[];
-      currencies.forEach((currency) => {
-        chains.forEach((chain) => {
-          accounts.push({
-            currency: currency,
-            chain: chain,
-          });
-        });
-      });
 
       signMessageAsync({ message: constants.LINK_MESSAGE }).then(
         (signature) => {
@@ -211,7 +240,6 @@ export default function Test() {
             address: address as string,
             chain: chainId,
             signature: signature,
-            accounts: accounts,
           });
         }
       );
@@ -303,13 +331,13 @@ export default function Test() {
           <h1>Queries</h1>
           <div>
             <div>
-              <h2>AuthContext</h2>
+              {/* <h2>AuthContext</h2>
               <p>name: {authContext?.name}</p>
               <p>defaultProfile: {authContext?.defaultProfile}</p>
               <details>
                 <summary>Click to Expand</summary>
                 <PrettyPrintJson data={authContext} />
-              </details>
+              </details> */}
             </div>
             <div>
               <h2>Profile</h2>
@@ -320,15 +348,6 @@ export default function Test() {
               </details>
             </div>
 
-            <div>
-              <h2>Balances (profile)</h2>
-              <details>
-                <summary>
-                  Click to Expand, total: {profileBalances?.length}
-                </summary>
-                <PrettyPrintJson data={profileBalances} />
-              </details>
-            </div>
             <div>
               <h2>Balances</h2>
               <details>
@@ -363,6 +382,8 @@ export default function Test() {
           <br />
 
           <h1>Mutations</h1>
+          <h2>Upload supporting document</h2>
+          <UploadSupportingDocument />
           <h2>Place order</h2>
           <details>
             <summary>Click to Expand</summary>

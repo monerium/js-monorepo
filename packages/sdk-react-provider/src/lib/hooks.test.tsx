@@ -7,7 +7,6 @@ import { LinkAddress, NewOrder } from '@monerium/sdk';
 
 import {
   useAuth,
-  useAuthContext,
   useBalances,
   useLinkAddress,
   useOrder,
@@ -109,23 +108,6 @@ describe('useAuth', () => {
   });
 });
 
-describe('useAuthContext', () => {
-  test('returns the auth context', async () => {
-    const { result } = renderHook(() => useAuthContext(), {
-      wrapper,
-    });
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(true);
-    });
-
-    await waitFor(() => {
-      expect(result.current.authContext).toBe('mockedAuthContext');
-      expect(result.current.isSuccess).toBe(true);
-      expect(result.current.isLoading).toBe(false);
-    });
-  });
-});
 describe('useOrder', () => {
   test('returns the order', async () => {
     const { result } = renderHook(() => useOrder({ orderId: '1234' }), {
@@ -180,7 +162,7 @@ describe('useOrders', () => {
 });
 describe('useProfile', () => {
   test('returns the profile', async () => {
-    const { result } = renderHook(() => useProfile({ profileId: '1234' }), {
+    const { result } = renderHook(() => useProfile({ profile: '1234' }), {
       wrapper,
     });
 
@@ -231,9 +213,12 @@ describe('useTokens', () => {
 });
 describe('useBalances', () => {
   test('returns the profile', async () => {
-    const { result } = renderHook(() => useBalances(), {
-      wrapper,
-    });
+    const { result } = renderHook(
+      () => useBalances({ profile: 'testProfileId' }),
+      {
+        wrapper,
+      }
+    );
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(true);
