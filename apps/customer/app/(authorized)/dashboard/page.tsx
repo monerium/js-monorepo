@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
 import { Currency } from '@monerium/sdk';
-import { useBalances } from '@monerium/sdk-react-provider';
+import { useBalances, useProfile } from '@monerium/sdk-react-provider';
 
 import ChainFilter from 'components/Dashboard/Filters/ChainFilter';
 import TokenFilter from 'components/Dashboard/Filters/TokenFilter';
@@ -20,7 +20,10 @@ function Dashboard() {
     Currency.eur
   );
 
+  const { profile } = useProfile();
+
   const { refetch } = useBalances({
+    profile: profile?.id as string,
     query: {
       refetchOnWindowFocus: false,
     },

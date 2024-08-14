@@ -18,7 +18,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
 
 import { Balances, Currency } from '@monerium/sdk';
-import { useBalances } from '@monerium/sdk-react-provider';
+import { useBalances, useProfile } from '@monerium/sdk-react-provider';
 
 import { Account, ChainSelection } from '../types';
 import { flattenSortAndSumBalances } from './utils';
@@ -35,7 +35,9 @@ const WalletList = memo(
   }) => {
     const router = useRouter();
     const [filteredList, setFilteredList] = useState<Account[]>();
+    const { profile } = useProfile();
     const { balances, isLoading: loadingBalances } = useBalances({
+      profile: profile?.id as string,
       query: {
         refetchOnWindowFocus: false,
       },
