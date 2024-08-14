@@ -1,5 +1,5 @@
 'use client';
-import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useQueryClient } from '@tanstack/react-query';
@@ -8,19 +8,27 @@ import {
   Chain,
   constants,
   Currency,
+  IdDocumentKind,
   PaymentStandard,
   placeOrderMessage,
 } from '@monerium/sdk';
 import {
   MoneriumContext,
+  useAddress,
+  useAddresses,
   useAuth,
   // useAuthContext,
   useBalances,
+  useIBAN,
+  useIBANs,
   useLinkAddress,
+  useMoveIban,
   useOrder,
   useOrders,
   usePlaceOrder,
   useProfile,
+  useRequestIban,
+  useSubmitProfileDetails,
   useTokens,
 } from '@monerium/sdk-react-provider';
 export default function Test() {
@@ -28,7 +36,7 @@ export default function Test() {
   /**
    * Wagmi
    */
-  const { address } = useAccount();
+  const { address: walletAddress } = useAccount();
   const chainId = useChainId();
   const { signMessageAsync } = useSignMessage();
 
@@ -55,6 +63,16 @@ export default function Test() {
     },
   });
 
+  const { ibans } = useIBANs();
+  const { iban } = useIBAN({
+    iban: ibans?.[0]?.iban as string,
+  });
+
+  const { addresses } = useAddresses();
+  const { address } = useAddress({
+    address: addresses?.[0]?.address as string,
+  });
+
   const { tokens } = useTokens();
 
   /**
@@ -63,6 +81,9 @@ export default function Test() {
   const { linkAddress, error: linkAddressError } = useLinkAddress({
     profileId: profile?.id as string,
   });
+
+  const { submitProfileDetails, error: submitProfileDetailsError } =
+    useSubmitProfileDetails({ profile: profile?.id as string });
 
   const { placeOrder, error: placeOrderError } = usePlaceOrder({
     mutation: {
@@ -75,17 +96,28 @@ export default function Test() {
     },
   });
 
+  const { requestIban, error: requestIbanError } = useRequestIban();
+  const { moveIban, error: moveIbanError } = useMoveIban();
+
+  useEffect(() => {
+    context?.sdk?.connectOrderSocket();
+    context?.sdk?.connectOrderSocket();
+  }, []);
+
   /**
    *
+Request IBAN.sdk?.connectOrderSocket();
    *
    */
 
   const Input = ({
     name,
     defaultValue,
+    type = 'text',
   }: {
     name: string;
     defaultValue: string;
+    type?: string;
   }) => {
     return (
       <div>
@@ -93,7 +125,7 @@ export default function Test() {
         <br />
         <input
           style={{ width: '400px' }}
-          type="text"
+          type={type}
           id={name}
           name={name}
           defaultValue={defaultValue}
@@ -116,19 +148,6 @@ export default function Test() {
         return;
       }
       context?.sdk?.uploadSupportingDocument(file);
-      // 👇 Uploading the file using the fetch API to the server
-      // fetch('https://httpbin.org/post', {
-      //   method: 'POST',
-      //   body: file,
-      //   // 👇 Set headers manually for single file upload
-      //   headers: {
-      //     'content-type': file.type,
-      //     'content-length': `${file.size}`, // 👈 Headers need to be a string
-      //   },
-      // })
-      //   .then((res) => res.json())
-      //   .then((data) => console.log(data))
-      //   .catch((err) => console.error(err));
     };
 
     return (
@@ -142,6 +161,317 @@ export default function Test() {
     );
   };
 
+  const SubmitProfileDetails = () => {
+    const [profileKind, setProfileKind] = useState<string>('personal');
+
+    const handleProfileKindChange = (
+      event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      setProfileKind(event.target.value);
+    };
+    function submittingProfileDetails(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+
+      if (profileKind === 'personal') {
+        submitProfileDetails({
+          personal: {
+            idDocument: {
+              number: formData.get(
+                'profile-detail-id-document-number'
+              ) as string,
+              kind: formData.get(
+                'profile-detail-id-document-type'
+              ) as IdDocumentKind,
+            },
+            firstName: formData.get('profile-detail-first-name') as string,
+            lastName: formData.get('profile-detail-last-name') as string,
+            birthday: formData.get('profile-detail-birthday') as string,
+            nationality: formData.get('profile-detail-nationality') as string,
+            address: formData.get('profile-detail-address') as string,
+            postalCode: formData.get('profile-detail-postal-code') as string,
+            city: formData.get('profile-detail-city') as string,
+            country: formData.get('profile-detail-country') as string,
+            countryState: formData.get(
+              'personal-detail-country-state'
+            ) as string,
+          },
+        });
+      }
+      if (profileKind === 'corporate') {
+        submitProfileDetails({
+          corporate: {
+            name: formData.get('profile-detail-name') as string,
+            registrationNumber: formData.get(
+              'profile-detail-registration-number'
+            ) as string,
+            address: formData.get('profile-detail-address') as string,
+            postalCode: formData.get('profile-detail-postal-code') as string,
+            city: formData.get('profile-detail-city') as string,
+            country: formData.get('profile-detail-country') as string,
+            countryState: formData.get(
+              'personal-detail-country-state'
+            ) as string,
+            representatives: [
+              {
+                idDocument: {
+                  number: formData.get(
+                    'representative-id-document-number'
+                  ) as string,
+                  kind: formData.get(
+                    'representative-id-document-type'
+                  ) as IdDocumentKind,
+                },
+                firstName: formData.get('representative-first-name') as string,
+                lastName: formData.get('representative-last-name') as string,
+                birthday: formData.get('representative-birthday') as string,
+                nationality: formData.get(
+                  'representative-nationality'
+                ) as string,
+                address: formData.get('representative-address') as string,
+                postalCode: formData.get(
+                  'representative-postal-code'
+                ) as string,
+                city: formData.get('representative-city') as string,
+                country: formData.get('representative-country') as string,
+                countryState: formData.get(
+                  'representative-country-state'
+                ) as string,
+              },
+            ],
+            finalBeneficiaries: [
+              {
+                ownershipPercentage: parseInt(
+                  formData.get('beneficiary-ownershipPercentage') as string
+                ),
+                firstName: formData.get('beneficiary-first-name') as string,
+                lastName: formData.get('beneficiary-last-name') as string,
+                birthday: formData.get('beneficiary-birthday') as string,
+                nationality: formData.get('beneficiary-nationality') as string,
+                address: formData.get('beneficiary-address') as string,
+                postalCode: formData.get('beneficiary-postal-code') as string,
+                city: formData.get('beneficiary-city') as string,
+                country: formData.get('beneficiary-country') as string,
+                countryState: formData.get(
+                  'beneficiary-country-state'
+                ) as string,
+              },
+            ],
+            directors: [
+              {
+                firstName: formData.get('director-first-name') as string,
+                lastName: formData.get('director-last-name') as string,
+                birthday: formData.get('director-birthday') as string,
+                nationality: formData.get('director-nationality') as string,
+                address: formData.get('director-address') as string,
+                postalCode: formData.get('director-postal-code') as string,
+                city: formData.get('director-city') as string,
+                country: formData.get('director-country') as string,
+                countryState: formData.get('director-country-state') as string,
+              },
+            ],
+          },
+        });
+      }
+    }
+    return (
+      <form onSubmit={submittingProfileDetails}>
+        <div>
+          <h3>Profile kind:</h3>
+          <label>
+            <input
+              id="profile-kind"
+              type="checkbox"
+              name="profile-kind"
+              value="personal"
+              checked={profileKind === 'personal'}
+              onChange={handleProfileKindChange}
+            />
+            Personal
+          </label>
+          <label>
+            <input
+              id="profile-kind"
+              type="checkbox"
+              name="profile-kind"
+              value="corporate"
+              checked={profileKind === 'corporate'}
+              onChange={handleProfileKindChange}
+            />{' '}
+            Corporate
+          </label>
+        </div>
+
+        {profileKind === 'personal' && (
+          <>
+            <Input
+              name="profile-detail-id-document-number"
+              defaultValue="A1234566788"
+            />
+            <Input
+              name="profile-detail-id-document-type"
+              defaultValue="passport"
+            />
+            <Input name="profile-detail-first-name" defaultValue="John" />
+            <Input name="profile-detail-last-name" defaultValue="Doe" />
+            <Input name="profile-detail-birthday" defaultValue="1990-05-15" />
+            <Input name="profile-detail-nationality" defaultValue="IS" />
+          </>
+        )}
+        {profileKind === 'corporate' && (
+          <>
+            <Input name="profile-detail-name" defaultValue="EvilCorp" />
+            <Input
+              name="profile-detail-registration-number"
+              defaultValue="passport"
+            />
+            <div>
+              <h3>Representative:</h3>
+              <Input
+                name="representative-id-document-number"
+                defaultValue="A1234566788"
+              />
+              <Input
+                name="representative-id-document-type"
+                defaultValue="passport"
+              />
+              <Input
+                name="representative-first-name"
+                defaultValue="Representative"
+              />
+              <Input name="representative-last-name" defaultValue="Doe" />
+              <Input
+                name="representative-address"
+                defaultValue="Pennylane 123"
+              />
+              <Input name="representative-birthday" defaultValue="1990-05-15" />
+              <Input name="representative-nationality" defaultValue="IS" />
+              <Input
+                name="representative-postal-code"
+                type="number"
+                defaultValue="1001"
+              />
+              <Input name="representative-country" defaultValue="IS" />
+              <Input
+                name="representative-country-state"
+                defaultValue="Reykjavík"
+              />
+              <Input name="representative-city" defaultValue="Liverpool" />
+            </div>
+            <div>
+              <h3>Final Beneficiary:</h3>
+              <Input
+                name="beneficiary-ownershipPercentage"
+                type="number"
+                defaultValue="100"
+              />
+              <Input name="beneficiary-first-name" defaultValue="Beneficiary" />
+              <Input name="beneficiary-last-name" defaultValue="Doe" />
+              <Input name="beneficiary-birthday" defaultValue="1990-05-15" />
+              <Input name="beneficiary-nationality" defaultValue="IS" />
+              <Input name="beneficiary-address" defaultValue="Pennylane 123" />
+              <Input
+                name="beneficiary-postal-code"
+                type="number"
+                defaultValue="1001"
+              />
+              <Input name="beneficiary-country" defaultValue="IS" />
+              <Input
+                name="beneficiary-country-state"
+                defaultValue="Reykjavík"
+              />
+              <Input name="beneficiary-city" defaultValue="Liverpool" />
+            </div>
+            <div>
+              <h3>Director:</h3>
+              <Input name="director-first-name" defaultValue="Director" />
+              <Input name="director-last-name" defaultValue="Doe" />
+              <Input name="director-birthday" defaultValue="1990-05-15" />
+              <Input name="director-nationality" defaultValue="IS" />
+              <Input name="director-address" defaultValue="Pennylane 123" />
+              <Input
+                name="director-postal-code"
+                type="number"
+                defaultValue="1001"
+              />
+              <Input name="director-country" defaultValue="IS" />
+              <Input name="director-country-state" defaultValue="Reykjavík" />
+              <Input name="director-city" defaultValue="Liverpool" />
+            </div>
+          </>
+        )}
+
+        <Input name="profile-detail-address" defaultValue="Pennylane 123" />
+        <Input
+          name="profile-detail-postal-code"
+          type="number"
+          defaultValue="1001"
+        />
+        <Input name="profile-detail-country" defaultValue="IS" />
+        <Input name="profile-detail-country-state" defaultValue="Reykjavík" />
+        <Input name="profile-detail-city" defaultValue="Liverpool" />
+
+        <div style={{ color: 'red' }}>
+          <PrettyPrintJson data={submitProfileDetailsError} />
+        </div>
+        <button type="submit">Submit Profile Details</button>
+      </form>
+    );
+  };
+  const RequestIban = () => {
+    function requestingIban(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+
+      requestIban({
+        address: walletAddress as string,
+        chain: chainId,
+        emailNotifications:
+          formData.get('notification') === 'true' ? true : false,
+      });
+    }
+    return (
+      <form onSubmit={requestingIban}>
+        <label htmlFor="notification">email notification:</label>
+        <br />
+        <select id="notification" name="notification">
+          <option value="true" selected>
+            true
+          </option>
+          <option value="false">false</option>
+        </select>
+        <div style={{ color: 'red' }}>
+          <PrettyPrintJson data={requestIbanError} />
+        </div>
+        <button type="submit">Request Iban for wallet address</button>
+      </form>
+    );
+  };
+  const MoveIban = () => {
+    function movingIban(event: FormEvent<HTMLFormElement>) {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+
+      moveIban({
+        iban: formData.get('move-iban') as string,
+        address:
+          (formData.get('move-address') as string) || (walletAddress as string),
+        chain: chainId,
+      });
+    }
+    return (
+      <form onSubmit={movingIban}>
+        <Input name="move-iban" defaultValue="" />
+        <Input name="move-iban-address" defaultValue={`${walletAddress}`} />
+        <Input name="move-iban-chain" defaultValue={`${chainId}`} />
+
+        <div style={{ color: 'red' }}>
+          <PrettyPrintJson data={moveIbanError} />
+        </div>
+        <button type="submit">Move Iban</button>
+      </form>
+    );
+  };
   const PlaceOrder = () => {
     function placingOrder(event: FormEvent<HTMLFormElement>) {
       event.preventDefault();
@@ -166,7 +496,7 @@ export default function Test() {
       signMessageAsync({ message: msg }).then((signature) => {
         alert(`You searched for '${signature}'`);
         placeOrder({
-          address: address as string,
+          address: walletAddress as string,
           amount: amount,
           currency: currency,
           signature,
@@ -237,7 +567,7 @@ export default function Test() {
         (signature) => {
           linkAddress({
             message: constants.LINK_MESSAGE,
-            address: address as string,
+            address: walletAddress as string,
             chain: chainId,
             signature: signature,
           });
@@ -303,7 +633,7 @@ export default function Test() {
         <ConnectButton />
       </div>
       <h1>Wallet</h1>
-      <p>Address: {address}</p>
+      <p>Address: {walletAddress}</p>
       <p>Chain ID: {chainId}</p>
       <h1>Auth</h1>
       <p>isAuthorized: {isAuthorized ? 'true' : 'false'}</p>
@@ -331,20 +661,41 @@ export default function Test() {
           <h1>Queries</h1>
           <div>
             <div>
-              {/* <h2>AuthContext</h2>
-              <p>name: {authContext?.name}</p>
-              <p>defaultProfile: {authContext?.defaultProfile}</p>
-              <details>
-                <summary>Click to Expand</summary>
-                <PrettyPrintJson data={authContext} />
-              </details> */}
-            </div>
-            <div>
               <h2>Profile</h2>
               <p>id: {profile?.id}</p>
               <details>
                 <summary>Click to Expand</summary>
                 <PrettyPrintJson data={profile} />
+              </details>
+            </div>
+            <div>
+              <h2>Address (first)</h2>
+              <p>address: {address?.address}</p>
+              <details>
+                <summary>Click to Expand</summary>
+                <PrettyPrintJson data={address} />
+              </details>
+            </div>
+            <div>
+              <h2>Addresses</h2>
+              <details>
+                <summary>Click to Expand, total: {addresses?.length}</summary>
+                <PrettyPrintJson data={addresses} />
+              </details>
+            </div>
+            <div>
+              <h2>Iban (first)</h2>
+              <p>iban: {iban?.iban}</p>
+              <details>
+                <summary>Click to Expand</summary>
+                <PrettyPrintJson data={iban} />
+              </details>
+            </div>
+            <div>
+              <h2>Ibans</h2>
+              <details>
+                <summary>Click to Expand, total: {ibans?.length}</summary>
+                <PrettyPrintJson data={ibans} />
               </details>
             </div>
 
@@ -394,6 +745,22 @@ export default function Test() {
             <summary>Click to Expand</summary>
             <LinkAddress />
           </details>
+          <h2>Submit Profile Details</h2>
+          <details>
+            <summary>Click to Expand</summary>
+            <SubmitProfileDetails />
+          </details>
+          <h2>Request IBAN</h2>
+          <details>
+            <summary>Click to Expand</summary>
+            <RequestIban />
+          </details>
+          <h2>Move IBAN</h2>
+          <details>
+            <summary>Click to Expand</summary>
+            <MoveIban />
+          </details>
+          {/* Order notifications */}
         </>
       )}
       <br />
