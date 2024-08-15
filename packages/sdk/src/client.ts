@@ -9,6 +9,7 @@ import {
   queryParams,
   rest,
 } from './helpers';
+import { getKey } from './helpers/internal.helpers';
 import type {
   Address,
   Addresses,
@@ -29,15 +30,11 @@ import type {
   IbansQueryParams,
   IBANsResponse,
   LinkAddress,
-  MoneriumEvent,
-  MoneriumEventListener,
   MoveIbanPayload,
   NewOrder,
   Order,
   OrderFilter,
-  OrderNotification,
   OrderNotificationQueryParams,
-  OrderState,
   PKCERequestArgs,
   Profile,
   ProfilesQueryParams,
@@ -73,11 +70,9 @@ export class MoneriumClient {
    * */
   bearerProfile?: BearerProfile;
   /**
-   * The socket will be available after subscribing to an event
+   * Sockets will be available after subscribing to an event
    * */
-  #socket?: WebSocket;
-  /** The subscriptions map will be available after subscribing to an event */
-  #subscriptions: Map<OrderState, MoneriumEventListener> = new Map();
+  #sockets?: Map<string, WebSocket> = new Map();
 
   isAuthorized = !!this.bearerProfile;
 
@@ -485,6 +480,7 @@ export class MoneriumClient {
    */
   uploadSupportingDocument(document: File): Promise<SupportingDoc> {
     const formData = new FormData();
+
     formData.append('file', document as unknown as Blob);
 
     return rest<SupportingDoc>(`${this.#env.api}/files`, 'post', formData, {
@@ -574,55 +570,83 @@ export class MoneriumClient {
   /**
    * Connects to the order notifications socket
    * @category Orders
-   */
-  async connectOrderSocket() {
-    // When the user is authenticated, we connect to the order notifications socket in case
-    // the user has subscribed to any event
-    if (this.bearerProfile?.access_token && this.#subscriptions.size > 0) {
-      this.#socket = this.subscribeToOrderNotifications();
-    }
-  }
-  /**
-   * Subscribes to the order notifications socket
-   * @category Orders
    * {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications}
    */
-  subscribeToOrderNotifications = (
-    queryParameters?: OrderNotificationQueryParams
-  ): WebSocket => {
-    const { profile, state } = queryParameters || {};
+  connectOrderNotifications({
+    filter,
+    onMessage,
+    onError,
+  }: {
+    filter?: OrderNotificationQueryParams;
+    onMessage?: (data: Order) => void;
+    onError?: (err: Event) => void;
+  } = {}): WebSocket | undefined {
+    if (!this.bearerProfile?.access_token) return;
+
+    const { profile, state } = filter || {};
     const params = queryParams({
       access_token: this.bearerProfile?.access_token,
       profile,
       state,
     });
-    const socketUrl = `${this.#env.wss}/orders${params}`;
 
-    const socket = new WebSocket(socketUrl);
+    let socket;
+    const key = getKey({ profile, state });
+    if (this.#sockets?.has(key)) {
+      socket = this.#sockets.get(key) as WebSocket;
+    } else {
+      const socketUrl = `${this.#env.wss}/orders${params}`;
+      socket = new WebSocket(socketUrl);
+      this.#sockets?.set(key, socket);
+    }
 
-    socket.addEventListener('open', () => {
-      console.info(`Socket connected: ${socketUrl}`);
-    });
-
-    socket.addEventListener('error', (event) => {
-      console.error(event);
-      throw new Error(`Socket error: ${socketUrl}`);
-    });
-
-    socket.addEventListener('message', (event) => {
-      const notification = JSON.parse(event.data) as OrderNotification;
-
-      this.#subscriptions.get(notification.meta.state as OrderState)?.(
-        notification
-      );
-    });
-
-    socket.addEventListener('close', () => {
-      console.info(`Socket connection closed: ${socketUrl}`);
-    });
-
+    socket.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+    socket.onmessage = (data) => {
+      const parsedData = JSON.parse(data.data);
+      if (onMessage) {
+        onMessage(parsedData);
+      }
+    };
+    socket.onclose = () => {
+      console.log('WebSocket connection closed');
+      this.#sockets?.delete(params);
+    };
+    socket.onerror = (err) => {
+      if (onError) {
+        onError(err);
+      }
+      console.error('WebSocket error:', err);
+    };
     return socket;
-  };
+  }
+
+  /**
+   * Closes the order notifications sockets
+   * @category Orders
+   * {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications}
+   */
+  disconnectOrderNotifications(queryParameters?: OrderNotificationQueryParams) {
+    if (queryParameters) {
+      const key = getKey({
+        profile: queryParameters?.profile,
+        state: queryParameters?.state,
+      });
+      const socket = this.#sockets?.get(key);
+      if (socket) {
+        socket.close();
+        this.#sockets?.delete(key);
+      }
+    } else {
+      this.#sockets?.forEach((socket) => {
+        socket.close();
+      });
+      this.#sockets?.clear();
+      this.#sockets = undefined;
+    }
+  }
+
   /**
    * Cleanups the socket and the subscriptions
    * @category Authentication
@@ -631,8 +655,7 @@ export class MoneriumClient {
     if (!isServer) {
       localStorage.removeItem(STORAGE_CODE_VERIFIER);
     }
-    this.#subscriptions.clear();
-    this.#socket?.close();
+    this.disconnectOrderNotifications();
     this.#authorizationHeader = undefined;
     this.bearerProfile = undefined;
   }
@@ -645,32 +668,6 @@ export class MoneriumClient {
       localStorage.removeItem(STORAGE_REFRESH_TOKEN);
     }
     this.disconnect();
-  }
-
-  /**
-   * Subscribe to MoneriumEvent to receive notifications using the Monerium API (WebSocket)
-   * We are setting a subscription map because we need the user to have a token to start the WebSocket connection
-   * {@link https://monerium.dev/api-docs#operation/profile-orders-notifications}
-   * @param event The event to subscribe to
-   * @param handler The handler to be called when the event is triggered
-   * @category Orders
-   */
-  subscribeOrders(event: MoneriumEvent, handler: MoneriumEventListener): void {
-    this.#subscriptions.set(event as OrderState, handler);
-  }
-
-  /**
-   * Unsubscribe from MoneriumEvent and close the socket if there are no more subscriptions
-   * @param event The event to unsubscribe from
-   * @category Orders
-   */
-  unsubscribeOrders(event: MoneriumEvent): void {
-    this.#subscriptions.delete(event as OrderState);
-
-    if (this.#subscriptions.size === 0) {
-      this.#socket?.close();
-      this.#socket = undefined;
-    }
   }
 
   // -- Getters (mainly for testing)
