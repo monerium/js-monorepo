@@ -474,7 +474,7 @@ export interface LinkAddress {
    * https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address
    */
   signature: string;
-  chain?: Chain | ChainId;
+  chain: Chain | ChainId;
 }
 
 // -- IBANs
@@ -509,31 +509,10 @@ export interface MoveIbanPayload {
 
 // -- Notifications
 
-export interface OrderNotification {
-  id: string;
-  profile: string;
-  accountId: string;
-  address: string;
-  kind: string;
-  amount: string;
-  currency: string;
-  totalFee: string;
-  fees: Fee[];
-  counterpart: Counterpart;
-  memo: string;
-  rejectedReason: string;
-  supportingDocumentId: string;
-  meta: OrderMetadata;
-}
-
 export interface OrderNotificationQueryParams {
   state?: OrderState;
   profile?: string;
 }
-
-export type MoneriumEvent = OrderState;
-
-export type MoneriumEventListener = (notification: OrderNotification) => void;
 
 export type ClassOptions = {
   environment?: ENV;
