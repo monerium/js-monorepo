@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.15.0](https://github.com/monerium/js-monorepo/compare/sdk-v2.14.0...sdk-v2.15.0) (2024-08-15)
+
+
+### Features
+
+* deprecating redirectUrl for redirectUri for consistency w Oauth2.0 ([90e8639](https://github.com/monerium/js-monorepo/commit/90e863940da8623462a29ce3ac59bdfdcf20271e))
+* remove chainId, chain should accept monerium chain name or chainId ([#85](https://github.com/monerium/js-monorepo/issues/85)) ([afbacb9](https://github.com/monerium/js-monorepo/commit/afbacb931eb15b00b69c3304bbcedcd9b156450c))
+
+
+### Bug Fixes
+
+* type-maps error on turbo dev ([3a99cdc](https://github.com/monerium/js-monorepo/commit/3a99cdcf77793f4e3f1aa2fe1c54ace12b43cc28))
+
+
+### Documentation
+
+* update docs with new chain property ([530606a](https://github.com/monerium/js-monorepo/commit/530606ad090851a47b688b8e1e3b82094f550d72))
+
+
+### Miscellaneous
+
+* bypass some tests in ci because of Cloudflare errors ([731b05a](https://github.com/monerium/js-monorepo/commit/731b05a28814ad0c962339161ed4e8bd5473ba84))
+* init adding version param ([25fba47](https://github.com/monerium/js-monorepo/commit/25fba47c0183bef37878c8cb64e6182f75976176))
+* netlify ([#89](https://github.com/monerium/js-monorepo/issues/89)) ([4f2ccbb](https://github.com/monerium/js-monorepo/commit/4f2ccbbab3654810f24287d973126d95378140bb))
+* set gitRevision to always be main to reduce changes in docs ([2540e69](https://github.com/monerium/js-monorepo/commit/2540e69707019b0073eac69f1e7ee50021836f8c))
+
 ## [2.14.0](https://github.com/monerium/js-monorepo/compare/sdk-v2.13.3...sdk-v2.14.0) (2024-07-25)
 
 
