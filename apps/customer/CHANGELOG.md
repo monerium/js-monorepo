@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.0](https://github.com/monerium/js-monorepo/compare/customer-v0.0.2...customer-v0.1.0) (2024-08-16)
+
+
+### Features
+
+* deprecating redirectUrl for redirectUri for consistency w Oauth2.0 ([90e8639](https://github.com/monerium/js-monorepo/commit/90e863940da8623462a29ce3ac59bdfdcf20271e))
+* remove chainId, chain should accept monerium chain name or chainId ([#85](https://github.com/monerium/js-monorepo/issues/85)) ([afbacb9](https://github.com/monerium/js-monorepo/commit/afbacb931eb15b00b69c3304bbcedcd9b156450c))
+* **sdk-react-provider:** complete refactor to use react-query async state management ([8bda8a7](https://github.com/monerium/js-monorepo/commit/8bda8a7cc6a6fe42449990825db14090c3948f69))
+
+
+### Documentation
+
+* update docs with new chain property ([530606a](https://github.com/monerium/js-monorepo/commit/530606ad090851a47b688b8e1e3b82094f550d72))
+
+
+### Miscellaneous
+
+* netlify ([#89](https://github.com/monerium/js-monorepo/issues/89)) ([4f2ccbb](https://github.com/monerium/js-monorepo/commit/4f2ccbbab3654810f24287d973126d95378140bb))
+
 ## [0.0.2](https://github.com/monerium/js-monorepo/compare/customer-v0.0.2...customer-v0.0.2) (2024-06-20)
 
 
