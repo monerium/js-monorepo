@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.3.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.2.0...sdk-react-provider-v0.3.0) (2024-08-16)
+
+
+### Features
+
+* deprecating redirectUrl for redirectUri for consistency w Oauth2.0 ([90e8639](https://github.com/monerium/js-monorepo/commit/90e863940da8623462a29ce3ac59bdfdcf20271e))
+* remove chainId, chain should accept monerium chain name or chainId ([#85](https://github.com/monerium/js-monorepo/issues/85)) ([afbacb9](https://github.com/monerium/js-monorepo/commit/afbacb931eb15b00b69c3304bbcedcd9b156450c))
+
+
+### Documentation
+
+* update docs with new chain property ([530606a](https://github.com/monerium/js-monorepo/commit/530606ad090851a47b688b8e1e3b82094f550d72))
+* update documentation and exclude docs from creatinga new package version ([85e1c39](https://github.com/monerium/js-monorepo/commit/85e1c394993e46417cdf209277f6985238f495f7))
+
+
+### Miscellaneous
+
+* set gitRevision to always be main to reduce changes in docs ([2540e69](https://github.com/monerium/js-monorepo/commit/2540e69707019b0073eac69f1e7ee50021836f8c))
+* update docs ([ffeefd2](https://github.com/monerium/js-monorepo/commit/ffeefd2a9bccc0d18acecd9390a7bfced5720c17))
+
 ## [0.2.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.1.2...sdk-react-provider-v0.2.0) (2024-07-25)
 
 
