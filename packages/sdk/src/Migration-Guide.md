@@ -26,13 +26,40 @@ Migration Guide.
 
 - `skipCreateAccount` added to `authorize` method to skip the account creation step in the auth flow.
 
+- Simplified websockets
+
+```ts
+const monerium = new MoneriumClient({...});
+// Subscribe to all order events
+monerium.connectOrderNotifications();
+
+// Subscribe to specific order events
+monerium.connectOrderNotifications({ 
+  filter: {
+    state: OrderState.pending,
+    profile: 'my-profile-id',
+  },
+  // optional callback functions
+  onMessage: (order) => console.log(order)
+  onError: (error) => console.error(error)
+});
+
+// Unsubscribe from specific order events
+monerium.disconnectOrderNotifications({ 
+  state: OrderState.pending,
+  profile: 'my-profile-id'
+});
+```
+
 - Interface `ClientCredentialsRequest` renamed to `ClientCredentialsPayload`
 - Interface `AuthCodeRequest` renamed to `AuthCodePayload`
 - Interface `RefreshTokenRequest` renamed to `RefreshTokenPayload`
 
-## TODO: TEST ORDER NOTIFICATIONS
+### TODO?
 
-- Do I need to add profile to #subscriptions ?
+- should connectOrderNotifications be renamed to subscribeOrderNotifications?
+- should disconnectOrderNotifications be renamed to unsubscribeOrderNotifications?
+- should functions be consistent in accepting an object as params, even though we are just expecting one argument?
 
 ---
 

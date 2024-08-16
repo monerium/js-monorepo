@@ -1,5 +1,13 @@
 'use client';
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import Link from 'next/link';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useQueryClient } from '@tanstack/react-query';
@@ -9,6 +17,8 @@ import {
   constants,
   Currency,
   IdDocumentKind,
+  Order,
+  OrderState,
   PaymentStandard,
   placeOrderMessage,
 } from '@monerium/sdk';
@@ -99,14 +109,38 @@ export default function Test() {
   const { requestIban, error: requestIbanError } = useRequestIban();
   const { moveIban, error: moveIbanError } = useMoveIban();
 
+  const handleOrderNotification = (order: Order) => {
+    console.log(
+      '%c order notification!',
+      'color:white; padding: 30px; background-color: darkgreen',
+      order
+    );
+  };
+
   useEffect(() => {
-    context?.sdk?.connectOrderSocket();
-    context?.sdk?.connectOrderSocket();
-  }, []);
+    if (context?.sdk) {
+      context?.sdk.connectOrderNotifications({
+        filter: {
+          state: OrderState.placed,
+          profile: profile?.id as string,
+        },
+        onMessage: handleOrderNotification,
+      });
+    }
+    return () => {
+      /**
+       * Note that in development mode, React Strict mode will cause this
+       * cleanup function to be called twice on client side route changes.
+       * So a socket will be immediately closed and opened again.
+       * This is not an issue in production mode.
+       */
+      if (context?.sdk) {
+        context?.sdk?.disconnectOrderNotifications();
+      }
+    };
+  }, [context]);
 
   /**
-   *
-Request IBAN.sdk?.connectOrderSocket();
    *
    */
 
@@ -434,10 +468,8 @@ Request IBAN.sdk?.connectOrderSocket();
       <form onSubmit={requestingIban}>
         <label htmlFor="notification">email notification:</label>
         <br />
-        <select id="notification" name="notification">
-          <option value="true" selected>
-            true
-          </option>
+        <select id="notification" name="notification" defaultValue="true">
+          <option value="true">true</option>
           <option value="false">false</option>
         </select>
         <div style={{ color: 'red' }}>
@@ -491,10 +523,10 @@ Request IBAN.sdk?.connectOrderSocket();
         counterpartIdentifierAddress,
         counterpartIdentifierChain
       );
-      alert(`Your message:'${msg}'`);
+      alert(`Message:'${msg}'`);
 
       signMessageAsync({ message: msg }).then((signature) => {
-        alert(`You searched for '${signature}'`);
+        alert(`Signature: '${signature}'`);
         placeOrder({
           address: walletAddress as string,
           amount: amount,
@@ -526,10 +558,8 @@ Request IBAN.sdk?.connectOrderSocket();
 
         <label htmlFor="currency">currency:</label>
         <br />
-        <select id="currency" name="currency">
-          <option value="eur" selected>
-            EUR
-          </option>
+        <select id="currency" name="currency" defaultValue="eur">
+          <option value="eur">EUR</option>
           <option value="gpb">GPB</option>
           <option value="usd">USD</option>
         </select>
@@ -629,6 +659,15 @@ Request IBAN.sdk?.connectOrderSocket();
 
   return (
     <div style={{ padding: '20px' }}>
+      <Link href="/dashboard">Dashboard</Link>
+      <button
+        type="submit"
+        onClick={() => {
+          context?.sdk?.closeOrderNotifications();
+        }}
+      >
+        Close Order Notifications
+      </button>
       <div>
         <ConnectButton />
       </div>
