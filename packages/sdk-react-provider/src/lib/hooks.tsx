@@ -2,14 +2,21 @@ import { useContext } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import MoneriumClient, {
+  Address,
   Balances,
+  Chain,
+  ChainId,
+  IBAN,
   LinkAddress,
+  MoveIbanPayload,
   NewOrder,
   Order,
   OrderState,
   Profile,
   ProfilePermissions,
-  ProfilesResponse,
+  RequestIbanPayload,
+  ResponseStatus,
+  SubmitProfileDetailsPayload,
   Token,
 } from '@monerium/sdk';
 
@@ -34,10 +41,22 @@ export const keys = {
     ...(profileId ? [profileId] : []),
   ],
   getProfiles: ['monerium', 'profiles'],
+  getAddress: (address: string) => ['monerium', 'address', [address]],
+  getAddresses: (filter?: unknown) => [
+    'monerium',
+    'addresses',
+    ...(filter ? [filter] : []),
+  ],
   getBalances: (profileId?: string) => [
     'monerium',
     'balances',
     ...(profileId ? [profileId] : []),
+  ],
+  getIban: (iban: string) => ['monerium', 'iban', iban],
+  getIbans: (filter?: unknown) => [
+    'monerium',
+    'ibans',
+    ...(filter ? [filter] : []),
   ],
   getTokens: ['monerium', 'tokens'],
   getOrder: (orderId: string) => ['monerium', 'order', orderId],
@@ -46,6 +65,9 @@ export const keys = {
     'orders',
     ...(filter ? [filter] : []),
   ],
+  submitProfileDetails: ['monerium', 'submit-profile-details'],
+  moveIban: ['monerium', 'move-iban'],
+  requestIban: ['monerium', 'request-iban'],
   placeOrder: ['monerium', 'place-order'],
   linkAddress: ['monerium', 'link-address'],
 };
@@ -63,6 +85,7 @@ function useSdk(): MoneriumClient | undefined {
 /**
  * # Redirect to the Monerium auth flow.
  * @group Hooks
+ * @category Authentication
  * @example
  * ```ts
  * const { authorize, isAuthorized, isLoading, error } = useAuth();
@@ -101,8 +124,9 @@ export function useAuth(): UseAuthReturn {
  * # Get single profile
  * If no `profileId` is provided, the default profile is used.
  * @group Hooks
+ * @category Profiles
  * @param {Object} params
- * @param {string} [params.profileId] The id of the profile.
+ * @param {string} [params.profile] The id of the profile.
  * @param {QueryOptions<Profile>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
@@ -163,6 +187,7 @@ export function useProfile({
 /**
  * # Get profiles
  * @group Hooks
+ * @category Profiles
  * @param {Object} [params] No required parameters.
  * @param {QueryOptions<ProfilesResponse>} [params.query] {@inheritDoc QueryOptions}
  *
@@ -260,10 +285,125 @@ export function useTokens({
 }
 
 /**
+ * # Get address
+ * @group Hooks
+ * @category Addresses
+ * @param {Object} params 
+ * @param {QueryOptions<Address>} params.address Fetch a specific address.
+ * @param {QueryOptions<Address>} [params.query] {@inheritDoc QueryOptions}
+
+ * @example
+ * ```ts
+ * const {
+ *    address, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useAddress();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/address)
+ *
+ * [Address interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Address.md)
+ */
+export function useAddress({
+  address,
+  query = {},
+}: {
+  address: string;
+  query?: QueryOptions<Address>;
+}): QueryResult<'address', Address> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getAddress(address),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.getAddress(address);
+    },
+    enabled: Boolean(
+      sdk && isAuthorized && address && (query?.enabled ?? true)
+    ),
+  });
+  return {
+    address: data,
+    ...rest,
+  };
+}
+/**
+ * # Get addresses
+ * @group Hooks
+ * @category Addresses
+ * @param {Object} [params] No required parameters.
+ * @param {QueryOptions<Address[]>} [params.profile] Fetch addresses for a specific profile.
+ * @param {QueryOptions<Address[]>} [params.chain] Fetch addresses for a specific chain.
+ * @param {QueryOptions<Address[]>} [params.query] {@inheritDoc QueryOptions}
+
+ * @example
+ * ```ts
+ * const {
+ *    addresses, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useAddresses();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses)
+ *
+ * [Address interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Address.md)
+ */
+export function useAddresses({
+  profile,
+  chain,
+  query = {},
+}: {
+  profile?: string;
+  chain?: Chain | ChainId;
+  query?: QueryOptions<Address[]>;
+} = {}): QueryResult<'addresses', Address[]> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getAddresses({ profile, chain }),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      const { addresses } = await sdk.getAddresses({ profile, chain });
+      return addresses;
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+  return {
+    addresses: data,
+    ...rest,
+  };
+}
+/**
  * # Get balances
  * @group Hooks
+ * @category Addresses
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Balances[]>} [params.profileId] Fetch balances for a specific profile.
+ * @param {QueryOptions<Balances[]>} [params.profile] Fetch balances for a specific profile.
  * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
 
  * @example
@@ -305,7 +445,9 @@ export function useBalances({
 
       return sdk.getBalances(profile);
     },
-    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+    enabled: Boolean(
+      sdk && isAuthorized && profile && (query?.enabled ?? true)
+    ),
   });
   return {
     balances: data,
@@ -314,8 +456,124 @@ export function useBalances({
 }
 
 /**
+ * # Get IBAN
+ * @group Hooks
+ * @category IBANs
+ * @param {Object} params
+ * @param {QueryOptions<IBAN>} param.iban Fetch a specific IBAN
+ * @param {QueryOptions<IBAN>} [params.query] {@inheritDoc QueryOptions}
+
+ * @example
+ * ```ts
+ * const {
+ *    iban, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useIBAN();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/iban)
+ *
+ * [IBAN interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/IBAN.md)
+ */
+export function useIBAN({
+  iban,
+  query,
+}: {
+  iban: string;
+  query?: QueryOptions<IBAN>;
+}): QueryResult<'iban', IBAN> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getIban(iban),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.getIban(iban);
+    },
+    enabled: Boolean(sdk && isAuthorized && iban && (query?.enabled ?? true)),
+  });
+
+  return {
+    iban: data,
+    ...rest,
+  };
+}
+/**
+ * # Get IBANs
+ * @group Hooks
+ * @category IBANs
+ * @param {Object} [params] No required parameters.
+ * @param {QueryOptions<IBAN[]>} [params.profile] Fetch IBANs for a specific profile.
+ * @param {QueryOptions<IBAN[]>} [params.chain] Fetch IBANs for a specific chain.
+ * @param {QueryOptions<IBAN[]>} [params.query] {@inheritDoc QueryOptions}
+
+ * @example
+ * ```ts
+ * const {
+ *    ibans, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useIBANs();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans)
+ *
+ * [IBAN interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/IBAN.md)
+ */
+export function useIBANs({
+  profile,
+  chain,
+  query = {},
+}: {
+  profile?: string;
+  chain?: Chain | ChainId;
+  query?: QueryOptions<IBAN[]>;
+} = {}): QueryResult<'ibans', IBAN[]> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getIbans({ profile, chain }),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      const { ibans } = await sdk.getIbans({ profile, chain });
+      return ibans;
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+
+  return {
+    ibans: data,
+    ...rest,
+  };
+}
+
+/**
  * # Get single order
  * @group Hooks
+ * @category Orders
  * @param {Object} params
  * @param {Object} params.orderId The id of the order.
  * @param {QueryOptions<Order>} [params.query] {@inheritDoc QueryOptions}
@@ -371,6 +629,7 @@ export function useOrder({
 /**
  * # Get orders
  * @group Hooks
+ * @category Orders
  * @param {Object} [params] No required parameters.
  * @param {Object} [params.address] Filter based on the blockchain address associated with the order.
  * @param {Object} [params.memo] Filter by the payment memo/reference..
@@ -430,11 +689,247 @@ export function useOrders({
 }
 
 /**
+ * # Submit profile details.
+ * Submit the required compliance information to onboard the customer.
+ *
+ * Note that you won't be able to change the profile "kind" from personal to corporate or vice versa once the profile has been approved.
+ * @group Hooks
+ * @category Profiles
+ * @param param
+ * @param {string} param.profile The id of the profile to submit to.
+ * @param {Object} param.mutation {@inheritDoc MutationOptions}
+ *
+ * @example
+ * ```ts
+ * const {
+ *    submitProfileDetails, // useMutation's `mutateAsync` property
+ *    isPending,
+ *    isError,
+ *    error,
+ *    status,
+ *    ...moreUseMutationResults
+ * } = useSubmitProfileDetails();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details)
+ *
+ * [SubmitProfileDetailsPayload type](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/type-aliases/SubmitProfileDetailsPayload.md)
+ */
+
+export function useSubmitProfileDetails({
+  profile,
+  mutation = {},
+}: {
+  profile: string;
+  mutation?: MutationOptions<
+    ResponseStatus,
+    Error,
+    SubmitProfileDetailsPayload
+  >;
+}): MutationResult<
+  'submitProfileDetails',
+  ResponseStatus,
+  Error,
+  SubmitProfileDetailsPayload
+> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, ...rest } = useMutation({
+    ...mutation,
+    mutationKey: keys.submitProfileDetails,
+    mutationFn: async (body: SubmitProfileDetailsPayload) => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.submitProfileDetails(profile, body);
+    },
+    onSuccess(data, variables, context) {
+      // Refetch all orders on success.
+      queryClient.invalidateQueries({
+        queryKey: keys.getProfile(profile),
+      });
+      // Allow the caller to add custom logic on success.
+      mutation?.onSuccess?.(data, variables, context);
+    },
+    onError(error, vars, context) {
+      // Allow the caller to add custom logic on error.
+      mutation?.onError?.(error, vars, context);
+      throw error;
+    },
+  });
+  return {
+    submitProfileDetails: mutateAsync,
+    ...rest,
+  };
+}
+/**
+ * # Request Iban
+ * Create an IBAN for a specified address and chain.
+ * All incoming EUR payments will automatically be routed to the linked address on that chain.
+ * Any linked address can use this IBAN for outgoing payments.
+ * @group Hooks
+ * @category IBANs
+ * @param {Object} [params] No required parameters.
+ * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
+ *
+ * @example
+ * ```ts
+ * const {
+ *    requestIban, // useMutation's `mutateAsync` property
+ *    isPending,
+ *    isError,
+ *    error,
+ *    status,
+ *    ...moreUseMutationResults
+ * } = useRequestIban();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban)
+ *
+ * [RequestIbanPayload type](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/RequestIbanPayload.md)
+ */
+
+export function useRequestIban({
+  mutation = {},
+}: {
+  mutation?: MutationOptions<ResponseStatus, Error, RequestIbanPayload>;
+} = {}): MutationResult<
+  'requestIban',
+  ResponseStatus,
+  Error,
+  RequestIbanPayload
+> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  const { mutateAsync, ...rest } = useMutation({
+    ...mutation,
+    mutationKey: keys.requestIban,
+    mutationFn: async ({
+      address,
+      chain,
+      emailNotifications,
+    }: RequestIbanPayload) => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.requestIban({ address, chain, emailNotifications });
+    },
+    onSuccess(data, variables, context) {
+      // Allow the caller to add custom logic on success.
+      mutation?.onSuccess?.(data, variables, context);
+    },
+    onError(error, vars, context) {
+      // Allow the caller to add custom logic on error.
+      mutation?.onError?.(error, vars, context);
+      throw error;
+    },
+  });
+  return {
+    requestIban: mutateAsync,
+    ...rest,
+  };
+}
+/**
+ * # Move Iban
+ * Move an existing IBAN to a specified address an chain.
+ * All incoming EUR payments will automatically be routed to the address on that chain.
+ * @group Hooks
+ * @category IBANs
+ * @param {Object} [params] No required parameters.
+ * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
+ *
+ * @example
+ * ```ts
+ * const {
+ *    moveIban, // useMutation's `mutateAsync` property
+ *    isPending,
+ *    isError,
+ *    error,
+ *    status,
+ *    ...moreUseMutationResults
+ * } = useMoveIban();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban)
+ *
+ * [NewOrder type](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/MoveIbanPayload.md)
+ */
+
+export function useMoveIban({
+  mutation = {},
+}: {
+  mutation?: MutationOptions<
+    ResponseStatus,
+    Error,
+    MoveIbanPayload & { iban: string }
+  >;
+} = {}): MutationResult<
+  'moveIban',
+  ResponseStatus,
+  Error,
+  MoveIbanPayload & { iban: string }
+> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, ...rest } = useMutation({
+    ...mutation,
+    mutationKey: keys.moveIban,
+    mutationFn: async ({
+      iban,
+      address,
+      chain,
+    }: MoveIbanPayload & { iban: string }) => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.moveIban(iban, { address, chain });
+    },
+    onSuccess(data, variables, context) {
+      // Refetch all orders on success.
+      queryClient.invalidateQueries({
+        queryKey: keys.getIban(variables.iban),
+      });
+      queryClient.invalidateQueries({
+        queryKey: keys.getIbans(),
+      });
+      // Allow the caller to add custom logic on success.
+      mutation?.onSuccess?.(data, variables, context);
+    },
+    onError(error, vars, context) {
+      // Allow the caller to add custom logic on error.
+      mutation?.onError?.(error, vars, context);
+      throw error;
+    },
+  });
+  return {
+    moveIban: mutateAsync,
+    ...rest,
+  };
+}
+/**
  * # Place an order.
  * When the order has been placed, the orders query will be invalidated and re-fetched.
  *
  * If the order amount is above 15000, a supporting document is required.
  * @group Hooks
+ * @category Orders
  * @param param
  * @param {File} param.supportingDocument Supporting document file.
  * @param {Object} param.mutation {@inheritDoc MutationOptions}
@@ -520,6 +1015,7 @@ export function usePlaceOrder({
  * When the address has been linked, the relevant profile query will be invalidated and re-fetched.
  *
  * @group Hooks
+ * @category Profiles
  * @param param
  * @param {File} param.profileId Which profile to link the address.
  * @param {Object} param.mutation {@inheritDoc MutationOptions}
