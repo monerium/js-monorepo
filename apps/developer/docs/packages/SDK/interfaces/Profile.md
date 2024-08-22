@@ -2,6 +2,7 @@
 
 ## Properties
 
+<<<<<<< HEAD:apps/developer/docs/packages/SDK/interfaces/Profile.md
 ### accounts
 
 > **accounts**: [`Account`](/docs/packages/SDK/interfaces/Account.md)[]
@@ -22,13 +23,15 @@
 
 ***
 
+=======
+>>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/interfaces/Profile.md
 ### id
 
 > **id**: `string`
 
 #### Defined in
 
-[types.ts:255](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L255)
+[types.ts:205](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L205)
 
 ***
 
@@ -38,7 +41,7 @@
 
 #### Defined in
 
-[types.ts:259](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L259)
+[types.ts:207](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L207)
 
 ***
 
@@ -48,7 +51,7 @@
 
 #### Defined in
 
-[types.ts:258](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L258)
+[types.ts:209](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L209)
 
 ***
 
@@ -58,4 +61,14 @@
 
 #### Defined in
 
-[types.ts:256](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L256)
+[types.ts:206](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L206)
+
+***
+
+### state
+
+> **state**: [`ProfileState`](../enumerations/ProfileState.md)
+
+#### Defined in
+
+[types.ts:208](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L208)

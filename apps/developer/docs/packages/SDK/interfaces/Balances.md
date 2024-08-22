@@ -8,17 +8,21 @@
 
 #### Defined in
 
-[types.ts:271](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L271)
+[types.ts:297](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L297)
 
 ***
 
 ### balances
 
+<<<<<<< HEAD:apps/developer/docs/packages/SDK/interfaces/Balances.md
 > **balances**: [`Balance`](/docs/packages/SDK/interfaces/Balance.md)[]
+=======
+> **balances**: [`CurrencyBalance`](CurrencyBalance.md)[]
+>>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/interfaces/Balances.md
 
 #### Defined in
 
-[types.ts:274](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L274)
+[types.ts:299](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L299)
 
 ***
 
@@ -28,7 +32,7 @@
 
 #### Defined in
 
-[types.ts:272](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L272)
+[types.ts:298](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L298)
 
 ***
 
@@ -38,14 +42,4 @@
 
 #### Defined in
 
-[types.ts:270](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L270)
-
-***
-
-### network
-
-> **network**: `"sepolia"` \| `"chiado"` \| `"amoy"` \| `"mainnet"`
-
-#### Defined in
-
-[types.ts:273](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L273)
+[types.ts:296](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L296)

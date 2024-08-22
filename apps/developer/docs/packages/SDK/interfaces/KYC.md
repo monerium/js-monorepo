@@ -8,7 +8,7 @@
 
 #### Defined in
 
-[types.ts:227](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L227)
+[types.ts:172](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L172)
 
 ***
 
@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[types.ts:226](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L226)
+[types.ts:171](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L171)

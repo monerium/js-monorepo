@@ -12,7 +12,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:380](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L380)
+[types.ts:405](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L405)
 
 ***
 
@@ -22,7 +22,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:377](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L377)
+[types.ts:403](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L403)
 
 ***
 
@@ -32,7 +32,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:374](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L374)
+[types.ts:400](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L400)
 
 ***
 
@@ -44,17 +44,7 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:382](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L382)
-
-***
-
-### network
-
-> **network**: `"sepolia"` \| `"chiado"` \| `"amoy"` \| `"mainnet"`
-
-#### Defined in
-
-[types.ts:378](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L378)
+[types.ts:407](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L407)
 
 ***
 
@@ -64,7 +54,7 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:376](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L376)
+[types.ts:402](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L402)
 
 ***
 
@@ -74,4 +64,4 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:375](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L375)
+[types.ts:401](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L401)

@@ -8,7 +8,7 @@
 
 #### Defined in
 
-[types.ts:483](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L483)
+[types.ts:525](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L525)
 
 ***
 
@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[types.ts:485](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L485)
+[types.ts:527](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L527)
 
 ***
 
@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[types.ts:479](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L479)
+[types.ts:523](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L523)
 
 ***
 
@@ -38,31 +38,7 @@
 
 #### Defined in
 
-[types.ts:480](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L480)
-
-***
-
-### ~~redirectUrl?~~
-
-> `optional` **redirectUrl**: `string`
-
-#### Deprecated
-
-use redirectUri
-
-#### Defined in
-
-[types.ts:482](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L482)
-
-***
-
-### scope?
-
-> `optional` **scope**: `string`
-
-#### Defined in
-
-[types.ts:487](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L487)
+[types.ts:524](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L524)
 
 ***
 
@@ -72,7 +48,17 @@ use redirectUri
 
 #### Defined in
 
-[types.ts:484](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L484)
+[types.ts:526](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L526)
+
+***
+
+### skipCreateAccount?
+
+> `optional` **skipCreateAccount**: `boolean`
+
+#### Defined in
+
+[types.ts:529](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L529)
 
 ***
 
@@ -82,4 +68,4 @@ use redirectUri
 
 #### Defined in
 
-[types.ts:486](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L486)
+[types.ts:528](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L528)

@@ -58,6 +58,12 @@ the scope of the application
 
 the signature of the wallet to automatically link
 
+### skipCreateAccount?
+
+> `optional` **skipCreateAccount**: `boolean`
+
+You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization
+
 ### state?
 
 > `optional` **state**: `string`
@@ -66,4 +72,4 @@ the state of the application
 
 ## Defined in
 
-[types.ts:145](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L145)
+[types.ts:93](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L93)

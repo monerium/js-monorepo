@@ -51,7 +51,11 @@ The data returned.
 
 ## Used By
 
+<<<<<<< HEAD:apps/developer/docs/packages/SDK React Provider/type-aliases/QueryResult.md
 [useAuthContext](/docs/packages/SDK%20React%20Provider/functions/useAuthContext.md)
+=======
+useAuthContext
+>>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk-react-provider/docs/generated/type-aliases/QueryResult.md
 
 [useBalances](/docs/packages/SDK%20React%20Provider/functions/useBalances.md)
 
