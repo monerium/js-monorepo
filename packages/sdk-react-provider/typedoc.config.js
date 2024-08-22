@@ -9,7 +9,7 @@ module.exports = {
   $schema: 'https://typedoc-plugin-markdown.org/schema.json',
 
   // See: apps/docs/docusaurus.config.js
-  out: '../../apps/docs/docs/SDK React Provider',
+  out: '../../apps/developer/docs/tools/SDK React Provider',
 
   /**
    * # Debugging

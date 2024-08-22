@@ -75,25 +75,25 @@ root.render(
 
 The following hooks are now available within your application:
 
-- [useAuth](../../apps/docs/docs/SDK%20React%20Provider/functions/useAuth.md)
+- [useAuth](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useAuth.md)
 
-- [useAuthContext](../../apps/docs/docs/SDK%20React%20Provider/functions/useAuthContext.md)
+- [useAuthContext](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useAuthContext.md)
 
-- [useBalances](../../apps/docs/docs/SDK%20React%20Provider/functions/useBalances.md)
+- [useBalances](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useBalances.md)
 
-- [useLinkAddress](../../apps/docs/docs/SDK%20React%20Provider/functions/useLinkAddress.md)
+- [useLinkAddress](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useLinkAddress.md)
 
-- [useOrder](../../apps/docs/docs/SDK%20React%20Provider/functions/useOrder.md)
+- [useOrder](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useOrder.md)
 
-- [useOrders](../../apps/docs/docs/SDK%20React%20Provider/functions/useOrders.md)
+- [useOrders](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useOrders.md)
 
-- [usePlaceOrder](../../apps/docs/docs/SDK%20React%20Provider/functions/usePlaceOrder.md)
+- [usePlaceOrder](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/usePlaceOrder.md)
 
-- [useProfile](../../apps/docs/docs/SDK%20React%20Provider/functions/useProfile.md)
+- [useProfile](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useProfile.md)
 
-- [useProfiles](../../apps/docs/docs/SDK%20React%20Provider/functions/useProfiles.md)
+- [useProfiles](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useProfiles.md)
 
-- [useTokens](../../apps/docs/docs/SDK%20React%20Provider/functions/useTokens.md)
+- [useTokens](../../apps/developer/docs/tools/SDK%20React%20Provider/functions/useTokens.md)
 
 ### Example
 

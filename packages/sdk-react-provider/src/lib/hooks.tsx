@@ -120,7 +120,7 @@ export function useAuth(): UseAuthReturn {
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/auth-context)
  *
- * [AuthContext interface](/docs/SDK/interfaces/AuthContext.md)
+ * [AuthContext interface](/docs/tools/SDK/interfaces/AuthContext.md)
  */
 export function useAuthContext({
   query,
@@ -173,7 +173,7 @@ export function useAuthContext({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profile)
  *
- * [Profile interface](/docs/SDK/interfaces/Profile.md)
+ * [Profile interface](/docs/tools/SDK/interfaces/Profile.md)
  */
 export function useProfile({
   profileId,
@@ -234,7 +234,7 @@ export function useProfile({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profiles)
  *
- * [Profile interface](/docs/SDK/interfaces/Profile.md)
+ * [Profile interface](/docs/tools/SDK/interfaces/Profile.md)
  */
 export function useProfiles({
   query,
@@ -284,7 +284,7 @@ export function useProfiles({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/tokens)
  *
- * [Token interface](/docs/SDK/interfaces/Token.md)
+ * [Token interface](/docs/tools/SDK/interfaces/Token.md)
  */
 export function useTokens({
   query,
@@ -332,7 +332,7 @@ export function useTokens({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profile-balances)
  *
- * [Balances interface](/docs/SDK/interfaces/Balances.md)
+ * [Balances interface](/docs/tools/SDK/interfaces/Balances.md)
  */
 export function useBalances({
   profileId,
@@ -384,7 +384,7 @@ export function useBalances({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/order)
  *
- * [Order interface](/docs/SDK/interfaces/Order.md)
+ * [Order interface](/docs/tools/SDK/interfaces/Order.md)
  */
 export function useOrder({
   orderId,
@@ -444,7 +444,7 @@ export function useOrder({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/orders)
  *
- * [Order interface](/docs/SDK/interfaces/Order.md)
+ * [Order interface](/docs/tools/SDK/interfaces/Order.md)
  */
 export function useOrders({
   query = {},
@@ -504,7 +504,7 @@ export function useOrders({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/post-orders)
  *
- * [NewOrder type](/docs/SDK/type-aliases/NewOrder.md)
+ * [NewOrder type](/docs/tools/SDK/type-aliases/NewOrder.md)
  */
 
 export function usePlaceOrder({
@@ -589,7 +589,7 @@ export function usePlaceOrder({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profile-addresses)
  *
- * [LinkAddress interface](/docs/SDK/interfaces/LinkAddress.md)
+ * [LinkAddress interface](/docs/tools/SDK/interfaces/LinkAddress.md)
  */
 export function useLinkAddress({
   profileId,
