@@ -23,6 +23,7 @@
       "dependsOn": ["@monerium/sdk#type-map"]
     },
     "generate-docs": {
+      "dependsOn": ["build"],
       "outputs": ["docs/docs/**"]
     },
     "lint": {},
