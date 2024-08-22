@@ -38,8 +38,8 @@ With a single signature from your wallet, your EURe is burned and sent as Euros 
 
 ## Documentation
 
-- [Documentation](./docs/generated/README.md)
-- [Documentation - MoneriumClient](./docs/generated/classes/MoneriumClient.md)
+- [Documentation](../../apps/docs/docs/SDK/index.md)
+- [Documentation - MoneriumClient](../../apps/docs/docs/SDK/classes/MoneriumClient.md)
 
 ## Table of Contents
 
@@ -109,11 +109,6 @@ await monerium.getAuthContext();
 const { access_token, refresh_token } = monerium.bearerProfile as BearerProfile;
 ```
 
-Interfaces:
-
-- [MoneriumClient](./docs/generated/classes/MoneriumClient.md)
-- [BearerProfile](./docs/generated/interfaces/BearerProfile.md)
-
 API documentation:
 
 - [/auth/token](https://monerium.dev/api-docs#operation/auth-token)
@@ -181,11 +176,6 @@ export function App() {
 }
 ```
 
-Interfaces:
-
-- [AuthCodeRequest](./docs/generated/interfaces/AuthCodeRequest.md)
-- [BearerProfile](./docs/generated/interfaces/BearerProfile.md)
-
 API documentation:
 
 - [/auth](https://monerium.dev/api-docs#operation/auth)
@@ -207,12 +197,6 @@ const { id: profileId, accounts }: Profile = await monerium.getProfile(
 const balances: Balances = await monerium.getBalances(profileId);
 ```
 
-Interfaces:
-
-- [AuthContext](./docs/generated/interfaces/AuthContext.md)
-- [Profile](./docs/generated/interfaces/Profile.md)
-- [Balances](./docs/generated/interfaces/Balances.md)
-
 API documentation:
 
 - [/auth/context](https://monerium.dev/api-docs#operation/auth-context)
@@ -226,10 +210,6 @@ Get the contract addresses of EURe tokens.
 ```ts
 const tokens: Token[] = await monerium.getTokens();
 ```
-
-Interfaces:
-
-- [Token](./docs/generated/interfaces/Token.md)
 
 API documentation:
 
@@ -265,10 +245,6 @@ await monerium.linkAddress(profileId, {
   ],
 } as LinkAddress);
 ```
-
-Interfaces:
-
-- [LinkAddress](./docs/generated/interfaces/LinkAddress.md)
 
 API documentation:
 
@@ -325,11 +301,6 @@ const order = await monerium.placeOrder({
 });
 ```
 
-Interfaces:
-
-- [Order](./docs/generated/interfaces/Order.md)
-- [PaymentStandard](./docs/generated/enumerations/PaymentStandard.md)
-
 API documentation:
 
 - [GET /orders](https://monerium.dev/api-docs#operation/orders)
@@ -344,10 +315,6 @@ When placing orders with payouts above 15,000 EUR, a supporting document is requ
 const supportingDocumentId: SupportingDoc =
   await uploadSupportingDocument(document);
 ```
-
-Interfaces:
-
-- [SupportingDoc](./docs/generated/interfaces/SupportingDoc.md)
 
 API documentation:
 

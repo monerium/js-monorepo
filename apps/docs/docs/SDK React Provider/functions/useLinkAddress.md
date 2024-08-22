@@ -38,7 +38,7 @@ const {
 
 [API Documentation](https://monerium.dev/api-docs#operation/profile-addresses)
 
-[LinkAddress interface](/docs/SDK/interfaces/AuthContext.md)
+[LinkAddress interface](/docs/SDK/interfaces/LinkAddress.md)
 
 ## Defined in
 

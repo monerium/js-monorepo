@@ -7,23 +7,31 @@
  */
 module.exports = {
   $schema: 'https://typedoc-plugin-markdown.org/schema.json',
+
+  // See: apps/docs/docusaurus.config.js
+  out: '../../apps/docs/docs/SDK React Provider',
+
+  /**
+   * # Debugging
+   * When running `turbo generate-docs` the entryPointStrategy:'Packages' is used,
+   * which does not support watch. If you need instant feedback while
+   * writing documentation, run `pnpm typedoc --watch` in that packages directory.
+   * This will create a `docs` folder in that packages directory that you can view.
+   */
+
   gitRevision: 'main',
   plugin: ['typedoc-plugin-markdown'],
 
-  // See: apps/docs/docusaurus.config.js
-
-  entryPoints: ['src/index.ts'],
-  out: '../../apps/docs/docs/SDK React Provider',
-
-  tsconfig: 'tsconfig.json',
-  entryFileName: 'index',
   name: 'SDK React Provider',
-  // sortEntryPoints: true,
-  // mergeReadme: true,
+  entryFileName: 'index',
+  entryPoints: ['src/index.ts'],
+  tsconfig: 'tsconfig.json',
+
+  excludePrivate: true,
+
   readme: 'none',
 
   cleanOutputDir: true,
-  excludePrivate: true,
 
   kindSortOrder: [
     'Class',

@@ -75,25 +75,25 @@ root.render(
 
 The following hooks are now available within your application:
 
-- [useAuth](./docs/generated/functions/useAuth.md)
+- [useAuth](../../apps/docs/docs/SDK%20React%20Provider/functions/useAuth.md)
 
-- [useAuthContext](./docs/generated/functions/useAuthContext.md)
+- [useAuthContext](../../apps/docs/docs/SDK%20React%20Provider/functions/useAuthContext.md)
 
-- [useBalances](./docs/generated/functions/useBalances.md)
+- [useBalances](../../apps/docs/docs/SDK%20React%20Provider/functions/useBalances.md)
 
-- [useLinkAddress](./docs/generated/functions/useLinkAddress.md)
+- [useLinkAddress](../../apps/docs/docs/SDK%20React%20Provider/functions/useLinkAddress.md)
 
-- [useOrder](./docs/generated/functions/useOrder.md)
+- [useOrder](../../apps/docs/docs/SDK%20React%20Provider/functions/useOrder.md)
 
-- [useOrders](./docs/generated/functions/useOrders.md)
+- [useOrders](../../apps/docs/docs/SDK%20React%20Provider/functions/useOrders.md)
 
-- [usePlaceOrder](./docs/generated/functions/usePlaceOrder.md)
+- [usePlaceOrder](../../apps/docs/docs/SDK%20React%20Provider/functions/usePlaceOrder.md)
 
-- [useProfile](./docs/generated/functions/useProfile.md)
+- [useProfile](../../apps/docs/docs/SDK%20React%20Provider/functions/useProfile.md)
 
-- [useProfiles](./docs/generated/functions/useProfiles.md)
+- [useProfiles](../../apps/docs/docs/SDK%20React%20Provider/functions/useProfiles.md)
 
-- [useTokens](./docs/generated/functions/useTokens.md)
+- [useTokens](../../apps/docs/docs/SDK%20React%20Provider/functions/useTokens.md)
 
 ### Example
 

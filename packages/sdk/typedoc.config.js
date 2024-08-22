@@ -6,27 +6,33 @@
  * @see https://typedoc-plugin-markdown.org/schema.json
  */
 module.exports = {
-  $schema: 'https://typedoc.org/schema.json',
+  $schema: 'https://typedoc-plugin-markdown.org/schema.json',
+
+  // See: apps/docs/docusaurus.config.js
+  out: '../../apps/docs/docs/SDK',
+
+  /**
+   * # Debugging
+   * When running `turbo generate-docs` the entryPointStrategy is used,
+   * which does not support watch. If you need instant feedback while
+   * writing documentation, run `pnpm typedoc --watch` in that packages directory.
+   * This will create a `docs` folder in that packages directory that you can view.
+   */
+
   gitRevision: 'main',
   plugin: ['typedoc-plugin-markdown'],
 
-  tsconfig: 'tsconfig.json',
-  entryFileName: 'index',
-  excludePrivate: true,
   name: 'SDK',
-  out: '../../apps/docs/docs/SDK',
-  readme: 'none',
-  // githubPages: true,
-  // includeVersion: true,
-  cleanOutputDir: true,
-  // searchInComments: true,
-  // entryPoints: [
-  //   'src/client.ts',
-  //   'src/types.ts',
-  //   'src/utils.ts',
-  //   'src/constants.ts',
-  // ],
+  entryFileName: 'index',
   entryPoints: ['src/index.ts'],
+  tsconfig: 'tsconfig.json',
+
+  excludePrivate: true,
+
+  readme: 'none',
+
+  cleanOutputDir: true,
+
   kindSortOrder: [
     'Class',
     'Property',
@@ -68,20 +74,4 @@ module.exports = {
     'Tokens',
     'Other',
   ],
-  // titleLink: 'https://www.npmjs.com/package/@monerium/sdk',
-
-  // navigationLinks: {
-  //   'monerium.com': 'https://monerium.com/',
-  //   'monerium.app': 'https://monerium.app/',
-  // },
-  // sidebarLinks: {
-  //   NPM: 'https://www.npmjs.com/package/@monerium/sdk',
-  //   Issues: 'https://github.com/monerium/js-monorepo/issues',
-  //   'Source code':
-  //     'https://github.com/monerium/js-monorepo/tree/main/packages/sdk',
-  //   'Developer portal': 'https://monerium.dev/',
-  //   'API documentation': 'https://monerium.dev/api-docs',
-  //   '': '',
-  // },
-  // entryPointStrategy: 'expand',
 };
