@@ -213,11 +213,3 @@ process.env.CI === 'true' &&
   it('SKIPPED', () => {
     expect(true).toBe(true);
   });
-
-// TODO:
-// test getAddresses
-// test getAddress
-// test getBalances
-// test signUp
-// test submitProfileDetails
-// test requestIban

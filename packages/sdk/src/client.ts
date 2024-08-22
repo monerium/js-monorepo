@@ -640,8 +640,9 @@ export class MoneriumClient {
       }
     } else {
       this.#sockets?.forEach((socket) => {
-        socket.close();
+        socket?.close();
       });
+
       this.#sockets?.clear();
       this.#sockets = undefined;
     }
