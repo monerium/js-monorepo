@@ -1,13 +1,10 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import i18n, { locales } from '@generated/i18n';
-import sdkReactProviderTypedocs from '../../packages/sdk-react-provider/typedoc.config.js';
-import sdkTypedocs from '../../packages/sdk/typedoc.config.js';
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'Monerium',
+  tagline: 'Monerium Docs',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -17,7 +14,7 @@ const config: Config = {
   baseUrl: '/',
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
+  organizationName: 'monerium', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
   plugins: [
     [
