@@ -13,6 +13,7 @@ module.exports = {
   // See: apps/docs/docusaurus.config.js
 
   entryPoints: ['src/index.ts'],
+  out: '../../apps/docs/docs/SDK React Provider',
 
   tsconfig: 'tsconfig.json',
   entryFileName: 'index',
@@ -67,10 +68,6 @@ module.exports = {
     '*',
     'Other',
   ],
-<<<<<<< HEAD
-=======
-
->>>>>>> 02f7ec5 (chore: decent condition)
   expandObjects: true,
   hideParameterTypesInTitle: true,
   expandParameters: true,

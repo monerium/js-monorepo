@@ -12,7 +12,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:380](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L380)
+[types.ts:380](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L380)
 
 ***
 
@@ -22,7 +22,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:377](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L377)
+[types.ts:377](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L377)
 
 ***
 
@@ -32,7 +32,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:374](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L374)
+[types.ts:374](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L374)
 
 ***
 
@@ -44,7 +44,7 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:382](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L382)
+[types.ts:382](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L382)
 
 ***
 
@@ -54,7 +54,7 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:378](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L378)
+[types.ts:378](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L378)
 
 ***
 
@@ -64,7 +64,7 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:376](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L376)
+[types.ts:376](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L376)
 
 ***
 
@@ -74,4 +74,4 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:375](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L375)
+[types.ts:375](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L375)

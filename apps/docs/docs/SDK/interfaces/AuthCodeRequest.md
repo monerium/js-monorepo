@@ -12,7 +12,7 @@ One of the options for the [AuthArgs](/docs/SDK/type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:97](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L97)
+[types.ts:97](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L97)
 
 ***
 
@@ -22,7 +22,7 @@ One of the options for the [AuthArgs](/docs/SDK/type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:98](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L98)
+[types.ts:98](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L98)
 
 ***
 
@@ -32,7 +32,7 @@ One of the options for the [AuthArgs](/docs/SDK/type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:99](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L99)
+[types.ts:99](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L99)
 
 ***
 
@@ -42,7 +42,7 @@ One of the options for the [AuthArgs](/docs/SDK/type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:96](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L96)
+[types.ts:96](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L96)
 
 ***
 
@@ -52,7 +52,7 @@ One of the options for the [AuthArgs](/docs/SDK/type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:100](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L100)
+[types.ts:100](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L100)
 
 ***
 
@@ -62,4 +62,4 @@ One of the options for the [AuthArgs](/docs/SDK/type-aliases/AuthArgs.md).
 
 #### Defined in
 
-[types.ts:101](https://github.com/monerium/js-monorepo/blob/bdb556f177407a98459f8edb039e31cf37d07d7a/packages/sdk/src/types.ts#L101)
+[types.ts:101](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L101)

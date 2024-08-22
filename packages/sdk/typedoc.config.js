@@ -14,7 +14,7 @@ module.exports = {
   entryFileName: 'index',
   excludePrivate: true,
   name: 'SDK',
-  // out: '../../apps/docs/sdk',
+  out: '../../apps/docs/docs/SDK',
   readme: 'none',
   // githubPages: true,
   // includeVersion: true,

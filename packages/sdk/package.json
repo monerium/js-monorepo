@@ -26,10 +26,9 @@
     "dist/index.d.ts"
   ],
   "scripts": {
-    "dev": "tsup --watch --onSuccess 'pnpm run docs'",
+    "dev": "tsup --watch",
     "build": "tsup",
-    "docs": "typedoc",
-    "docs:watch": "typedoc  --watch",
+    "typedoc": "typedoc",
     "type-map": "tsc --emitDeclarationOnly --declaration",
     "lint": "eslint . --fix",
     "pub:pre": "pnpm publish --no-git-checks --dry-run",
