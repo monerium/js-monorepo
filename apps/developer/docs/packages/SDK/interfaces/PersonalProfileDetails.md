@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / PersonalProfileDetails
-
 # Interface: PersonalProfileDetails
 
 ## Properties
@@ -74,7 +68,7 @@
 
 #### kind
 
-> **kind**: [`IdDocumentKind`](../enumerations/IdDocumentKind.md)
+> **kind**: [`IdDocumentKind`](/docs/packages/SDK/enumerations/IdDocumentKind.md)
 
 #### number
 

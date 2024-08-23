@@ -1,17 +1,11 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / IBANsResponse
-
 # Interface: IBANsResponse
 
 ## Properties
 
 ### ibans
 
-> **ibans**: [`IBAN`](IBAN.md)[]
+> **ibans**: [`IBAN`](/docs/packages/SDK/interfaces/IBAN.md)[]
 
 #### Defined in
 
-[types.ts:503](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L503)
+[types.ts:502](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L502)

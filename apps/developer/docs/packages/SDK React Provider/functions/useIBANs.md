@@ -1,34 +1,41 @@
-[Monerium SDK React Provider](../README.md) / useIBANs
-
 # Function: useIBANs()
 
-> **useIBANs**(`params`?: \{`chain`: `number` \| `Chain`;`profile`: `string`;`query`: `{}`; \}): [`QueryResult`](../type-aliases/QueryResult.md)\<`"ibans"`, `IBAN`[]\>
+> **useIBANs**(`params`?): [`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"ibans"`, `IBAN`[]\>
 
 # Get IBANs
 
 ## Parameters
 
-| Parameter         | Type                                                          | Description                                                                                                         |
-| ----------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `params`?         | `object`                                                      | No required parameters.                                                                                             |
-| `params.chain`?   | `number` \| `Chain`                                           | Fetch IBANs for a specific chain.                                                                                   |
-| `params.profile`? | `string`                                                      | Fetch IBANs for a specific profile.                                                                                 |
-| `params.query`?   | [`QueryOptions`](../type-aliases/QueryOptions.md)\<`IBAN`[]\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+• **params?** = `{}`
+
+No required parameters.
+
+• **params.chain?**: `number` \| `Chain`
+
+Fetch IBANs for a specific chain.
+
+• **params.profile?**: `string`
+
+Fetch IBANs for a specific profile.
+
+• **params.query?**: [`QueryOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryOptions.md)\<`IBAN`[]\> = `{}`
+
+See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
 
 ## Returns
 
-[`QueryResult`](../type-aliases/QueryResult.md)\<`"ibans"`, `IBAN`[]\>
+[`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"ibans"`, `IBAN`[]\>
 
 ## Example
 
 ```ts
 const {
-  ibans, // useQuery's `data` property
-  isLoading,
-  isError,
-  error,
-  refetch,
-  ...moreUseQueryResults
+   ibans, // useQuery's `data` property
+   isLoading,
+   isError,
+   error,
+   refetch,
+   ...moreUseQueryResults
 } = useIBANs();
 ```
 

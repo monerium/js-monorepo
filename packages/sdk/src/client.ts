@@ -347,14 +347,14 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/iban}
+   * {@link "https://monerium.dev/api-docs-v2#tag/ibans/operation/iban"}
    * @category IBANs
    */
   getIban(iban: string): Promise<IBAN> {
     return this.#api<IBAN>('get', `ibans/${encodeURI(iban)}`);
   }
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans}
+   * {@link "https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans"}
    * @category IBANs
    */
   getIbans(queryParameters?: IbansQueryParams): Promise<IBANsResponse> {
@@ -570,7 +570,7 @@ export class MoneriumClient {
   /**
    * Connects to the order notifications socket
    * @category Orders
-   * {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications}
+   * [Websocket](https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications)
    */
   connectOrderNotifications({
     filter,
@@ -625,7 +625,7 @@ export class MoneriumClient {
   /**
    * Closes the order notifications sockets
    * @category Orders
-   * {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications}
+   * [Websocket](https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications)
    */
   disconnectOrderNotifications(queryParameters?: OrderNotificationQueryParams) {
     if (queryParameters) {

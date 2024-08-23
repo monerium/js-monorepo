@@ -1,35 +1,33 @@
-[Monerium SDK React Provider](../README.md) / useMoveIban
-
 # Function: useMoveIban()
 
-> **useMoveIban**(`params`?: \{`mutation`: `{}`; \}): [`MutationResult`](../type-aliases/MutationResult.md)\<`"moveIban"`, `ResponseStatus`, `Error`, `MoveIbanPayload` & \{`iban`: `string`; \}\>
+> **useMoveIban**(`params`?): [`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"moveIban"`, `ResponseStatus`, `Error`, `MoveIbanPayload` & `object`\>
 
 # Move Iban
-
 Move an existing IBAN to a specified address an chain.
 All incoming EUR payments will automatically be routed to the address on that chain.
 
 ## Parameters
 
-| Parameter          | Type                                                                                                                             | Description             |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `params`?          | `object`                                                                                                                         | No required parameters. |
-| `params.mutation`? | [`MutationOptions`](../type-aliases/MutationOptions.md)\<`ResponseStatus`, `Error`, `MoveIbanPayload` & \{`iban`: `string`; \}\> | -                       |
+• **params?** = `{}`
+
+No required parameters.
+
+• **params.mutation?**: [`MutationOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationOptions.md)\<`ResponseStatus`, `Error`, `MoveIbanPayload` & `object`\> = `{}`
 
 ## Returns
 
-[`MutationResult`](../type-aliases/MutationResult.md)\<`"moveIban"`, `ResponseStatus`, `Error`, `MoveIbanPayload` & \{`iban`: `string`; \}\>
+[`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"moveIban"`, `ResponseStatus`, `Error`, `MoveIbanPayload` & `object`\>
 
 ## Example
 
 ```ts
 const {
-  moveIban, // useMutation's `mutateAsync` property
-  isPending,
-  isError,
-  error,
-  status,
-  ...moreUseMutationResults
+   moveIban, // useMutation's `mutateAsync` property
+   isPending,
+   isError,
+   error,
+   status,
+   ...moreUseMutationResults
 } = useMoveIban();
 ```
 

@@ -1,14 +1,8 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / IBANIdentifier
-
 # Interface: IBANIdentifier
 
 ## Extends
 
-- [`Identifier`](Identifier.md)
+- [`Identifier`](/docs/packages/SDK/interfaces/Identifier.md)
 
 ## Properties
 
@@ -18,7 +12,7 @@
 
 #### Inherited from
 
-[`Identifier`](Identifier.md).[`bic`](Identifier.md#bic)
+[`Identifier`](/docs/packages/SDK/interfaces/Identifier.md).[`bic`](/docs/packages/SDK/interfaces/Identifier.md#bic)
 
 #### Defined in
 
@@ -38,11 +32,11 @@
 
 ### standard
 
-> **standard**: [`iban`](../enumerations/PaymentStandard.md#iban)
+> **standard**: [`iban`](/docs/packages/SDK/enumerations/PaymentStandard.md#iban)
 
 #### Overrides
 
-[`Identifier`](Identifier.md).[`standard`](Identifier.md#standard)
+[`Identifier`](/docs/packages/SDK/interfaces/Identifier.md).[`standard`](/docs/packages/SDK/interfaces/Identifier.md#standard)
 
 #### Defined in
 

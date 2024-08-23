@@ -1,20 +1,14 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / IbansQueryParams
-
 # Interface: IbansQueryParams
 
 ## Properties
 
 ### chain?
 
-> `optional` **chain**: `number` \| [`Chain`](../type-aliases/Chain.md)
+> `optional` **chain**: `number` \| [`Chain`](/docs/packages/SDK/type-aliases/Chain.md)
 
 #### Defined in
 
-[types.ts:491](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L491)
+[types.ts:490](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L490)
 
 ***
 
@@ -24,4 +18,4 @@
 
 #### Defined in
 
-[types.ts:490](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L490)
+[types.ts:489](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L489)

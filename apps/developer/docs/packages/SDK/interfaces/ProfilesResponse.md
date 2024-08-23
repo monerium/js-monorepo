@@ -1,16 +1,10 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / ProfilesResponse
-
 # Interface: ProfilesResponse
 
 ## Properties
 
 ### profiles
 
-> **profiles**: [`ProfilePermissions`](ProfilePermissions.md)[]
+> **profiles**: [`ProfilePermissions`](/docs/packages/SDK/interfaces/ProfilePermissions.md)[]
 
 #### Defined in
 

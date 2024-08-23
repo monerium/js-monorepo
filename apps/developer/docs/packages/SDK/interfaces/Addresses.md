@@ -1,16 +1,10 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / Addresses
-
 # Interface: Addresses
 
 ## Properties
 
 ### addresses
 
-> **addresses**: [`Address`](Address.md)[]
+> **addresses**: [`Address`](/docs/packages/SDK/interfaces/Address.md)[]
 
 #### Defined in
 

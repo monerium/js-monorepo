@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / SignUpPayload
-
 # Interface: SignUpPayload
 
 ## Properties
@@ -14,4 +8,4 @@
 
 #### Defined in
 
-[types.ts:452](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L452)
+[types.ts:451](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L451)

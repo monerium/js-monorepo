@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / CorporateProfileDetails
-
 # Interface: CorporateProfileDetails
 
 ## Properties
@@ -50,7 +44,7 @@
 
 ### directors
 
-> **directors**: [`Director`](../type-aliases/Director.md)[]
+> **directors**: [`Director`](/docs/packages/SDK/type-aliases/Director.md)[]
 
 List of Individual who has powers to legally bind the company (power of procuration).
 
@@ -62,7 +56,7 @@ List of Individual who has powers to legally bind the company (power of procurat
 
 ### finalBeneficiaries
 
-> **finalBeneficiaries**: [`Beneficiary`](../type-aliases/Beneficiary.md)[]
+> **finalBeneficiaries**: [`Beneficiary`](/docs/packages/SDK/type-aliases/Beneficiary.md)[]
 
 List of beneficial owner that owns 25% or more in a corporation.
 
@@ -104,7 +98,7 @@ List of beneficial owner that owns 25% or more in a corporation.
 
 ### representatives
 
-> **representatives**: [`PersonalProfileDetails`](PersonalProfileDetails.md)[]
+> **representatives**: [`PersonalProfileDetails`](/docs/packages/SDK/interfaces/PersonalProfileDetails.md)[]
 
 List of individuals representing the company and authorized to act on it's behalf.
 

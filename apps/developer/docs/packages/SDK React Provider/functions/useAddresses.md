@@ -1,34 +1,41 @@
-[Monerium SDK React Provider](../README.md) / useAddresses
-
 # Function: useAddresses()
 
-> **useAddresses**(`params`?: \{`chain`: `number` \| `Chain`;`profile`: `string`;`query`: `{}`; \}): [`QueryResult`](../type-aliases/QueryResult.md)\<`"addresses"`, `Address`[]\>
+> **useAddresses**(`params`?): [`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"addresses"`, `Address`[]\>
 
 # Get addresses
 
 ## Parameters
 
-| Parameter         | Type                                                             | Description                                                                                                         |
-| ----------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `params`?         | `object`                                                         | No required parameters.                                                                                             |
-| `params.chain`?   | `number` \| `Chain`                                              | Fetch addresses for a specific chain.                                                                               |
-| `params.profile`? | `string`                                                         | Fetch addresses for a specific profile.                                                                             |
-| `params.query`?   | [`QueryOptions`](../type-aliases/QueryOptions.md)\<`Address`[]\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+• **params?** = `{}`
+
+No required parameters.
+
+• **params.chain?**: `number` \| `Chain`
+
+Fetch addresses for a specific chain.
+
+• **params.profile?**: `string`
+
+Fetch addresses for a specific profile.
+
+• **params.query?**: [`QueryOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryOptions.md)\<`Address`[]\> = `{}`
+
+See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
 
 ## Returns
 
-[`QueryResult`](../type-aliases/QueryResult.md)\<`"addresses"`, `Address`[]\>
+[`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"addresses"`, `Address`[]\>
 
 ## Example
 
 ```ts
 const {
-  addresses, // useQuery's `data` property
-  isLoading,
-  isError,
-  error,
-  refetch,
-  ...moreUseQueryResults
+   addresses, // useQuery's `data` property
+   isLoading,
+   isError,
+   error,
+   refetch,
+   ...moreUseQueryResults
 } = useAddresses();
 ```
 

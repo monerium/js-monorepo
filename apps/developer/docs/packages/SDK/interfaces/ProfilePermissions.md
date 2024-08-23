@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / ProfilePermissions
-
 # Interface: ProfilePermissions
 
 ## Properties
@@ -20,7 +14,7 @@
 
 ### kind
 
-> **kind**: [`ProfileType`](../enumerations/ProfileType.md)
+> **kind**: [`ProfileType`](/docs/packages/SDK/enumerations/ProfileType.md)
 
 #### Defined in
 
@@ -40,7 +34,7 @@
 
 ### perms
 
-> **perms**: [`Permission`](../enumerations/Permission.md)[]
+> **perms**: [`Permission`](/docs/packages/SDK/enumerations/Permission.md)[]
 
 #### Defined in
 

@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / IdDocumentKind
-
 # Enumeration: IdDocumentKind
 
 The type of ID document. Passports, National ID cards, and driving licenses are supported.

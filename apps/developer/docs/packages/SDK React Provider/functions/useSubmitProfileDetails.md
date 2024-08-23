@@ -1,37 +1,38 @@
-[Monerium SDK React Provider](../README.md) / useSubmitProfileDetails
-
 # Function: useSubmitProfileDetails()
 
-> **useSubmitProfileDetails**(`param`: \{`mutation`: `{}`;`profile`: `string`; \}): [`MutationResult`](../type-aliases/MutationResult.md)\<`"submitProfileDetails"`, `ResponseStatus`, `Error`, `SubmitProfileDetailsPayload`\>
+> **useSubmitProfileDetails**(`param`): [`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"submitProfileDetails"`, `ResponseStatus`, `Error`, `SubmitProfileDetailsPayload`\>
 
 # Submit profile details.
-
 Submit the required compliance information to onboard the customer.
 
 Note that you won't be able to change the profile "kind" from personal to corporate or vice versa once the profile has been approved.
 
 ## Parameters
 
-| Parameter         | Type                                                                                                                | Description                                                                                                               |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `param`           | `object`                                                                                                            |                                                                                                                           |
-| `param.mutation`? | [`MutationOptions`](../type-aliases/MutationOptions.md)\<`ResponseStatus`, `Error`, `SubmitProfileDetailsPayload`\> | See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options. |
-| `param.profile`   | `string`                                                                                                            | The id of the profile to submit to.                                                                                       |
+• **param**
+
+• **param.mutation?**: [`MutationOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationOptions.md)\<`ResponseStatus`, `Error`, `SubmitProfileDetailsPayload`\> = `{}`
+
+See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options.
+
+• **param.profile**: `string`
+
+The id of the profile to submit to.
 
 ## Returns
 
-[`MutationResult`](../type-aliases/MutationResult.md)\<`"submitProfileDetails"`, `ResponseStatus`, `Error`, `SubmitProfileDetailsPayload`\>
+[`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"submitProfileDetails"`, `ResponseStatus`, `Error`, `SubmitProfileDetailsPayload`\>
 
 ## Example
 
 ```ts
 const {
-  submitProfileDetails, // useMutation's `mutateAsync` property
-  isPending,
-  isError,
-  error,
-  status,
-  ...moreUseMutationResults
+   submitProfileDetails, // useMutation's `mutateAsync` property
+   isPending,
+   isError,
+   error,
+   status,
+   ...moreUseMutationResults
 } = useSubmitProfileDetails();
 ```
 

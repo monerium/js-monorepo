@@ -1,12 +1,6 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / Representative
-
 # Type Alias: Representative
 
-> **Representative**: [`PersonalProfileDetails`](../interfaces/PersonalProfileDetails.md)
+> **Representative**: [`PersonalProfileDetails`](/docs/packages/SDK/interfaces/PersonalProfileDetails.md)
 
 ## Defined in
 

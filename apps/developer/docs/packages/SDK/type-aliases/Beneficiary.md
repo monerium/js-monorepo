@@ -1,12 +1,6 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / Beneficiary
-
 # Type Alias: Beneficiary
 
-> **Beneficiary**: `Omit`\<[`PersonalProfileDetails`](../interfaces/PersonalProfileDetails.md), `"idDocument"`\> & `object`
+> **Beneficiary**: `Omit`\<[`PersonalProfileDetails`](/docs/packages/SDK/interfaces/PersonalProfileDetails.md), `"idDocument"`\> & `object`
 
 ## Type declaration
 

@@ -663,7 +663,7 @@ export default function Test() {
       <button
         type="submit"
         onClick={() => {
-          context?.sdk?.closeOrderNotifications();
+          context?.sdk?.disconnectOrderNotifications();
         }}
       >
         Close Order Notifications

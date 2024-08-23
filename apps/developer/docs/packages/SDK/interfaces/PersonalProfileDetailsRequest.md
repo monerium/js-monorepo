@@ -1,16 +1,10 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / PersonalProfileDetailsRequest
-
 # Interface: PersonalProfileDetailsRequest
 
 ## Properties
 
 ### personal
 
-> **personal**: [`PersonalProfileDetails`](PersonalProfileDetails.md)
+> **personal**: [`PersonalProfileDetails`](/docs/packages/SDK/interfaces/PersonalProfileDetails.md)
 
 #### Defined in
 

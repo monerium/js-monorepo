@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / OrderNotificationQueryParams
-
 # Interface: OrderNotificationQueryParams
 
 ## Properties
@@ -14,14 +8,14 @@
 
 #### Defined in
 
-[types.ts:515](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L515)
+[types.ts:514](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L514)
 
 ***
 
 ### state?
 
-> `optional` **state**: [`OrderState`](../enumerations/OrderState.md)
+> `optional` **state**: [`OrderState`](/docs/packages/SDK/enumerations/OrderState.md)
 
 #### Defined in
 
-[types.ts:514](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L514)
+[types.ts:513](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L513)

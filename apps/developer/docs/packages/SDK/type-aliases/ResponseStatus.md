@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / ResponseStatus
-
 # Type Alias: ResponseStatus
 
 > **ResponseStatus**: `object`
@@ -20,4 +14,4 @@
 
 ## Defined in
 
-[types.ts:546](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L546)
+[types.ts:545](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L545)

@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / MoveIbanPayload
-
 # Interface: MoveIbanPayload
 
 ## Properties
@@ -14,14 +8,14 @@
 
 #### Defined in
 
-[types.ts:507](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L507)
+[types.ts:506](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L506)
 
 ***
 
 ### chain
 
-> **chain**: `number` \| [`Chain`](../type-aliases/Chain.md)
+> **chain**: `number` \| [`Chain`](/docs/packages/SDK/type-aliases/Chain.md)
 
 #### Defined in
 
-[types.ts:508](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L508)
+[types.ts:507](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L507)
