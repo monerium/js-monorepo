@@ -6,7 +6,7 @@ See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framew
 
 ## Type Parameters
 
-• **TFuncName** *extends* `string`
+• **TFuncName** _extends_ `string`
 
 The name of the function that mutates.
 
@@ -33,6 +33,7 @@ The context used in the mutation.
 ## Example
 
 > `mutateAsync` is renamed according to the `TFuncName` and therefore not included in the result.
+
 ```diff
 const {
    data,
@@ -51,7 +52,7 @@ const {
    submittedAt,
    variables,
 } = useMutationHook();
- ```
+```
 
 ## Used By
 

@@ -17,6 +17,7 @@ The data returned.
 ## Options
 
 > `queryKey` and `queryFn` are used internally and therefore not included in the options.
+
 ```diff
 query: {
 -  queryKey,
@@ -43,18 +44,18 @@ query: {
    structuralSharing,
    throwOnError
 }
- ```
+```
 
 ## Example
 
 ```ts
 useQueryHook({
- query: {
-   enabled: isReady,
-   staleTime: 1000,
-   placeHolderData: { foo: 'bar' },
- }
-})
+  query: {
+    enabled: isReady,
+    staleTime: 1000,
+    placeHolderData: { foo: 'bar' },
+  },
+});
 ```
 
 ## Used By
