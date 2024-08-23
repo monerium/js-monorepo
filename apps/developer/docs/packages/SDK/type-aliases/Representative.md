@@ -1,6 +1,6 @@
 # Type Alias: Representative
 
-> **Representative**: [`PersonalProfileDetails`](/docs/packages/SDK/interfaces/PersonalProfileDetails.md)
+> **Representative**: [`PersonalProfileDetails`](/docs/packages/sdk/interfaces/PersonalProfileDetails.md)
 
 ## Defined in
 

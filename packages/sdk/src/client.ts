@@ -55,6 +55,31 @@ const { STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } = constants;
 
 const isServer = typeof window === 'undefined';
 
+/**
+ * In the [Monerium UI](https://monerium.app/), create an application to get the `clientId` and register your `redirectUri`.
+ * ```ts
+ * import { MoneriumClient } from '@monerium/sdk';
+ *
+ * const monerium = new MoneriumClient() // defaults to `sandbox`
+ *
+ * // or
+ * new MoneriumClient('production')
+ *
+ * // or
+ * new MoneriumClient({
+ *  environment: 'sandbox',
+ *  clientId: 'your-client-id',
+ *  redirectUri: 'http://your-redirect-url.com/monerium'
+ * });
+ *
+ * // or - server only
+ * new MoneriumClient({
+ *  environment: 'sandbox',
+ *  clientId: 'your-client-id',
+ *  clientSecret: 'your-client-secret'
+ * })
+ *```
+ */
 export class MoneriumClient {
   #env: Environment;
 
@@ -73,7 +98,9 @@ export class MoneriumClient {
    * Sockets will be available after subscribing to an event
    * */
   #sockets?: Map<string, WebSocket> = new Map();
-
+  /**
+   * The client is authorized if the bearer profile is available
+   */
   isAuthorized = !!this.bearerProfile;
 
   #client?: BearerTokenCredentials;
@@ -84,23 +111,6 @@ export class MoneriumClient {
 
   /**
    * @defaultValue `sandbox`
-   * @example
-   * const monerium = new MoneriumClient() // defaults to `sandbox`
-   * // or
-   * new MoneriumClient('production')
-   *
-   * new MoneriumClient({
-   *  environment: 'sandbox',
-   *  clientId: 'your-client-id',
-   *  redirectUri: 'your-redirect-url'
-   * })
-   *
-   * // Server side only
-   * new MoneriumClient({
-   *  environment: 'sandbox',
-   *  clientId: 'your-client-id',
-   *  clientSecret: 'your-secret'
-   * })
    * */
   constructor(envOrOptions?: ENV | ClassOptions) {
     // No arguments, default to sandbox
@@ -138,12 +148,15 @@ export class MoneriumClient {
   }
 
   /**
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/auth/operation/auth)
+   *
    * Construct the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
+   *
+   * @group Authentication
    * @returns string
-   * @category Authentication
-   * @link [API Documentation](https://monerium.dev/api-docs-v2#tag/auth/operation/auth)
+   *
    */
   async authorize(client?: AuthFlowOptions) {
     const clientId =
@@ -172,11 +185,16 @@ export class MoneriumClient {
   }
 
   /**
+   *
+   *
    * Will redirect to the authorization code flow and store the code verifier in the local storage
+   *
    * @param {AuthorizationCodeCredentials | ClientCredentials} client - the client credentials
+   *
    * @returns boolean to indicate if access has been granted
-   * @category Authentication
+   *
    * @example
+   * ```ts
    *   import { MoneriumClient } from '@monerium/sdk';
    *  // Initialize the client with credentials
    *  const monerium = new MoneriumClient({
@@ -186,6 +204,8 @@ export class MoneriumClient {
    *  });
    *
    * await monerium.getAccess();
+   * ```
+   * @group Authentication
    */
   async getAccess(
     client?: AuthorizationCodeCredentials | ClientCredentials
@@ -243,7 +263,7 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth-token}
+   * https://monerium.dev/api-docs-v2#tag/auth/operation/auth-token
    */
   async #grantAccess(args: AuthArgs): Promise<BearerProfile> {
     let params:
@@ -302,32 +322,36 @@ export class MoneriumClient {
     return this.bearerProfile as BearerProfile;
   }
 
-  // -- Read Methods
   /**
-   * # TELL
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile)
+   *
+   * @group Profiles
    * @param {string} profile - the id of the profile to fetch.
-   * @category Profiles
-   * @link [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile)
+   *
    */
   getProfile(profile: string): Promise<Profile> {
     return this.#api<Profile>('get', `profiles/${profile}`);
   }
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles}
-   * @category Profiles
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles)
+   *
+   * @group Profiles
    */
   getProfiles(params?: ProfilesQueryParams): Promise<ProfilesResponse> {
     return this.#api<ProfilesResponse>('get', `profiles${queryParams(params)}`);
   }
   /**
-   * # Get a single address
+   *
    * Get details for a single address by using the address public key after the address has been successfully linked to Monerium.
+   *
+   * @group Addresses
    * @param {string} address - The public key of the blockchain account.
-   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address | API Documentation}
-   * @category Addresses
+   *
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/address)
+   *
    * @example
-   * ```
-   * monerium.getAddress('0x1234567890abcdef1234567890abcdef12345678')
+   * ```ts
+   *  monerium.getAddress('0x1234567890abcdef1234567890abcdef12345678')
    * ```
    */
   getAddress(address: string): Promise<Address> {
@@ -335,10 +359,13 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses}
-   * @param {string} profile - the id of the profile to filter.
-   * @param {Chain | ChainId} chain - the chain to filter.
-   * @category Addresses
+   *
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses)
+   *
+   * @group Addresses
+   * @param {AddressesQueryParams} params - No required parameters.
+   * @param {string} params.profile - the id of the profile to filter.
+   * @param {Chain | ChainId} params.chain - the chain to filter.
    */
   getAddresses({
     profile,
@@ -352,24 +379,36 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/profile-balances}
-   * @param {string} profileId - the id of the profile to fetch balances.
-   * @category Addresses
+   *
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/profile-balances)
+   *
+   * @group Addresses
+   * @param {string} profile - the id of the profile to fetch balances.
+   *
    */
   getBalances(profile: string): Promise<Balances[]> {
     return this.#api<Balances[]>('get', `profiles/${profile}/balances`);
   }
 
   /**
-   * {@link "https://monerium.dev/api-docs-v2#tag/ibans/operation/iban"}
-   * @category IBANs
+   * Fetch details about a single IBAN
+   *
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/iban)
+   *
+   * @group IBANs
+   *
+   * @param {string} iban - the IBAN to fetch.
+   *
    */
   getIban(iban: string): Promise<IBAN> {
     return this.#api<IBAN>('get', `ibans/${encodeURI(iban)}`);
   }
   /**
-   * {@link "https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans"}
-   * @category IBANs
+   * Fetch all IBANs for the profile
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans)
+   *
+   * @group IBANs
+   *
    */
   getIbans(queryParameters?: IbansQueryParams): Promise<IBANsResponse> {
     const { profile, chain } = queryParameters || {};
@@ -381,33 +420,37 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/orders}
-   * @category Orders
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/orders)
+   *
+   * @group Orders
    */
   getOrders(filter?: OrderFilter): Promise<Order[]> {
     return this.#api<Order[]>('get', `orders${queryParams(filter)}`);
   }
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/order}
-   * @category Orders
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/order)
+   *
+   * @group Orders
    */
   getOrder(orderId: string): Promise<Order> {
     return this.#api<Order>('get', `orders/${orderId}`);
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/tokens}
-   * @category Tokens
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/tokens)
+   *
+   * @group Tokens
    */
   getTokens(): Promise<Token[]> {
     return this.#api<Token[]>('get', 'tokens');
   }
 
-  // -- Write Methods
-
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address}
-   * @category Addresses
+   * Add a new address to the profile
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address)
+   *
+   * @group Addresses
+   *
    */
   linkAddress(body: LinkAddress): Promise<ResponseStatus> {
     body = mapChainIdToChain(body);
@@ -415,8 +458,9 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders}
-   * @category Orders
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders)
+   *
+   * @group Orders
    */
   placeOrder(order: NewOrder): Promise<Order> {
     const body = {
@@ -432,8 +476,11 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban}
-   * @category IBANs
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban)
+   *
+   * @group IBANs
+   * @param {string} iban - the IBAN to move.
+   * @param {MoveIbanPayload} payload - the payload to move the IBAN.
    */
   moveIban(
     iban: string,
@@ -446,8 +493,12 @@ export class MoneriumClient {
     );
   }
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban}
-   * @category IBANs
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban)
+   *
+   * @group IBANs
+   * @param {RequestIbanPayload} payload - the payload to request an IBAN.
+   * @param {string} payload.address - the address to request the IBAN.
+   * @param {Chain | ChainId} payload.chain - the chain to request the IBAN.
    */
   requestIban({
     address,
@@ -462,8 +513,9 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth-signup}
-   * @category Authentication
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/auth/operation/auth-signup)
+   *
+   * @group Authentication
    */
   signUp(body: SignUpPayload): Promise<SignUpResponse> {
     return this.#api<SignUpResponse>(
@@ -474,8 +526,9 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details}
-   * @category Profiles
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details)
+   *
+   * @group Profiles
    */
   submitProfileDetails(
     profile: string,
@@ -489,8 +542,9 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/orders/operation/supporting-document}
-   * @category Orders
+   * [API Documentation](https://monerium.dev/api-docs-v2#tag/orders/operation/supporting-document)
+   *
+   * @group Orders
    */
   uploadSupportingDocument(document: File): Promise<SupportingDoc> {
     const formData = new FormData();
@@ -501,8 +555,6 @@ export class MoneriumClient {
       Authorization: this.#authorizationHeader || '',
     });
   }
-
-  // -- Helper Methods
 
   async #api<T>(
     method: string,
@@ -580,11 +632,11 @@ export class MoneriumClient {
     });
   };
 
-  // -- Notifications
   /**
    * Connects to the order notifications socket
-   * @category Orders
    * [Websocket](https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications)
+   *
+   * @group Orders
    */
   connectOrderNotifications({
     filter,
@@ -638,8 +690,9 @@ export class MoneriumClient {
 
   /**
    * Closes the order notifications sockets
-   * @category Orders
    * [Websocket](https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications)
+   *
+   * @group Orders
    */
   disconnectOrderNotifications(queryParameters?: OrderNotificationQueryParams) {
     if (queryParameters) {
@@ -664,7 +717,8 @@ export class MoneriumClient {
 
   /**
    * Cleanups the socket and the subscriptions
-   * @category Authentication
+   *
+   * @group Authentication
    */
   async disconnect() {
     if (!isServer) {
@@ -676,7 +730,8 @@ export class MoneriumClient {
   }
   /**
    * Revokes access
-   * @category Authentication
+   *
+   * @group Authentication
    */
   async revokeAccess() {
     if (!isServer) {
@@ -685,12 +740,13 @@ export class MoneriumClient {
     this.disconnect();
   }
 
-  // -- Getters (mainly for testing)
   /**
+   *
    * @hidden
    */
   getEnvironment = (): Environment => this.#env;
   /**
+   *
    * @hidden
    */
   getAuthFlowURI = (args: PKCERequestArgs): string => {

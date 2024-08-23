@@ -1,6 +1,6 @@
 # Type Alias: Director
 
-> **Director**: `Omit`\<[`PersonalProfileDetails`](/docs/packages/SDK/interfaces/PersonalProfileDetails.md), `"idDocument"`\>
+> **Director**: `Omit`\<[`PersonalProfileDetails`](/docs/packages/sdk/interfaces/PersonalProfileDetails.md), `"idDocument"`\>
 
 ## Defined in
 

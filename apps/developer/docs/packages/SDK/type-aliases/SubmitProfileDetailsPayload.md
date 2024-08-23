@@ -1,6 +1,6 @@
 # Type Alias: SubmitProfileDetailsPayload
 
-> **SubmitProfileDetailsPayload**: [`PersonalProfileDetailsRequest`](/docs/packages/SDK/interfaces/PersonalProfileDetailsRequest.md) \| [`CorporateProfileDetailsRequest`](/docs/packages/SDK/interfaces/CorporateProfileDetailsRequest.md)
+> **SubmitProfileDetailsPayload**: [`PersonalProfileDetailsRequest`](/docs/packages/sdk/interfaces/PersonalProfileDetailsRequest.md) \| [`CorporateProfileDetailsRequest`](/docs/packages/sdk/interfaces/CorporateProfileDetailsRequest.md)
 
 ## Defined in
 
