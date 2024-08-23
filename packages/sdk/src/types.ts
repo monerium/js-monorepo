@@ -277,7 +277,10 @@ export interface AddressesQueryParams {
 // }
 
 export interface Address {
+  /** The id of the profile. */
   profile: string;
+
+  /** The address  */
   address: string;
   chains: Chain[];
 }

@@ -6,9 +6,11 @@
 
 > **address**: `string`
 
+The address
+
 #### Defined in
 
-[types.ts:281](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L281)
+[types.ts:284](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L284)
 
 ***
 
@@ -18,7 +20,7 @@
 
 #### Defined in
 
-[types.ts:282](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L282)
+[types.ts:285](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L285)
 
 ***
 
@@ -26,6 +28,8 @@
 
 > **profile**: `string`
 
+The id of the profile.
+
 #### Defined in
 
-[types.ts:280](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L280)
+[types.ts:281](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L281)

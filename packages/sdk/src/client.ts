@@ -85,14 +85,21 @@ export class MoneriumClient {
   /**
    * @defaultValue `sandbox`
    * @example
-   * new MoneriumClient() // defaults to `sandbox`
-   *
+   * const monerium = new MoneriumClient() // defaults to `sandbox`
+   * // or
    * new MoneriumClient('production')
    *
    * new MoneriumClient({
    *  environment: 'sandbox',
    *  clientId: 'your-client-id',
    *  redirectUri: 'your-redirect-url'
+   * })
+   *
+   * // Server side only
+   * new MoneriumClient({
+   *  environment: 'sandbox',
+   *  clientId: 'your-client-id',
+   *  clientSecret: 'your-secret'
    * })
    * */
   constructor(envOrOptions?: ENV | ClassOptions) {
@@ -101,7 +108,7 @@ export class MoneriumClient {
       this.#env = MONERIUM_CONFIG.environments['sandbox'];
       return;
     }
-    // String argument
+
     if (typeof envOrOptions === 'string') {
       this.#env = MONERIUM_CONFIG.environments[envOrOptions];
     } else {
@@ -135,8 +142,8 @@ export class MoneriumClient {
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
    * @returns string
-   * {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth}
    * @category Authentication
+   * @link [API Documentation](https://monerium.dev/api-docs-v2#tag/auth/operation/auth)
    */
   async authorize(client?: AuthFlowOptions) {
     const clientId =
@@ -297,9 +304,10 @@ export class MoneriumClient {
 
   // -- Read Methods
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile}
+   * # TELL
    * @param {string} profile - the id of the profile to fetch.
    * @category Profiles
+   * @link [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile)
    */
   getProfile(profile: string): Promise<Profile> {
     return this.#api<Profile>('get', `profiles/${profile}`);
@@ -312,9 +320,15 @@ export class MoneriumClient {
     return this.#api<ProfilesResponse>('get', `profiles${queryParams(params)}`);
   }
   /**
-   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address}
+   * # Get a single address
+   * Get details for a single address by using the address public key after the address has been successfully linked to Monerium.
    * @param {string} address - The public key of the blockchain account.
+   * {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address | API Documentation}
    * @category Addresses
+   * @example
+   * ```
+   * monerium.getAddress('0x1234567890abcdef1234567890abcdef12345678')
+   * ```
    */
   getAddress(address: string): Promise<Address> {
     return this.#api<Address>('get', `addresses/${address}`);
