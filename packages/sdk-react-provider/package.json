@@ -29,6 +29,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch --onSuccess 'pnpm type-map'",
+    "dev:docs": "echo 'No docs to build'",
     "typedoc": "typedoc",
     "lint": "eslint . --fix",
     "pub:pre": "pnpm publish --no-git-checks --dry-run",

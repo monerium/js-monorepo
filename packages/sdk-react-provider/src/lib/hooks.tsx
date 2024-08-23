@@ -92,7 +92,7 @@ function useSdk(): MoneriumClient | undefined {
  *
  * authorize(); // Redirects to the Monerium auth flow.
  *
- * // To opt-in to automated wallet linking, pass the address, signature and chain.
+ * // Opt-in to automated wallet linking with these parameters.
  * authorize({ address, signature, chain }).
  * ```
  *
@@ -144,7 +144,7 @@ export function useAuth(): UseAuthReturn {
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profile)
  *
- * [Profile interface](/docs/packages/SDK/interfaces/Profile.md)
+ * [Profile interface](/docs/packages/sdk/interfaces/Profile.md)
  */
 export function useProfile({
   profile,
@@ -206,7 +206,7 @@ export function useProfile({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profiles)
  *
- * [Profile interface](/docs/packages/SDK/interfaces/Profile.md)
+ * [Profile interface](/docs/packages/sdk/interfaces/Profile.md)
  */
 export function useProfiles({
   query,
@@ -257,7 +257,7 @@ export function useProfiles({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/tokens)
  *
- * [Token interface](/docs/packages/SDK/interfaces/Token.md)
+ * [Token interface](/docs/packages/sdk/interfaces/Token.md)
  */
 export function useTokens({
   query,
@@ -420,7 +420,7 @@ export function useAddresses({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profile-balances)
  *
- * [Balances interface](/docs/packages/SDK/interfaces/Balances.md)
+ * [Balances interface](/docs/packages/sdk/interfaces/Balances.md)
  */
 export function useBalances({
   profile,
@@ -460,7 +460,7 @@ export function useBalances({
  * @group Hooks
  * @category IBANs
  * @param {Object} params
- * @param {QueryOptions<IBAN>} param.iban Fetch a specific IBAN
+ * @param {QueryOptions<IBAN>} params.iban Fetch a specific IBAN
  * @param {QueryOptions<IBAN>} [params.query] {@inheritDoc QueryOptions}
 
  * @example
@@ -591,7 +591,7 @@ export function useIBANs({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/order)
  *
- * [Order interface](/docs/packages/SDK/interfaces/Order.md)
+ * [Order interface](/docs/packages/sdk/interfaces/Order.md)
  */
 export function useOrder({
   orderId,
@@ -652,7 +652,7 @@ export function useOrder({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/orders)
  *
- * [Order interface](/docs/packages/SDK/interfaces/Order.md)
+ * [Order interface](/docs/packages/sdk/interfaces/Order.md)
  */
 export function useOrders({
   query = {},
@@ -697,7 +697,7 @@ export function useOrders({
  * @category Profiles
  * @param param
  * @param {string} param.profile The id of the profile to submit to.
- * @param {Object} param.mutation {@inheritDoc MutationOptions}
+ * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -932,7 +932,7 @@ export function useMoveIban({
  * @category Orders
  * @param param
  * @param {File} param.supportingDocument Supporting document file.
- * @param {Object} param.mutation {@inheritDoc MutationOptions}
+ * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -948,7 +948,7 @@ export function useMoveIban({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/post-orders)
  *
- * [NewOrder type](/docs/packages/SDK/type-aliases/NewOrder.md)
+ * [NewOrder type](/docs/packages/sdk/type-aliases/NewOrder.md)
  */
 
 export function usePlaceOrder({
@@ -1012,13 +1012,12 @@ export function usePlaceOrder({
 }
 /**
  * # Add address to profile.
- * When the address has been linked, the relevant profile query will be invalidated and re-fetched.
  *
  * @group Hooks
  * @category Profiles
  * @param param
  * @param {File} param.profileId Which profile to link the address.
- * @param {Object} param.mutation {@inheritDoc MutationOptions}
+ * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -1034,7 +1033,7 @@ export function usePlaceOrder({
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profile-addresses)
  *
- * [LinkAddress interface](/docs/packages/SDK/interfaces/LinkAddress.md)
+ * [LinkAddress interface](/docs/packages/sdk/interfaces/LinkAddress.md)
  */
 
 export function useLinkAddress({

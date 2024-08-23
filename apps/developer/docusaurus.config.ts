@@ -1,7 +1,94 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import { TypeDocOptions } from 'typedoc';
+import { PluginOptions } from 'typedoc-plugin-markdown';
 
+// https://typedoc-plugin-markdown.org/schema.json
+const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
+  cleanOutputDir: true,
+  entryPointStrategy: 'Expand',
+  gitRevision: 'main',
+
+  readme: 'none',
+
+  // skipErrorChecking: true,
+  expandObjects: true,
+  expandParameters: true,
+
+  hideParameterTypesInTitle: true,
+  hidePageHeader: true,
+  hideGenerator: true,
+
+  categorizeByGroup: true,
+
+  navigationModel: {
+    excludeFolders: true,
+    excludeGroups: false,
+    excludeCategories: false,
+  },
+
+  parametersFormat: 'table',
+  interfacePropertiesFormat: 'table',
+  enumMembersFormat: 'table',
+  classPropertiesFormat: 'table',
+  typeDeclarationFormat: 'table',
+  propertyMembersFormat: 'table',
+
+  kindSortOrder: [
+    'Class',
+    'Property',
+    'Function',
+    'Variable',
+    'Interface',
+    'TypeAlias',
+    'Enum',
+    'EnumMember',
+  ],
+  groupOrder: [
+    'Provider',
+    'Hooks',
+    'Constructors',
+    'Properties',
+    'Authentication',
+    'Addresses',
+    'Profiles',
+    'IBANs',
+    'Orders',
+    'Tokens',
+    'Classes',
+    'Constants',
+    'Functions',
+    'Variables',
+    'Methods',
+    'Utils',
+    'Interfaces',
+    'Type Aliases',
+    'Documents',
+    '*',
+  ],
+
+  categoryOrder: [
+    'Provider',
+    'Constructors',
+    'Properties',
+    'Classes',
+    'Functions',
+    'Variables',
+    'Methods',
+    'Interfaces',
+    'Type Aliases',
+    'Hooks',
+    'Documents',
+    '*',
+    'Authorize',
+    'Accounts',
+    'Profiles',
+    'Orders',
+    'Tokens',
+    'Other',
+  ],
+};
 const config: Config = {
   title: 'Monerium',
   tagline: 'Onchain fiat',
@@ -15,21 +102,30 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'monerium', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  projectName: 'js-monerium', // Usually your repo name.
   plugins: [
     [
       'docusaurus-plugin-typedoc',
       {
-        entryPointStrategy: 'Packages',
-        entryPoints: [
-          '../../packages/sdk/',
-          '../../packages/sdk-react-provider/',
-        ],
-        out: 'docs/packages',
-        publicPath: '/docs/packages',
+        ...typedocConfig,
+        id: 'sdk',
+        entryPoints: ['../../packages/sdk/src/index.ts'],
+        tsconfig: '../../packages/sdk/tsconfig.json',
+        out: 'docs/packages/sdk',
+        publicPath: '/docs/packages/sdk',
         watch: process.env.TYPEDOC_WATCH,
-        readme: 'none',
-        name: 'Packages',
+      },
+    ],
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        ...typedocConfig,
+        id: '@monerium/sdk-react-provider',
+        entryPoints: ['../../packages/sdk-react-provider/src/index.ts'],
+        tsconfig: '../../packages/sdk-react-provider/tsconfig.json',
+        out: 'docs/packages/sdk-react-provider',
+        publicPath: '/docs/packages/sdk-react-provider',
+        watch: process.env.TYPEDOC_WATCH,
       },
     ],
   ],

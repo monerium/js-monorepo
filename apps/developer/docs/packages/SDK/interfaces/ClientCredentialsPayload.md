@@ -1,35 +1,13 @@
 # Interface: ClientCredentialsPayload
 
-One of the options for the [AuthArgs](/docs/packages/SDK/type-aliases/AuthArgs.md).
+One of the options for the [AuthArgs](/docs/packages/sdk/type-aliases/AuthArgs.md).
 
 [Auth endpoint in API documentation:](https://monerium.dev/api-docs#operation/auth).
 
 ## Properties
 
-### client\_id
-
-> **client\_id**: `string`
-
-#### Defined in
-
-[types.ts:70](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L70)
-
-***
-
-### client\_secret
-
-> **client\_secret**: `string`
-
-#### Defined in
-
-[types.ts:71](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L71)
-
-***
-
-### grant\_type
-
-> **grant\_type**: `"client_credentials"`
-
-#### Defined in
-
-[types.ts:69](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L69)
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| `client_id` | `string` | [types.ts:70](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L70) |
+| `client_secret` | `string` | [types.ts:71](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L71) |
+| `grant_type` | `"client_credentials"` | [types.ts:69](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L69) |

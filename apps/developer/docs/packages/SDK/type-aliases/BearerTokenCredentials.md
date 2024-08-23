@@ -1,6 +1,6 @@
 # Type Alias: BearerTokenCredentials
 
-> **BearerTokenCredentials**: [`ClientCredentials`](/docs/packages/SDK/interfaces/ClientCredentials.md) \| [`AuthorizationCodeCredentials`](/docs/packages/SDK/interfaces/AuthorizationCodeCredentials.md)
+> **BearerTokenCredentials**: [`ClientCredentials`](/docs/packages/sdk/interfaces/ClientCredentials.md) \| [`AuthorizationCodeCredentials`](/docs/packages/sdk/interfaces/AuthorizationCodeCredentials.md)
 
 ## Defined in
 

@@ -1,6 +1,6 @@
 # Type Alias: AuthArgs
 
-> **AuthArgs**: `Omit`\<[`AuthCodePayload`](/docs/packages/SDK/interfaces/AuthCodePayload.md), `"grant_type"`\> \| `Omit`\<[`RefreshTokenPayload`](/docs/packages/SDK/interfaces/RefreshTokenPayload.md), `"grant_type"`\> \| `Omit`\<[`ClientCredentialsPayload`](/docs/packages/SDK/interfaces/ClientCredentialsPayload.md), `"grant_type"`\>
+> **AuthArgs**: `Omit`\<[`AuthCodePayload`](/docs/packages/sdk/interfaces/AuthCodePayload.md), `"grant_type"`\> \| `Omit`\<[`RefreshTokenPayload`](/docs/packages/sdk/interfaces/RefreshTokenPayload.md), `"grant_type"`\> \| `Omit`\<[`ClientCredentialsPayload`](/docs/packages/sdk/interfaces/ClientCredentialsPayload.md), `"grant_type"`\>
 
 ## Defined in
 

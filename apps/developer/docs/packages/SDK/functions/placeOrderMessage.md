@@ -1,31 +1,42 @@
 # Function: placeOrderMessage()
 
-> **placeOrderMessage**(`amount`, `currency`, `receiver`, `chain`?): `string`
+> **placeOrderMessage**(`amount`: `string` \| `number`, `currency`: [`Currency`](/docs/packages/sdk/enumerations/Currency.md), `receiver`: `string`, `chain`?: `number` \| [`Chain`](/docs/packages/sdk/type-aliases/Chain.md)): `string`
+
+The message to be signed when placing an order.
 
 ## Parameters
 
-• **amount**: `string` \| `number`
-
-The amount to be sent
-
-• **currency**: [`Currency`](/docs/packages/SDK/enumerations/Currency.md)
-
-The currency to be sent
-
-• **receiver**: `string`
-
-The receiver of the funds
-
-• **chain?**: `number` \| [`Chain`](/docs/packages/SDK/type-aliases/Chain.md)
-
-The chainId of the network if it's a cross-chain transaction
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `amount` | `string` \| `number` | The amount to be sent |
+| `currency` | [`Currency`](/docs/packages/sdk/enumerations/Currency.md) | The currency to be sent |
+| `receiver` | `string` | The receiver of the funds |
+| `chain`? | `number` \| [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) | The chainId of the network if it's a cross-chain transaction |
 
 ## Returns
 
 `string`
 
-string
+cross-chain:
+```ts
+ Send {CURRENCY} {AMOUNT} to {RECEIVER} on {CHAIN} at {DATE}`
+```
+
+off-ramp:
+```ts
+ Send {CURRENCY} {AMOUNT} to {RECEIVER} at {DATE}
+```
+
+## Examples
+
+```ts
+`Send EUR 1 to 0x1234123412341234123412341234123412341234 on ethereum at 2023-04-30T12:00:00+01:00`
+```
+
+```ts
+`Send EUR 1 to IS1234123412341234 at 2023-04-30T12:00:00+01:00`
+```
 
 ## Defined in
 
-[utils.ts:56](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L56)
+[utils.ts:75](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L75)

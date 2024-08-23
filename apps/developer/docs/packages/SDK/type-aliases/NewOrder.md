@@ -1,6 +1,6 @@
 # Type Alias: NewOrder
 
-> **NewOrder**: [`NewOrderByAddress`](/docs/packages/SDK/interfaces/NewOrderByAddress.md) \| [`NewOrderByAccountId`](/docs/packages/SDK/interfaces/NewOrderByAccountId.md)
+> **NewOrder**: [`NewOrderByAddress`](/docs/packages/sdk/interfaces/NewOrderByAddress.md) \| [`NewOrderByAccountId`](/docs/packages/sdk/interfaces/NewOrderByAccountId.md)
 
 ## Defined in
 

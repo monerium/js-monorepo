@@ -51,10 +51,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Generate Documentation
-        if: github.ref == 'refs/heads/main'
-        run: pnpm run generate-docs
-
       - name: Commit and Push Documentation
         if: github.ref == 'refs/heads/main'
         run: |

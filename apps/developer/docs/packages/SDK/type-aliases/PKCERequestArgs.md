@@ -1,6 +1,6 @@
 # Type Alias: PKCERequestArgs
 
-> **PKCERequestArgs**: `Omit`\<[`PKCERequest`](/docs/packages/SDK/type-aliases/PKCERequest.md), `"code_challenge"` \| `"code_challenge_method"` \| `"response_type"`\>
+> **PKCERequestArgs**: `Omit`\<[`PKCERequest`](/docs/packages/sdk/type-aliases/PKCERequest.md), `"code_challenge"` \| `"code_challenge_method"` \| `"response_type"`\>
 
 ## Defined in
 

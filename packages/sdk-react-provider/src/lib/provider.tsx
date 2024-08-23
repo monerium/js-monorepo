@@ -19,7 +19,6 @@ import { AuthorizeParams } from './types';
 export const MoneriumProvider = ({
   children,
   clientId,
-  redirectUrl,
   redirectUri,
   environment = 'sandbox',
 }: {

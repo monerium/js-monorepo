@@ -2,26 +2,13 @@
 
 ## Extended by
 
-- [`IBANIdentifier`](/docs/packages/SDK/interfaces/IBANIdentifier.md)
-- [`CrossChainIdentifier`](/docs/packages/SDK/interfaces/CrossChainIdentifier.md)
-- [`SCANIdentifier`](/docs/packages/SDK/interfaces/SCANIdentifier.md)
+- [`IBANIdentifier`](/docs/packages/sdk/interfaces/IBANIdentifier.md)
+- [`CrossChainIdentifier`](/docs/packages/sdk/interfaces/CrossChainIdentifier.md)
+- [`SCANIdentifier`](/docs/packages/sdk/interfaces/SCANIdentifier.md)
 
 ## Properties
 
-### bic?
-
-> `optional` **bic**: `string`
-
-#### Defined in
-
-[types.ts:192](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L192)
-
-***
-
-### standard
-
-> **standard**: [`PaymentStandard`](/docs/packages/SDK/enumerations/PaymentStandard.md)
-
-#### Defined in
-
-[types.ts:191](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L191)
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| `bic?` | `string` | [types.ts:192](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L192) |
+| `standard` | [`PaymentStandard`](/docs/packages/sdk/enumerations/PaymentStandard.md) | [types.ts:191](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L191) |
