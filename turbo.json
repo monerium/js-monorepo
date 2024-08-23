@@ -22,6 +22,10 @@
     "@monerium/sdk-react-provider#dev": {
       "dependsOn": ["@monerium/sdk#type-map"]
     },
+    "generate-docs": {
+      "dependsOn": ["build"],
+      "outputs": ["apps/developer/docs/packages/**"]
+    },
     "lint": {},
     "lint:style": {},
     "pub:pre": {

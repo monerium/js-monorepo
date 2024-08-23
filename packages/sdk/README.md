@@ -5,27 +5,27 @@
 
   <a href="https://monerium.dev/">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7">
-      <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge">
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7"></source>
+      <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge"></img>
     </picture>
   </a>
   <a href="https://monerium.dev/api-docs">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7">
-      <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge">
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7"></source>
+      <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge"></img>
     </picture>
   </a>
-  </br>
+  <br></br>
     <a href="https://www.npmjs.com/package/@monerium/sdk">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=2c6ca7&colorB=21262d">
-      <img src="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=f6f8fa&colorB=f6f8fa" alt="Version">
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=2c6ca7&colorB=21262d"></source>
+      <img src="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=f6f8fa&colorB=f6f8fa" alt="Version"></img>
     </picture>
   </a>
-  <a href="https://github.com/monerium/js-monorepo/issues>
+  <a href="https://github.com/monerium/js-monorepo/issues">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d">
-      <img src="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d" alt="Version">
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d"></source>
+      <img src="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d" alt="Version"></img>
     </picture>
   </a>
 
@@ -38,8 +38,8 @@ With a single signature from your wallet, your EURe is burned and sent as Euros 
 
 ## Documentation
 
-- [Documentation](./docs/generated/README.md)
-- [Documentation - MoneriumClient](./docs/generated/classes/MoneriumClient.md)
+- [Documentation](../../apps/developer/docs/packages/SDK/index.md)
+- [Documentation - MoneriumClient](../../apps/developer/docs/packages/SDK/classes/MoneriumClient.md)
 
 ## Table of Contents
 
@@ -109,11 +109,6 @@ await monerium.getAuthContext();
 const { access_token, refresh_token } = monerium.bearerProfile as BearerProfile;
 ```
 
-Interfaces:
-
-- [MoneriumClient](./docs/generated/classes/MoneriumClient.md)
-- [BearerProfile](./docs/generated/interfaces/BearerProfile.md)
-
 API documentation:
 
 - [/auth/token](https://monerium.dev/api-docs#operation/auth-token)
@@ -181,11 +176,6 @@ export function App() {
 }
 ```
 
-Interfaces:
-
-- [AuthCodeRequest](./docs/generated/interfaces/AuthCodeRequest.md)
-- [BearerProfile](./docs/generated/interfaces/BearerProfile.md)
-
 API documentation:
 
 - [/auth](https://monerium.dev/api-docs#operation/auth)
@@ -207,17 +197,11 @@ const { id: profileId, accounts }: Profile = await monerium.getProfile(
 const balances: Balances = await monerium.getBalances(profileId);
 ```
 
-Interfaces:
-
-- [AuthContext](./docs/generated/interfaces/AuthContext.md)
-- [Profile](./docs/generated/interfaces/Profile.md)
-- [Balances](./docs/generated/interfaces/Balances.md)
-
 API documentation:
 
 - [/auth/context](https://monerium.dev/api-docs#operation/auth-context)
 - [/profile](https://monerium.dev/api-docs#operation/profile)
-- [/profile/{profiledId}/balances](https://monerium.dev/api-docs#operation/profile-balances)
+- [/profile/&#123;profileId&#123;/balances](https://monerium.dev/api-docs#operation/profile-balances)
 
 #### Get token information
 
@@ -226,10 +210,6 @@ Get the contract addresses of EURe tokens.
 ```ts
 const tokens: Token[] = await monerium.getTokens();
 ```
-
-Interfaces:
-
-- [Token](./docs/generated/interfaces/Token.md)
 
 API documentation:
 
@@ -266,13 +246,9 @@ await monerium.linkAddress(profileId, {
 } as LinkAddress);
 ```
 
-Interfaces:
-
-- [LinkAddress](./docs/generated/interfaces/LinkAddress.md)
-
 API documentation:
 
-- [/profile/{profiledId}/addresses](https://monerium.dev/api-docs#operation/profile-addresses)
+- [/profile/&#123;profileId&#123;/addresses](https://monerium.dev/api-docs#operation/profile-addresses)
 
 #### Get and place orders
 
@@ -325,11 +301,6 @@ const order = await monerium.placeOrder({
 });
 ```
 
-Interfaces:
-
-- [Order](./docs/generated/interfaces/Order.md)
-- [PaymentStandard](./docs/generated/enumerations/PaymentStandard.md)
-
 API documentation:
 
 - [GET /orders](https://monerium.dev/api-docs#operation/orders)
@@ -344,10 +315,6 @@ When placing orders with payouts above 15,000 EUR, a supporting document is requ
 const supportingDocumentId: SupportingDoc =
   await uploadSupportingDocument(document);
 ```
-
-Interfaces:
-
-- [SupportingDoc](./docs/generated/interfaces/SupportingDoc.md)
 
 API documentation:
 

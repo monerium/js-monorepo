@@ -1,18 +1,37 @@
-/** @type {import('typedoc').TypeDocOptions} */
+// typedoc.config.js
 
-// https://typedoc.org/options/
-
+// @ts-check
+/**
+ * @type {import('typedoc').TypeDocOptions}
+ * @see https://typedoc-plugin-markdown.org/schema.json
+ */
 module.exports = {
   $schema: 'https://typedoc-plugin-markdown.org/schema.json',
+
+  // See: apps/docs/docusaurus.config.js
+  out: '../../apps/developer/docs/packages/SDK React Provider',
+
+  /**
+   * # Debugging
+   * When running `turbo generate-docs` the entryPointStrategy:'Packages' is used,
+   * which does not support watch. If you need instant feedback while
+   * writing documentation, run `pnpm typedoc --watch` in that packages directory.
+   * This will create a `docs` folder in that packages directory that you can view.
+   */
+
   gitRevision: 'main',
   plugin: ['typedoc-plugin-markdown'],
+
+  name: 'SDK React Provider',
+  entryFileName: 'index',
+  entryPoints: ['src/index.ts'],
   tsconfig: 'tsconfig.json',
+
   excludePrivate: true,
-  name: 'Monerium SDK React Provider',
-  out: 'docs/generated',
+
   readme: 'none',
+
   cleanOutputDir: true,
-  searchInComments: true,
 
   kindSortOrder: [
     'Class',
@@ -57,9 +76,6 @@ module.exports = {
     '*',
     'Other',
   ],
-  entryPoints: ['src/index.ts'],
-  sortEntryPoints: true,
-  entryPointStrategy: 'Resolve',
   expandObjects: true,
   hideParameterTypesInTitle: true,
   expandParameters: true,
@@ -73,8 +89,4 @@ module.exports = {
   propertyMembersFormat: 'table',
 
   hidePageHeader: true,
-
-  compilerOptions: {
-    noEmit: true,
-  },
 };
