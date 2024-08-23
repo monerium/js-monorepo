@@ -71,7 +71,7 @@ jobs:
         # if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./apps/docs/build
+          publish_dir: ./apps/developer/build
 
       - name: Test
         run: pnpm test
