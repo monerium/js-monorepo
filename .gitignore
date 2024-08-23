@@ -27,7 +27,7 @@ out/
 build
 dist
 static
-!apps/docs/static
+!apps/developer/static
 
 # Debug
 npm-debug.log*
