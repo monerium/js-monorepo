@@ -11,7 +11,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Trust',
-    Svg: require('@site/static/img/icon-home-micro-economies.svg').default,
+    Svg: require('@site/static/img/icon-home-financing.svg').default,
 
     description: (
       <>
@@ -24,7 +24,7 @@ const FeatureList: FeatureItem[] = [
 
   {
     title: 'Transparency',
-    Svg: require('@site/static/img/icon-home-financing.svg').default,
+    Svg: require('@site/static/img/icon-home-micro-economies.svg').default,
 
     description: (
       <>
