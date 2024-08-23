@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / RequestIbanPayload
-
 # Interface: RequestIbanPayload
 
 ## Properties
@@ -14,17 +8,17 @@
 
 #### Defined in
 
-[types.ts:484](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L484)
+[types.ts:483](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L483)
 
 ***
 
 ### chain
 
-> **chain**: `number` \| [`Chain`](../type-aliases/Chain.md)
+> **chain**: `number` \| [`Chain`](/docs/packages/SDK/type-aliases/Chain.md)
 
 #### Defined in
 
-[types.ts:485](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L485)
+[types.ts:484](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L484)
 
 ***
 
@@ -34,4 +28,4 @@
 
 #### Defined in
 
-[types.ts:486](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L486)
+[types.ts:485](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L485)

@@ -9,7 +9,7 @@ If no `profileId` is provided, the default profile is used.
 
 • **params** = `{}`
 
-• **params.profileId?**: `string`
+• **params.profile?**: `string`
 
 The id of the profile.
 
@@ -42,4 +42,4 @@ const {
 
 ## Defined in
 
-[hooks.tsx:178](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L178)
+[hooks.tsx:149](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L149)

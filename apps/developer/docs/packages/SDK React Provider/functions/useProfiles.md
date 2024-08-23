@@ -1,6 +1,6 @@
 # Function: useProfiles()
 
-> **useProfiles**(`params`?): [`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"profiles"`, `Profile`[]\>
+> **useProfiles**(`params`?): [`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"profiles"`, `ProfilePermissions`[]\>
 
 # Get profiles
 
@@ -10,13 +10,13 @@
 
 No required parameters.
 
-• **params.query?**: [`QueryOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryOptions.md)\<`Profile`[]\>
+• **params.query?**: [`QueryOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryOptions.md)\<`ProfilePermissions`[]\>
 
 See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
 
 ## Returns
 
-[`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"profiles"`, `Profile`[]\>
+[`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"profiles"`, `ProfilePermissions`[]\>
 
 ## Example
 
@@ -39,4 +39,4 @@ const {
 
 ## Defined in
 
-[hooks.tsx:239](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L239)
+[hooks.tsx:211](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L211)

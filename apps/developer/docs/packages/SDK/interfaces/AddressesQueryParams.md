@@ -1,16 +1,10 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / AddressesQueryParams
-
 # Interface: AddressesQueryParams
 
 ## Properties
 
 ### chain?
 
-> `optional` **chain**: `number` \| [`Chain`](../type-aliases/Chain.md)
+> `optional` **chain**: `number` \| [`Chain`](/docs/packages/SDK/type-aliases/Chain.md)
 
 Filter the list on the chain
 

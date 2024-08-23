@@ -8,14 +8,14 @@
 
 #### Defined in
 
-[types.ts:329](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L329)
+[types.ts:354](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L354)
 
 ***
 
 ### identifier
 
-> **identifier**: [`IBAN`](/docs/packages/SDK/interfaces/IBAN.md) \| [`CrossChain`](/docs/packages/SDK/interfaces/CrossChain.md) \| [`SCAN`](/docs/packages/SDK/interfaces/SCAN.md)
+> **identifier**: [`IBANIdentifier`](/docs/packages/SDK/interfaces/IBANIdentifier.md) \| [`CrossChainIdentifier`](/docs/packages/SDK/interfaces/CrossChainIdentifier.md) \| [`SCANIdentifier`](/docs/packages/SDK/interfaces/SCANIdentifier.md)
 
 #### Defined in
 
-[types.ts:328](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L328)
+[types.ts:353](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L353)

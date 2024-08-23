@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / CurrencyBalance
-
 # Interface: CurrencyBalance
 
 ## Properties
@@ -20,7 +14,7 @@
 
 ### currency
 
-> **currency**: [`Currency`](../enumerations/Currency.md)
+> **currency**: [`Currency`](/docs/packages/SDK/enumerations/Currency.md)
 
 #### Defined in
 

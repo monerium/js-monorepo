@@ -28,8 +28,4 @@ authorize({ address, signature, chain }).
 
 ## Defined in
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK React Provider/functions/useAuth.md
-[hooks.tsx:85](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L85)
-=======
 [hooks.tsx:107](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L107)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk-react-provider/docs/generated/functions/useAuth.md

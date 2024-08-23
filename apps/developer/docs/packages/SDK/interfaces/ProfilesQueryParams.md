@@ -1,16 +1,10 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / ProfilesQueryParams
-
 # Interface: ProfilesQueryParams
 
 ## Properties
 
 ### kind?
 
-> `optional` **kind**: [`ProfileType`](../enumerations/ProfileType.md)
+> `optional` **kind**: [`ProfileType`](/docs/packages/SDK/enumerations/ProfileType.md)
 
 #### Defined in
 
@@ -20,7 +14,7 @@
 
 ### state?
 
-> `optional` **state**: [`ProfileState`](../enumerations/ProfileState.md)
+> `optional` **state**: [`ProfileState`](/docs/packages/SDK/enumerations/ProfileState.md)
 
 #### Defined in
 

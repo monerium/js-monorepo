@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / ProfileState
-
 # Enumeration: ProfileState
 
 ## Enumeration Members

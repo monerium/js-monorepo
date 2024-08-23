@@ -59,4 +59,4 @@ const {
 
 ## Defined in
 
-[hooks.tsx:449](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L449)
+[hooks.tsx:657](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L657)

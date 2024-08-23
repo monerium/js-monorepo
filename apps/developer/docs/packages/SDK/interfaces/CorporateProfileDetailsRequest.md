@@ -1,16 +1,10 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / CorporateProfileDetailsRequest
-
 # Interface: CorporateProfileDetailsRequest
 
 ## Properties
 
 ### corporate
 
-> **corporate**: [`CorporateProfileDetails`](CorporateProfileDetails.md)
+> **corporate**: [`CorporateProfileDetails`](/docs/packages/SDK/interfaces/CorporateProfileDetails.md)
 
 #### Defined in
 

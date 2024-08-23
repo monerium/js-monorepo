@@ -6,15 +6,38 @@
 
 ## Hooks
 
-- [useAuth](/docs/packages/SDK%20React%20Provider/functions/useAuth.md)
-- [useAuthContext](/docs/packages/SDK%20React%20Provider/functions/useAuthContext.md)
+### Addresses
+
+- [useAddress](/docs/packages/SDK%20React%20Provider/functions/useAddress.md)
+- [useAddresses](/docs/packages/SDK%20React%20Provider/functions/useAddresses.md)
 - [useBalances](/docs/packages/SDK%20React%20Provider/functions/useBalances.md)
-- [useLinkAddress](/docs/packages/SDK%20React%20Provider/functions/useLinkAddress.md)
+
+### Authentication
+
+- [useAuth](/docs/packages/SDK%20React%20Provider/functions/useAuth.md)
+
+### IBANs
+
+- [useIBAN](/docs/packages/SDK%20React%20Provider/functions/useIBAN.md)
+- [useIBANs](/docs/packages/SDK%20React%20Provider/functions/useIBANs.md)
+- [useMoveIban](/docs/packages/SDK%20React%20Provider/functions/useMoveIban.md)
+- [useRequestIban](/docs/packages/SDK%20React%20Provider/functions/useRequestIban.md)
+
+### Orders
+
 - [useOrder](/docs/packages/SDK%20React%20Provider/functions/useOrder.md)
 - [useOrders](/docs/packages/SDK%20React%20Provider/functions/useOrders.md)
 - [usePlaceOrder](/docs/packages/SDK%20React%20Provider/functions/usePlaceOrder.md)
+
+### Profiles
+
+- [useLinkAddress](/docs/packages/SDK%20React%20Provider/functions/useLinkAddress.md)
 - [useProfile](/docs/packages/SDK%20React%20Provider/functions/useProfile.md)
 - [useProfiles](/docs/packages/SDK%20React%20Provider/functions/useProfiles.md)
+- [useSubmitProfileDetails](/docs/packages/SDK%20React%20Provider/functions/useSubmitProfileDetails.md)
+
+### Other
+
 - [useTokens](/docs/packages/SDK%20React%20Provider/functions/useTokens.md)
 
 ## Variables

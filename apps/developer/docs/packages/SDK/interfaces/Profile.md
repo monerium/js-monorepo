@@ -2,29 +2,6 @@
 
 ## Properties
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/interfaces/Profile.md
-### accounts
-
-> **accounts**: [`Account`](/docs/packages/SDK/interfaces/Account.md)[]
-
-#### Defined in
-
-[types.ts:260](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L260)
-
-***
-
-### email
-
-> **email**: `string`
-
-#### Defined in
-
-[types.ts:257](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L257)
-
-***
-
-=======
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/interfaces/Profile.md
 ### id
 
 > **id**: `string`
@@ -67,7 +44,7 @@
 
 ### state
 
-> **state**: [`ProfileState`](../enumerations/ProfileState.md)
+> **state**: [`ProfileState`](/docs/packages/SDK/enumerations/ProfileState.md)
 
 #### Defined in
 

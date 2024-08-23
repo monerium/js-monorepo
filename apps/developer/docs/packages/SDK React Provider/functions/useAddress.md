@@ -1,33 +1,35 @@
-[Monerium SDK React Provider](../README.md) / useAddress
-
 # Function: useAddress()
 
-> **useAddress**(`params`: \{`address`: `string`;`query`: `{}`; \}): [`QueryResult`](../type-aliases/QueryResult.md)\<`"address"`, `Address`\>
+> **useAddress**(`params`): [`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"address"`, `Address`\>
 
 # Get address
 
 ## Parameters
 
-| Parameter        | Type                                                           | Description                                                                                                         |
-| ---------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `params`         | `object`                                                       |                                                                                                                     |
-| `params.address` | `string`                                                       | Fetch a specific address.                                                                                           |
-| `params.query`?  | [`QueryOptions`](../type-aliases/QueryOptions.md)\<`Address`\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+• **params**
+
+• **params.address**: `string`
+
+Fetch a specific address.
+
+• **params.query?**: [`QueryOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryOptions.md)\<`Address`\> = `{}`
+
+See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
 
 ## Returns
 
-[`QueryResult`](../type-aliases/QueryResult.md)\<`"address"`, `Address`\>
+[`QueryResult`](/docs/packages/SDK%20React%20Provider/type-aliases/QueryResult.md)\<`"address"`, `Address`\>
 
 ## Example
 
 ```ts
 const {
-  address, // useQuery's `data` property
-  isLoading,
-  isError,
-  error,
-  refetch,
-  ...moreUseQueryResults
+   address, // useQuery's `data` property
+   isLoading,
+   isError,
+   error,
+   refetch,
+   ...moreUseQueryResults
 } = useAddress();
 ```
 

@@ -12,7 +12,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:405](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L405)
+[types.ts:404](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L404)
 
 ***
 
@@ -22,7 +22,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:403](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L403)
+[types.ts:402](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L402)
 
 ***
 
@@ -32,7 +32,7 @@ The address of the EURe contract on this network
 
 #### Defined in
 
-[types.ts:400](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L400)
+[types.ts:399](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L399)
 
 ***
 
@@ -44,7 +44,7 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:407](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L407)
+[types.ts:406](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L406)
 
 ***
 
@@ -54,7 +54,7 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:402](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L402)
+[types.ts:401](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L401)
 
 ***
 
@@ -64,4 +64,4 @@ How many decimals this token supports
 
 #### Defined in
 
-[types.ts:401](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L401)
+[types.ts:400](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L400)

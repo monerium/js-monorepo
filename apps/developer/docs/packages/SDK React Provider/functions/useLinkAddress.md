@@ -1,6 +1,6 @@
 # Function: useLinkAddress()
 
-> **useLinkAddress**(`param`): [`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"linkAddress"`, `LinkedAddress`, `Error`, `LinkAddress`\>
+> **useLinkAddress**(`param`): [`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"linkAddress"`, `object`, `Error`, `LinkAddress`\>
 
 # Add address to profile.
 When the address has been linked, the relevant profile query will be invalidated and re-fetched.
@@ -9,7 +9,7 @@ When the address has been linked, the relevant profile query will be invalidated
 
 • **param**
 
-• **param.mutation?**: [`MutationOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationOptions.md)\<`LinkedAddress`, `Error`, `LinkAddress`\>
+• **param.mutation?**: [`MutationOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationOptions.md)\<`object`, `Error`, `LinkAddress`\>
 
 See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options.
 
@@ -19,7 +19,7 @@ Which profile to link the address.
 
 ## Returns
 
-[`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"linkAddress"`, `LinkedAddress`, `Error`, `LinkAddress`\>
+[`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"linkAddress"`, `object`, `Error`, `LinkAddress`\>
 
 ## Example
 
@@ -42,4 +42,4 @@ const {
 
 ## Defined in
 
-[hooks.tsx:594](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L594)
+[hooks.tsx:1040](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L1040)

@@ -76,7 +76,7 @@ The state parameter is used to maintain state between the request and the callba
 
 #### getAddress()
 
-> **getAddress**(`address`): `Promise`\<[`Address`](../interfaces/Address.md)\>
+> **getAddress**(`address`): `Promise`\<[`Address`](/docs/packages/SDK/interfaces/Address.md)\>
 
 [https://monerium.dev/api-docs-v2#tag/addresses/operation/address](https://monerium.dev/api-docs-v2#tag/addresses/operation/address)
 
@@ -88,27 +88,7 @@ The public key of the blockchain account.
 
 ##### Returns
 
-`Promise`\<[`Address`](../interfaces/Address.md)\>
-
-##### Defined in
-
-[client.ts:309](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L309)
-
-***
-
-#### getAddresses()
-
-> **getAddresses**(`__namedParameters`): `Promise`\<[`Addresses`](../interfaces/Addresses.md)\>
-
-[https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses](https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses)
-
-##### Parameters
-
-• **\_\_namedParameters**: [`AddressesQueryParams`](../interfaces/AddressesQueryParams.md) = `{}`
-
-##### Returns
-
-`Promise`\<[`Addresses`](../interfaces/Addresses.md)\>
+`Promise`\<[`Address`](/docs/packages/SDK/interfaces/Address.md)\>
 
 ##### Defined in
 
@@ -116,9 +96,29 @@ The public key of the blockchain account.
 
 ***
 
+#### getAddresses()
+
+> **getAddresses**(`__namedParameters`): `Promise`\<[`Addresses`](/docs/packages/SDK/interfaces/Addresses.md)\>
+
+[https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses](https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses)
+
+##### Parameters
+
+• **\_\_namedParameters**: [`AddressesQueryParams`](/docs/packages/SDK/interfaces/AddressesQueryParams.md) = `{}`
+
+##### Returns
+
+`Promise`\<[`Addresses`](/docs/packages/SDK/interfaces/Addresses.md)\>
+
+##### Defined in
+
+[client.ts:329](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L329)
+
+***
+
 #### getBalances()
 
-> **getBalances**(`profile`): `Promise`\<[`Balances`](../interfaces/Balances.md)[]\>
+> **getBalances**(`profile`): `Promise`\<[`Balances`](/docs/packages/SDK/interfaces/Balances.md)[]\>
 
 [https://monerium.dev/api-docs-v2#tag/addresses/operation/profile-balances](https://monerium.dev/api-docs-v2#tag/addresses/operation/profile-balances)
 
@@ -128,31 +128,31 @@ The public key of the blockchain account.
 
 ##### Returns
 
-`Promise`\<[`Balances`](../interfaces/Balances.md)[]\>
+`Promise`\<[`Balances`](/docs/packages/SDK/interfaces/Balances.md)[]\>
 
 ##### Defined in
 
-[client.ts:335](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L335)
+[client.ts:345](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L345)
 
 ***
 
 #### linkAddress()
 
-> **linkAddress**(`body`): `Promise`\<[`ResponseStatus`](../type-aliases/ResponseStatus.md)\>
+> **linkAddress**(`body`): `Promise`\<[`ResponseStatus`](/docs/packages/SDK/type-aliases/ResponseStatus.md)\>
 
 [https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address](https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address)
 
 ##### Parameters
 
-• **body**: [`LinkAddress`](../interfaces/LinkAddress.md)
+• **body**: [`LinkAddress`](/docs/packages/SDK/interfaces/LinkAddress.md)
 
 ##### Returns
 
-`Promise`\<[`ResponseStatus`](../type-aliases/ResponseStatus.md)\>
+`Promise`\<[`ResponseStatus`](/docs/packages/SDK/type-aliases/ResponseStatus.md)\>
 
 ##### Defined in
 
-[client.ts:389](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L389)
+[client.ts:398](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L398)
 
 ### Authentication
 
@@ -193,11 +193,7 @@ Cleanups the socket and the subscriptions
 
 ##### Defined in
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:525](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L525)
-=======
-[client.ts:644](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L644)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:655](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L655)
 
 ***
 
@@ -209,11 +205,7 @@ Will redirect to the authorization code flow and store the code verifier in the 
 
 ##### Parameters
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-• **client?**: [`ClientCredentials`](/docs/packages/SDK/interfaces/ClientCredentials.md) \| [`AuthorizationCodeCredentials`](/docs/packages/SDK/interfaces/AuthorizationCodeCredentials.md) \| [`DeprecatedAuthorizationCodeCredentials`](/docs/packages/SDK/interfaces/DeprecatedAuthorizationCodeCredentials.md)
-=======
-• **client?**: [`ClientCredentials`](../interfaces/ClientCredentials.md) \| [`AuthorizationCodeCredentials`](../interfaces/AuthorizationCodeCredentials.md)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+• **client?**: [`ClientCredentials`](/docs/packages/SDK/interfaces/ClientCredentials.md) \| [`AuthorizationCodeCredentials`](/docs/packages/SDK/interfaces/AuthorizationCodeCredentials.md)
 
 the client credentials
 
@@ -239,75 +231,51 @@ await monerium.getAccess();
 
 ##### Defined in
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:176](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L176)
-=======
-[client.ts:173](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L173)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:183](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L183)
 
 ***
 
 #### revokeAccess()
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-> **getAuthContext**(): `Promise`\<[`AuthContext`](/docs/packages/SDK/interfaces/AuthContext.md)\>
-=======
 > **revokeAccess**(): `Promise`\<`void`\>
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
 
 Revokes access
 
 ##### Returns
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-`Promise`\<[`AuthContext`](/docs/packages/SDK/interfaces/AuthContext.md)\>
-
-##### Defined in
-
-[client.ts:298](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L298)
-=======
 `Promise`\<`void`\>
 
 ##### Defined in
 
-[client.ts:656](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L656)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:667](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L667)
 
 ***
 
 #### signUp()
 
-> **signUp**(`body`): `Promise`\<[`SignUpResponse`](../interfaces/SignUpResponse.md)\>
+> **signUp**(`body`): `Promise`\<[`SignUpResponse`](/docs/packages/SDK/interfaces/SignUpResponse.md)\>
 
 [https://monerium.dev/api-docs-v2#tag/auth/operation/auth-signup](https://monerium.dev/api-docs-v2#tag/auth/operation/auth-signup)
 
 ##### Parameters
 
-• **body**: [`SignUpPayload`](../interfaces/SignUpPayload.md)
+• **body**: [`SignUpPayload`](/docs/packages/SDK/interfaces/SignUpPayload.md)
 
 ##### Returns
 
-`Promise`\<[`SignUpResponse`](../interfaces/SignUpResponse.md)\>
+`Promise`\<[`SignUpResponse`](/docs/packages/SDK/interfaces/SignUpResponse.md)\>
 
 ##### Defined in
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:538](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L538)
-=======
-[client.ts:445](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L445)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:454](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L454)
 
 ### IBANs
 
 #### getIban()
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-> **getBalances**(`profileId`?): `Promise`\<[`Balances`](/docs/packages/SDK/interfaces/Balances.md)[]\>
-=======
-> **getIban**(`iban`): `Promise`\<[`IBAN`](../interfaces/IBAN.md)\>
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+> **getIban**(`iban`): `Promise`\<[`IBAN`](/docs/packages/SDK/interfaces/IBAN.md)\>
 
-[https://monerium.dev/api-docs-v2#tag/ibans/operation/iban](https://monerium.dev/api-docs-v2#tag/ibans/operation/iban)
+"https://monerium.dev/api-docs-v2#tag/ibans/operation/iban"
 
 ##### Parameters
 
@@ -315,63 +283,37 @@ Revokes access
 
 ##### Returns
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-`Promise`\<[`Balances`](/docs/packages/SDK/interfaces/Balances.md)[]\>
+`Promise`\<[`IBAN`](/docs/packages/SDK/interfaces/IBAN.md)\>
 
 ##### Defined in
 
-[client.ts:322](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L322)
-=======
-`Promise`\<[`IBAN`](../interfaces/IBAN.md)\>
-
-##### Defined in
-
-[client.ts:344](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L344)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:353](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L353)
 
 ***
 
 #### getIbans()
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-> **linkAddress**(`profileId`, `body`): `Promise`\<[`LinkedAddress`](/docs/packages/SDK/interfaces/LinkedAddress.md)\>
-=======
-> **getIbans**(`queryParameters`?): `Promise`\<[`IBANsResponse`](../interfaces/IBANsResponse.md)\>
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+> **getIbans**(`queryParameters`?): `Promise`\<[`IBANsResponse`](/docs/packages/SDK/interfaces/IBANsResponse.md)\>
 
-[https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans](https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans)
+"https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans"
 
 ##### Parameters
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-• **profileId**: `string`
-
-• **body**: [`LinkAddress`](/docs/packages/SDK/interfaces/LinkAddress.md)
+• **queryParameters?**: [`IbansQueryParams`](/docs/packages/SDK/interfaces/IbansQueryParams.md)
 
 ##### Returns
 
-`Promise`\<[`LinkedAddress`](/docs/packages/SDK/interfaces/LinkedAddress.md)\>
-=======
-• **queryParameters?**: [`IbansQueryParams`](../interfaces/IbansQueryParams.md)
-
-##### Returns
-
-`Promise`\<[`IBANsResponse`](../interfaces/IBANsResponse.md)\>
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+`Promise`\<[`IBANsResponse`](/docs/packages/SDK/interfaces/IBANsResponse.md)\>
 
 ##### Defined in
 
-[client.ts:361](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L361)
+[client.ts:360](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L360)
 
 ***
 
 #### moveIban()
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-> **getProfile**(`profileId`): `Promise`\<[`Profile`](/docs/packages/SDK/interfaces/Profile.md)\>
-=======
-> **moveIban**(`iban`, `__namedParameters`): `Promise`\<[`ResponseStatus`](../type-aliases/ResponseStatus.md)\>
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+> **moveIban**(`iban`, `__namedParameters`): `Promise`\<[`ResponseStatus`](/docs/packages/SDK/type-aliases/ResponseStatus.md)\>
 
 [https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban](https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban)
 
@@ -379,58 +321,38 @@ Revokes access
 
 • **iban**: `string`
 
-• **\_\_namedParameters**: [`MoveIbanPayload`](../interfaces/MoveIbanPayload.md)
+• **\_\_namedParameters**: [`MoveIbanPayload`](/docs/packages/SDK/interfaces/MoveIbanPayload.md)
 
 ##### Returns
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-`Promise`\<[`Profile`](/docs/packages/SDK/interfaces/Profile.md)\>
+`Promise`\<[`ResponseStatus`](/docs/packages/SDK/type-aliases/ResponseStatus.md)\>
 
 ##### Defined in
 
-[client.ts:307](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L307)
-=======
-`Promise`\<[`ResponseStatus`](../type-aliases/ResponseStatus.md)\>
-
-##### Defined in
-
-[client.ts:415](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L415)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:424](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L424)
 
 ***
 
 #### requestIban()
 
-> **requestIban**(`__namedParameters`): `Promise`\<[`ResponseStatus`](../type-aliases/ResponseStatus.md)\>
+> **requestIban**(`__namedParameters`): `Promise`\<[`ResponseStatus`](/docs/packages/SDK/type-aliases/ResponseStatus.md)\>
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-> **getProfiles**(): `Promise`\<[`Profile`](/docs/packages/SDK/interfaces/Profile.md)[]\>
-=======
 [https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban](https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
 
 ##### Parameters
 
-• **\_\_namedParameters**: [`RequestIbanPayload`](../interfaces/RequestIbanPayload.md)
+• **\_\_namedParameters**: [`RequestIbanPayload`](/docs/packages/SDK/interfaces/RequestIbanPayload.md)
 
 ##### Returns
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-`Promise`\<[`Profile`](/docs/packages/SDK/interfaces/Profile.md)[]\>
+`Promise`\<[`ResponseStatus`](/docs/packages/SDK/type-aliases/ResponseStatus.md)\>
 
 ##### Defined in
 
-[client.ts:314](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L314)
-=======
-`Promise`\<[`ResponseStatus`](../type-aliases/ResponseStatus.md)\>
-
-##### Defined in
-
-[client.ts:429](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L429)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:438](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L438)
 
 ### Orders
-{@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications}
+[Websocket](https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications)
 
 #### connectOrderNotifications()
 
@@ -442,7 +364,7 @@ Connects to the order notifications socket
 
 • **\_\_namedParameters** = `{}`
 
-• **\_\_namedParameters.filter?**: [`OrderNotificationQueryParams`](../interfaces/OrderNotificationQueryParams.md)
+• **\_\_namedParameters.filter?**: [`OrderNotificationQueryParams`](/docs/packages/SDK/interfaces/OrderNotificationQueryParams.md)
 
 • **\_\_namedParameters.onError?**
 
@@ -454,59 +376,122 @@ Connects to the order notifications socket
 
 ##### Defined in
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:482](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L482)
-=======
-[client.ts:565](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L565)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:575](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L575)
 
 ***
 
 #### disconnectOrderNotifications()
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-> **getOrder**(`orderId`): `Promise`\<[`Order`](/docs/packages/SDK/interfaces/Order.md)\>
-=======
 > **disconnectOrderNotifications**(`queryParameters`?): `void`
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
 
 Closes the order notifications sockets
 
 ##### Parameters
 
-• **queryParameters?**: [`OrderNotificationQueryParams`](../interfaces/OrderNotificationQueryParams.md)
+• **queryParameters?**: [`OrderNotificationQueryParams`](/docs/packages/SDK/interfaces/OrderNotificationQueryParams.md)
 
 ##### Returns
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-`Promise`\<[`Order`](/docs/packages/SDK/interfaces/Order.md)\>
-
-##### Defined in
-
-[client.ts:343](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L343)
-=======
 `void`
 
 ##### Defined in
 
-[client.ts:620](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L620)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:630](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L630)
 
 ### Profiles
 
 #### getProfile()
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-> **getOrders**(`filter`?): `Promise`\<[`Order`](/docs/packages/SDK/interfaces/Order.md)[]\>
-=======
-> **getProfile**(`profile`): `Promise`\<[`Profile`](../interfaces/Profile.md)\>
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+> **getProfile**(`profile`): `Promise`\<[`Profile`](/docs/packages/SDK/interfaces/Profile.md)\>
 
 [https://monerium.dev/api-docs-v2#tag/profiles/operation/profile](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile)
 
 ##### Parameters
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
+• **profile**: `string`
+
+the id of the profile to fetch.
+
+##### Returns
+
+`Promise`\<[`Profile`](/docs/packages/SDK/interfaces/Profile.md)\>
+
+##### Defined in
+
+[client.ts:304](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L304)
+
+***
+
+#### getProfiles()
+
+> **getProfiles**(`params`?): `Promise`\<[`ProfilesResponse`](/docs/packages/SDK/interfaces/ProfilesResponse.md)\>
+
+[https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles](https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles)
+
+##### Parameters
+
+• **params?**: [`ProfilesQueryParams`](/docs/packages/SDK/interfaces/ProfilesQueryParams.md)
+
+##### Returns
+
+`Promise`\<[`ProfilesResponse`](/docs/packages/SDK/interfaces/ProfilesResponse.md)\>
+
+##### Defined in
+
+[client.ts:311](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L311)
+
+***
+
+#### submitProfileDetails()
+
+> **submitProfileDetails**(`profile`, `body`): `Promise`\<[`ResponseStatus`](/docs/packages/SDK/type-aliases/ResponseStatus.md)\>
+
+[https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details)
+
+##### Parameters
+
+• **profile**: `string`
+
+• **body**: [`SubmitProfileDetailsPayload`](/docs/packages/SDK/type-aliases/SubmitProfileDetailsPayload.md)
+
+##### Returns
+
+`Promise`\<[`ResponseStatus`](/docs/packages/SDK/type-aliases/ResponseStatus.md)\>
+
+##### Defined in
+
+[client.ts:466](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L466)
+
+### Orders
+
+#### getOrder()
+
+> **getOrder**(`orderId`): `Promise`\<[`Order`](/docs/packages/SDK/interfaces/Order.md)\>
+
+[https://monerium.dev/api-docs-v2#tag/order](https://monerium.dev/api-docs-v2#tag/order)
+
+##### Parameters
+
+• **orderId**: `string`
+
+##### Returns
+
+`Promise`\<[`Order`](/docs/packages/SDK/interfaces/Order.md)\>
+
+##### Defined in
+
+[client.ts:380](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L380)
+
+***
+
+#### getOrders()
+
+> **getOrders**(`filter`?): `Promise`\<[`Order`](/docs/packages/SDK/interfaces/Order.md)[]\>
+
+[https://monerium.dev/api-docs-v2#tag/orders](https://monerium.dev/api-docs-v2#tag/orders)
+
+##### Parameters
+
 • **filter?**: [`OrderFilter`](/docs/packages/SDK/interfaces/OrderFilter.md)
 
 ##### Returns
@@ -515,36 +500,18 @@ Closes the order notifications sockets
 
 ##### Defined in
 
-[client.ts:334](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L334)
-=======
-• **profile**: `string`
-
-the id of the profile to fetch.
-
-##### Returns
-
-`Promise`\<[`Profile`](../interfaces/Profile.md)\>
-
-##### Defined in
-
-[client.ts:294](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L294)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:373](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L373)
 
 ***
 
-#### getProfiles()
+#### placeOrder()
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
 > **placeOrder**(`order`): `Promise`\<[`Order`](/docs/packages/SDK/interfaces/Order.md)\>
-=======
-> **getProfiles**(`params`?): `Promise`\<[`ProfilesResponse`](../interfaces/ProfilesResponse.md)\>
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
 
-[https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles](https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles)
+[https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders](https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders)
 
 ##### Parameters
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
 • **order**: [`NewOrder`](/docs/packages/SDK/type-aliases/NewOrder.md)
 
 ##### Returns
@@ -553,126 +520,7 @@ the id of the profile to fetch.
 
 ##### Defined in
 
-[client.ts:376](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L376)
-=======
-• **params?**: [`ProfilesQueryParams`](../interfaces/ProfilesQueryParams.md)
-
-##### Returns
-
-`Promise`\<[`ProfilesResponse`](../interfaces/ProfilesResponse.md)\>
-
-##### Defined in
-
-[client.ts:301](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L301)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
-
-***
-
-#### submitProfileDetails()
-
-> **submitProfileDetails**(`profile`, `body`): `Promise`\<[`ResponseStatus`](../type-aliases/ResponseStatus.md)\>
-
-[https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details)
-
-##### Parameters
-
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-• **event**: [`OrderState`](/docs/packages/SDK/enumerations/OrderState.md)
-=======
-• **profile**: `string`
-
-• **body**: [`SubmitProfileDetailsPayload`](../type-aliases/SubmitProfileDetailsPayload.md)
-
-##### Returns
-
-`Promise`\<[`ResponseStatus`](../type-aliases/ResponseStatus.md)\>
-
-##### Defined in
-
-[client.ts:457](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L457)
-
-### Orders
-
-#### getOrder()
-
-> **getOrder**(`orderId`): `Promise`\<[`Order`](../interfaces/Order.md)\>
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
-
-[https://monerium.dev/api-docs-v2#tag/order](https://monerium.dev/api-docs-v2#tag/order)
-
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-• **handler**: [`MoneriumEventListener`](/docs/packages/SDK/type-aliases/MoneriumEventListener.md)
-=======
-##### Parameters
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
-
-• **orderId**: `string`
-
-##### Returns
-
-`Promise`\<[`Order`](../interfaces/Order.md)\>
-
-##### Defined in
-
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:554](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L554)
-=======
-[client.ts:371](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L371)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
-
-***
-
-#### getOrders()
-
-> **getOrders**(`filter`?): `Promise`\<[`Order`](../interfaces/Order.md)[]\>
-
-[https://monerium.dev/api-docs-v2#tag/orders](https://monerium.dev/api-docs-v2#tag/orders)
-
-##### Parameters
-
-• **filter?**: [`OrderFilter`](../interfaces/OrderFilter.md)
-
-##### Returns
-
-`Promise`\<[`Order`](../interfaces/Order.md)[]\>
-
-##### Defined in
-
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:493](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L493)
-=======
-[client.ts:364](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L364)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
-
-***
-
-#### placeOrder()
-
-> **placeOrder**(`order`): `Promise`\<[`Order`](../interfaces/Order.md)\>
-
-[https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders](https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders)
-
-##### Parameters
-
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-• **event**: [`OrderState`](/docs/packages/SDK/enumerations/OrderState.md)
-
-The event to unsubscribe from
-=======
-• **order**: [`NewOrder`](../type-aliases/NewOrder.md)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
-
-##### Returns
-
-`Promise`\<[`Order`](../interfaces/Order.md)\>
-
-##### Defined in
-
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:563](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L563)
-=======
-[client.ts:398](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L398)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:407](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L407)
 
 ***
 
@@ -692,11 +540,7 @@ The event to unsubscribe from
 
 ##### Defined in
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:393](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L393)
-=======
-[client.ts:472](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L472)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:481](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L481)
 
 ### Tokens
 
@@ -712,8 +556,4 @@ The event to unsubscribe from
 
 ##### Defined in
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/classes/MoneriumClient.md
-[client.ts:351](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L351)
-=======
-[client.ts:379](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L379)
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/classes/MoneriumClient.md
+[client.ts:388](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L388)

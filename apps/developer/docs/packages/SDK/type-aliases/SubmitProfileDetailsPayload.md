@@ -1,12 +1,6 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / SubmitProfileDetailsPayload
-
 # Type Alias: SubmitProfileDetailsPayload
 
-> **SubmitProfileDetailsPayload**: [`PersonalProfileDetailsRequest`](../interfaces/PersonalProfileDetailsRequest.md) \| [`CorporateProfileDetailsRequest`](../interfaces/CorporateProfileDetailsRequest.md)
+> **SubmitProfileDetailsPayload**: [`PersonalProfileDetailsRequest`](/docs/packages/SDK/interfaces/PersonalProfileDetailsRequest.md) \| [`CorporateProfileDetailsRequest`](/docs/packages/SDK/interfaces/CorporateProfileDetailsRequest.md)
 
 ## Defined in
 

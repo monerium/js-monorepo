@@ -1,12 +1,6 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / AuthCodePayload
-
 # Interface: AuthCodePayload
 
-One of the options for the [AuthArgs](../type-aliases/AuthArgs.md).
+One of the options for the [AuthArgs](/docs/packages/SDK/type-aliases/AuthArgs.md).
 
 [Auth endpoint in API documentation:](https://monerium.dev/api-docs#operation/auth).
 

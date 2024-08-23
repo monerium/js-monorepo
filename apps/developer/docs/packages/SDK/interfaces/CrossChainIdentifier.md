@@ -1,14 +1,4 @@
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/interfaces/CrossChain.md
-# Interface: CrossChain
-=======
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / CrossChainIdentifier
-
 # Interface: CrossChainIdentifier
->>>>>>> 3a1f3b9 (docs: update generated docs):apps/developer/docs/packages/SDK/interfaces/CrossChainIdentifier.md
 
 ## Extends
 

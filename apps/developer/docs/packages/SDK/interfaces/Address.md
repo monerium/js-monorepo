@@ -1,9 +1,3 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / Address
-
 # Interface: Address
 
 ## Properties
@@ -20,7 +14,7 @@
 
 ### chains
 
-> **chains**: [`Chain`](../type-aliases/Chain.md)[]
+> **chains**: [`Chain`](/docs/packages/SDK/type-aliases/Chain.md)[]
 
 #### Defined in
 

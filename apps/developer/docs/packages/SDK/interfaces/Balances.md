@@ -14,11 +14,7 @@
 
 ### balances
 
-<<<<<<< HEAD:apps/developer/docs/packages/SDK/interfaces/Balances.md
-> **balances**: [`Balance`](/docs/packages/SDK/interfaces/Balance.md)[]
-=======
-> **balances**: [`CurrencyBalance`](CurrencyBalance.md)[]
->>>>>>> 3a1f3b9 (docs: update generated docs):packages/sdk/docs/generated/interfaces/Balances.md
+> **balances**: [`CurrencyBalance`](/docs/packages/SDK/interfaces/CurrencyBalance.md)[]
 
 #### Defined in
 

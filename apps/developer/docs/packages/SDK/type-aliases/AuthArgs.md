@@ -1,7 +1,7 @@
 # Type Alias: AuthArgs
 
-> **AuthArgs**: `Omit`\<[`AuthCodeRequest`](/docs/packages/SDK/interfaces/AuthCodeRequest.md), `"grant_type"`\> \| `Omit`\<[`RefreshTokenRequest`](/docs/packages/SDK/interfaces/RefreshTokenRequest.md), `"grant_type"`\> \| `Omit`\<[`ClientCredentialsRequest`](/docs/packages/SDK/interfaces/ClientCredentialsRequest.md), `"grant_type"`\>
+> **AuthArgs**: `Omit`\<[`AuthCodePayload`](/docs/packages/SDK/interfaces/AuthCodePayload.md), `"grant_type"`\> \| `Omit`\<[`RefreshTokenPayload`](/docs/packages/SDK/interfaces/RefreshTokenPayload.md), `"grant_type"`\> \| `Omit`\<[`ClientCredentialsPayload`](/docs/packages/SDK/interfaces/ClientCredentialsPayload.md), `"grant_type"`\>
 
 ## Defined in
 
-[types.ts:80](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L80)
+[types.ts:31](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L31)

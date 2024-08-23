@@ -1,12 +1,6 @@
-[**Monerium SDK**](../README.md) • **Docs**
-
-***
-
-[Monerium SDK](../README.md) / Director
-
 # Type Alias: Director
 
-> **Director**: `Omit`\<[`PersonalProfileDetails`](../interfaces/PersonalProfileDetails.md), `"idDocument"`\>
+> **Director**: `Omit`\<[`PersonalProfileDetails`](/docs/packages/SDK/interfaces/PersonalProfileDetails.md), `"idDocument"`\>
 
 ## Defined in
 

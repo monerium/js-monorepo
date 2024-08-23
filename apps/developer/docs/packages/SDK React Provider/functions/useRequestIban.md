@@ -1,36 +1,34 @@
-[Monerium SDK React Provider](../README.md) / useRequestIban
-
 # Function: useRequestIban()
 
-> **useRequestIban**(`params`?: \{`mutation`: `{}`; \}): [`MutationResult`](../type-aliases/MutationResult.md)\<`"requestIban"`, `ResponseStatus`, `Error`, `RequestIbanPayload`\>
+> **useRequestIban**(`params`?): [`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"requestIban"`, `ResponseStatus`, `Error`, `RequestIbanPayload`\>
 
 # Request Iban
-
 Create an IBAN for a specified address and chain.
 All incoming EUR payments will automatically be routed to the linked address on that chain.
 Any linked address can use this IBAN for outgoing payments.
 
 ## Parameters
 
-| Parameter          | Type                                                                                                       | Description             |
-| ------------------ | ---------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `params`?          | `object`                                                                                                   | No required parameters. |
-| `params.mutation`? | [`MutationOptions`](../type-aliases/MutationOptions.md)\<`ResponseStatus`, `Error`, `RequestIbanPayload`\> | -                       |
+• **params?** = `{}`
+
+No required parameters.
+
+• **params.mutation?**: [`MutationOptions`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationOptions.md)\<`ResponseStatus`, `Error`, `RequestIbanPayload`\> = `{}`
 
 ## Returns
 
-[`MutationResult`](../type-aliases/MutationResult.md)\<`"requestIban"`, `ResponseStatus`, `Error`, `RequestIbanPayload`\>
+[`MutationResult`](/docs/packages/SDK%20React%20Provider/type-aliases/MutationResult.md)\<`"requestIban"`, `ResponseStatus`, `Error`, `RequestIbanPayload`\>
 
 ## Example
 
 ```ts
 const {
-  requestIban, // useMutation's `mutateAsync` property
-  isPending,
-  isError,
-  error,
-  status,
-  ...moreUseMutationResults
+   requestIban, // useMutation's `mutateAsync` property
+   isPending,
+   isError,
+   error,
+   status,
+   ...moreUseMutationResults
 } = useRequestIban();
 ```
 

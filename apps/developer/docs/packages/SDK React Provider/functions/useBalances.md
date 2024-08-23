@@ -6,11 +6,11 @@
 
 ## Parameters
 
-• **params?** = `{}`
+• **params?**
 
 No required parameters.
 
-• **params.profileId?**: `string`
+• **params.profile?**: `string`
 
 Fetch balances for a specific profile.
 
@@ -43,4 +43,4 @@ const {
 
 ## Defined in
 
-[hooks.tsx:337](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L337)
+[hooks.tsx:425](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L425)
