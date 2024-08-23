@@ -119,7 +119,7 @@ Cleanups the socket and the subscriptions
 
 > **getAccess**(`client`?): `Promise`\<`boolean`\>
 
-Get access to the API
+Will redirect to the authorization code flow and store the code verifier in the local storage
 
 ##### Parameters
 
@@ -143,12 +143,13 @@ import { MoneriumClient } from '@monerium/sdk';
    clientId: 'your_client_credentials_uuid', // replace with your client ID
    clientSecret: 'your_client_secret', // replace with your client secret
  });
+
 await monerium.getAccess();
 ```
 
 ##### Defined in
 
-[client.ts:175](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L175)
+[client.ts:176](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L176)
 
 ***
 
@@ -164,7 +165,7 @@ await monerium.getAccess();
 
 ##### Defined in
 
-[client.ts:297](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L297)
+[client.ts:298](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L298)
 
 ***
 
@@ -202,7 +203,7 @@ the id of the profile to fetch balances.
 
 ##### Defined in
 
-[client.ts:321](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L321)
+[client.ts:322](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L322)
 
 ***
 
@@ -246,7 +247,7 @@ the id of the profile to fetch.
 
 ##### Defined in
 
-[client.ts:306](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L306)
+[client.ts:307](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L307)
 
 ***
 
@@ -262,7 +263,7 @@ the id of the profile to fetch.
 
 ##### Defined in
 
-[client.ts:313](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L313)
+[client.ts:314](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L314)
 
 ### Orders
 
@@ -298,7 +299,7 @@ Connects to the order notifications socket
 
 ##### Defined in
 
-[client.ts:342](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L342)
+[client.ts:343](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L343)
 
 ***
 
@@ -318,7 +319,7 @@ Connects to the order notifications socket
 
 ##### Defined in
 
-[client.ts:333](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L333)
+[client.ts:334](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L334)
 
 ***
 
