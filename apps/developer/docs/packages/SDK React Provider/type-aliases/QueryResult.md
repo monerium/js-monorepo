@@ -6,7 +6,7 @@ See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework
 
 ## Type Parameters
 
-• **TVarName** _extends_ `string`
+• **TVarName** *extends* `string`
 
 The name of the variable that returns the data.
 
@@ -21,7 +21,6 @@ The data returned.
 ## Example
 
 > `data` is renamed according to the `TVarName` and therefore not included in the result.
-
 ```diff
 {
 -   data,
@@ -48,7 +47,7 @@ The data returned.
    refetch,
    status,
 }
-```
+ ```
 
 ## Used By
 
