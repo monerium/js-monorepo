@@ -24,7 +24,7 @@
     },
     "generate-docs": {
       "dependsOn": ["build"],
-      "outputs": ["developer/docs/tools/**"]
+      "outputs": ["developer/docs/packages/**"]
     },
     "lint": {},
     "lint:style": {},

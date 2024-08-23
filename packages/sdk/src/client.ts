@@ -158,10 +158,20 @@ export class MoneriumClient {
   }
 
   /**
-   * Get access to the API
+   * Will redirect to the authorization code flow and store the code verifier in the local storage
    * @param {AuthorizationCodeCredentials | ClientCredentials} client - the client credentials
    * @returns boolean to indicate if access has been granted
    * @category Auth
+   * @example
+   *   import { MoneriumClient } from '@monerium/sdk';
+   *  // Initialize the client with credentials
+   *  const monerium = new MoneriumClient({
+   *    environment: 'sandbox',
+   *    clientId: 'your_client_credentials_uuid', // replace with your client ID
+   *    clientSecret: 'your_client_secret', // replace with your client secret
+   *  });
+   *
+   * await monerium.getAccess();
    */
   async getAccess(
     client?:

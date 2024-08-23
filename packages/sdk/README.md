@@ -38,8 +38,8 @@ With a single signature from your wallet, your EURe is burned and sent as Euros 
 
 ## Documentation
 
-- [Documentation](../../apps/developer/docs/tools/SDK/index.md)
-- [Documentation - MoneriumClient](../../apps/developer/docs/tools/SDK/classes/MoneriumClient.md)
+- [Documentation](../../apps/developer/docs/packages/SDK/index.md)
+- [Documentation - MoneriumClient](../../apps/developer/docs/packages/SDK/classes/MoneriumClient.md)
 
 ## Table of Contents
 
