@@ -10,4 +10,4 @@
 
 ## Defined in
 
-[types.ts:517](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L517)
+[types.ts:520](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L520)

@@ -10,7 +10,7 @@ The public key of the blockchain account.
 
 #### Defined in
 
-[types.ts:464](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L464)
+[types.ts:467](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L467)
 
 ***
 
@@ -20,7 +20,7 @@ The public key of the blockchain account.
 
 #### Defined in
 
-[types.ts:477](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L477)
+[types.ts:480](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L480)
 
 ***
 
@@ -34,7 +34,7 @@ Fixed message to be signed with the private key corresponding to the given addre
 
 #### Defined in
 
-[types.ts:470](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L470)
+[types.ts:473](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L473)
 
 ***
 
@@ -46,7 +46,7 @@ Profile ID that owns the address.
 
 #### Defined in
 
-[types.ts:462](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L462)
+[types.ts:465](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L465)
 
 ***
 
@@ -60,4 +60,4 @@ https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address
 
 #### Defined in
 
-[types.ts:476](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L476)
+[types.ts:479](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L479)
