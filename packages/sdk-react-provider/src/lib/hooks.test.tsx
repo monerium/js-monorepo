@@ -6,6 +6,8 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { LinkAddress, NewOrder } from '@monerium/sdk';
 
 import {
+  useAddress,
+  useAddresses,
   useAuth,
   useBalances,
   useLinkAddress,
@@ -42,8 +44,10 @@ jest.mock('@monerium/sdk', () => {
     getOrders: mockHook('mockedOrders'),
     getOrder: mockHook('mockedOrder'),
     getProfile: mockHook('mockedProfile'),
-    getProfiles: mockHook('mockedProfiles'),
+    getProfiles: mockHook({ profiles: ['mockedProfiles'] }),
     getTokens: mockHook('mockedTokens'),
+    getAddress: mockHook('mockedAddress'),
+    getAddresses: mockHook({ addresses: ['mockedAddresses'] }),
     getBalances: mockHook('mockedBalances'),
     placeOrder: mockHook('mockedPlacedOrder'),
     linkAddress: mockHook('mockedLinkedAddress'),
@@ -188,7 +192,7 @@ describe('useProfiles', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.profiles).toBe('mockedProfiles');
+      expect(result.current.profiles?.[0]).toBe('mockedProfiles');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -206,6 +210,43 @@ describe('useTokens', () => {
 
     await waitFor(() => {
       expect(result.current.tokens).toBe('mockedTokens');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+describe('useAddress', () => {
+  test('returns the address info', async () => {
+    const { result } = renderHook(
+      () => useAddress({ address: 'mockedAddress' }),
+      {
+        wrapper,
+      }
+    );
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.address).toBe('mockedAddress');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+describe('useAddresses', () => {
+  test('returns the addresses info', async () => {
+    const { result } = renderHook(() => useAddresses(), {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.addresses?.[0]).toBe('mockedAddresses');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
