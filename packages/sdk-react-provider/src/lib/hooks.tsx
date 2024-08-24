@@ -188,6 +188,7 @@ export function useProfile({
  * # Get profiles
  * @group Hooks
  * @category Profiles
+ *
  * @param {Object} [params] No required parameters.
  * @param {QueryOptions<ProfilesResponse>} [params.query] {@inheritDoc QueryOptions}
  *
@@ -202,7 +203,6 @@ export function useProfile({
  *    ...moreUseQueryResults
  * } = useProfiles();
  * ```
-
  * @see
  * [API Documentation](https://monerium.dev/api-docs#operation/profiles)
  *
