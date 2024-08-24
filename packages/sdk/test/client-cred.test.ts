@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment node
  */
 
 // Login: monerium-test-sdk@maildrop.cc
