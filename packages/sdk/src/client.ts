@@ -125,8 +125,7 @@ export class MoneriumClient {
       this.#env =
         MONERIUM_CONFIG.environments[envOrOptions.environment || 'sandbox'];
 
-      // if (!isServer) {
-      if (!(envOrOptions as ClientCredentials)?.clientSecret) {
+      if (!isServer && !(envOrOptions as ClientCredentials)?.clientSecret) {
         const { clientId, redirectUri } =
           envOrOptions as AuthorizationCodeCredentials;
         this.#client = {
@@ -220,11 +219,12 @@ export class MoneriumClient {
         '\x1b[31m%s\x1b[0m',
         'Use client credentials only on the server where the secret is secure!'
       );
-
-      await this.#clientCredentialsAuthorization(
-        this.#client as ClientCredentials
-      );
-      return !!this.bearerProfile;
+      if (isServer) {
+        await this.#clientCredentialsAuthorization(
+          this.#client as ClientCredentials
+        );
+      }
+      return !!this?.bearerProfile;
     }
 
     const redirectUri =
