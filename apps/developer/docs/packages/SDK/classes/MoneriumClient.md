@@ -82,7 +82,7 @@ string
 
 #### Defined in
 
-[client.ts:161](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L161)
+[client.ts:160](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L160)
 
 ***
 
@@ -136,7 +136,7 @@ await monerium.getAccess();
 
 #### Defined in
 
-[client.ts:210](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L210)
+[client.ts:209](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L209)
 
 ***
 
