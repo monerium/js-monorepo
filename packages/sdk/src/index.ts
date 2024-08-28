@@ -2,6 +2,13 @@
  * @packageDocumentation
  * A library to interact with Monerium API.
  *
+ *
+ * ## Installation
+ *
+ * ```bash
+ * pnpm add @monerium/sdk
+ * ```
+ *
  * @example
  * ```tsx
  * import { MoneriumClient } from '@monerium/sdk';
