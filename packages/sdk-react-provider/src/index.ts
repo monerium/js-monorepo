@@ -2,7 +2,7 @@
  * @packageDocumentation
  * A library to interact with Monerium API with React hooks.
  *
- * This context provider utilizes React Query for async data fetching and caching.
+ * The MoneriumProvider context provider utilizes React Query for async data fetching and caching.
  *
  * ## Installation
  *
@@ -15,6 +15,8 @@
  * Wrap your app in the `QueryClientProvider` React Context Provider and pass a new `QueryClient` instance to the `client` property
  *
  * Inside the `QueryClientProvider`, wrap your app in the `MoneriumProvider` React Context Provider and pass the auth flow's `clientId`, `redirectUri`, and `environment` configuration.
+ *
+ * Hooks are now accessible in your app.
  *
  * @example
  * ```tsx
