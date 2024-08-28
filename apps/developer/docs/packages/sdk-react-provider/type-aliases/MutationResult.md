@@ -43,4 +43,4 @@ const {
 
 ## Defined in
 
-[types.ts:214](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L214)
+[sdk-react-provider/src/lib/types.ts:214](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L214)

@@ -31,7 +31,7 @@ import {
 
 /**
  * @internal
- * Query keys
+ * Query keys for React query
  * */
 export const keys = {
   getAll: ['monerium'],
@@ -121,13 +121,10 @@ export function useAuth(): UseAuthReturn {
 }
 
 /**
- * # Get single profile
- * If no `profileId` is provided, the default profile is used.
+ * If no `profile` id is provided, the default profile is used.
  * @group Hooks
  * @category Profiles
  * @param {Object} params
- * @param {string} [params.profile] The id of the profile.
- * @param {QueryOptions<Profile>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
@@ -141,16 +138,15 @@ export function useAuth(): UseAuthReturn {
  * } = useProfile();
  * ```
 
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profile)
- *
- * [Profile interface](/docs/packages/sdk/interfaces/Profile.md)
+ * @see {@link https://monerium.dev/api-docs#operation/profile | API Documentation}
  */
 export function useProfile({
   profile,
   query,
 }: {
+  /** The id of the profile */
   profile?: string;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Profile>;
 } = {}): QueryResult<'profile', Profile> {
   const { isAuthorized } = useAuth();
@@ -190,7 +186,6 @@ export function useProfile({
  * @category Profiles
  *
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<ProfilesResponse>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
@@ -203,14 +198,12 @@ export function useProfile({
  *    ...moreUseQueryResults
  * } = useProfiles();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profiles)
- *
- * [Profile interface](/docs/packages/sdk/interfaces/Profile.md)
+ * @see {@link https://monerium.dev/api-docs#operation/profiles | API Documentation}
  */
 export function useProfiles({
   query,
 }: {
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<ProfilePermissions[]>;
 } = {}): QueryResult<'profiles', ProfilePermissions[]> {
   const { isAuthorized } = useAuth();
@@ -237,10 +230,8 @@ export function useProfiles({
   };
 }
 /**
- * # Get tokens
  * @group Hooks
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Token[]>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
@@ -254,14 +245,14 @@ export function useProfiles({
  * } = useTokens();
  * ```
 
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/tokens)
- *
- * [Token interface](/docs/packages/sdk/interfaces/Token.md)
+ * @see {@link https://monerium.dev/api-docs#operation/tokens | API Documentation}
  */
 export function useTokens({
   query,
-}: { query?: QueryOptions<Token[]> } = {}): QueryResult<'tokens', Token[]> {
+}: {
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<Token[]>;
+} = {}): QueryResult<'tokens', Token[]> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const { data, ...rest } = useQuery({
@@ -285,12 +276,9 @@ export function useTokens({
 }
 
 /**
- * # Get address
  * @group Hooks
  * @category Addresses
  * @param {Object} params 
- * @param {QueryOptions<Address>} params.address Fetch a specific address.
- * @param {QueryOptions<Address>} [params.query] {@inheritDoc QueryOptions}
 
  * @example
  * ```ts
@@ -303,16 +291,15 @@ export function useTokens({
  *    ...moreUseQueryResults
  * } = useAddress();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/address)
- *
- * [Address interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Address.md)
+ * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address | API Documentation}
  */
 export function useAddress({
   address,
   query = {},
 }: {
+  /** Fetch a specific address. */
   address: string;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Address>;
 }): QueryResult<'address', Address> {
   const sdk = useSdk();
@@ -341,14 +328,9 @@ export function useAddress({
   };
 }
 /**
- * # Get addresses
  * @group Hooks
  * @category Addresses
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Address[]>} [params.profile] Fetch addresses for a specific profile.
- * @param {QueryOptions<Address[]>} [params.chain] Fetch addresses for a specific chain.
- * @param {QueryOptions<Address[]>} [params.query] {@inheritDoc QueryOptions}
-
  * @example
  * ```ts
  * const {
@@ -360,18 +342,18 @@ export function useAddress({
  *    ...moreUseQueryResults
  * } = useAddresses();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses)
- *
- * [Address interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Address.md)
+ * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses | API Documentation}
  */
 export function useAddresses({
   profile,
   chain,
   query = {},
 }: {
+  /** Fetch addresses for a specific profile. */
   profile?: string;
+  /** Fetch addresses for a specific chain. */
   chain?: Chain | ChainId;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Address[]>;
 } = {}): QueryResult<'addresses', Address[]> {
   const sdk = useSdk();
@@ -399,12 +381,9 @@ export function useAddresses({
   };
 }
 /**
- * # Get balances
  * @group Hooks
  * @category Addresses
- * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Balances[]>} [params.profile] Fetch balances for a specific profile.
- * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
+ * @param {Object} params
 
  * @example
  * ```ts
@@ -417,16 +396,15 @@ export function useAddresses({
  *    ...moreUseQueryResults
  * } = useBalances();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profile-balances)
- *
- * [Balances interface](/docs/packages/sdk/interfaces/Balances.md)
+ * @see {@link https://monerium.dev/api-docs#operation/profile-balances | API Documentation}
  */
 export function useBalances({
   profile,
   query,
 }: {
+  /** Fetch balances for a specific profile. */
   profile: string;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Balances[]>;
 }): QueryResult<'balances', Balances[]> {
   const sdk = useSdk();
@@ -456,13 +434,9 @@ export function useBalances({
 }
 
 /**
- * # Get IBAN
  * @group Hooks
  * @category IBANs
  * @param {Object} params
- * @param {QueryOptions<IBAN>} params.iban Fetch a specific IBAN
- * @param {QueryOptions<IBAN>} [params.query] {@inheritDoc QueryOptions}
-
  * @example
  * ```ts
  * const {
@@ -474,16 +448,15 @@ export function useBalances({
  *    ...moreUseQueryResults
  * } = useIBAN();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/iban)
- *
- * [IBAN interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/IBAN.md)
+ * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/iban | API Documentation}
  */
 export function useIBAN({
   iban,
   query,
 }: {
+  /** Fetch a specific IBAN */
   iban: string;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<IBAN>;
 }): QueryResult<'iban', IBAN> {
   const sdk = useSdk();
@@ -511,14 +484,9 @@ export function useIBAN({
   };
 }
 /**
- * # Get IBANs
  * @group Hooks
  * @category IBANs
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<IBAN[]>} [params.profile] Fetch IBANs for a specific profile.
- * @param {QueryOptions<IBAN[]>} [params.chain] Fetch IBANs for a specific chain.
- * @param {QueryOptions<IBAN[]>} [params.query] {@inheritDoc QueryOptions}
-
  * @example
  * ```ts
  * const {
@@ -530,18 +498,18 @@ export function useIBAN({
  *    ...moreUseQueryResults
  * } = useIBANs();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans)
- *
- * [IBAN interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/IBAN.md)
+ * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans | API Documentation}
  */
 export function useIBANs({
   profile,
   chain,
   query = {},
 }: {
+  /** Fetch IBANs for a specific profile. */
   profile?: string;
+  /** Fetch IBANs for a specific chain. */
   chain?: Chain | ChainId;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<IBAN[]>;
 } = {}): QueryResult<'ibans', IBAN[]> {
   const sdk = useSdk();
@@ -571,12 +539,9 @@ export function useIBANs({
 }
 
 /**
- * # Get single order
  * @group Hooks
  * @category Orders
  * @param {Object} params
- * @param {Object} params.orderId The id of the order.
- * @param {QueryOptions<Order>} [params.query] {@inheritDoc QueryOptions}
  * @example
  * ```ts
  * const {
@@ -588,16 +553,15 @@ export function useIBANs({
  *    ...moreUseQueryResults
  * } = useOrder();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/order)
- *
- * [Order interface](/docs/packages/sdk/interfaces/Order.md)
+ * @see {@link https://monerium.dev/api-docs#operation/order| API Documentation}
  */
 export function useOrder({
   orderId,
   query = {},
 }: {
+  /**  The id of the order. */
   orderId: string;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Order>;
 }): QueryResult<'order', Order> {
   const sdk = useSdk();
@@ -627,7 +591,6 @@ export function useOrder({
 }
 
 /**
- * # Get orders
  * @group Hooks
  * @category Orders
  * @param {Object} [params] No required parameters.
@@ -636,7 +599,6 @@ export function useOrder({
  * @param {Object} [params.profile] Filter based on the profile ID associated with the order.
  * @param {Object} [params.state] Filter based on the state of the order.
  * @param {Object} [params.txHash] Filter based on the blockchain transaction hash.
- * @param {QueryOptions<Order[]>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
@@ -649,15 +611,13 @@ export function useOrder({
  *    ...moreUseQueryResults
  * } = useOrders();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/orders)
- *
- * [Order interface](/docs/packages/sdk/interfaces/Order.md)
+ * @see {@link https://monerium.dev/api-docs#operation/orders | API Documentation}
  */
 export function useOrders({
   query = {},
   ...filters
 }: {
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Order[]>;
   address?: string;
   txHash?: string;
@@ -689,7 +649,6 @@ export function useOrders({
 }
 
 /**
- * # Submit profile details.
  * Submit the required compliance information to onboard the customer.
  *
  * Note that you won't be able to change the profile "kind" from personal to corporate or vice versa once the profile has been approved.
@@ -697,7 +656,6 @@ export function useOrders({
  * @category Profiles
  * @param param
  * @param {string} param.profile The id of the profile to submit to.
- * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -710,10 +668,7 @@ export function useOrders({
  *    ...moreUseMutationResults
  * } = useSubmitProfileDetails();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details)
- *
- * [SubmitProfileDetailsPayload type](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/type-aliases/SubmitProfileDetailsPayload.md)
+ * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details | API Documentation}}
  */
 
 export function useSubmitProfileDetails({
@@ -721,6 +676,7 @@ export function useSubmitProfileDetails({
   mutation = {},
 }: {
   profile: string;
+  /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<
     ResponseStatus,
     Error,
@@ -769,14 +725,12 @@ export function useSubmitProfileDetails({
   };
 }
 /**
- * # Request Iban
  * Create an IBAN for a specified address and chain.
  * All incoming EUR payments will automatically be routed to the linked address on that chain.
  * Any linked address can use this IBAN for outgoing payments.
  * @group Hooks
  * @category IBANs
  * @param {Object} [params] No required parameters.
- * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -789,15 +743,13 @@ export function useSubmitProfileDetails({
  *    ...moreUseMutationResults
  * } = useRequestIban();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban)
- *
- * [RequestIbanPayload type](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/RequestIbanPayload.md)
+ * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban | API Documentation}}
  */
 
 export function useRequestIban({
   mutation = {},
 }: {
+  /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<ResponseStatus, Error, RequestIbanPayload>;
 } = {}): MutationResult<
   'requestIban',
@@ -841,13 +793,11 @@ export function useRequestIban({
   };
 }
 /**
- * # Move Iban
  * Move an existing IBAN to a specified address an chain.
  * All incoming EUR payments will automatically be routed to the address on that chain.
  * @group Hooks
  * @category IBANs
  * @param {Object} [params] No required parameters.
- * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -860,15 +810,13 @@ export function useRequestIban({
  *    ...moreUseMutationResults
  * } = useMoveIban();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban)
- *
- * [NewOrder type](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/MoveIbanPayload.md)
+ * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban  | API Documentation}
  */
 
 export function useMoveIban({
   mutation = {},
 }: {
+  /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<
     ResponseStatus,
     Error,
@@ -924,7 +872,6 @@ export function useMoveIban({
   };
 }
 /**
- * # Place an order.
  * When the order has been placed, the orders query will be invalidated and re-fetched.
  *
  * If the order amount is above 15000, a supporting document is required.
@@ -932,7 +879,6 @@ export function useMoveIban({
  * @category Orders
  * @param param
  * @param {File} param.supportingDocument Supporting document file.
- * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -945,10 +891,7 @@ export function useMoveIban({
  *    ...moreUseMutationResults
  * } = usePlaceOrder();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/post-orders)
- *
- * [NewOrder type](/docs/packages/sdk/type-aliases/NewOrder.md)
+ * @see {@link https://monerium.dev/api-docs#operation/post-orders| API Documentation}
  */
 
 export function usePlaceOrder({
@@ -956,6 +899,7 @@ export function usePlaceOrder({
   mutation,
 }: {
   supportingDocument?: File;
+  /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<Order, Error, NewOrder>;
 } = {}): MutationResult<'placeOrder', Order, Error, NewOrder> {
   const sdk = useSdk();
@@ -1017,7 +961,6 @@ export function usePlaceOrder({
  * @category Profiles
  * @param param
  * @param {File} param.profileId Which profile to link the address.
- * @param {Object} [param.mutation] {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -1030,10 +973,7 @@ export function usePlaceOrder({
  *    ...moreUseMutationResults
  * } = useLinkAddress();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profile-addresses)
- *
- * [LinkAddress interface](/docs/packages/sdk/interfaces/LinkAddress.md)
+ * @see {@link https://monerium.dev/api-docs#operation/profile-addresses | API Documentation}
  */
 
 export function useLinkAddress({
@@ -1041,6 +981,7 @@ export function useLinkAddress({
   mutation,
 }: {
   profileId: string;
+  /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<
     { status: number; statusText: string },
     Error,
@@ -1087,3 +1028,19 @@ export function useLinkAddress({
     ...rest,
   };
 }
+
+/** Export types for documentation */
+export type {
+  Address,
+  Balances,
+  IBAN,
+  MoveIbanPayload,
+  LinkAddress,
+  Profile,
+  ProfilePermissions,
+  Token,
+  SubmitProfileDetailsPayload,
+  NewOrder,
+  ResponseStatus,
+  Order,
+};

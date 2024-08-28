@@ -4,4 +4,4 @@
 
 ## Defined in
 
-[types.ts:16](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L16)
+[sdk-react-provider/src/lib/types.ts:16](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L16)

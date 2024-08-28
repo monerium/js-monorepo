@@ -55,4 +55,4 @@ query: {
 
 ## Defined in
 
-[types.ts:83](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L83)
+[sdk-react-provider/src/lib/types.ts:83](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L83)

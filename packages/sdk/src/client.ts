@@ -147,22 +147,23 @@ export class MoneriumClient {
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/auth/operation/auth)
    *
    * Construct the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
    *
    * @group Authentication
+   * @see {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth | API Documentation}
+   * @param {AuthFlowOptions} [params] - the auth flow params
    * @returns string
    *
    */
-  async authorize(client?: AuthFlowOptions) {
+  async authorize(params?: AuthFlowOptions) {
     const clientId =
-      client?.clientId ||
+      params?.clientId ||
       (this.#client as AuthorizationCodeCredentials)?.clientId;
     const redirectUri =
-      client?.redirectUri ||
+      params?.redirectUri ||
       (this.#client as AuthorizationCodeCredentials)?.redirectUri;
 
     if (!clientId) {
@@ -172,11 +173,11 @@ export class MoneriumClient {
     const authFlowUrl = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, {
       client_id: clientId,
       redirect_uri: redirectUri,
-      address: client?.address,
-      signature: client?.signature,
-      chain: client?.chain,
-      state: client?.state,
-      skipCreateAccount: client?.skipCreateAccount,
+      address: params?.address,
+      signature: params?.signature,
+      chain: params?.chain,
+      state: params?.state,
+      skipCreateAccount: params?.skipCreateAccount,
     });
 
     // Redirect to the authFlow
@@ -184,9 +185,9 @@ export class MoneriumClient {
   }
 
   /**
-   *
-   *
    * Will redirect to the authorization code flow and store the code verifier in the local storage
+   *
+   * @group Authentication
    *
    * @param {AuthorizationCodeCredentials | ClientCredentials} client - the client credentials
    *
@@ -204,7 +205,6 @@ export class MoneriumClient {
    *
    * await monerium.getAccess();
    * ```
-   * @group Authentication
    */
   async getAccess(
     client?: AuthorizationCodeCredentials | ClientCredentials
@@ -323,19 +323,16 @@ export class MoneriumClient {
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile)
-   *
    * @group Profiles
    * @param {string} profile - the id of the profile to fetch.
-   *
+   * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile | API Documentation}
    */
   getProfile(profile: string): Promise<Profile> {
     return this.#api<Profile>('get', `profiles/${profile}`);
   }
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles)
-   *
    * @group Profiles
+   * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles | API Documentation}
    */
   getProfiles(params?: ProfilesQueryParams): Promise<ProfilesResponse> {
     return this.#api<ProfilesResponse>('get', `profiles${queryParams(params)}`);
@@ -347,7 +344,7 @@ export class MoneriumClient {
    * @group Addresses
    * @param {string} address - The public key of the blockchain account.
    *
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/address)
+   * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address | API Documentation}
    *
    * @example
    * ```ts
@@ -359,13 +356,9 @@ export class MoneriumClient {
   }
 
   /**
-   *
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses)
-   *
    * @group Addresses
-   * @param {AddressesQueryParams} params - No required parameters.
-   * @param {string} params.profile - the id of the profile to filter.
-   * @param {Chain | ChainId} params.chain - the chain to filter.
+   * @param {AddressesQueryParams} [params] - No required parameters.
+   * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses | API Documentation}
    */
   getAddresses({
     profile,
@@ -379,12 +372,9 @@ export class MoneriumClient {
   }
 
   /**
-   *
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/profile-balances)
-   *
    * @group Addresses
    * @param {string} profile - the id of the profile to fetch balances.
-   *
+   * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/profile-balances | API Documentation}
    */
   getBalances(profile: string): Promise<Balances[]> {
     return this.#api<Balances[]>('get', `profiles/${profile}/balances`);
@@ -393,22 +383,17 @@ export class MoneriumClient {
   /**
    * Fetch details about a single IBAN
    *
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/iban)
-   *
    * @group IBANs
-   *
    * @param {string} iban - the IBAN to fetch.
-   *
+   * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/iban | API Documentation}
    */
   getIban(iban: string): Promise<IBAN> {
     return this.#api<IBAN>('get', `ibans/${encodeURI(iban)}`);
   }
   /**
    * Fetch all IBANs for the profile
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans)
-   *
    * @group IBANs
-   *
+   * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans | API Documentation}
    */
   getIbans(queryParameters?: IbansQueryParams): Promise<IBANsResponse> {
     const { profile, chain } = queryParameters || {};
@@ -420,26 +405,23 @@ export class MoneriumClient {
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/orders)
-   *
    * @group Orders
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders | API Documentation}
    */
   getOrders(filter?: OrderFilter): Promise<Order[]> {
     return this.#api<Order[]>('get', `orders${queryParams(filter)}`);
   }
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/order)
-   *
    * @group Orders
+   * @see {@link https://monerium.dev/api-docs-v2#tag/order | API Documentation}
    */
   getOrder(orderId: string): Promise<Order> {
     return this.#api<Order>('get', `orders/${orderId}`);
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/tokens)
-   *
    * @group Tokens
+   * @see {@link https://monerium.dev/api-docs-v2#tag/tokens | API Documentation}
    */
   getTokens(): Promise<Token[]> {
     return this.#api<Token[]>('get', 'tokens');
@@ -447,18 +429,20 @@ export class MoneriumClient {
 
   /**
    * Add a new address to the profile
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address)
-   *
    * @group Addresses
-   *
+   * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address | API Documentation}
    */
-  linkAddress(body: LinkAddress): Promise<ResponseStatus> {
-    body = mapChainIdToChain(body);
-    return this.#api<ResponseStatus>('post', `addresses`, JSON.stringify(body));
+  linkAddress(payload: LinkAddress): Promise<ResponseStatus> {
+    payload = mapChainIdToChain(payload);
+    return this.#api<ResponseStatus>(
+      'post',
+      `addresses`,
+      JSON.stringify(payload)
+    );
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders)
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders | API Documentation}
    *
    * @group Orders
    */
@@ -476,11 +460,10 @@ export class MoneriumClient {
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban)
-   *
    * @group IBANs
    * @param {string} iban - the IBAN to move.
    * @param {MoveIbanPayload} payload - the payload to move the IBAN.
+   * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban | API Documentation}
    */
   moveIban(
     iban: string,
@@ -492,18 +475,16 @@ export class MoneriumClient {
       JSON.stringify({ address, chain: parseChain(chain) })
     );
   }
+
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban)
-   *
    * @group IBANs
-   * @param {RequestIbanPayload} payload - the payload to request an IBAN.
-   * @param {string} payload.address - the address to request the IBAN.
-   * @param {Chain | ChainId} payload.chain - the chain to request the IBAN.
+   * @param {RequestIbanPayload} payload
+   * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban | API Documentation}
    */
   requestIban({
     address,
     chain,
-    emailNotifications = true, // TODO: needs documentation
+    emailNotifications = true,
   }: RequestIbanPayload): Promise<ResponseStatus> {
     return this.#api<ResponseStatus>(
       'post',
@@ -513,22 +494,20 @@ export class MoneriumClient {
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/auth/operation/auth-signup)
-   *
    * @group Authentication
+   * @see {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth-signup | API Documentation}
    */
-  signUp(body: SignUpPayload): Promise<SignUpResponse> {
+  signUp(payload: SignUpPayload): Promise<SignUpResponse> {
     return this.#api<SignUpResponse>(
       'post',
       `auth/signup`,
-      JSON.stringify(body)
+      JSON.stringify(payload)
     );
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details)
-   *
    * @group Profiles
+   * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details | API Documentation}
    */
   submitProfileDetails(
     profile: string,
@@ -542,9 +521,8 @@ export class MoneriumClient {
   }
 
   /**
-   * [API Documentation](https://monerium.dev/api-docs-v2#tag/orders/operation/supporting-document)
-   *
    * @group Orders
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/supporting-document | API Documentation}
    */
   uploadSupportingDocument(document: File): Promise<SupportingDoc> {
     const formData = new FormData();
@@ -634,15 +612,18 @@ export class MoneriumClient {
 
   /**
    * Connects to the order notifications socket
-   * [Websocket](https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications)
    *
    * @group Orders
+   * @param {OrderNotificationQueryParams} [params]
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications | API Document - Websocket}
+
    */
   connectOrderNotifications({
     filter,
     onMessage,
     onError,
   }: {
+    /** specify which type of orders to listen to */
     filter?: OrderNotificationQueryParams;
     onMessage?: (data: Order) => void;
     onError?: (err: Event) => void;
@@ -690,15 +671,16 @@ export class MoneriumClient {
 
   /**
    * Closes the order notifications sockets
-   * [Websocket](https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications)
    *
    * @group Orders
+   * @param {OrderNotificationQueryParams} [params] - specify which socket to close or close all if not provided
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications | API Document - Websocket}
    */
-  disconnectOrderNotifications(queryParameters?: OrderNotificationQueryParams) {
-    if (queryParameters) {
+  disconnectOrderNotifications(params?: OrderNotificationQueryParams) {
+    if (params) {
       const key = getKey({
-        profile: queryParameters?.profile,
-        state: queryParameters?.state,
+        profile: params?.profile,
+        state: params?.state,
       });
       const socket = this.#sockets?.get(key);
       if (socket) {
@@ -716,7 +698,7 @@ export class MoneriumClient {
   }
 
   /**
-   * Cleanups the socket and the subscriptions
+   * Cleanups the localstorage and websocket connections
    *
    * @group Authentication
    */

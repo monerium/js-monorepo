@@ -4,4 +4,4 @@
 
 ## Defined in
 
-[context.tsx:5](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/context.tsx#L5)
+[sdk-react-provider/src/lib/context.tsx:5](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/context.tsx#L5)

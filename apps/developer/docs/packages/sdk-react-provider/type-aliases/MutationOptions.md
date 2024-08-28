@@ -51,4 +51,4 @@ mutation: {
 
 ## Defined in
 
-[types.ts:173](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L173)
+[sdk-react-provider/src/lib/types.ts:173](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/types.ts#L173)

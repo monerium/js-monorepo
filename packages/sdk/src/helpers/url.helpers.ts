@@ -1,6 +1,7 @@
 /**
  * Construct query parameters
  * @internal
+ * @hidden
  * */
 export const queryParams = (params?: Record<string, any>): string => {
   if (!params) return '';
