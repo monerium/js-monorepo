@@ -2,6 +2,12 @@
 
 A library to interact with Monerium API.
 
+## Installation
+
+```bash
+pnpm add @monerium/sdk
+```
+
 ## Example
 
 ```tsx
