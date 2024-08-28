@@ -1,8 +1,6 @@
 # Function: useAddress()
 
-> **useAddress**(`params`: \{`address`: `string`;`query`: `{}`; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"address"`, `Address`\>
-
-# Get address
+> **useAddress**(`params`: \{`address`: `string`;`query`: `{}`; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"address"`, [`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md)\>
 
 ## Parameters
 
@@ -10,11 +8,11 @@
 | ------ | ------ | ------ |
 | `params` | `object` |  |
 | `params.address` | `string` | Fetch a specific address. |
-| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<`Address`\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md)\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"address"`, `Address`\>
+[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"address"`, [`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md)\>
 
 ## Example
 
@@ -33,8 +31,6 @@ const {
 
 [API Documentation](https://monerium.dev/api-docs-v2#tag/addresses/operation/address)
 
-[Address interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/Address.md)
-
 ## Defined in
 
-[hooks.tsx:311](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L311)
+[sdk-react-provider/src/lib/hooks.tsx:296](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L296)

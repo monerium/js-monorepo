@@ -4,5 +4,5 @@
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| `companyName` | `string` | [types.ts:351](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L351) |
-| `country` | `string` | [types.ts:352](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L352) |
+| `companyName` | `string` | [types.ts:349](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L349) |
+| `country` | `string` | [types.ts:350](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L350) |

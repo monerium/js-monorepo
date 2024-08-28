@@ -4,5 +4,5 @@
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| `email` | `string` | [types.ts:457](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L457) |
-| `profile` | `string` | [types.ts:458](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L458) |
+| `email` | `string` | [types.ts:455](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L455) |
+| `profile` | `string` | [types.ts:456](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L456) |

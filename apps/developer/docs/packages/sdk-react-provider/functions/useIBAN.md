@@ -1,8 +1,6 @@
 # Function: useIBAN()
 
-> **useIBAN**(`params`: \{`iban`: `string`;`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<`IBAN`\>; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"iban"`, `IBAN`\>
-
-# Get IBAN
+> **useIBAN**(`params`: \{`iban`: `string`;`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)\>; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"iban"`, [`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)\>
 
 ## Parameters
 
@@ -10,11 +8,11 @@
 | ------ | ------ | ------ |
 | `params` | `object` |  |
 | `params.iban` | `string` | Fetch a specific IBAN |
-| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<`IBAN`\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"iban"`, `IBAN`\>
+[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"iban"`, [`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)\>
 
 ## Example
 
@@ -33,8 +31,6 @@ const {
 
 [API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/iban)
 
-[IBAN interface](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/docs/generated/interfaces/IBAN.md)
-
 ## Defined in
 
-[hooks.tsx:482](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L482)
+[sdk-react-provider/src/lib/hooks.tsx:453](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L453)

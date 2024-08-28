@@ -210,7 +210,9 @@ export interface Profile {
 }
 
 export interface ProfilesQueryParams {
+  /** profile state to filter by */
   state?: ProfileState;
+  /** profile kind to filter by */
   kind?: ProfileType;
 }
 
@@ -268,20 +270,16 @@ export type SubmitProfileDetailsPayload =
 export interface AddressesQueryParams {
   /** Filter the list on profile ID */
   profile?: string;
-  /** Filter the list on the chain */
+  /** Filter the list by chain */
   chain?: Chain | ChainId;
 }
-// export interface AddressFilters {
-//   /** The public key of the blockchain account.*/
-//   address: string;
-// }
 
 export interface Address {
-  /** The id of the profile. */
+  /** The id of the profile the address belongs to. */
   profile: string;
-
   /** The address  */
   address: string;
+  /** Which chains is the address linked on. */
   chains: Chain[];
 }
 
@@ -483,8 +481,11 @@ export interface LinkAddress {
 // -- IBANs
 
 export interface RequestIbanPayload {
+  /** the address to request the IBAN. */
   address: string;
+  /** the chain to request the IBAN. */
   chain: Chain | ChainId;
+  /** payment email notifications sent to customers, `true` by default. */
   emailNotifications: boolean;
 }
 
@@ -506,7 +507,9 @@ export interface IBANsResponse {
 }
 
 export interface MoveIbanPayload {
+  /** the address to move iban to */
   address: string;
+  /** the chain to move iban to */
   chain: Chain | ChainId;
 }
 
@@ -522,12 +525,19 @@ export type ClassOptions = {
 } & BearerTokenCredentials;
 
 export interface AuthFlowOptions {
+  /** the auth flow client ID for your application */
   clientId?: string;
+  /** the redirect URI defined by your application */
   redirectUri?: string;
+  /** the address your customer should link in auth flow */
   address?: string;
+  /** the signature of the address */
   signature?: string;
+  /** the chain of the address */
   chain?: Chain | ChainId;
+  /** the state oauth parameter */
   state?: string;
+  /** skip account creation in auth flow */
   skipCreateAccount?: boolean;
 }
 

@@ -21,4 +21,4 @@ Place this provider at the root of your application.
 
 ## Defined in
 
-[provider.tsx:19](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/provider.tsx#L19)
+[sdk-react-provider/src/lib/provider.tsx:19](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/provider.tsx#L19)

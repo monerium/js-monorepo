@@ -1,21 +1,20 @@
 # Function: useProfile()
 
-> **useProfile**(`params`: \{`profile`: `string`;`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<`Profile`\>; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"profile"`, `Profile`\>
+> **useProfile**(`params`: \{`profile`: `string`;`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md)\>; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"profile"`, [`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md)\>
 
-# Get single profile
-If no `profileId` is provided, the default profile is used.
+If no `profile` id is provided, the default profile is used.
 
 ## Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `params` | `object` |  |
-| `params.profile`? | `string` | The id of the profile. |
-| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<`Profile`\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+| `params.profile`? | `string` | The id of the profile |
+| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md)\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"profile"`, `Profile`\>
+[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"profile"`, [`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md)\>
 
 ## Example
 
@@ -34,8 +33,6 @@ const {
 
 [API Documentation](https://monerium.dev/api-docs#operation/profile)
 
-[Profile interface](/docs/packages/sdk/interfaces/Profile.md)
-
 ## Defined in
 
-[hooks.tsx:149](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L149)
+[sdk-react-provider/src/lib/hooks.tsx:143](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L143)
