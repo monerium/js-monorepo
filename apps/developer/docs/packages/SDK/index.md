@@ -1,5 +1,24 @@
 # @monerium/sdk
 
+A library to interact with Monerium API.
+
+## Example
+
+```tsx
+import { MoneriumClient } from '@monerium/sdk';
+
+const monerium = new MoneriumClient({
+ clientId: '...',
+ redirectUri: '...',
+ environment: 'sandbox',
+})
+
+await monerium.getAccess();
+
+// Retrieve profiles the client has access to.
+await monerium.getProfiles();
+```
+
 ## References
 
 ### default

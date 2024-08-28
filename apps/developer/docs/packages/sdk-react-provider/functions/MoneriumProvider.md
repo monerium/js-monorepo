@@ -2,7 +2,7 @@
 
 > **MoneriumProvider**(`params`: \{`children`: `ReactNode`;`clientId`: `string`;`environment`: `'sandbox'`;`redirectUri`: `string`;`redirectUrl`: `string`; \}): `Element`
 
-Place this provider at the root of your application.
+Wrap your application with the Monerium provider.
 
 ## Parameters
 
