@@ -7,7 +7,7 @@ import { MoneriumContext } from './context';
 import { AuthorizeParams } from './types';
 
 /**
- * Place this provider at the root of your application.
+ * Wrap your application with the Monerium provider.
  * @group Provider
  * @param params
  * @param params.children - Rest of the application.
