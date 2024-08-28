@@ -108,7 +108,7 @@ const config: Config = {
       'docusaurus-plugin-typedoc',
       {
         ...typedocConfig,
-        id: 'sdk',
+        id: '@monerium/sdk',
         entryPoints: ['../../packages/sdk/src/index.ts'],
         tsconfig: '../../packages/sdk/tsconfig.json',
         out: 'docs/packages/sdk',
