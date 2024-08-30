@@ -1,6 +1,7 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type * as Redocusaurus from 'redocusaurus';
 
 const config: Config = {
   title: 'Monerium',
@@ -61,6 +62,32 @@ const config: Config = {
         },
       } satisfies Preset.Options,
     ],
+    [
+      'redocusaurus',
+      {
+        // Plugin Options for loading OpenAPI files
+        // https://redocusaurus.vercel.app/docs/getting-started/plugin-options
+        specs: [
+          // How to use a local instance of OpenAPI spec
+          // {
+          //   id: 'openapi',
+          //   spec: './src/openapi-v2.yaml',
+          //   route: '/docs/openapi/',
+          // },
+          // Let's use the remote instance for now.
+          {
+            id: 'api',
+            spec: 'https://monerium.dev/openapi-v2.yml',
+            route: '/docs/api/',
+          },
+        ],
+        // Theme Options for modifying how redoc renders them
+        theme: {
+          // Change with your site colors
+          primaryColor: '#1890ff',
+        },
+      },
+    ] satisfies Redocusaurus.PresetEntry,
   ],
 
   themeConfig: {
@@ -73,13 +100,8 @@ const config: Config = {
         src: 'img/logo.png',
       },
       items: [
-        // {
-        //   type: 'docSidebar',
-        //   sidebarId: 'tutorialSidebar',
-        //   position: 'left',
-        //   label: 'Tutorial',
-        // },
         { to: '/docs', label: 'Docs', position: 'left' },
+        { to: '/docs/api', label: 'API', position: 'left' },
         {
           href: 'https://github.com/monerium/js-monorepo',
           label: 'GitHub',
