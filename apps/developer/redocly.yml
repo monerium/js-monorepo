@@ -1,0 +1,36 @@
+extends:
+  - recommended
+rules:
+  no-unused-components: error
+theme:
+  openapi:
+    expandResponses: 200,201,202
+    theme:
+      colors:
+        primary:
+          main: "#2c6ca7"
+          light: "#769fc4"
+        success:
+          main: "#6ac07a"
+          light: "#81ec9a"
+          dark: "#083312"
+          contrastText: "#000"
+        error:
+          main: "#f1706c"
+        http:
+          get: "#6ac072"
+          post: "#2383c5"
+        rightPanel:
+          backgroundColor: "#303846"
+      typography:
+        fontSize: 14px
+        fontFamily: Roboto, sans-serif
+        optimizeSpeed: true
+        smoothing: antialiased
+        headings:
+          fontWeight: bold
+          lineHeight: 1em
+        links:
+          color: "#2c6ca7"
+          visited: "#2c6ca7"
+          hover: "#91538a"
