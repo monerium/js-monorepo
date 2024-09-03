@@ -19,6 +19,7 @@ const monerium = new MoneriumClient({
  environment: 'sandbox',
 })
 
+// Will redirect the user to Monerium's authentication code flow.
 await monerium.getAccess();
 
 // Retrieve profiles the client has access to.
