@@ -74,6 +74,7 @@ const config: Config = {
           //   spec: './src/openapi-v2.yaml',
           //   route: '/docs/openapi/',
           // },
+
           // Let's use the remote instance for now.
           {
             id: 'api',
@@ -81,11 +82,6 @@ const config: Config = {
             route: '/docs/api/',
           },
         ],
-        // Theme Options for modifying how redoc renders them
-        theme: {
-          // Change with your site colors
-          primaryColor: '#1890ff',
-        },
       },
     ] satisfies Redocusaurus.PresetEntry,
   ],
