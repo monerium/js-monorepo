@@ -34,11 +34,14 @@ The Authorization Code grant type is used by public clients which can not secure
 Further reading:
 
 - [The OAuth 2.0 Authorization Framework - Authorization Code Grant](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1)
-- [Proof Key for Code Exchange (PKCE) by OAuth Public Clients ](https://datatracker.ietf.org/doc/html/rfc7636)
 
 #### Authorization code flow with proof key for code exchange (PKCE)
 
-The goal of the SDK is to provide a simplified way for developers to interact with the Monerium API by abstracting the complexity of the OAuth 2.0 Authorization Framework.
+OAuth 2.0 includes an extension of the Authorization Code Flow to safeguard public clients against authorization code interception attacks. This extension is known as Proof Key for Code Exchange (PKCE).
+
+In the PKCE-enhanced authorization code flow, the calling application generates a secret called the code verifier, which is later validated by the authorization server. The application also creates a code challenge by hashing the code verifier and sends this value over HTTPS to obtain an authorization code. This approach ensures that even if a malicious attacker intercepts the authorization code, they cannot exchange it for a token without the code verifier.
+
+At a high level, the entire authorization flow for a partner application works as follows:
 
 <figure>
   <img
@@ -47,8 +50,16 @@ The goal of the SDK is to provide a simplified way for developers to interact wi
   <figcaption>Monerium's OAuth 2.0 PKCE flow diagram.</figcaption>
 </figure>
 
+Further reading:
+
+- [Proof Key for Code Exchange (PKCE) by OAuth Public Clients ](https://datatracker.ietf.org/doc/html/rfc7636)
+
 # Packages
 
 ## [@monerium/sdk](packages/sdk/index.md)
+
+The goal of the SDK is to provide a simplified way for developers to interact with the Monerium API by abstracting the complexity of the OAuth 2.0 Authorization Framework.
+
+TBD
 
 ## [@monerium/sdk-react-provider](packages/sdk-react-provider/index.md)
