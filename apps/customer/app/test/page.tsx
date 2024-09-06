@@ -20,6 +20,7 @@ import {
   useAddress,
   useAddresses,
   useAuth,
+  useBalance,
   useBalances,
   useIBAN,
   useIBANs,
@@ -58,8 +59,12 @@ export default function Test() {
     orderId: orders?.[0]?.id as string,
   });
 
+  const { balances: walletBalances } = useBalance({
+    address: walletAddress as string,
+    chain: chainId,
+  });
+
   const { balances } = useBalances({
-    profile: profile?.id as string,
     query: {
       refetchOnWindowFocus: true,
     },
@@ -81,9 +86,7 @@ export default function Test() {
   /**
    * Monerium mutations
    */
-  const { linkAddress, error: linkAddressError } = useLinkAddress({
-    profile: profile?.id as string,
-  });
+  const { linkAddress, error: linkAddressError } = useLinkAddress();
 
   const { submitProfileDetails, error: submitProfileDetailsError } =
     useSubmitProfileDetails({ profile: profile?.id as string });
@@ -589,9 +592,9 @@ export default function Test() {
       signMessageAsync({ message: constants.LINK_MESSAGE }).then(
         (signature) => {
           linkAddress({
-            message: constants.LINK_MESSAGE,
+            // message: constants.LINK_MESSAGE,
             address: walletAddress as string,
-            chain: chainId,
+            chain: chains?.[0] || 'ethereum',
             signature: signature,
           });
         }
@@ -600,33 +603,35 @@ export default function Test() {
     return (
       <form onSubmit={linkingAddress}>
         <div>
-          <h3>Currency:</h3>
+          <h3>Currency (not used):</h3>
           <label>
-            <input id="currency" type="checkbox" name="currency" value="eur" />{' '}
-            EUR
+            <input id="currency" type="radio" name="currency" value="eur" /> EUR
           </label>
           <label>
-            <input id="currency" type="checkbox" name="currency" value="gbp" />{' '}
-            GBP
+            <input id="currency" type="radio" name="currency" value="gbp" /> GBP
           </label>
           <label>
-            <input id="currency" type="checkbox" name="currency" value="usd" />{' '}
-            USD
+            <input id="currency" type="radio" name="currency" value="usd" /> USD
           </label>
         </div>
         <div>
           <h3>Chain:</h3>
           <label>
-            <input id="chain" type="checkbox" name="chain" value="ethereum" />{' '}
+            <input
+              id="chain"
+              type="radio"
+              name="chain"
+              value="ethereum"
+              defaultChecked
+            />{' '}
             Ethereum
           </label>
           <label>
-            <input id="chain" type="checkbox" name="chain" value="polygon" />{' '}
+            <input id="chain" type="radio" name="chain" value="polygon" />{' '}
             Polygon
           </label>
           <label>
-            <input id="chain" type="checkbox" name="chain" value="gnosis" />{' '}
-            Gnosis
+            <input id="chain" type="radio" name="chain" value="gnosis" /> Gnosis
           </label>
         </div>
         <div style={{ color: 'red' }}>
@@ -664,9 +669,9 @@ export default function Test() {
       <div>
         <ConnectButton />
       </div>
-      <h1>Wallet</h1>
+      {/* <h1>Wallet</h1>
       <p>Address: {walletAddress}</p>
-      <p>Chain ID: {chainId}</p>
+      <p>Chain ID: {chainId}</p> */}
       <h1>Auth</h1>
       <p>isAuthorized: {isAuthorized ? 'true' : 'false'}</p>
       <div style={{ color: 'red' }}>
@@ -745,6 +750,20 @@ export default function Test() {
               <details>
                 <summary>Click to Expand, total: {balances?.length}</summary>
                 <PrettyPrintJson data={balances} />
+              </details>
+            </div>
+            <div>
+              <h2>Balance (wallet)</h2>
+              <details>
+                <summary>
+                  Click to Expand, balance:{' '}
+                  {
+                    walletBalances?.balances.find((b) => b.currency === 'eur')
+                      ?.amount
+                  }{' '}
+                  EUR
+                </summary>
+                <PrettyPrintJson data={walletBalances} />
               </details>
             </div>
             <div>

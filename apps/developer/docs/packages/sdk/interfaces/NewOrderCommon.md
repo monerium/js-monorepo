@@ -9,10 +9,10 @@
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| `amount` | `string` | [types.ts:415](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L415) |
-| `counterpart` | [`Counterpart`](/docs/packages/sdk/interfaces/Counterpart.md) | [types.ts:418](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L418) |
-| `currency` | [`Currency`](/docs/packages/sdk/enumerations/Currency.md) | [types.ts:417](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L417) |
-| `memo?` | `string` | [types.ts:420](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L420) |
-| `message` | `string` | [types.ts:419](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L419) |
-| `signature` | `string` | [types.ts:416](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L416) |
-| `supportingDocumentId?` | `string` | [types.ts:421](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L421) |
+| `amount` | `string` | [types.ts:429](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L429) |
+| `counterpart` | [`Counterpart`](/docs/packages/sdk/interfaces/Counterpart.md) | [types.ts:432](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L432) |
+| `currency` | [`Currency`](/docs/packages/sdk/enumerations/Currency.md) | [types.ts:431](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L431) |
+| `memo?` | `string` | [types.ts:434](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L434) |
+| `message` | `string` | [types.ts:433](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L433) |
+| `signature` | `string` | [types.ts:430](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L430) |
+| `supportingDocumentId?` | `string` | [types.ts:435](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L435) |

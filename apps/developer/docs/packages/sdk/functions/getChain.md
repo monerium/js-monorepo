@@ -31,4 +31,4 @@ getChain(80002) // 'polygon'
 
 ## Defined in
 
-[utils.ts:124](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L124)
+[utils.ts:130](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L130)

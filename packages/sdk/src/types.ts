@@ -10,7 +10,7 @@ export type ENV = 'sandbox' | 'production';
 
 export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'arbitrum' | 'noble';
 
-export type ChainId =
+export type EvmChainId =
   | number
   | 1
   | 11155111
@@ -20,6 +20,10 @@ export type ChainId =
   | 80002
   | 42161
   | 421614;
+
+export type ChainId = EvmChainId | CosmosChainId;
+
+export type CosmosChainId = 'noble-1' | 'grand-1' | 'florin-1';
 
 export enum Currency {
   eur = 'eur',
@@ -293,6 +297,11 @@ export interface Addresses {
 }
 
 // -- getBalances
+
+export interface BalancesFilter {
+  address: string;
+  chain: Chain | ChainId;
+}
 export interface CurrencyBalance {
   currency: Currency;
   amount: string;
@@ -473,7 +482,7 @@ export interface LinkAddress {
    *
    * `I hereby declare that I am the address owner.`
    */
-  message: string;
+  message?: string;
   /**
    * The signature hash of signing the `message` with the private key associated with the given address.
    * For signing on-chain with ERC1271 contracts, use `0x`, visit the documentation for further details.

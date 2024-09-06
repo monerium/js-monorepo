@@ -4,4 +4,4 @@
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| `corporate` | [`CorporateProfileDetails`](/docs/packages/sdk/interfaces/CorporateProfileDetails.md) | [types.ts:262](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L262) |
+| `corporate` | [`CorporateProfileDetails`](/docs/packages/sdk/interfaces/CorporateProfileDetails.md) | [types.ts:271](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L271) |

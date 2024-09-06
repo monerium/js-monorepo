@@ -1,6 +1,6 @@
 # Function: placeOrderMessage()
 
-> **placeOrderMessage**(`amount`: `string` \| `number`, `currency`: [`Currency`](/docs/packages/sdk/enumerations/Currency.md), `receiver`: `string`, `chain`?: `number` \| [`Chain`](/docs/packages/sdk/type-aliases/Chain.md)): `string`
+> **placeOrderMessage**(`amount`: `string` \| `number`, `currency`: [`Currency`](/docs/packages/sdk/enumerations/Currency.md), `receiver`: `string`, `chain`?: [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md)): `string`
 
 The message to be signed when placing an order.
 
@@ -11,7 +11,7 @@ The message to be signed when placing an order.
 | `amount` | `string` \| `number` | The amount to be sent |
 | `currency` | [`Currency`](/docs/packages/sdk/enumerations/Currency.md) | The currency to be sent |
 | `receiver` | `string` | The receiver of the funds |
-| `chain`? | `number` \| [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) | The chainId of the network if it's a cross-chain transaction |
+| `chain`? | [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md) | The chainId of the network if it's a cross-chain transaction |
 
 ## Returns
 
@@ -39,4 +39,4 @@ off-ramp:
 
 ## Defined in
 
-[utils.ts:75](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L75)
+[utils.ts:81](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L81)

@@ -21,6 +21,8 @@ import type {
   Balances,
   BearerProfile,
   BearerTokenCredentials,
+  Chain,
+  ChainId,
   ClassOptions,
   ClientCredentials,
   ClientCredentialsPayload,
@@ -372,11 +374,21 @@ export class MoneriumClient {
 
   /**
    * @group Addresses
-   * @param {string} profile - the id of the profile to fetch balances.
-   * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/profile-balances | API Documentation}
+   * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances| API Documentation}
    */
-  getBalances(profile: string): Promise<Balances[]> {
-    return this.#api<Balances[]>('get', `profiles/${profile}/balances`);
+  getBalances(): Promise<Balances[]> {
+    return this.#api<Balances[]>('get', `balances`);
+  }
+
+  /**
+   * @group Addresses
+   * {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances}
+   */
+  getBalance(address: string, chain: Chain | ChainId): Promise<Balances> {
+    return this.#api<Balances>(
+      'get',
+      `balances/${parseChain(chain)}/${address}`
+    );
   }
 
   /**

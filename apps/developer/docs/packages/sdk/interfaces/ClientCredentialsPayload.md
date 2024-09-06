@@ -8,6 +8,6 @@ One of the options for the [AuthArgs](/docs/packages/sdk/type-aliases/AuthArgs.m
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| `client_id` | `string` | [types.ts:70](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L70) |
-| `client_secret` | `string` | [types.ts:71](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L71) |
-| `grant_type` | `"client_credentials"` | [types.ts:69](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L69) |
+| `client_id` | `string` | [types.ts:79](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L79) |
+| `client_secret` | `string` | [types.ts:80](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L80) |
+| `grant_type` | `"client_credentials"` | [types.ts:78](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L78) |

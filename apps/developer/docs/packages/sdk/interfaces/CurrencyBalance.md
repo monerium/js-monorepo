@@ -4,5 +4,5 @@
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| `amount` | `string` | [types.ts:293](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L293) |
-| `currency` | [`Currency`](/docs/packages/sdk/enumerations/Currency.md) | [types.ts:292](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L292) |
+| `amount` | `string` | [types.ts:307](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L307) |
+| `currency` | [`Currency`](/docs/packages/sdk/enumerations/Currency.md) | [types.ts:306](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L306) |

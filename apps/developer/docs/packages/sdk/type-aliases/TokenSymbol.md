@@ -4,4 +4,4 @@
 
 ## Defined in
 
-[types.ts:26](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L26)
+[types.ts:35](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L35)

@@ -174,7 +174,7 @@ process.env.CI !== 'true' &&
         });
       } catch (err) {
         expect((err as Error).message).toBe(
-          'Unable to load refresh token info'
+          'Failed to handle access request: Unable to load refresh token info: Access not found via code: testRefreshToken'
         );
       }
 

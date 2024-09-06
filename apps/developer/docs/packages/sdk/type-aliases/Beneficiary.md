@@ -6,8 +6,8 @@
 
 | Name | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| `ownershipPercentage` | `number` | Ownership in % that is between 25% and 100%. | [types.ts:242](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L242) |
+| `ownershipPercentage` | `number` | Ownership in % that is between 25% and 100%. | [types.ts:251](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L251) |
 
 ## Defined in
 
-[types.ts:240](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L240)
+[types.ts:249](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L249)

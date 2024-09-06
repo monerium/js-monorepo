@@ -254,12 +254,9 @@ describe('useAddresses', () => {
 });
 describe('useBalances', () => {
   test('returns the profile', async () => {
-    const { result } = renderHook(
-      () => useBalances({ profile: 'testProfileId' }),
-      {
-        wrapper,
-      }
-    );
+    const { result } = renderHook(() => useBalances(), {
+      wrapper,
+    });
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(true);
@@ -300,12 +297,9 @@ describe('usePlaceOrder', () => {
 });
 describe('useLinkAddress', () => {
   test('links address', async () => {
-    const { result } = renderHook(
-      () => useLinkAddress({ profile: 'profileId-12345' }),
-      {
-        wrapper,
-      }
-    );
+    const { result } = renderHook(() => useLinkAddress(), {
+      wrapper,
+    });
     const { result: authResult } = renderHook(() => useAuth(), {
       wrapper,
     });

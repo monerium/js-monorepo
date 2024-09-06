@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import MoneriumClient, {
   Address,
   Balances,
+  BalancesFilter,
   Chain,
   ChainId,
   IBAN,
@@ -48,10 +49,10 @@ export const keys = {
     'addresses',
     ...(filter ? [filter] : []),
   ],
-  getBalances: (profile?: string) => [
+  getBalances: (filter?: BalancesFilter) => [
     'monerium',
     'balances',
-    ...(profile ? [profile] : []),
+    ...(filter ? [filter] : []),
   ],
   getIban: (iban: string) => ['monerium', 'iban', iban],
   getIbans: (filter?: unknown) => [
@@ -317,6 +318,10 @@ export function useAddress({
         throw new Error('User not authorized');
       }
 
+      if (!address) {
+        throw new Error('Address is required');
+      }
+
       return sdk.getAddress(address);
     },
     enabled: Boolean(
@@ -385,6 +390,58 @@ export function useAddresses({
   };
 }
 /**
+ * # Get balance for a an address on a give chain
+ * @group Hooks
+ * @param {Object} [params] No required parameters.
+ * @param {QueryOptions<Balances[]>} [params.address] The address to fetch the balance for.
+ * @param {QueryOptions<Balances[]>} [params.chain] The chain to fetch the balance for.
+ * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
+ * @example
+ * ```ts
+ * const {
+ *    balance, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useBalances();
+ * ```
+ * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances | API Documentation}
+ *
+ */
+export function useBalance({
+  address,
+  chain,
+  query,
+}: {
+  address: string;
+  chain: Chain | ChainId;
+  query?: QueryOptions<Balances>;
+}): QueryResult<'balances', Balances> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getBalances({ address, chain }),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+      return sdk.getBalance(address, chain);
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+  return {
+    balances: data,
+    ...rest,
+  };
+}
+/**
  * @group Hooks
  * @category Addresses
  * @param {Object} params
@@ -400,23 +457,20 @@ export function useAddresses({
  *    ...moreUseQueryResults
  * } = useBalances();
  * ```
- * @see {@link https://monerium.dev/api-docs#operation/profile-balances | API Documentation}
+ * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances | API Documentation}
  */
 export function useBalances({
-  profile,
   query,
 }: {
-  /** Fetch balances for a specific profile. */
-  profile: string;
   /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Balances[]>;
-}): QueryResult<'balances', Balances[]> {
+} = {}): QueryResult<'balances', Balances[]> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
 
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getBalances(profile),
+    queryKey: keys.getBalances(),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -425,11 +479,9 @@ export function useBalances({
         throw new Error('User not authorized');
       }
 
-      return sdk.getBalances(profile);
+      return sdk.getBalances();
     },
-    enabled: Boolean(
-      sdk && isAuthorized && profile && (query?.enabled ?? true)
-    ),
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
   return {
     balances: data,
@@ -981,17 +1033,15 @@ export function usePlaceOrder({
  */
 
 export function useLinkAddress({
-  profile,
   mutation,
 }: {
-  profile: string;
   /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<
     { status: number; statusText: string },
     Error,
     LinkAddress
   >;
-}): MutationResult<
+} = {}): MutationResult<
   'linkAddress',
   { status: number; statusText: string },
   Error,
@@ -1011,14 +1061,18 @@ export function useLinkAddress({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.linkAddress({ profile: profile, ...body });
+      return sdk.linkAddress(body);
     },
     onSuccess(data, variables, context) {
       // Refetch all orders on success.
       queryClient.invalidateQueries({
         queryKey: keys.getAddresses(),
       });
-
+      if (variables.profile) {
+        queryClient.invalidateQueries({
+          queryKey: keys.getProfile(variables.profile),
+        });
+      }
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
     },

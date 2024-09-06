@@ -1,13 +1,13 @@
 # Function: useIBANs()
 
-> **useIBANs**(`params`?: \{`chain`: `number` \| `Chain`;`profile`: `string`;`query`: `{}`; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"ibans"`, [`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)[]\>
+> **useIBANs**(`params`?: \{`chain`: `ChainId` \| `Chain`;`profile`: `string`;`query`: `{}`; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"ibans"`, [`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)[]\>
 
 ## Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `params`? | `object` | No required parameters. |
-| `params.chain`? | `number` \| `Chain` | Fetch IBANs for a specific chain. |
+| `params.chain`? | `ChainId` \| `Chain` | Fetch IBANs for a specific chain. |
 | `params.profile`? | `string` | Fetch IBANs for a specific profile. |
 | `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)[]\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
 
@@ -34,4 +34,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:508](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L508)
+[sdk-react-provider/src/lib/hooks.tsx:559](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L559)

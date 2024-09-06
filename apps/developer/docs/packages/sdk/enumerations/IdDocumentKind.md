@@ -7,6 +7,6 @@ The ID document must verify the person's name, birthday, and nationality
 
 | Enumeration Member | Value | Defined in |
 | ------ | ------ | ------ |
-| `drivingLicense` | `"drivingLicense"` | [types.ts:187](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L187) |
-| `nationalIdentityCard` | `"nationalIdentityCard"` | [types.ts:186](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L186) |
-| `passport` | `"passport"` | [types.ts:185](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L185) |
+| `drivingLicense` | `"drivingLicense"` | [types.ts:196](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L196) |
+| `nationalIdentityCard` | `"nationalIdentityCard"` | [types.ts:195](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L195) |
+| `passport` | `"passport"` | [types.ts:194](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L194) |
