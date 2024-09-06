@@ -51,8 +51,12 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Generate Documentation
+        if: github.ref == 'refs/heads/main' &&  needs.release-please.outputs.releases_created
+        run: pnpm run generate-docs
+
       - name: Commit and Push Documentation
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' &&  needs.release-please.outputs.releases_created
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
@@ -66,7 +70,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' &&  needs.release-please.outputs.releases_created
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./apps/developer/build

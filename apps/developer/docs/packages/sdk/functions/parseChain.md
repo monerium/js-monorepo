@@ -1,6 +1,6 @@
 # Function: parseChain()
 
-> **parseChain**(`chain`: `number` \| [`Chain`](/docs/packages/sdk/type-aliases/Chain.md)): [`Chain`](/docs/packages/sdk/type-aliases/Chain.md)
+> **parseChain**(`chain`: [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md)): [`Chain`](/docs/packages/sdk/type-aliases/Chain.md)
 
 This will resolve the chainId number to the corresponding chain name.
 
@@ -8,7 +8,7 @@ This will resolve the chainId number to the corresponding chain name.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `chain` | `number` \| [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) | The chainId of the network |
+| `chain` | [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md) | The chainId of the network |
 
 ## Returns
 

@@ -193,7 +193,7 @@ const { id: profileId, accounts }: Profile = await monerium.getProfile(
 );
 
 // Fetching all balances for a specific profile
-const balances: Balances = await monerium.getBalances(profileId);
+const balances: Balances = await monerium.getBalances();
 ```
 
 API documentation:

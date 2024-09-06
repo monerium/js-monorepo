@@ -48,6 +48,12 @@ export const rfc3339 = (d: Date) => {
 export const parseChain = (chain: Chain | ChainId) => {
   if (typeof chain === 'number') {
     return getChain(chain);
+  } else if (
+    chain === 'noble-1' ||
+    chain === 'florin-1' ||
+    chain === 'grand-1'
+  ) {
+    return 'noble';
   }
   return chain;
 };
@@ -149,7 +155,7 @@ export const getAmount = (
   if (!balances || !address || !chain) return '0';
   const curr = currency || Currency.eur;
 
-  const balance = balances.find(
+  const balance = balances?.find(
     (account) =>
       account.address === address && account.chain === parseChain(chain)
   )?.balances;

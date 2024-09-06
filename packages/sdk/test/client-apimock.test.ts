@@ -42,9 +42,9 @@ describe('MoneriumClient', () => {
   describe('Addresses', () => {
     test('link address using chainId', async () => {
       const body = {
-        profile: 'testProfile',
+        // profile: 'testProfile',
         address: PUBLIC_KEY,
-        message: message,
+        // message: message,
         signature: OWNER_SIGNATURE,
         chain: 11155111,
       };
@@ -59,9 +59,9 @@ describe('MoneriumClient', () => {
         expect.objectContaining({
           method: 'post',
           body: JSON.stringify({
-            profile: 'testProfile',
+            // profile: 'testProfile',
             address: PUBLIC_KEY,
-            message: message,
+            // message: message,
             signature: OWNER_SIGNATURE,
             chain: 'ethereum',
           }),

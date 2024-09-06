@@ -35,9 +35,7 @@ const WalletList = memo(
   }) => {
     const router = useRouter();
     const [filteredList, setFilteredList] = useState<Account[]>();
-    const { profile } = useProfile();
     const { balances, isLoading: loadingBalances } = useBalances({
-      profile: profile?.id as string,
       query: {
         refetchOnWindowFocus: false,
       },

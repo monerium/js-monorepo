@@ -1,7 +1,7 @@
 # Type Alias: Chain
 
-> **Chain**: `"ethereum"` \| `"gnosis"` \| `"polygon"` \| `"gnosismainnet"`
+> **Chain**: `"ethereum"` \| `"gnosis"` \| `"polygon"` \| `"arbitrum"` \| `"noble"`
 
 ## Defined in
 
-[types.ts:15](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L15)
+[types.ts:11](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L11)
