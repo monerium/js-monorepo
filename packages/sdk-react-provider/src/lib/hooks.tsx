@@ -12,6 +12,7 @@ import MoneriumClient, {
   NewOrder,
   Order,
   OrderState,
+  parseChain,
   Profile,
   ProfilePermissions,
   RequestIbanPayload,
@@ -35,10 +36,10 @@ import {
  * */
 export const keys = {
   getAll: ['monerium'],
-  getProfile: (profileId: string) => [
+  getProfile: (profile: string) => [
     'monerium',
     'profile',
-    ...(profileId ? [profileId] : []),
+    ...(profile ? [profile] : []),
   ],
   getProfiles: ['monerium', 'profiles'],
   getAddress: (address: string) => ['monerium', 'address', [address]],
@@ -47,10 +48,10 @@ export const keys = {
     'addresses',
     ...(filter ? [filter] : []),
   ],
-  getBalances: (profileId?: string) => [
+  getBalances: (profile?: string) => [
     'monerium',
     'balances',
-    ...(profileId ? [profileId] : []),
+    ...(profile ? [profile] : []),
   ],
   getIban: (iban: string) => ['monerium', 'iban', iban],
   getIbans: (filter?: unknown) => [
@@ -361,7 +362,10 @@ export function useAddresses({
 
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getAddresses({ profile, chain }),
+    queryKey: keys.getAddresses({
+      profile,
+      chain: chain ? parseChain(chain) : chain,
+    }),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -960,7 +964,7 @@ export function usePlaceOrder({
  * @group Hooks
  * @category Profiles
  * @param param
- * @param {File} param.profileId Which profile to link the address.
+ * @param {string} param.profile Which profile to link the address.
  *
  * @example
  * ```ts
@@ -977,10 +981,10 @@ export function usePlaceOrder({
  */
 
 export function useLinkAddress({
-  profileId,
+  profile,
   mutation,
 }: {
-  profileId: string;
+  profile: string;
   /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<
     { status: number; statusText: string },
@@ -1007,13 +1011,14 @@ export function useLinkAddress({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.linkAddress({ profile: profileId, ...body });
+      return sdk.linkAddress({ profile: profile, ...body });
     },
     onSuccess(data, variables, context) {
       // Refetch all orders on success.
       queryClient.invalidateQueries({
-        queryKey: keys.getProfile(profileId),
+        queryKey: keys.getAddresses(),
       });
+
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
     },

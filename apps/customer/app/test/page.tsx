@@ -71,6 +71,7 @@ export default function Test() {
   });
 
   const { addresses } = useAddresses();
+  const { addresses: addressesByChains } = useAddresses({ chain: 'ethereum' });
   const { address } = useAddress({
     address: addresses?.[0]?.address as string,
   });
@@ -81,7 +82,7 @@ export default function Test() {
    * Monerium mutations
    */
   const { linkAddress, error: linkAddressError } = useLinkAddress({
-    profileId: profile?.id as string,
+    profile: profile?.id as string,
   });
 
   const { submitProfileDetails, error: submitProfileDetailsError } =
@@ -712,6 +713,15 @@ export default function Test() {
               <details>
                 <summary>Click to Expand, total: {addresses?.length}</summary>
                 <PrettyPrintJson data={addresses} />
+              </details>
+            </div>
+            <div>
+              <h2>Addresses On Ethereum</h2>
+              <details>
+                <summary>
+                  Click to Expand, total: {addressesByChains?.length}
+                </summary>
+                <PrettyPrintJson data={addressesByChains} />
               </details>
             </div>
             <div>
