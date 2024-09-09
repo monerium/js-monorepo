@@ -1,6 +1,6 @@
 # Function: useLinkAddress()
 
-> **useLinkAddress**(`param`: \{`mutation`: [`MutationOptions`](/docs/packages/sdk-react-provider/type-aliases/MutationOptions.md)\<\{`status`: `number`;`statusText`: `string`; \}, `Error`, [`LinkAddress`](/docs/packages/sdk-react-provider/interfaces/LinkAddress.md)\>;`profileId`: `string`; \}): [`MutationResult`](/docs/packages/sdk-react-provider/type-aliases/MutationResult.md)\<`"linkAddress"`, \{`status`: `number`;`statusText`: `string`; \}, `Error`, [`LinkAddress`](/docs/packages/sdk-react-provider/interfaces/LinkAddress.md)\>
+> **useLinkAddress**(`param`: \{`mutation`: [`MutationOptions`](/docs/packages/sdk-react-provider/type-aliases/MutationOptions.md)\<\{`status`: `number`;`statusText`: `string`; \}, `Error`, [`LinkAddress`](/docs/packages/sdk-react-provider/interfaces/LinkAddress.md)\>;`profile`: `string`; \}): [`MutationResult`](/docs/packages/sdk-react-provider/type-aliases/MutationResult.md)\<`"linkAddress"`, \{`status`: `number`;`statusText`: `string`; \}, `Error`, [`LinkAddress`](/docs/packages/sdk-react-provider/interfaces/LinkAddress.md)\>
 
 # Add address to profile.
 
@@ -10,7 +10,7 @@
 | ------ | ------ | ------ |
 | `param` | `object` |  |
 | `param.mutation`? | [`MutationOptions`](/docs/packages/sdk-react-provider/type-aliases/MutationOptions.md)\<\{`status`: `number`;`statusText`: `string`; \}, `Error`, [`LinkAddress`](/docs/packages/sdk-react-provider/interfaces/LinkAddress.md)\> | See [Tanstack Query - useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation) options. |
-| `param.profileId` | `string` | Which profile to link the address. |
+| `param.profile` | `string` | Which profile to link the address. |
 
 ## Returns
 
@@ -35,4 +35,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:979](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L979)
+[sdk-react-provider/src/lib/hooks.tsx:985](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L985)

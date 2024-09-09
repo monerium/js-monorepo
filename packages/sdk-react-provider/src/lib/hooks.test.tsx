@@ -301,7 +301,7 @@ describe('usePlaceOrder', () => {
 describe('useLinkAddress', () => {
   test('links address', async () => {
     const { result } = renderHook(
-      () => useLinkAddress({ profileId: 'profileId-12345' }),
+      () => useLinkAddress({ profile: 'profileId-12345' }),
       {
         wrapper,
       }
