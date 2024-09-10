@@ -35,4 +35,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:985](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L985)
+[sdk-react-provider/src/lib/hooks.tsx:984](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L984)
