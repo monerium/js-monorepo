@@ -8,13 +8,18 @@ export type Config = {
 
 export type ENV = 'sandbox' | 'production';
 
-export type EthereumTestnet = 'sepolia';
-export type GnosisTestnet = 'chiado';
-export type PolygonTestnet = 'amoy';
+export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'arbitrum' | 'noble';
 
-export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'gnosismainnet';
-
-export type ChainId = number | 1 | 11155111 | 100 | 137 | 10200 | 80002;
+export type ChainId =
+  | number
+  | 1
+  | 11155111
+  | 100
+  | 137
+  | 10200
+  | 80002
+  | 42161
+  | 421614;
 
 export enum Currency {
   eur = 'eur',
