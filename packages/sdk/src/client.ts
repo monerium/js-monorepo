@@ -9,12 +9,16 @@ import {
   rest,
 } from './helpers';
 import type {
+  Address,
+  Addresses,
+  AddressesQueryParams,
   AuthArgs,
   AuthCodeRequest,
   AuthContext,
   AuthFlowOptions,
   AuthorizationCodeCredentials,
   Balances,
+  BalancesFilter,
   BearerProfile,
   BearerTokenCredentials,
   ClassOptions,
@@ -38,7 +42,7 @@ import type {
   SupportingDoc,
   Token,
 } from './types';
-import { mapChainIdToChain, urlEncoded } from './utils';
+import { mapChainIdToChain, parseChain, urlEncoded } from './utils';
 
 // import pjson from "../package.json";
 const { STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } = constants;
@@ -319,12 +323,15 @@ export class MoneriumClient {
    * @param {string=} profileId - the id of the profile to fetch balances.
    * @category Accounts
    */
-  getBalances(profileId?: string): Promise<Balances[]> {
-    if (profileId) {
-      return this.#api<Balances[]>('get', `profiles/${profileId}/balances`);
-    } else {
-      return this.#api<Balances[]>('get', `balances`);
+  getBalances(filter?: BalancesFilter): Promise<Balances[]> {
+    if (filter) {
+      return this.#api<Balances[]>(
+        'get',
+        `balances/${parseChain(filter.chain)}/${filter.address}`
+      );
     }
+    return this.#api<Balances[]>('get', `balances`);
+    // }
   }
 
   /**
@@ -355,18 +362,31 @@ export class MoneriumClient {
   // -- Write Methods
 
   /**
-   * {@link https://monerium.dev/api-docs#operation/profile-addresses}
+   * {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/addresses}
    * @category Accounts
    */
-  linkAddress(profileId: string, body: LinkAddress): Promise<LinkedAddress> {
+  getAddresses(params?: AddressesQueryParams): Promise<Addresses> {
+    const searchParams = urlEncoded(params as Record<string, string>);
+    const url = searchParams ? `addresses?${searchParams}` : 'addresses';
+    // return this.#api<Order[]>('get', url);
+    return this.#api('get', url);
+  }
+  /**
+   * {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/address}
+   * @category Accounts
+   */
+  getAddress(address: string): Promise<Address> {
+    return this.#api('get', `addresses/${address}`);
+  }
+  /**
+   * {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/link-address}
+   * @category Accounts
+   */
+  linkAddress(body: LinkAddress): Promise<LinkedAddress> {
     body = mapChainIdToChain(body);
-    body.accounts = body.accounts.map((account) => mapChainIdToChain(account));
+    // body.accounts = body.accounts.map((account) => mapChainIdToChain(account));
 
-    return this.#api(
-      'post',
-      `profiles/${profileId}/addresses`,
-      JSON.stringify(body)
-    );
+    return this.#api('post', `addresses`, JSON.stringify(body));
   }
 
   /**

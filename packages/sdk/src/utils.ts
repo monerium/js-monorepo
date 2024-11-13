@@ -41,6 +41,12 @@ export const rfc3339 = (d: Date) => {
 export const parseChain = (chain: Chain | ChainId) => {
   if (typeof chain === 'number') {
     return getChain(chain);
+  } else if (
+    chain === 'noble-1' ||
+    chain === 'florin-1' ||
+    chain === 'grand-1'
+  ) {
+    return 'noble';
   }
   return chain;
 };
@@ -101,6 +107,9 @@ export const getChain = (chainId: number): Chain => {
     case 137:
     case 80002:
       return 'polygon';
+    case 42161:
+    case 421614:
+      return 'arbitrum';
     default:
       throw new Error(`Chain not supported: ${chainId}`);
   }

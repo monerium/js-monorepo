@@ -193,8 +193,8 @@ const { id: profileId, accounts }: Profile = await monerium.getProfile(
   authCtx.profiles[0].id
 );
 
-// Fetching all balances for a specific profile
-const balances: Balances = await monerium.getBalances(profileId);
+// Fetching all balances
+const balances: Balances = await monerium.getBalances();
 ```
 
 API documentation:

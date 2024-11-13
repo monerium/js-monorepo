@@ -2,8 +2,12 @@ import { useContext } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import MoneriumClient, {
+  Address,
+  Addresses,
   AuthContext,
   Balances,
+  BalancesFilter,
+  Chain,
   LinkAddress,
   LinkedAddress,
   NewOrder,
@@ -35,10 +39,10 @@ export const keys = {
     ...(profileId ? [profileId] : []),
   ],
   getProfiles: ['monerium', 'profiles'],
-  getBalances: (profileId?: string) => [
+  getBalances: (filter?: BalancesFilter) => [
     'monerium',
     'balances',
-    ...(profileId ? [profileId] : []),
+    ...(filter ? [filter] : []),
   ],
   getTokens: ['monerium', 'tokens'],
   getOrder: (orderId: string) => ['monerium', 'order', orderId],
@@ -49,6 +53,12 @@ export const keys = {
   ],
   placeOrder: ['monerium', 'place-order'],
   linkAddress: ['monerium', 'link-address'],
+  getAddress: (address: string) => ['monerium', 'address', address],
+  getAddresses: (filter?: unknown) => [
+    'monerium',
+    'addresses',
+    ...(filter ? [filter] : []),
+  ],
 };
 
 /** Internal hook to use SDK */
@@ -335,10 +345,10 @@ export function useTokens({
  * [Balances interface](/docs/packages/SDK/interfaces/Balances.md)
  */
 export function useBalances({
-  profileId,
+  filter,
   query,
 }: {
-  profileId?: string;
+  filter?: BalancesFilter;
   query?: QueryOptions<Balances[]>;
 } = {}): QueryResult<'balances', Balances[]> {
   const sdk = useSdk();
@@ -346,7 +356,7 @@ export function useBalances({
 
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getBalances(profileId),
+    queryKey: keys.getBalances(filter),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -354,7 +364,7 @@ export function useBalances({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.getBalances(profileId);
+      return sdk.getBalances(filter);
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
@@ -592,12 +602,10 @@ export function usePlaceOrder({
  * [LinkAddress interface](/docs/packages/SDK/interfaces/LinkAddress.md)
  */
 export function useLinkAddress({
-  profileId,
   mutation,
 }: {
-  profileId: string;
   mutation?: MutationOptions<LinkedAddress, Error, LinkAddress>;
-}): MutationResult<'linkAddress', LinkedAddress, Error, LinkAddress> {
+} = {}): MutationResult<'linkAddress', LinkedAddress, Error, LinkAddress> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const queryClient = useQueryClient();
@@ -612,13 +620,15 @@ export function useLinkAddress({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.linkAddress(profileId, body);
+      return sdk.linkAddress(body);
     },
     onSuccess(data, variables, context) {
       // Refetch all orders on success.
-      queryClient.invalidateQueries({
-        queryKey: keys.getProfile(profileId),
-      });
+      if (variables.profile) {
+        queryClient.invalidateQueries({
+          queryKey: keys.getProfile(variables.profile),
+        });
+      }
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
     },
@@ -630,6 +640,120 @@ export function useLinkAddress({
   });
   return {
     linkAddress: mutateAsync,
+    ...rest,
+  };
+}
+
+/**
+ * # Get single address
+ * @group Hooks
+ * @param {Object} params
+ * @param {string} [params.address] The wallet address.
+ * @param {QueryOptions<Address>} [params.query] {@inheritDoc QueryOptions}
+ *
+ * @example
+ * ```ts
+ * const {
+ *    address, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useAddress();
+ * ```
+
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs/v2#tag/addresses/operation/address)
+ *
+ * [Address interface](/docs/packages/SDK/interfaces/Address.md)
+ */
+export function useAddress({
+  address,
+  query,
+}: {
+  address: string;
+  query?: QueryOptions<Address>;
+}): QueryResult<'address', Address> {
+  const { isAuthorized } = useAuth();
+  const sdk = useSdk();
+
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getAddress(address),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+      if (!address) {
+        throw new Error('Address is required');
+      }
+
+      return sdk.getAddress(address);
+    },
+    enabled: Boolean(
+      sdk && isAuthorized && address && (query?.enabled ?? true)
+    ),
+  });
+  return {
+    address: data,
+    ...rest,
+  };
+}
+/**
+ * # Get addresses
+ * @group Hooks
+ * @param {Object} [params] No required parameters.
+ * @param {Object} [params.profile] Filter based on the profile ID associated with the order.
+ * @param {Object} [params.chain] Filter based on the chain.
+ * @param {QueryOptions<Addresses>} [params.query] {@inheritDoc QueryOptions}
+ *
+ * @example
+ * ```ts
+ * const {
+ *    addresses, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useAddresses();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs/v2#tag/addresses/operation/addresses)
+ *
+ * [Order interface](/docs/packages/SDK/interfaces/Addresses.md)
+ */
+export function useAddresses({
+  query = {},
+  ...filters
+}: {
+  query?: QueryOptions<Addresses>;
+  chain?: Chain;
+  profile?: string;
+} = {}): QueryResult<'addresses', Addresses> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getAddresses(filters),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.getAddresses(filters);
+    },
+    enabled: Boolean(sdk && isAuthorized && (query.enabled ?? true)),
+  });
+  return {
+    addresses: data,
     ...rest,
   };
 }

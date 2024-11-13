@@ -8,62 +8,21 @@ export type Config = {
 
 export type ENV = 'sandbox' | 'production';
 
-export type EthereumTestnet = 'sepolia';
-export type GnosisTestnet = 'chiado';
-export type PolygonTestnet = 'amoy';
+export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'arbitrum' | 'noble';
 
-export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'gnosismainnet';
-export type Networks =
-  | EthereumTestnet
-  | GnosisTestnet
-  | PolygonTestnet
-  | 'mainnet';
+export type ChainId = EvmChainId | CosmosChainId;
 
-// -- Commons
-export type NetworkSemiStrict<C extends Chain> = C extends 'ethereum'
-  ? EthereumTestnet | 'mainnet'
-  : C extends 'gnosis'
-    ? GnosisTestnet | 'mainnet'
-    : C extends 'polygon'
-      ? PolygonTestnet | 'mainnet'
-      : never;
-
-export type NetworkStrict<
-  C extends Chain,
-  E extends ENV,
-> = E extends 'production'
-  ? 'mainnet'
-  : E extends 'sandbox'
-    ? C extends 'ethereum'
-      ? EthereumTestnet
-      : C extends 'gnosis'
-        ? GnosisTestnet
-        : C extends 'polygon'
-          ? PolygonTestnet
-          : never
-    : never;
-
-/*
- * -- isValid:
- * const network: Network<'ethereum', 'sandbox'> = 'sepolia';
- * const network: Network<'ethereum'> = 'mainnet';
- * const network: Network<'ethereum'> = 'sepolia'
- * const network: Network = 'chiado'
- *
- * -- isInValid:
- * const network: Network<'ethereum', 'sandbox'> = 'chiado';
- * const network: Network<'ethereum'> = 'chiado';
- */
-export type Network<
-  C extends Chain = Chain,
-  E extends ENV = ENV,
-> = C extends Chain
-  ? E extends ENV
-    ? NetworkStrict<C, E> & NetworkSemiStrict<C>
-    : never
-  : never;
-
-export type ChainId = number | 1 | 11155111 | 100 | 137 | 10200 | 80002;
+export type CosmosChainId = 'noble-1' | 'grand-1' | 'florin-1';
+export type EvmChainId =
+  | number
+  | 1
+  | 11155111
+  | 100
+  | 10200
+  | 137
+  | 80002
+  | 42161
+  | 421614;
 
 export enum Currency {
   eur = 'eur',
@@ -245,7 +204,6 @@ export interface Account {
   iban?: string;
   // sortCode?: string;
   // accountNumber?: string;
-  network?: Network;
   chain: Chain;
   id?: string;
   state?: AccountState;
@@ -261,17 +219,22 @@ export interface Profile {
 }
 
 // -- getBalances
+export interface BalancesFilter {
+  address: string;
+  chain: Chain | ChainId;
+}
 export interface Balance {
   currency: Currency;
   amount: string;
 }
 
 export interface Balances {
-  id: string;
-  address: string;
-  chain: Chain;
-  network: Network;
-  balances: Balance[];
+  balances: {
+    id: string;
+    address: string;
+    chain: Chain;
+    balances: Balance[];
+  };
 }
 
 // --getOrders
@@ -375,7 +338,6 @@ export interface Token {
   ticker: Ticker;
   symbol: TokenSymbol;
   chain: Chain;
-  network: Network;
   /** The address of the EURe contract on this network */
   address: string;
   /** How many decimals this token supports */
@@ -429,11 +391,26 @@ export interface CurrencyAccounts {
   currency: Currency;
 }
 
-export interface LinkAddress {
+export interface AddressesQueryParams {
+  profile?: string;
+  chain?: Chain;
+}
+export interface Addresses {
+  addresses: Address[];
+}
+
+export interface Address {
+  profile: string;
   address: string;
-  message: string;
+  chains: Chain[];
+}
+
+export interface LinkAddress {
+  profile?: string;
+  address: string;
+  // message: string;
   signature: string;
-  accounts: CurrencyAccounts[];
+  // accounts: CurrencyAccounts[];
   chain?: Chain | ChainId;
 }
 

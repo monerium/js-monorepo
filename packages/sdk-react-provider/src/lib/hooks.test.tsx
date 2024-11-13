@@ -274,12 +274,9 @@ describe('usePlaceOrder', () => {
 });
 describe('useLinkAddress', () => {
   test('links address', async () => {
-    const { result } = renderHook(
-      () => useLinkAddress({ profileId: 'profileId-12345' }),
-      {
-        wrapper,
-      }
-    );
+    const { result } = renderHook(() => useLinkAddress(), {
+      wrapper,
+    });
     const { result: authResult } = renderHook(() => useAuth(), {
       wrapper,
     });

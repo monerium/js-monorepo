@@ -13,6 +13,8 @@ import {
   placeOrderMessage,
 } from '@monerium/sdk';
 import {
+  useAddress,
+  useAddresses,
   useAuth,
   useAuthContext,
   useBalances,
@@ -28,7 +30,7 @@ export default function Test() {
   /**
    * Wagmi
    */
-  const { address } = useAccount();
+  const { address, status } = useAccount();
   const chainId = useChainId();
   const { signMessageAsync } = useSignMessage();
 
@@ -38,6 +40,12 @@ export default function Test() {
   const { isAuthorized, authorize, revokeAccess, error: authError } = useAuth();
 
   const { profile } = useProfile();
+
+  const { addresses } = useAddresses();
+
+  const { address: addressInfo } = useAddress({
+    address: address as string,
+  });
 
   const { authContext } = useAuthContext();
 
@@ -53,8 +61,8 @@ export default function Test() {
     },
   });
 
-  const { balances: profileBalances } = useBalances({
-    profileId: profile?.id as string,
+  const { balances: walletBalances } = useBalances({
+    filter: { address: address as string, chain: chainId },
   });
 
   const { tokens } = useTokens();
@@ -62,9 +70,7 @@ export default function Test() {
   /**
    * Monerium mutations
    */
-  const { linkAddress, error: linkAddressError } = useLinkAddress({
-    profileId: profile?.id as string,
-  });
+  const { linkAddress, error: linkAddressError } = useLinkAddress();
 
   const { placeOrder, error: placeOrderError } = usePlaceOrder({
     mutation: {
@@ -186,6 +192,7 @@ export default function Test() {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
       const currencies = formData.getAll('currency') as Currency[];
+
       const chains = formData.getAll('chain') as Chain[];
 
       if (currencies.length === 0) {
@@ -194,24 +201,13 @@ export default function Test() {
       if (chains.length === 0) {
         chains.push('ethereum');
       }
-      let accounts = [] as CurrencyAccounts[];
-      currencies.forEach((currency) => {
-        chains.forEach((chain) => {
-          accounts.push({
-            currency: currency,
-            chain: chain,
-          });
-        });
-      });
 
       signMessageAsync({ message: constants.LINK_MESSAGE }).then(
         (signature) => {
           linkAddress({
-            message: constants.LINK_MESSAGE,
             address: address as string,
-            chain: chainId,
+            chain: chains?.[0] || 'ethereum',
             signature: signature,
-            accounts: accounts,
           });
         }
       );
@@ -219,33 +215,39 @@ export default function Test() {
     return (
       <form onSubmit={linkingAddress}>
         <div>
-          <h3>Currency:</h3>
+          <h3>Currency (not used):</h3>
           <label>
-            <input id="currency" type="checkbox" name="currency" value="eur" />{' '}
-            EUR
+            <input id="currency" type="radio" name="currency" value="eur" /> EUR
           </label>
           <label>
-            <input id="currency" type="checkbox" name="currency" value="gbp" />{' '}
-            GBP
+            <input id="currency" type="radio" name="currency" value="gbp" /> GBP
           </label>
           <label>
-            <input id="currency" type="checkbox" name="currency" value="usd" />{' '}
-            USD
+            <input id="currency" type="radio" name="currency" value="usd" /> USD
           </label>
         </div>
         <div>
           <h3>Chain:</h3>
           <label>
-            <input id="chain" type="checkbox" name="chain" value="ethereum" />{' '}
+            <input
+              id="chain"
+              type="radio"
+              name="chain"
+              value="ethereum"
+              defaultChecked
+            />{' '}
             Ethereum
           </label>
           <label>
-            <input id="chain" type="checkbox" name="chain" value="polygon" />{' '}
+            <input id="chain" type="radio" name="chain" value="polygon" />{' '}
             Polygon
           </label>
           <label>
-            <input id="chain" type="checkbox" name="chain" value="gnosis" />{' '}
-            Gnosis
+            <input id="chain" type="radio" name="chain" value="gnosis" /> Gnosis
+          </label>
+          <label>
+            <input id="chain" type="radio" name="chain" value="arbitrum" />{' '}
+            Arbitrum
           </label>
         </div>
         <div style={{ color: 'red' }}>
@@ -274,9 +276,6 @@ export default function Test() {
       <div>
         <ConnectButton />
       </div>
-      <h1>Wallet</h1>
-      <p>Address: {address}</p>
-      <p>Chain ID: {chainId}</p>
       <h1>Auth</h1>
       <p>isAuthorized: {isAuthorized ? 'true' : 'false'}</p>
       <div style={{ color: 'red' }}>
@@ -321,12 +320,35 @@ export default function Test() {
             </div>
 
             <div>
-              <h2>Balances (profile)</h2>
+              <h2>Address Info (wallet)</h2>
+              <details>
+                {/* <summary>
+                  Click to Expand, total: { addresses}
+                </summary> */}
+                <PrettyPrintJson data={addressInfo} />
+              </details>
+            </div>
+            <div>
+              <h2>Addresses</h2>
               <details>
                 <summary>
-                  Click to Expand, total: {profileBalances?.length}
+                  Click to Expand, total: {addresses?.addresses?.length}
                 </summary>
-                <PrettyPrintJson data={profileBalances} />
+                <PrettyPrintJson data={addresses} />
+              </details>
+            </div>
+            <div>
+              <h2>Balances (wallet)</h2>
+              <details>
+                <summary>
+                  Click to Expand, balance:{' '}
+                  {
+                    walletBalances?.balances.find((b) => b.currency === 'eur')
+                      ?.amount
+                  }{' '}
+                  EUR
+                </summary>
+                <PrettyPrintJson data={walletBalances} />
               </details>
             </div>
             <div>
