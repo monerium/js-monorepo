@@ -227,14 +227,11 @@ export interface Balance {
   currency: Currency;
   amount: string;
 }
-
 export interface Balances {
-  balances: {
-    id: string;
-    address: string;
-    chain: Chain;
-    balances: Balance[];
-  };
+  id: string;
+  address: string;
+  chain: Chain;
+  balances: Balance[];
 }
 
 // --getOrders

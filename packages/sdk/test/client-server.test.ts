@@ -57,32 +57,14 @@ process.env.CI !== 'true' &&
     });
 
     test('link address', async () => {
-      const authContext = await client.getAuthContext();
-
-      const res = await client.linkAddress(authContext.defaultProfile, {
+      const res = await client.linkAddress({
         address: PUBLIC_KEY,
-        message: message,
         signature: OWNER_SIGNATURE,
-        accounts: [
-          {
-            chain: 'ethereum',
-            currency: Currency.eur,
-          },
-          {
-            chain: 'gnosis',
-            currency: Currency.eur,
-          },
-          {
-            chain: 'polygon',
-            currency: Currency.eur,
-          },
-        ] as CurrencyAccounts[] /** to bypass typeerror to test backwards compatibility */,
+        chain: 11155111,
       });
 
       expect(res).toMatchObject({
         address: '0xBd78A5C7efBf7f84C75ef638689A006512E1A6c4',
-        id: 'ebec4eed-6dcb-11ee-8aa6-5273f65ed05b',
-        message: 'I hereby declare that I am the address owner.',
         meta: {
           linkedBy: '9fdfd981-6dca-11ee-8aa6-5273f65ed05b',
         },

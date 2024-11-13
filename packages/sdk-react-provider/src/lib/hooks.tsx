@@ -8,6 +8,7 @@ import MoneriumClient, {
   Balances,
   BalancesFilter,
   Chain,
+  ChainId,
   LinkAddress,
   LinkedAddress,
   NewOrder,
@@ -322,10 +323,64 @@ export function useTokens({
 }
 
 /**
+ * # Get balance for a an address on a give chain
+ * @group Hooks
+ * @param {Object} [params] No required parameters.
+ * @param {QueryOptions<Balances[]>} [params.address] The address to fetch the balance for.
+ * @param {QueryOptions<Balances[]>} [params.chain] The chain to fetch the balance for.
+ * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
+
+ * @example
+ * ```ts
+ * const {
+ *    balance, // useQuery's `data` property
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useBalances();
+ * ```
+ * @see
+ * [API Documentation](https://monerium.dev/api-docs/v2#tag/addresses/operation/balances)
+ *
+ * [Balances interface](/docs/packages/SDK/interfaces/Balances.md)
+ */
+export function useBalance({
+  address,
+  chain,
+  query,
+}: {
+  address: string;
+  chain: Chain | ChainId;
+  query?: QueryOptions<Balances>;
+}): QueryResult<'balances', Balances> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  const { data, ...rest } = useQuery({
+    ...query,
+    queryKey: keys.getBalances({ address, chain }),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+      return sdk.getBalance(address, chain);
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+  return {
+    balances: data,
+    ...rest,
+  };
+}
+/**
  * # Get balances
  * @group Hooks
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Balances[]>} [params.profileId] Fetch balances for a specific profile.
  * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
 
  * @example
@@ -340,15 +395,13 @@ export function useTokens({
  * } = useBalances();
  * ```
  * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profile-balances)
+ * [API Documentation](https://monerium.dev/api-docs/v2#tag/addresses/operation/balances)
  *
  * [Balances interface](/docs/packages/SDK/interfaces/Balances.md)
  */
 export function useBalances({
-  filter,
   query,
 }: {
-  filter?: BalancesFilter;
   query?: QueryOptions<Balances[]>;
 } = {}): QueryResult<'balances', Balances[]> {
   const sdk = useSdk();
@@ -356,7 +409,7 @@ export function useBalances({
 
   const { data, ...rest } = useQuery({
     ...query,
-    queryKey: keys.getBalances(filter),
+    queryKey: keys.getBalances(),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -364,7 +417,7 @@ export function useBalances({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.getBalances(filter);
+      return sdk.getBalances();
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });

@@ -17,6 +17,7 @@ import {
   useAddresses,
   useAuth,
   useAuthContext,
+  useBalance,
   useBalances,
   useLinkAddress,
   useOrder,
@@ -61,8 +62,9 @@ export default function Test() {
     },
   });
 
-  const { balances: walletBalances } = useBalances({
-    filter: { address: address as string, chain: chainId },
+  const { balances: walletBalances } = useBalance({
+    address: address as string,
+    chain: chainId,
   });
 
   const { tokens } = useTokens();
@@ -338,7 +340,7 @@ export default function Test() {
               </details>
             </div>
             <div>
-              <h2>Balances (wallet)</h2>
+              <h2>Balance (wallet)</h2>
               <details>
                 <summary>
                   Click to Expand, balance:{' '}
@@ -352,7 +354,7 @@ export default function Test() {
               </details>
             </div>
             <div>
-              <h2>Balances</h2>
+              <h2>All Balances</h2>
               <details>
                 <summary>Click to Expand, total: {balances?.length}</summary>
                 <PrettyPrintJson data={balances} />

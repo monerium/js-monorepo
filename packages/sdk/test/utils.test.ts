@@ -103,7 +103,6 @@ describe('url params', () => {
           id: 'testId',
           address: 'testAddress',
           chain: 'ethereum',
-          network: 'mainnet',
           balances: [
             {
               currency: Currency.eur,
@@ -123,7 +122,6 @@ describe('url params', () => {
           id: 'testId',
           address: 'testAddress',
           chain: 'polygon',
-          network: 'mainnet',
           balances: [
             {
               currency: Currency.eur,
@@ -154,7 +152,6 @@ describe('url params', () => {
             currency: Currency.eur,
             standard: 'iban' as PaymentStandard,
             chain: 'ethereum',
-            network: 'mainnet',
           },
           {
             address: 'testAddress1',
@@ -162,7 +159,6 @@ describe('url params', () => {
             currency: Currency.eur,
             standard: 'iban' as PaymentStandard,
             chain: 'gnosis',
-            network: 'mainnet',
           },
         ],
       };
@@ -186,7 +182,6 @@ describe('url params', () => {
             currency: Currency.eur,
             standard: 'iban' as PaymentStandard,
             chain: 'ethereum',
-            network: 'mainnet',
           },
           {
             address: 'testAddress2',
@@ -194,7 +189,6 @@ describe('url params', () => {
             currency: Currency.eur,
             standard: 'iban' as PaymentStandard,
             chain: 'ethereum',
-            network: 'mainnet',
           },
         ],
       };
@@ -218,14 +212,12 @@ describe('url params', () => {
             currency: Currency.eur,
             standard: 'iban' as PaymentStandard,
             chain: 'ethereum',
-            network: 'sepolia',
           },
           {
             address: 'testAddress2',
             currency: Currency.eur,
             standard: 'iban' as PaymentStandard,
             chain: 'ethereum',
-            network: 'sepolia',
           },
         ],
       };

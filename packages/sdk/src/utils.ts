@@ -139,7 +139,7 @@ export const getAmount = (
   if (!balances || !address || !chain) return '0';
   const curr = currency || Currency.eur;
 
-  const balance = balances.find(
+  const balance = balances?.find(
     (account) =>
       account.address === address && account.chain === parseChain(chain)
   )?.balances;

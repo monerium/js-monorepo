@@ -21,52 +21,25 @@ describe('MoneriumClient', () => {
   test('link address using chainId', async () => {
     const body = {
       address: PUBLIC_KEY,
-      message: message,
+      // message: message,
       signature: OWNER_SIGNATURE,
-      accounts: [
-        {
-          chain: 11155111,
-          currency: Currency.eur,
-        },
-        {
-          chain: 10200,
-          currency: Currency.eur,
-        },
-        {
-          chain: 80002,
-          currency: Currency.eur,
-        },
-      ],
+      chain: 11155111,
     };
-    await client.linkAddress('testProfile', body).catch(() => ({}));
+    await client.linkAddress(body).catch(() => ({}));
 
     // TODO: Client initialization should be done in a beforeEach.
     expect(fetchMock?.mock?.calls?.length).toEqual(1);
 
     expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
-      `https://api.monerium.dev/profiles/testProfile/addresses`
+      `https://api.monerium.dev/addresses`
     );
     expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
       expect.objectContaining({
         method: 'post',
         body: JSON.stringify({
           address: PUBLIC_KEY,
-          message: message,
           signature: OWNER_SIGNATURE,
-          accounts: [
-            {
-              currency: Currency.eur,
-              chain: 'ethereum',
-            },
-            {
-              currency: Currency.eur,
-              chain: 'gnosis',
-            },
-            {
-              currency: Currency.eur,
-              chain: 'polygon',
-            },
-          ],
+          chain: 'ethereum',
         }),
       })
     );
