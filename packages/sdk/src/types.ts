@@ -406,6 +406,10 @@ export interface Order {
   meta: OrderMetadata;
 }
 
+export interface Orders {
+  orders: Order[];
+}
+
 // -- getTokens
 /**
  * Information about the EURe token on different networks.

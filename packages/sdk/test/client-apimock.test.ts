@@ -116,12 +116,12 @@ describe('MoneriumClient', () => {
       );
     });
     test('get balances', async () => {
-      await client.getBalances('testProfileId').catch(() => ({}));
+      await client.getBalances().catch(() => ({}));
 
       expect(fetchMock?.mock?.calls?.length).toEqual(1);
 
       expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
-        `https://api.monerium.dev/profiles/testProfileId/balances`
+        `https://api.monerium.dev/balances`
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({

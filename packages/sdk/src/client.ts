@@ -37,6 +37,7 @@ import type {
   Order,
   OrderFilter,
   OrderNotificationQueryParams,
+  Orders,
   PKCERequestArgs,
   Profile,
   ProfilesQueryParams,
@@ -382,7 +383,7 @@ export class MoneriumClient {
 
   /**
    * @group Addresses
-   * {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances}
+   * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances| API Documentation}
    */
   getBalance(address: string, chain: Chain | ChainId): Promise<Balances> {
     return this.#api<Balances>(
@@ -419,8 +420,8 @@ export class MoneriumClient {
    * @group Orders
    * @see {@link https://monerium.dev/api-docs-v2#tag/orders | API Documentation}
    */
-  getOrders(filter?: OrderFilter): Promise<Order[]> {
-    return this.#api<Order[]>('get', `orders${queryParams(filter)}`);
+  getOrders(filter?: OrderFilter): Promise<Orders> {
+    return this.#api<Orders>('get', `orders${queryParams(filter)}`);
   }
   /**
    * @group Orders

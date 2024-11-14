@@ -238,6 +238,31 @@ Get details for a single address by using the address public key after the addre
 
 ***
 
+### getBalance()
+
+> **getBalance**(`address`: `string`, `chain`: [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md)): `Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)\>
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `address` | `string` |
+| `chain` | [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md) |
+
+#### Returns
+
+`Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)\>
+
+#### See
+
+[API Documentation](https://monerium.dev/api-docs/v2#tag/addresses/operation/balances|)
+
+#### Defined in
+
+[client.ts:387](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L387)
+
+***
+
 ### getBalances()
 
 > **getBalances**(): `Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)[]\>
@@ -622,25 +647,3 @@ Closes the order notifications sockets
 #### Defined in
 
 [client.ts:437](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L437)
-
-## Addresses
-{@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances}
-
-### getBalance()
-
-> **getBalance**(`address`: `string`, `chain`: [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md)): `Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)\>
-
-#### Parameters
-
-| Parameter | Type |
-| ------ | ------ |
-| `address` | `string` |
-| `chain` | [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md) |
-
-#### Returns
-
-`Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)\>
-
-#### Defined in
-
-[client.ts:387](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L387)

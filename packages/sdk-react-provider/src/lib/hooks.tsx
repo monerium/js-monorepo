@@ -12,6 +12,7 @@ import MoneriumClient, {
   MoveIbanPayload,
   NewOrder,
   Order,
+  Orders,
   OrderState,
   parseChain,
   Profile,
@@ -674,13 +675,13 @@ export function useOrders({
   ...filters
 }: {
   /** {@inheritDoc QueryOptions} */
-  query?: QueryOptions<Order[]>;
+  query?: QueryOptions<Orders>;
   address?: string;
   txHash?: string;
   profile?: string;
   memo?: string;
   state?: OrderState;
-} = {}): QueryResult<'orders', Order[]> {
+} = {}): QueryResult<'orders', Orders> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const { data, ...rest } = useQuery({
