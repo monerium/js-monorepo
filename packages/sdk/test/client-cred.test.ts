@@ -22,6 +22,7 @@ import { rfc3339 } from '../src/utils';
 import {
   APP_ONE_CREDENTIALS_CLIENT_ID,
   APP_ONE_CREDENTIALS_SECRET,
+  APP_ONE_OWNER_USER_ID,
   DEFAULT_PROFILE,
   OWNER_SIGNATURE,
   PUBLIC_KEY,
@@ -69,17 +70,26 @@ process.env.CI !== 'true' &&
         const { profiles } = await client.getProfiles();
 
         const res = await client.linkAddress({
-          profile: profiles?.[0]?.id as string,
+          // profile: profiles?.[0]?.id as string,
           address: PUBLIC_KEY,
-          message: message,
+          // message: message,
           chain: 11155111,
           signature: OWNER_SIGNATURE,
         });
 
-        expect(res).toMatchObject({
-          status: 201,
-          statusText: 'Created',
-        });
+        const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{9}Z$/;
+
+        expect(res).toEqual(
+          expect.objectContaining({
+            address: PUBLIC_KEY,
+            meta: expect.objectContaining({
+              linkedAt: expect.stringMatching(dateRegex),
+              linkedBy: APP_ONE_OWNER_USER_ID,
+            }),
+            profile: profiles?.[0]?.id as string,
+            state: '',
+          })
+        );
       });
       test('get address', async () => {
         const address = await client.getAddress(PUBLIC_KEY).catch(() => ({}));
@@ -108,8 +118,7 @@ process.env.CI !== 'true' &&
       });
 
       test('get balances', async () => {
-        const { profiles } = await client.getProfiles();
-        const balances = await client.getBalances(profiles?.[0]?.id as string);
+        const balances = await client.getBalances();
 
         expect(balances).toEqual(
           expect.arrayContaining([
@@ -179,13 +188,14 @@ process.env.CI !== 'true' &&
         ).rejects.toEqual({
           code: 400,
           status: 'Bad Request',
-          message: 'Payment account has already been approved for this account',
+          message: 'IBAN already requested or provisioned for this profile',
         });
       });
     });
     describe('Orders', () => {
       test('get orders', async () => {
-        const orders = await client.getOrders();
+        const { orders } = await client.getOrders();
+
         const order = orders.find(
           (o: Order) => o.memo === 'UNIT-TEST'
         ) as Order;
@@ -202,7 +212,7 @@ process.env.CI !== 'true' &&
       });
 
       test('get orders by profileId', async () => {
-        const orders = await client.getOrders({
+        const { orders } = await client.getOrders({
           profile: DEFAULT_PROFILE,
         });
 
