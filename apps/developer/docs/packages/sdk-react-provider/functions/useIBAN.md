@@ -1,6 +1,6 @@
 # Function: useIBAN()
 
-> **useIBAN**(`params`: \{`iban`: `string`;`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)\>; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"iban"`, [`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)\>
+> **useIBAN**(`params`: \{`iban`: `string`;`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)\>; \}): `UseQueryResult`\<[`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md), `Error`\>
 
 ## Parameters
 
@@ -12,13 +12,13 @@
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"iban"`, [`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md)\>
+`UseQueryResult`\<[`IBAN`](/docs/packages/sdk-react-provider/interfaces/IBAN.md), `Error`\>
 
 ## Example
 
 ```ts
 const {
-   iban, // useQuery's `data` property
+   data,
    isLoading,
    isError,
    error,
@@ -33,4 +33,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:509](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L509)
+[sdk-react-provider/src/lib/hooks.tsx:452](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L452)

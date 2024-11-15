@@ -56,6 +56,7 @@ jest.mock('@monerium/sdk', () => {
   return {
     MoneriumClient: jest.fn(() => mockMoneriumClient),
     MoneriumContext: jest.fn(() => null),
+    parseChain: jest.fn(),
   };
 });
 
@@ -123,7 +124,7 @@ describe('useOrder', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.order).toBe('mockedOrder');
+      expect(result.current.data).toBe('mockedOrder');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -158,7 +159,7 @@ describe('useOrders', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.orders).toBe('mockedOrders');
+      expect(result.current.data).toBe('mockedOrders');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -175,7 +176,7 @@ describe('useProfile', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.profile).toBe('mockedProfile');
+      expect(result.current.data).toBe('mockedProfile');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -192,14 +193,14 @@ describe('useProfiles', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.profiles?.[0]).toBe('mockedProfiles');
+      expect(result.current.data?.profiles?.[0]).toBe('mockedProfiles');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
   });
 });
 describe('useTokens', () => {
-  test('returns the profile', async () => {
+  test('returns the tokens', async () => {
     const { result } = renderHook(() => useTokens(), {
       wrapper,
     });
@@ -209,7 +210,7 @@ describe('useTokens', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.tokens).toBe('mockedTokens');
+      expect(result.current.data).toBe('mockedTokens');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -229,7 +230,7 @@ describe('useAddress', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.address).toBe('mockedAddress');
+      expect(result.current.data).toBe('mockedAddress');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -246,24 +247,27 @@ describe('useAddresses', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.addresses?.[0]).toBe('mockedAddresses');
+      expect(result.current.data?.addresses?.[0]).toBe('mockedAddresses');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
   });
 });
 describe('useBalances', () => {
-  test('returns the profile', async () => {
-    const { result } = renderHook(() => useBalances(), {
-      wrapper,
-    });
+  test('returns  balances', async () => {
+    const { result } = renderHook(
+      () => useBalances({ address: '0x1234', chain: 100 }),
+      {
+        wrapper,
+      }
+    );
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(true);
     });
 
     await waitFor(() => {
-      expect(result.current.balances).toBe('mockedBalances');
+      expect(result.current.data).toBe('mockedBalances');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });

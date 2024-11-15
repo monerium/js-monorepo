@@ -20,7 +20,6 @@ import {
   useAddress,
   useAddresses,
   useAuth,
-  useBalance,
   useBalances,
   useIBAN,
   useIBANs,
@@ -49,39 +48,41 @@ export default function Test() {
   const context = useContext(MoneriumContext);
   const { isAuthorized, authorize, revokeAccess, error: authError } = useAuth();
 
-  const { profile } = useProfile();
+  const { data: profile } = useProfile();
 
   // const { authContext } = useAuthContext();
 
-  const { orders } = useOrders();
+  const { data: orders } = useOrders();
 
-  const { order } = useOrder({
-    orderId: orders?.[0]?.id as string,
+  const { data: order } = useOrder({
+    orderId: orders?.orders?.[0]?.id as string,
   });
 
-  const { balances: walletBalances } = useBalance({
+  const { data: walletBalances } = useBalances({
     address: walletAddress as string,
     chain: chainId,
   });
-
-  const { balances } = useBalances({
-    query: {
-      refetchOnWindowFocus: true,
-    },
+  const { data: walletBalancesGbpUsd } = useBalances({
+    address: walletAddress as string,
+    chain: chainId,
+    currencies: [Currency.gbp, Currency.usd],
   });
 
-  const { ibans } = useIBANs();
-  const { iban } = useIBAN({
-    iban: ibans?.[0]?.iban as string,
+  const { data: ibans } = useIBANs();
+  const { data: iban } = useIBAN({
+    iban: ibans?.ibans?.[0]?.iban as string,
   });
 
-  const { addresses } = useAddresses();
-  const { addresses: addressesByChains } = useAddresses({ chain: 'ethereum' });
-  const { address } = useAddress({
-    address: addresses?.[0]?.address as string,
+  const { data: addresses } = useAddresses();
+  const { data: addressesByChains } = useAddresses({
+    profile: profile?.id as string,
+    // chain: chainId,
+  });
+  const { data: address } = useAddress({
+    address: addresses?.addresses?.[0]?.address as string,
   });
 
-  const { tokens } = useTokens();
+  const { data: tokens } = useTokens();
 
   /**
    * Monerium mutations
@@ -716,7 +717,9 @@ export default function Test() {
             <div>
               <h2>Addresses</h2>
               <details>
-                <summary>Click to Expand, total: {addresses?.length}</summary>
+                <summary>
+                  Click to Expand, total: {addresses?.addresses.length}
+                </summary>
                 <PrettyPrintJson data={addresses} />
               </details>
             </div>
@@ -724,7 +727,7 @@ export default function Test() {
               <h2>Addresses On Ethereum</h2>
               <details>
                 <summary>
-                  Click to Expand, total: {addressesByChains?.length}
+                  Click to Expand, total: {addressesByChains?.addresses?.length}
                 </summary>
                 <PrettyPrintJson data={addressesByChains} />
               </details>
@@ -740,18 +743,13 @@ export default function Test() {
             <div>
               <h2>Ibans</h2>
               <details>
-                <summary>Click to Expand, total: {ibans?.length}</summary>
+                <summary>
+                  Click to Expand, total: {ibans?.ibans?.length}
+                </summary>
                 <PrettyPrintJson data={ibans} />
               </details>
             </div>
 
-            <div>
-              <h2>Balances</h2>
-              <details>
-                <summary>Click to Expand, total: {balances?.length}</summary>
-                <PrettyPrintJson data={balances} />
-              </details>
-            </div>
             <div>
               <h2>Balance (wallet)</h2>
               <details>
@@ -767,6 +765,27 @@ export default function Test() {
               </details>
             </div>
             <div>
+              <h2>Balance (wallet) GBP & USD</h2>
+              <details>
+                <summary>
+                  Click to Expand, balance:{' '}
+                  {
+                    walletBalancesGbpUsd?.balances.find(
+                      (b) => b.currency === 'gbp'
+                    )?.amount
+                  }{' '}
+                  GBP,
+                  {
+                    walletBalancesGbpUsd?.balances.find(
+                      (b) => b.currency === 'usd'
+                    )?.amount
+                  }{' '}
+                  USD
+                </summary>
+                <PrettyPrintJson data={walletBalancesGbpUsd} />
+              </details>
+            </div>
+            <div>
               <h2>Order (latest)</h2>
               <p>placedAt: {order?.meta?.placedAt}</p>
               <details>
@@ -778,7 +797,9 @@ export default function Test() {
               <h2>Orders</h2>
 
               <details>
-                <summary>Click to Expand, total: {orders?.length}</summary>
+                <summary>
+                  Click to Expand, total: {orders?.orders?.length}
+                </summary>
                 <PrettyPrintJson data={orders} />
               </details>
             </div>

@@ -1,6 +1,6 @@
 # Function: useOrder()
 
-> **useOrder**(`params`: \{`orderId`: `string`;`query`: `{}`; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"order"`, [`Order`](/docs/packages/sdk-react-provider/interfaces/Order.md)\>
+> **useOrder**(`params`: \{`orderId`: `string`;`query`: `{}`; \}): `UseQueryResult`\<[`Order`](/docs/packages/sdk-react-provider/interfaces/Order.md), `Error`\>
 
 ## Parameters
 
@@ -12,13 +12,13 @@
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"order"`, [`Order`](/docs/packages/sdk-react-provider/interfaces/Order.md)\>
+`UseQueryResult`\<[`Order`](/docs/packages/sdk-react-provider/interfaces/Order.md), `Error`\>
 
 ## Example
 
 ```ts
 const {
-   order, // useQuery's `data` property
+   data,
    isLoading,
    isError,
    error,
@@ -33,4 +33,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:614](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L614)
+[sdk-react-provider/src/lib/hooks.tsx:546](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L546)

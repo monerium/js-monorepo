@@ -10,5 +10,5 @@
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| `bic?` | `string` | [types.ts:201](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L201) |
-| `standard` | [`PaymentStandard`](/docs/packages/sdk/enumerations/PaymentStandard.md) | [types.ts:200](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L200) |
+| `bic?` | `string` | [types.ts:202](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L202) |
+| `standard` | [`PaymentStandard`](/docs/packages/sdk/enumerations/PaymentStandard.md) | [types.ts:201](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L201) |

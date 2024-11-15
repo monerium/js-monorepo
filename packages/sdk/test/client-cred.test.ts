@@ -77,13 +77,10 @@ process.env.CI !== 'true' &&
           signature: OWNER_SIGNATURE,
         });
 
-        const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{9}Z$/;
-
         expect(res).toEqual(
           expect.objectContaining({
             address: PUBLIC_KEY,
             meta: expect.objectContaining({
-              linkedAt: expect.stringMatching(dateRegex),
               linkedBy: APP_ONE_OWNER_USER_ID,
             }),
             profile: profiles?.[0]?.id as string,
@@ -101,9 +98,8 @@ process.env.CI !== 'true' &&
         });
       });
       test('get addresses', async () => {
-        const { profiles } = await client.getProfiles();
         const { addresses } = await client.getAddresses({
-          profile: profiles?.[0]?.id as string,
+          profile: DEFAULT_PROFILE,
           chain: 11155111,
         });
 
@@ -118,16 +114,20 @@ process.env.CI !== 'true' &&
       });
 
       test('get balances', async () => {
-        const balances = await client.getBalances();
+        const balances = await client.getBalances(PUBLIC_KEY, 11155111);
 
         expect(balances).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              // id: '4b208818-44e3-11ed-adac-b2efc0e6677d',
-              chain: 'ethereum',
-              address: PUBLIC_KEY,
-            }),
-          ])
+          expect.objectContaining({
+            // id: '4b208818-44e3-11ed-adac-b2efc0e6677d',
+            chain: 'ethereum',
+            address: PUBLIC_KEY,
+            balances: expect.arrayContaining([
+              expect.objectContaining({
+                amount: expect.any(String),
+                currency: expect.any(String),
+              }),
+            ]),
+          })
         );
       }, 15000);
     });

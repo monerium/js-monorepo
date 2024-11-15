@@ -31,8 +31,8 @@ const {
 
 ## See
 
-[API Documentation](https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban)
+[API Documentation](https://monerium.dev/api-docs/v2#tag/ibans/operation/move-iban)
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:872](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L872)
+[sdk-react-provider/src/lib/hooks.tsx:796](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L796)

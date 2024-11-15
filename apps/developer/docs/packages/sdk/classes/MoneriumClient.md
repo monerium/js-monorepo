@@ -46,15 +46,15 @@ new MoneriumClient({
 
 #### Defined in
 
-[client.ts:117](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L117)
+[client.ts:120](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L120)
 
 ## Properties
 
 | Property | Type | Default value | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| `bearerProfile?` | [`BearerProfile`](/docs/packages/sdk/interfaces/BearerProfile.md) | `undefined` | The bearer profile will be available after authentication, it includes the `access_token` and `refresh_token` | [client.ts:98](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L98) |
-| `isAuthorized` | `boolean` | `!!this.bearerProfile` | The client is authorized if the bearer profile is available | [client.ts:106](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L106) |
-| `state` | `undefined` \| `string` | `undefined` | The state parameter is used to maintain state between the request and the callback. | [client.ts:112](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L112) |
+| `bearerProfile?` | [`BearerProfile`](/docs/packages/sdk/interfaces/BearerProfile.md) | `undefined` | The bearer profile will be available after authentication, it includes the `access_token` and `refresh_token` | [client.ts:101](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L101) |
+| `isAuthorized` | `boolean` | `!!this.bearerProfile` | The client is authorized if the bearer profile is available | [client.ts:109](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L109) |
+| `state` | `undefined` \| `string` | `undefined` | The state parameter is used to maintain state between the request and the callback. | [client.ts:115](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L115) |
 
 ## Authentication
 
@@ -84,7 +84,7 @@ string
 
 #### Defined in
 
-[client.ts:162](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L162)
+[client.ts:165](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L165)
 
 ***
 
@@ -100,7 +100,7 @@ Cleanups the localstorage and websocket connections
 
 #### Defined in
 
-[client.ts:716](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L716)
+[client.ts:720](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L720)
 
 ***
 
@@ -138,7 +138,7 @@ await monerium.getAccess();
 
 #### Defined in
 
-[client.ts:210](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L210)
+[client.ts:213](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L213)
 
 ***
 
@@ -154,7 +154,7 @@ Revokes access
 
 #### Defined in
 
-[client.ts:729](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L729)
+[client.ts:733](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L733)
 
 ***
 
@@ -178,7 +178,7 @@ Revokes access
 
 #### Defined in
 
-[client.ts:511](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L511)
+[client.ts:515](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L515)
 
 ## Addresses
 
@@ -210,13 +210,13 @@ Get details for a single address by using the address public key after the addre
 
 #### Defined in
 
-[client.ts:355](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L355)
+[client.ts:358](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L358)
 
 ***
 
 ### getAddresses()
 
-> **getAddresses**(`params`?: [`AddressesQueryParams`](/docs/packages/sdk/interfaces/AddressesQueryParams.md)): `Promise`\<[`Addresses`](/docs/packages/sdk/interfaces/Addresses.md)\>
+> **getAddresses**(`params`?: [`AddressesQueryParams`](/docs/packages/sdk/interfaces/AddressesQueryParams.md)): `Promise`\<[`AddressesResponse`](/docs/packages/sdk/interfaces/AddressesResponse.md)\>
 
 #### Parameters
 
@@ -226,7 +226,7 @@ Get details for a single address by using the address public key after the addre
 
 #### Returns
 
-`Promise`\<[`Addresses`](/docs/packages/sdk/interfaces/Addresses.md)\>
+`Promise`\<[`AddressesResponse`](/docs/packages/sdk/interfaces/AddressesResponse.md)\>
 
 #### See
 
@@ -234,13 +234,13 @@ Get details for a single address by using the address public key after the addre
 
 #### Defined in
 
-[client.ts:364](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L364)
+[client.ts:367](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L367)
 
 ***
 
-### getBalance()
+### getBalances()
 
-> **getBalance**(`address`: `string`, `chain`: [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md)): `Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)\>
+> **getBalances**(`address`: `string`, `chain`: [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md), `currencies`?: [`Currency`](/docs/packages/sdk/enumerations/Currency.md) \| [`Currency`](/docs/packages/sdk/enumerations/Currency.md)[]): `Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)\>
 
 #### Parameters
 
@@ -248,6 +248,7 @@ Get details for a single address by using the address public key after the addre
 | ------ | ------ |
 | `address` | `string` |
 | `chain` | [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md) |
+| `currencies`? | [`Currency`](/docs/packages/sdk/enumerations/Currency.md) \| [`Currency`](/docs/packages/sdk/enumerations/Currency.md)[] |
 
 #### Returns
 
@@ -259,31 +260,13 @@ Get details for a single address by using the address public key after the addre
 
 #### Defined in
 
-[client.ts:387](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L387)
-
-***
-
-### getBalances()
-
-> **getBalances**(): `Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)[]\>
-
-#### Returns
-
-`Promise`\<[`Balances`](/docs/packages/sdk/interfaces/Balances.md)[]\>
-
-#### See
-
-[API Documentation](https://monerium.dev/api-docs/v2#tag/addresses/operation/balances|)
-
-#### Defined in
-
-[client.ts:379](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L379)
+[client.ts:381](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L381)
 
 ***
 
 ### linkAddress()
 
-> **linkAddress**(`payload`: [`LinkAddress`](/docs/packages/sdk/interfaces/LinkAddress.md)): `Promise`\<[`ResponseStatus`](/docs/packages/sdk/type-aliases/ResponseStatus.md)\>
+> **linkAddress**(`payload`: [`LinkAddress`](/docs/packages/sdk/interfaces/LinkAddress.md)): `Promise`\<[`LinkedAddress`](/docs/packages/sdk/interfaces/LinkedAddress.md)\>
 
 Add a new address to the profile
 
@@ -295,7 +278,7 @@ Add a new address to the profile
 
 #### Returns
 
-`Promise`\<[`ResponseStatus`](/docs/packages/sdk/type-aliases/ResponseStatus.md)\>
+`Promise`\<[`LinkedAddress`](/docs/packages/sdk/interfaces/LinkedAddress.md)\>
 
 #### See
 
@@ -303,7 +286,7 @@ Add a new address to the profile
 
 #### Defined in
 
-[client.ts:446](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L446)
+[client.ts:450](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L450)
 
 ## Profiles
 
@@ -327,7 +310,7 @@ Add a new address to the profile
 
 #### Defined in
 
-[client.ts:331](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L331)
+[client.ts:334](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L334)
 
 ***
 
@@ -351,7 +334,7 @@ Add a new address to the profile
 
 #### Defined in
 
-[client.ts:338](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L338)
+[client.ts:341](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L341)
 
 ***
 
@@ -376,7 +359,7 @@ Add a new address to the profile
 
 #### Defined in
 
-[client.ts:523](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L523)
+[client.ts:527](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L527)
 
 ## IBANs
 
@@ -402,7 +385,7 @@ Fetch details about a single IBAN
 
 #### Defined in
 
-[client.ts:401](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L401)
+[client.ts:405](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L405)
 
 ***
 
@@ -428,7 +411,7 @@ Fetch all IBANs for the profile
 
 #### Defined in
 
-[client.ts:409](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L409)
+[client.ts:413](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L413)
 
 ***
 
@@ -453,7 +436,7 @@ Fetch all IBANs for the profile
 
 #### Defined in
 
-[client.ts:479](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L479)
+[client.ts:483](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L483)
 
 ***
 
@@ -477,7 +460,7 @@ Fetch all IBANs for the profile
 
 #### Defined in
 
-[client.ts:495](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L495)
+[client.ts:499](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L499)
 
 ## Orders
 
@@ -506,7 +489,7 @@ Connects to the order notifications socket
 
 #### Defined in
 
-[client.ts:632](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L632)
+[client.ts:636](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L636)
 
 ***
 
@@ -532,7 +515,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:690](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L690)
+[client.ts:694](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L694)
 
 ***
 
@@ -556,13 +539,13 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:429](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L429)
+[client.ts:433](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L433)
 
 ***
 
 ### getOrders()
 
-> **getOrders**(`filter`?: [`OrderFilter`](/docs/packages/sdk/interfaces/OrderFilter.md)): `Promise`\<[`Order`](/docs/packages/sdk/interfaces/Order.md)[]\>
+> **getOrders**(`filter`?: [`OrderFilter`](/docs/packages/sdk/interfaces/OrderFilter.md)): `Promise`\<[`OrdersResponse`](/docs/packages/sdk/interfaces/OrdersResponse.md)\>
 
 #### Parameters
 
@@ -572,7 +555,7 @@ Closes the order notifications sockets
 
 #### Returns
 
-`Promise`\<[`Order`](/docs/packages/sdk/interfaces/Order.md)[]\>
+`Promise`\<[`OrdersResponse`](/docs/packages/sdk/interfaces/OrdersResponse.md)\>
 
 #### See
 
@@ -580,7 +563,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:422](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L422)
+[client.ts:426](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L426)
 
 ***
 
@@ -604,7 +587,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:460](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L460)
+[client.ts:464](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L464)
 
 ***
 
@@ -628,7 +611,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:538](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L538)
+[client.ts:542](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L542)
 
 ## Tokens
 
@@ -646,4 +629,4 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:437](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L437)
+[client.ts:441](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L441)

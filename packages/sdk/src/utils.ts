@@ -103,6 +103,7 @@ export const urlEncoded = (
 ): string | undefined => {
   return body && Object.entries(body)?.length > 0
     ? Object.entries(body)
+        .filter(([_, value]) => value !== undefined) // Filter out undefined values
         .map(
           ([key, value]) =>
             `${encodeURIComponent(key)}=${encodeURIComponent(value)}`

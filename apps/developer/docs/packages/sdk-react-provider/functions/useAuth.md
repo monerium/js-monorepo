@@ -28,4 +28,4 @@ authorize({ address, signature, chain }).
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:109](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L109)
+[sdk-react-provider/src/lib/hooks.tsx:120](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L120)

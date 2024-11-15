@@ -6,9 +6,9 @@
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `status` | `number` | sdk/dist/index.d.ts:461 |
-| `statusText` | `string` | sdk/dist/index.d.ts:462 |
+| `status` | `number` | sdk/dist/index.d.ts:471 |
+| `statusText` | `string` | sdk/dist/index.d.ts:472 |
 
 ## Defined in
 
-sdk/dist/index.d.ts:460
+sdk/dist/index.d.ts:470

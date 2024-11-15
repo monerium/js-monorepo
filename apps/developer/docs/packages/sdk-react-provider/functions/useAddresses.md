@@ -1,25 +1,25 @@
 # Function: useAddresses()
 
-> **useAddresses**(`params`?: \{`chain`: `ChainId` \| `Chain`;`profile`: `string`;`query`: `{}`; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"addresses"`, [`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md)[]\>
+> **useAddresses**(`params`?: \{`chain`: `ChainId` \| `Chain`;`profile`: `string`;`query`: `{}`; \}): `UseQueryResult`\<`AddressesResponse`, `Error`\>
 
 ## Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `params`? | `object` | No required parameters. |
-| `params.chain`? | `ChainId` \| `Chain` | Fetch addresses for a specific chain. |
-| `params.profile`? | `string` | Fetch addresses for a specific profile. |
-| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md)[]\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+| `params.chain`? | `ChainId` \| `Chain` | Filter based on chain - CURRENTLY RETURNS AN ERROR. |
+| `params.profile`? | `string` | Filter based on profile id. |
+| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<`AddressesResponse`\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"addresses"`, [`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md)[]\>
+`UseQueryResult`\<`AddressesResponse`, `Error`\>
 
 ## Example
 
 ```ts
 const {
-   addresses, // useQuery's `data` property
+   data,
    isLoading,
    isError,
    error,
@@ -34,4 +34,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:353](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L353)
+[sdk-react-provider/src/lib/hooks.tsx:349](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L349)

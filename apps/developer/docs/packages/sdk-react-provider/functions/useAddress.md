@@ -1,6 +1,6 @@
 # Function: useAddress()
 
-> **useAddress**(`params`: \{`address`: `string`;`query`: `{}`; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"address"`, [`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md)\>
+> **useAddress**(`params`: \{`address`: `string`;`query`: `{}`; \}): `UseQueryResult`\<[`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md), `Error`\>
 
 ## Parameters
 
@@ -12,13 +12,13 @@
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"address"`, [`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md)\>
+`UseQueryResult`\<[`Address`](/docs/packages/sdk-react-provider/interfaces/Address.md), `Error`\>
 
 ## Example
 
 ```ts
 const {
-   address, // useQuery's `data` property
+   data,
    isLoading,
    isError,
    error,
@@ -33,4 +33,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:298](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L298)
+[sdk-react-provider/src/lib/hooks.tsx:296](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L296)
