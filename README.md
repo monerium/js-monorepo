@@ -35,7 +35,7 @@ To build all apps and packages, run the following command:
 
 ```
 cd js-monorepo
-pnpm build
+turbo build
 ```
 
 ### Develop
@@ -44,7 +44,7 @@ To develop all apps and packages, run the following command:
 
 ```
 cd js-monorepo
-pnpm dev
+turbo dev
 ```
 
 Note: use `pnpm dev --log-order stream` for a more traditional log output.

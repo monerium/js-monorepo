@@ -42,13 +42,20 @@ export type UseAuthReturn = {
  * See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options.
  * @see # [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)
  * @template {Object} TData - The data returned.
- *
- * @options
- * > `queryKey` and `queryFn` are used internally and therefore not included in the options.
+ * @example
+ * ```ts
+ * useQueryHook({
+ *  query: {
+ *    enabled: isReady,
+ *    staleTime: 1000,
+ *    placeHolderData: { foo: 'bar' },
+ *  }
+ * })
+ * ```
+ * ## Options
+ * > `queryKey` and `queryFn` are used internally and therefore not included as an options.
  * ```diff
  * query: {
- * -  queryKey,
- * -  queryFn,
  *    gcTime,
  *    enabled,
  *    networkMode,
@@ -72,26 +79,6 @@ export type UseAuthReturn = {
  *    throwOnError
  * }
  *  ```
- * @example
- * ```ts
- * useQueryHook({
- *  query: {
- *    enabled: isReady,
- *    staleTime: 1000,
- *    placeHolderData: { foo: 'bar' },
- *  }
- * })
- * ```
- * @usedBy
- * {@link useAuthContext}
- *
- * {@link useBalances}
- *
- * {@link useOrders}
- *
- * {@link useProfile}
- *
- * {@link useTokens}
  */
 export type QueryOptions<TData = unknown> = Omit<
   UseQueryOptions<TData>,
@@ -134,16 +121,6 @@ export type QueryOptions<TData = unknown> = Omit<
  *    status,
  *}
  *  ```
- * @usedBy
- * {@link useAuthContext}
- *
- * {@link useBalances}
- *
- * {@link useOrders}
- *
- * {@link useProfile}
- *
- * {@link useTokens}
  *
  */
 export type QueryResult<TVarName extends string, TData = unknown> = Omit<
@@ -161,25 +138,6 @@ export type QueryResult<TVarName extends string, TData = unknown> = Omit<
  * @template {Object} TError - The error returned.
  * @template {Object} TVariables - The variables used in the mutation.
  *
- * @options
- * > `mutationKey` and `mutationFn` are used internally and therefore not included in the options.
- * ```diff
- * mutation: {
- *    gcTime,
- *    meta,
- * -  mutationFn,
- * -  mutationKey,
- *    networkMode,
- *    onError,
- *    onMutate,
- *    onSettled,
- *    onSuccess,
- *    retry,
- *    retryDelay,
- *    scope,
- *    throwOnError,
- * }
- *  ```
  * @example
  * ```ts
  * useMutationHook({
@@ -192,12 +150,25 @@ export type QueryResult<TVarName extends string, TData = unknown> = Omit<
  *    },
  *  },
  * })
+ *
  * ```
- *
- * @usedBy
- * {@link useLinkAddress}
- *
- * {@link usePlaceOrder}
+ * ## Options
+ * > `mutationKey` and `mutationFn` are used internally and therefore not included as an options.
+ * ```diff
+ * mutation: {
+ *    gcTime,
+ *    meta,
+ *    networkMode,
+ *    onError,
+ *    onMutate,
+ *    onSettled,
+ *    onSuccess,
+ *    retry,
+ *    retryDelay,
+ *    scope,
+ *    throwOnError,
+ * }
+ *  ```
  */
 export type MutationOptions<
   TData = unknown,
@@ -239,10 +210,6 @@ export type MutationOptions<
  *    variables,
  * } = useMutationHook();
  *  ```
- * @usedBy
- * {@link useLinkAddress}
- *
- * {@link usePlaceOrder}
  */
 export type MutationResult<
   TFuncName extends string,

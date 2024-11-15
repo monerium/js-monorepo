@@ -3,18 +3,10 @@ import SHA256 from 'crypto-js/sha256.js';
 import timezone_mock from 'timezone-mock';
 
 import { generateRandomString } from '../src/helpers';
-import {
-  Balances,
-  Currency,
-  KYC,
-  PaymentStandard,
-  Profile,
-  ProfileType,
-} from '../src/types';
+import { Balances, Currency } from '../src/types';
 import {
   getAmount,
   getChain,
-  getIban,
   mapChainIdToChain,
   parseChain,
   placeOrderMessage,
@@ -103,7 +95,6 @@ describe('url params', () => {
           id: 'testId',
           address: 'testAddress',
           chain: 'ethereum',
-          network: 'mainnet',
           balances: [
             {
               currency: Currency.eur,
@@ -123,7 +114,6 @@ describe('url params', () => {
           id: 'testId',
           address: 'testAddress',
           chain: 'polygon',
-          network: 'mainnet',
           balances: [
             {
               currency: Currency.eur,
@@ -136,103 +126,6 @@ describe('url params', () => {
       const result = getAmount(balances, 'testAddress', 1);
 
       expect(result).toBe('0');
-    });
-  });
-
-  describe('getIban', () => {
-    test('should return the correct IBAN for a given address and chain', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013001',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'gnosis',
-            network: 'mainnet',
-          },
-        ],
-      };
-
-      const result = getIban(profile, 'testAddress1', 100);
-
-      expect(result).toBe('DE89370400440532013001');
-    });
-
-    test('should return an empty string if no account with the given address exists', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-          {
-            address: 'testAddress2',
-            iban: 'DE89370400440532013001',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-        ],
-      };
-
-      const result = getIban(profile, 'testAddress3', 1);
-
-      expect(result).toBe('');
-    });
-
-    test('should return an empty string if the account with the given address does not have an IBAN', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'sepolia',
-          },
-          {
-            address: 'testAddress2',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'sepolia',
-          },
-        ],
-      };
-
-      const result = getIban(profile, 'testAddress2', 11155111);
-
-      expect(result).toBe('');
     });
   });
 });

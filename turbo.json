@@ -11,20 +11,12 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "env": ["STANDALONE", "false"]
     },
-    "@monerium/sdk#docs": {
-      "dependsOn": ["@monerium/sdk#build"],
-      "outputs": ["docs/generated/**"]
-    },
-    "@monerium/sdk#docs:watch": {
-      "dependsOn": ["@monerium/sdk#build"],
-      "outputs": ["docs/generated/**"]
-    },
     "@monerium/sdk-react-provider#dev": {
       "dependsOn": ["@monerium/sdk#type-map"]
     },
     "generate-docs": {
       "dependsOn": ["build"],
-      "outputs": ["apps/developer/docs/packages/**"]
+      "outputs": ["docs/packages/**"]
     },
     "lint": {},
     "lint:style": {},

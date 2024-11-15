@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
 import { Currency } from '@monerium/sdk';
-import { useBalances } from '@monerium/sdk-react-provider';
 
 import ChainFilter from 'components/Dashboard/Filters/ChainFilter';
 import TokenFilter from 'components/Dashboard/Filters/TokenFilter';
@@ -20,16 +19,6 @@ function Dashboard() {
     Currency.eur
   );
 
-  const { refetch } = useBalances({
-    query: {
-      refetchOnWindowFocus: false,
-    },
-  });
-
-  useEffect(() => {
-    refetch();
-  }, [selectedCurrency, selectedChain]);
-
   return (
     <Box sx={{ pt: 7 }}>
       <Stack direction="row" sx={{ p: 3 }}>
@@ -38,9 +27,6 @@ function Dashboard() {
           selected={selectedCurrency}
           setSelected={setSelectedCurrency}
         />
-        {/* <div style={{ marginLeft: '8px' }}>
-          <ConnectButton chainStatus={'none'} showBalance={false} />
-        </div> */}
       </Stack>
       <TotalBalance totalBalance={totalBalance} currency={selectedCurrency} />
 

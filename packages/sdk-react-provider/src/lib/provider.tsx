@@ -7,7 +7,7 @@ import { MoneriumContext } from './context';
 import { AuthorizeParams } from './types';
 
 /**
- * Place this provider at the root of your application.
+ * Wrap your application with the Monerium provider.
  * @group Provider
  * @param params
  * @param params.children - Rest of the application.
@@ -19,7 +19,6 @@ import { AuthorizeParams } from './types';
 export const MoneriumProvider = ({
   children,
   clientId,
-  redirectUrl,
   redirectUri,
   environment = 'sandbox',
 }: {
@@ -42,7 +41,7 @@ export const MoneriumProvider = ({
     const sdkInstance = new MoneriumClient({
       environment: environment,
       clientId,
-      redirectUri: redirectUri || redirectUrl,
+      redirectUri: redirectUri,
     });
     setSdk(sdkInstance);
   }, []);
