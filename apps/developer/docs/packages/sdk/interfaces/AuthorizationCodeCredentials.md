@@ -4,5 +4,5 @@
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| `clientId` | `string` | [types.ts:575](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L575) |
-| `redirectUri` | `string` | [types.ts:576](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L576) |
+| `clientId` | `string` | [types.ts:579](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L579) |
+| `redirectUri` | `string` | [types.ts:580](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L580) |

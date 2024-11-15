@@ -181,7 +181,8 @@ export class MoneriumClient {
       signature: params?.signature,
       chain: params?.chain,
       state: params?.state,
-      skipCreateAccount: params?.skipCreateAccount,
+      skip_create_account: params?.skipCreateAccount,
+      skip_kyc: params?.skipKyc,
     });
 
     // Redirect to the authFlow

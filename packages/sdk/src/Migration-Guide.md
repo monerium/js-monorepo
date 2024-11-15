@@ -1,30 +1,36 @@
 Migration Guide.
 
+# SDK
+
+- `getBalances` now only returns the balance for a specified address+chain. Defaults to only 'eur' currency, optional parameter accepts a list of currency codes.
+
+Preparing for pagination.
+
+- `getOrders` now returns an `orders` object which contains a list of orders.
+
 - `getAuthContext` removed, use `getProfiles` instead.
 
 - Use `redirectUri` instead of `redirectUrl` for consistency with OAuth 2.0.
 
-- `Network` has been completely removed.
+- `Network` interface has been completely removed. You will find occasional `network` in responses, but it's in the process of being removed.
 
-- `Balance` renamed to `CurrencyBalance`.
+- `Balance` interface renamed to `CurrencyBalance`.
 
 - `IBAN`, `SCAN` and `CrossChain` interfaces renamed to `IBANIdentifier`, `SCANIdentifier` and `CrossChainIdentifier`.
 
-- `linkAddress` now only accepts one argument, the profile id has been added to the body.
+- `linkAddress` has been simplified to:
 
   ```ts
    {
-     profile: "profile-id-that-owns-address",
+     profile: "profile-id-that-owns-address", // optional
      address: "0x1234...7890",
-     message: "I hereby declare that I am the address     owner",
      signature: "0x12341234...78907890",
      chain: "ethereum"
    }
   ```
 
-- `getBalances` now has a required `profile` id argument.
-
 - `skipCreateAccount` added to `authorize` method to skip the account creation step in the auth flow.
+- `skipKyc` added to `authorize` method to skip KYC in the auth flow.
 
 - Simplified websockets
 
@@ -55,26 +61,18 @@ monerium.disconnectOrderNotifications({ 
 - Interface `AuthCodeRequest` renamed to `AuthCodePayload`
 - Interface `RefreshTokenRequest` renamed to `RefreshTokenPayload`
 
+# New
+
+getAddresses
+getAddress
+getProfile
+getProfiles
+getIban
+getIbans
+
+CurrencyCode type
+
 ### TODO?
 
 - should connectOrderNotifications be renamed to subscribeOrderNotifications?
 - should disconnectOrderNotifications be renamed to unsubscribeOrderNotifications?
-- should functions be consistent in accepting an object as params, even though we are just expecting one argument?
-
----
-
----
-
----
-
----
-
----
-
-TODO: when there is only one arg, should it be an object??
-
-like:
-
-getAddress({ address }: AddressFilters)
-OR
-getAddress(address: AddressFilters)

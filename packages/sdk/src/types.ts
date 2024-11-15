@@ -122,7 +122,9 @@ export type PKCERequest = {
   /** The network of the wallet to automatically link  */
   chain?: Chain | ChainId;
   /** You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization */
-  skipCreateAccount?: boolean;
+  skip_create_account?: boolean;
+  /** You can skip the KYC onboarding steps in the Authorization Flow and use the the details, additional data, and verifications API endpoints after you have gotten the authorization. */
+  skip_kyc?: boolean;
 };
 
 // -- authContext
@@ -564,6 +566,8 @@ export interface AuthFlowOptions {
   state?: string;
   /** skip account creation in auth flow */
   skipCreateAccount?: boolean;
+  /** skip KYC in auth flow */
+  skipKyc?: boolean;
 }
 
 export interface ClientCredentials {
