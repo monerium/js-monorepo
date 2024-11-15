@@ -82,7 +82,6 @@ root.render(
 
 ### Other
 
-- [useBalance](/docs/packages/sdk-react-provider/functions/useBalance.md)
 - [useTokens](/docs/packages/sdk-react-provider/functions/useTokens.md)
 
 ## Variables

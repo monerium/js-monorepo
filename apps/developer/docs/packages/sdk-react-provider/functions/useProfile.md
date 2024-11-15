@@ -1,6 +1,6 @@
 # Function: useProfile()
 
-> **useProfile**(`params`: \{`profile`: `string`;`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md)\>; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"profile"`, [`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md)\>
+> **useProfile**(`params`: \{`profile`: `string`;`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md)\>; \}): `UseQueryResult`\<[`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md), `Error`\>
 
 If no `profile` id is provided, the default profile is used.
 
@@ -14,13 +14,13 @@ If no `profile` id is provided, the default profile is used.
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"profile"`, [`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md)\>
+`UseQueryResult`\<[`Profile`](/docs/packages/sdk-react-provider/interfaces/Profile.md), `Error`\>
 
 ## Example
 
 ```ts
 const {
-   profile, // useQuery's `data` property
+   data
    isLoading,
    isError,
    error,
@@ -35,4 +35,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:145](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L145)
+[sdk-react-provider/src/lib/hooks.tsx:156](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L156)

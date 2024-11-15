@@ -6,9 +6,9 @@
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `status` | `number` | [types.ts:573](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L573) |
-| `statusText` | `string` | [types.ts:574](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L574) |
+| `status` | `number` | [types.ts:584](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L584) |
+| `statusText` | `string` | [types.ts:585](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L585) |
 
 ## Defined in
 
-[types.ts:572](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L572)
+[types.ts:583](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L583)

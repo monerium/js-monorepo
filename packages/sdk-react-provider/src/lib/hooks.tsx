@@ -3,20 +3,25 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import MoneriumClient, {
   Address,
+  AddressesResponse,
   Balances,
-  BalancesFilter,
   Chain,
   ChainId,
+  Currency,
+  CurrencyCode,
   IBAN,
+  IBANsResponse,
   LinkAddress,
+  LinkedAddress,
   MoveIbanPayload,
   NewOrder,
   Order,
-  Orders,
+  OrdersResponse,
   OrderState,
   parseChain,
   Profile,
   ProfilePermissions,
+  ProfilesResponse,
   RequestIbanPayload,
   ResponseStatus,
   SubmitProfileDetailsPayload,
@@ -28,7 +33,6 @@ import {
   MutationOptions,
   MutationResult,
   QueryOptions,
-  QueryResult,
   UseAuthReturn,
 } from './types';
 
@@ -50,10 +54,16 @@ export const keys = {
     'addresses',
     ...(filter ? [filter] : []),
   ],
-  getBalances: (filter?: BalancesFilter) => [
+  getBalances: (
+    address: string,
+    chain: Chain,
+    currencies?: CurrencyCode | CurrencyCode[]
+  ) => [
     'monerium',
     'balances',
-    ...(filter ? [filter] : []),
+    address,
+    chain,
+    ...(currencies ? [...currencies] : []),
   ],
   getIban: (iban: string) => ['monerium', 'iban', iban],
   getIbans: (filter?: unknown) => [
@@ -132,7 +142,7 @@ export function useAuth(): UseAuthReturn {
  * @example
  * ```ts
  * const {
- *    profile, // useQuery's `data` property
+ *    data
  *    isLoading,
  *    isError,
  *    error,
@@ -151,14 +161,14 @@ export function useProfile({
   profile?: string;
   /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Profile>;
-} = {}): QueryResult<'profile', Profile> {
+} = {}) {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
-  const { profiles } = useProfiles();
+  const { data } = useProfiles();
 
-  const profileToUse = profile || (profiles?.[0]?.id as string);
+  const profileToUse = profile || (data?.profiles?.[0]?.id as string);
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getProfile(profileToUse),
     queryFn: async () => {
@@ -178,10 +188,6 @@ export function useProfile({
       sdk && isAuthorized && profileToUse && (query?.enabled ?? true)
     ),
   });
-  return {
-    profile: data,
-    ...rest,
-  };
 }
 /**
  * # Get profiles
@@ -193,7 +199,7 @@ export function useProfile({
  * @example
  * ```ts
  * const {
- *    profiles, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -207,12 +213,12 @@ export function useProfiles({
   query,
 }: {
   /** {@inheritDoc QueryOptions} */
-  query?: QueryOptions<ProfilePermissions[]>;
-} = {}): QueryResult<'profiles', ProfilePermissions[]> {
+  query?: QueryOptions<ProfilesResponse>;
+} = {}) {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getProfiles,
     queryFn: async () => {
@@ -222,15 +228,10 @@ export function useProfiles({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      const { profiles } = await sdk.getProfiles();
-      return profiles;
+      return sdk.getProfiles();
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
-  return {
-    profiles: data,
-    ...rest,
-  };
 }
 /**
  * @group Hooks
@@ -239,7 +240,7 @@ export function useProfiles({
  * @example
  * ```ts
  * const {
- *    tokens, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -255,10 +256,10 @@ export function useTokens({
 }: {
   /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Token[]>;
-} = {}): QueryResult<'tokens', Token[]> {
+} = {}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getTokens,
     queryFn: async () => {
@@ -272,10 +273,6 @@ export function useTokens({
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
-  return {
-    tokens: data,
-    ...rest,
-  };
 }
 
 /**
@@ -286,7 +283,7 @@ export function useTokens({
  * @example
  * ```ts
  * const {
- *    address, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -304,11 +301,11 @@ export function useAddress({
   address: string;
   /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Address>;
-}): QueryResult<'address', Address> {
+}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getAddress(address),
     queryFn: async () => {
@@ -329,19 +326,17 @@ export function useAddress({
       sdk && isAuthorized && address && (query?.enabled ?? true)
     ),
   });
-  return {
-    address: data,
-    ...rest,
-  };
 }
 /**
  * @group Hooks
  * @category Addresses
  * @param {Object} [params] No required parameters.
+ * @param {Object} [params.profile] Filter based on profile id.
+ * @param {Object} [params.chain] Filter based on chain - CURRENTLY RETURNS AN ERROR.
  * @example
  * ```ts
  * const {
- *    addresses, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -356,21 +351,20 @@ export function useAddresses({
   chain,
   query = {},
 }: {
-  /** Fetch addresses for a specific profile. */
   profile?: string;
-  /** Fetch addresses for a specific chain. */
   chain?: Chain | ChainId;
   /** {@inheritDoc QueryOptions} */
-  query?: QueryOptions<Address[]>;
-} = {}): QueryResult<'addresses', Address[]> {
+  query?: QueryOptions<AddressesResponse>;
+} = {}) {
   const sdk = useSdk();
+
   const { isAuthorized } = useAuth();
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getAddresses({
       profile,
-      chain: chain ? parseChain(chain) : chain,
+      chain: chain ? parseChain(chain) : undefined,
     }),
     queryFn: async () => {
       if (!sdk) {
@@ -379,28 +373,23 @@ export function useAddresses({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-
-      const { addresses } = await sdk.getAddresses({ profile, chain });
-      return addresses;
+      return sdk.getAddresses({ profile, chain });
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
-  return {
-    addresses: data,
-    ...rest,
-  };
 }
 /**
  * # Get balance for a an address on a give chain
  * @group Hooks
- * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Balances[]>} [params.address] The address to fetch the balance for.
- * @param {QueryOptions<Balances[]>} [params.chain] The chain to fetch the balance for.
- * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
+ * @category Addresses
+ * @param {Object} params
+ * @param {QueryOptions<Balances>} params.address The address to fetch the balance for.
+ * @param {QueryOptions<Balances>} params.chain The chain to fetch the balance for.
+ * @param {QueryOptions<Balances>} [params.currencies] One or many: `eur`, `usd`, `gbp`, `isk`
  * @example
  * ```ts
  * const {
- *    balance, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -411,67 +400,25 @@ export function useAddresses({
  * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances | API Documentation}
  *
  */
-export function useBalance({
+export function useBalances({
   address,
   chain,
+  currencies,
   query,
 }: {
   address: string;
   chain: Chain | ChainId;
-  query?: QueryOptions<Balances>;
-}): QueryResult<'balances', Balances> {
-  const sdk = useSdk();
-  const { isAuthorized } = useAuth();
-
-  const { data, ...rest } = useQuery({
-    ...query,
-    queryKey: keys.getBalances({ address, chain }),
-    queryFn: async () => {
-      if (!sdk) {
-        throw new Error('No SDK instance available');
-      }
-      if (!isAuthorized) {
-        throw new Error('User not authorized');
-      }
-      return sdk.getBalance(address, chain);
-    },
-    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
-  });
-  return {
-    balances: data,
-    ...rest,
-  };
-}
-/**
- * @group Hooks
- * @category Addresses
- * @param {Object} params
-
- * @example
- * ```ts
- * const {
- *    balances, // useQuery's `data` property
- *    isLoading,
- *    isError,
- *    error,
- *    refetch,
- *    ...moreUseQueryResults
- * } = useBalances();
- * ```
- * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances | API Documentation}
- */
-export function useBalances({
-  query,
-}: {
+  currencies?: Currency | Currency[];
   /** {@inheritDoc QueryOptions} */
-  query?: QueryOptions<Balances[]>;
-} = {}): QueryResult<'balances', Balances[]> {
+  query?: QueryOptions<Balances>;
+}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
-    queryKey: keys.getBalances(),
+    queryKey: keys.getBalances(address, parseChain(chain), currencies),
+    staleTime: 1000 * 60 * 5,
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -479,15 +426,10 @@ export function useBalances({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-
-      return sdk.getBalances();
+      return sdk.getBalances(address, chain, currencies);
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
-  return {
-    balances: data,
-    ...rest,
-  };
 }
 
 /**
@@ -497,7 +439,7 @@ export function useBalances({
  * @example
  * ```ts
  * const {
- *    iban, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -515,11 +457,11 @@ export function useIBAN({
   iban: string;
   /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<IBAN>;
-}): QueryResult<'iban', IBAN> {
+}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getIban(iban),
     queryFn: async () => {
@@ -534,11 +476,6 @@ export function useIBAN({
     },
     enabled: Boolean(sdk && isAuthorized && iban && (query?.enabled ?? true)),
   });
-
-  return {
-    iban: data,
-    ...rest,
-  };
 }
 /**
  * @group Hooks
@@ -547,7 +484,7 @@ export function useIBAN({
  * @example
  * ```ts
  * const {
- *    ibans, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -567,12 +504,12 @@ export function useIBANs({
   /** Fetch IBANs for a specific chain. */
   chain?: Chain | ChainId;
   /** {@inheritDoc QueryOptions} */
-  query?: QueryOptions<IBAN[]>;
-} = {}): QueryResult<'ibans', IBAN[]> {
+  query?: QueryOptions<IBANsResponse>;
+} = {}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getIbans({ profile, chain }),
     queryFn: async () => {
@@ -583,16 +520,10 @@ export function useIBANs({
         throw new Error('User not authorized');
       }
 
-      const { ibans } = await sdk.getIbans({ profile, chain });
-      return ibans;
+      return sdk.getIbans({ profile, chain });
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
-
-  return {
-    ibans: data,
-    ...rest,
-  };
 }
 
 /**
@@ -602,7 +533,7 @@ export function useIBANs({
  * @example
  * ```ts
  * const {
- *    order, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -620,10 +551,10 @@ export function useOrder({
   orderId: string;
   /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Order>;
-}): QueryResult<'order', Order> {
+}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getOrder(orderId),
     queryFn: async () => {
@@ -641,10 +572,6 @@ export function useOrder({
     },
     enabled: Boolean(sdk && isAuthorized && orderId && (query.enabled ?? true)),
   });
-  return {
-    order: data,
-    ...rest,
-  };
 }
 
 /**
@@ -660,7 +587,7 @@ export function useOrder({
  * @example
  * ```ts
  * const {
- *    orders, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -675,16 +602,16 @@ export function useOrders({
   ...filters
 }: {
   /** {@inheritDoc QueryOptions} */
-  query?: QueryOptions<Orders>;
+  query?: QueryOptions<OrdersResponse>;
   address?: string;
   txHash?: string;
   profile?: string;
   memo?: string;
   state?: OrderState;
-} = {}): QueryResult<'orders', Orders> {
+} = {}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getOrders(filters),
     queryFn: async () => {
@@ -699,10 +626,6 @@ export function useOrders({
     },
     enabled: Boolean(sdk && isAuthorized && (query.enabled ?? true)),
   });
-  return {
-    orders: data,
-    ...rest,
-  };
 }
 
 /**
@@ -867,7 +790,7 @@ export function useRequestIban({
  *    ...moreUseMutationResults
  * } = useMoveIban();
  * ```
- * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban  | API Documentation}
+ * @see {@link https://monerium.dev/api-docs/v2#tag/ibans/operation/move-iban | API Documentation}
  */
 
 export function useMoveIban({
@@ -913,6 +836,9 @@ export function useMoveIban({
       });
       queryClient.invalidateQueries({
         queryKey: keys.getIbans(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: keys.getAddress(variables.address),
       });
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
@@ -997,6 +923,9 @@ export function usePlaceOrder({
       queryClient.invalidateQueries({
         queryKey: keys.getOrders(),
       });
+      queryClient.invalidateQueries({
+        queryKey: keys.getBalances(data.address, data.chain),
+      });
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
     },
@@ -1016,8 +945,7 @@ export function usePlaceOrder({
  *
  * @group Hooks
  * @category Profiles
- * @param param
- * @param {string} param.profile Which profile to link the address.
+ * @param {Object} [params] No required parameters.
  *
  * @example
  * ```ts
@@ -1037,17 +965,8 @@ export function useLinkAddress({
   mutation,
 }: {
   /** {@inheritDoc MutationOptions} */
-  mutation?: MutationOptions<
-    { status: number; statusText: string },
-    Error,
-    LinkAddress
-  >;
-} = {}): MutationResult<
-  'linkAddress',
-  { status: number; statusText: string },
-  Error,
-  LinkAddress
-> {
+  mutation?: MutationOptions<LinkedAddress, Error, LinkAddress>;
+} = {}): MutationResult<'linkAddress', LinkedAddress, Error, LinkAddress> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const queryClient = useQueryClient();

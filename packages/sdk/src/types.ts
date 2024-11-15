@@ -34,6 +34,7 @@ export enum Currency {
 
 export type TokenSymbol = 'EURe' | 'GBPe' | 'USDe' | 'ISKe';
 export type Ticker = 'EUR' | 'GBP' | 'USD' | 'ISK';
+export type CurrencyCode = 'eur' | 'gbp' | 'usd' | 'isk';
 
 // -- auth
 
@@ -277,7 +278,7 @@ export type SubmitProfileDetailsPayload =
 
 // -- getAddresses
 export interface AddressesQueryParams {
-  /** Filter the list on profile ID */
+  /** Filter the list by profile */
   profile?: string;
   /** Filter the list by chain */
   chain?: Chain | ChainId;
@@ -292,16 +293,12 @@ export interface Address {
   chains: Chain[];
 }
 
-export interface Addresses {
+export interface AddressesResponse {
   addresses: Address[];
 }
 
 // -- getBalances
 
-export interface BalancesFilter {
-  address: string;
-  chain: Chain | ChainId;
-}
 export interface CurrencyBalance {
   currency: Currency;
   amount: string;
@@ -395,6 +392,7 @@ export interface Order {
   accountId: string;
   address: string;
   kind: OrderKind;
+  chain: Chain;
   amount: string;
   currency: Currency;
   totalFee: string;
@@ -406,7 +404,7 @@ export interface Order {
   meta: OrderMetadata;
 }
 
-export interface Orders {
+export interface OrdersResponse {
   orders: Order[];
 }
 
@@ -494,6 +492,15 @@ export interface LinkAddress {
    */
   signature: string;
   chain: Chain | ChainId;
+}
+export interface LinkedAddress {
+  profile: string;
+  address: string;
+  state: string;
+  meta: {
+    linkedBy: string;
+    linkedAt: string;
+  };
 }
 
 // -- IBANs

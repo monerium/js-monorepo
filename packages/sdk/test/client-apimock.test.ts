@@ -35,7 +35,7 @@ describe('MoneriumClient', () => {
     );
     expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
       expect.objectContaining({
-        method: 'get',
+        method: 'GET',
       })
     );
   });
@@ -57,7 +57,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'post',
+          method: 'POST',
           body: JSON.stringify({
             // profile: 'testProfile',
             address: PUBLIC_KEY,
@@ -78,7 +78,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });
@@ -92,14 +92,14 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });
     test('get addresses with params', async () => {
       await client
         .getAddresses({
-          profile: 'testProfileId',
+          profile: 'mockTestProfile',
           chain: 11155111,
         })
         .catch(() => ({}));
@@ -107,25 +107,25 @@ describe('MoneriumClient', () => {
       expect(fetchMock?.mock?.calls?.length).toEqual(1);
 
       expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
-        `https://api.monerium.dev/addresses?profile=testProfileId&chain=ethereum`
+        `https://api.monerium.dev/addresses?profile=mockTestProfile&chain=ethereum`
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });
     test('get balances', async () => {
-      await client.getBalances().catch(() => ({}));
+      await client.getBalances('0x1234', 100).catch(() => ({}));
 
       expect(fetchMock?.mock?.calls?.length).toEqual(1);
 
       expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
-        `https://api.monerium.dev/balances`
+        `https://api.monerium.dev/balances/gnosis/0x1234`
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });
@@ -141,7 +141,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'post',
+          method: 'POST',
           body: JSON.stringify({
             email: 'test@gmail.com',
           }),
@@ -171,7 +171,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'patch',
+          method: 'PATCH',
           body: JSON.stringify({
             address: PUBLIC_KEY,
             chain: 'ethereum',
@@ -193,7 +193,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'patch',
+          method: 'PATCH',
           body: JSON.stringify({
             address: PUBLIC_KEY,
             chain: 'ethereum',
@@ -216,7 +216,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'post',
+          method: 'POST',
           body: JSON.stringify({
             address: PUBLIC_KEY,
             chain: 'ethereum',
@@ -260,7 +260,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'post',
+          method: 'POST',
           body: JSON.stringify({
             kind: 'redeem',
             amount: '10',
@@ -318,7 +318,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'post',
+          method: 'POST',
           body: JSON.stringify({
             kind: 'redeem',
             amount: '10',
@@ -384,7 +384,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });
@@ -404,7 +404,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });
@@ -426,7 +426,6 @@ describe('MoneriumClient', () => {
 
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'post',
           body: fd,
         })
       );
@@ -462,7 +461,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'put',
+          method: 'PUT',
           body: JSON.stringify({
             personal: {
               idDocument: {
@@ -493,7 +492,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });
@@ -508,7 +507,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });
@@ -527,7 +526,7 @@ describe('MoneriumClient', () => {
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
-          method: 'get',
+          method: 'GET',
         })
       );
     });

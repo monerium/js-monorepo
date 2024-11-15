@@ -12,8 +12,8 @@ import {
 import { getKey } from './helpers/internal.helpers';
 import type {
   Address,
-  Addresses,
   AddressesQueryParams,
+  AddressesResponse,
   AuthArgs,
   AuthCodePayload,
   AuthFlowOptions,
@@ -26,18 +26,20 @@ import type {
   ClassOptions,
   ClientCredentials,
   ClientCredentialsPayload,
+  Currency,
   ENV,
   Environment,
   IBAN,
   IbansQueryParams,
   IBANsResponse,
   LinkAddress,
+  LinkedAddress,
   MoveIbanPayload,
   NewOrder,
   Order,
   OrderFilter,
   OrderNotificationQueryParams,
-  Orders,
+  OrdersResponse,
   PKCERequestArgs,
   Profile,
   ProfilesQueryParams,
@@ -362,33 +364,34 @@ export class MoneriumClient {
    * @param {AddressesQueryParams} [params] - No required parameters.
    * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses | API Documentation}
    */
-  getAddresses({
-    profile,
-    chain,
-  }: AddressesQueryParams = {}): Promise<Addresses> {
-    const params = queryParams({
-      profile,
-      chain: chain ? parseChain(chain) : chain,
-    });
-    return this.#api<Addresses>('get', `addresses${params}`);
+  getAddresses(params?: AddressesQueryParams): Promise<AddressesResponse> {
+    params = mapChainIdToChain(params);
+    const searchParams = params
+      ? urlEncoded(params as unknown as Record<string, string>)
+      : undefined;
+    const url = searchParams ? `addresses?${searchParams}` : 'addresses';
+    // return this.#api<Order[]>('get', url);
+    return this.#api('get', url);
   }
 
   /**
    * @group Addresses
    * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances| API Documentation}
    */
-  getBalances(): Promise<Balances[]> {
-    return this.#api<Balances[]>('get', `balances`);
-  }
+  getBalances(
+    address: string,
+    chain: Chain | ChainId,
+    currencies?: Currency | Currency[]
+  ): Promise<Balances> {
+    const currencyParams = Array.isArray(currencies)
+      ? currencies.map((currency) => `currency=${currency}`).join('&')
+      : currencies
+        ? `currency=${currencies}`
+        : '';
 
-  /**
-   * @group Addresses
-   * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances| API Documentation}
-   */
-  getBalance(address: string, chain: Chain | ChainId): Promise<Balances> {
     return this.#api<Balances>(
       'get',
-      `balances/${parseChain(chain)}/${address}`
+      `balances/${parseChain(chain)}/${address}${currencyParams ? `?${currencyParams}` : ''}`
     );
   }
 
@@ -420,8 +423,8 @@ export class MoneriumClient {
    * @group Orders
    * @see {@link https://monerium.dev/api-docs-v2#tag/orders | API Documentation}
    */
-  getOrders(filter?: OrderFilter): Promise<Orders> {
-    return this.#api<Orders>('get', `orders${queryParams(filter)}`);
+  getOrders(filter?: OrderFilter): Promise<OrdersResponse> {
+    return this.#api<OrdersResponse>('get', `orders${queryParams(filter)}`);
   }
   /**
    * @group Orders
@@ -444,9 +447,9 @@ export class MoneriumClient {
    * @group Addresses
    * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address | API Documentation}
    */
-  linkAddress(payload: LinkAddress): Promise<ResponseStatus> {
+  linkAddress(payload: LinkAddress): Promise<LinkedAddress> {
     payload = mapChainIdToChain(payload);
-    return this.#api<ResponseStatus>(
+    return this.#api<LinkedAddress>(
       'post',
       `addresses`,
       JSON.stringify(payload)
@@ -562,7 +565,7 @@ export class MoneriumClient {
 
     return rest<T>(
       `${this.#env.api}/${resource}`,
-      method,
+      method.toUpperCase(),
       isFormEncoded ? urlEncoded(body as Record<string, string>) : body,
       headers
     );

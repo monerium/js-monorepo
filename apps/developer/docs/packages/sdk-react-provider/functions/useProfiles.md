@@ -1,6 +1,6 @@
 # Function: useProfiles()
 
-> **useProfiles**(`params`?: \{`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`ProfilePermissions`](/docs/packages/sdk-react-provider/interfaces/ProfilePermissions.md)[]\>; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"profiles"`, [`ProfilePermissions`](/docs/packages/sdk-react-provider/interfaces/ProfilePermissions.md)[]\>
+> **useProfiles**(`params`?: \{`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<`ProfilesResponse`\>; \}): `UseQueryResult`\<`ProfilesResponse`, `Error`\>
 
 # Get profiles
 
@@ -9,17 +9,17 @@
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `params`? | `object` | No required parameters. |
-| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`ProfilePermissions`](/docs/packages/sdk-react-provider/interfaces/ProfilePermissions.md)[]\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
+| `params.query`? | [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<`ProfilesResponse`\> | See [Tanstack Query - useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery) options. |
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"profiles"`, [`ProfilePermissions`](/docs/packages/sdk-react-provider/interfaces/ProfilePermissions.md)[]\>
+`UseQueryResult`\<`ProfilesResponse`, `Error`\>
 
 ## Example
 
 ```ts
 const {
-   profiles, // useQuery's `data` property
+   data,
    isLoading,
    isError,
    error,
@@ -34,4 +34,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:205](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L205)
+[sdk-react-provider/src/lib/hooks.tsx:212](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L212)

@@ -1,6 +1,6 @@
 # Function: useTokens()
 
-> **useTokens**(`params`?: \{`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`Token`](/docs/packages/sdk-react-provider/interfaces/Token.md)[]\>; \}): [`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"tokens"`, [`Token`](/docs/packages/sdk-react-provider/interfaces/Token.md)[]\>
+> **useTokens**(`params`?: \{`query`: [`QueryOptions`](/docs/packages/sdk-react-provider/type-aliases/QueryOptions.md)\<[`Token`](/docs/packages/sdk-react-provider/interfaces/Token.md)[]\>; \}): `UseQueryResult`\<[`Token`](/docs/packages/sdk-react-provider/interfaces/Token.md)[], `Error`\>
 
 ## Parameters
 
@@ -11,13 +11,13 @@
 
 ## Returns
 
-[`QueryResult`](/docs/packages/sdk-react-provider/type-aliases/QueryResult.md)\<`"tokens"`, [`Token`](/docs/packages/sdk-react-provider/interfaces/Token.md)[]\>
+`UseQueryResult`\<[`Token`](/docs/packages/sdk-react-provider/interfaces/Token.md)[], `Error`\>
 
 ## Example
 
 ```ts
 const {
-   tokens, // useQuery's `data` property
+   data,
    isLoading,
    isError,
    error,
@@ -32,4 +32,4 @@ const {
 
 ## Defined in
 
-[sdk-react-provider/src/lib/hooks.tsx:252](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L252)
+[sdk-react-provider/src/lib/hooks.tsx:254](https://github.com/monerium/js-monorepo/blob/main/packages/sdk-react-provider/src/lib/hooks.tsx#L254)
