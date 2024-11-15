@@ -17,8 +17,17 @@ export const getAuthFlowParams = (
   args: PKCERequestArgs,
   codeChallenge: string
 ) => {
-  const { client_id, redirect_uri, scope, state, address, signature, chain } =
-    args;
+  const {
+    client_id,
+    redirect_uri,
+    scope,
+    state,
+    address,
+    signature,
+    chain,
+    skip_create_account,
+    skip_kyc,
+  } = args;
 
   const autoLink = address
     ? {
@@ -33,9 +42,14 @@ export const getAuthFlowParams = (
     redirect_uri,
     ...(scope !== undefined ? { scope: scope } : {}),
     ...(state !== undefined ? { state: state } : {}),
+    ...(skip_create_account !== undefined
+      ? { skip_create_account: skip_create_account }
+      : {}),
+    ...(skip_kyc !== undefined ? { skip_kyc: skip_kyc } : {}),
     code_challenge: codeChallenge,
     code_challenge_method: 'S256' as PKCERequest['code_challenge_method'],
     response_type: 'code' as PKCERequest['response_type'],
+
     ...autoLink,
   });
 };

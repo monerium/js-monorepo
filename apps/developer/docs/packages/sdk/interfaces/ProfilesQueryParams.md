@@ -4,5 +4,5 @@
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| `kind?` | [`ProfileType`](/docs/packages/sdk/enumerations/ProfileType.md) | profile kind to filter by | [types.ts:226](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L226) |
-| `state?` | [`ProfileState`](/docs/packages/sdk/enumerations/ProfileState.md) | profile state to filter by | [types.ts:224](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L224) |
+| `kind?` | [`ProfileType`](/docs/packages/sdk/enumerations/ProfileType.md) | profile kind to filter by | [types.ts:228](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L228) |
+| `state?` | [`ProfileState`](/docs/packages/sdk/enumerations/ProfileState.md) | profile state to filter by | [types.ts:226](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L226) |

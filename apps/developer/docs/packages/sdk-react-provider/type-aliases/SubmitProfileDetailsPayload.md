@@ -4,4 +4,4 @@
 
 ## Defined in
 
-sdk/dist/index.d.ts:221
+sdk/dist/index.d.ts:223

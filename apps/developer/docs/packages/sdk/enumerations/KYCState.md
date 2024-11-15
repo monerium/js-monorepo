@@ -4,7 +4,7 @@
 
 | Enumeration Member | Value | Defined in |
 | ------ | ------ | ------ |
-| `absent` | `"absent"` | [types.ts:162](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L162) |
-| `confirmed` | `"confirmed"` | [types.ts:165](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L165) |
-| `pending` | `"pending"` | [types.ts:164](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L164) |
-| `submitted` | `"submitted"` | [types.ts:163](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L163) |
+| `absent` | `"absent"` | [types.ts:164](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L164) |
+| `confirmed` | `"confirmed"` | [types.ts:167](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L167) |
+| `pending` | `"pending"` | [types.ts:166](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L166) |
+| `submitted` | `"submitted"` | [types.ts:165](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L165) |

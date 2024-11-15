@@ -100,7 +100,7 @@ Cleanups the localstorage and websocket connections
 
 #### Defined in
 
-[client.ts:720](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L720)
+[client.ts:721](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L721)
 
 ***
 
@@ -138,7 +138,7 @@ await monerium.getAccess();
 
 #### Defined in
 
-[client.ts:213](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L213)
+[client.ts:214](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L214)
 
 ***
 
@@ -154,7 +154,7 @@ Revokes access
 
 #### Defined in
 
-[client.ts:733](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L733)
+[client.ts:734](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L734)
 
 ***
 
@@ -178,7 +178,7 @@ Revokes access
 
 #### Defined in
 
-[client.ts:515](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L515)
+[client.ts:516](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L516)
 
 ## Addresses
 
@@ -210,7 +210,7 @@ Get details for a single address by using the address public key after the addre
 
 #### Defined in
 
-[client.ts:358](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L358)
+[client.ts:359](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L359)
 
 ***
 
@@ -234,7 +234,7 @@ Get details for a single address by using the address public key after the addre
 
 #### Defined in
 
-[client.ts:367](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L367)
+[client.ts:368](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L368)
 
 ***
 
@@ -260,7 +260,7 @@ Get details for a single address by using the address public key after the addre
 
 #### Defined in
 
-[client.ts:381](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L381)
+[client.ts:382](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L382)
 
 ***
 
@@ -286,7 +286,7 @@ Add a new address to the profile
 
 #### Defined in
 
-[client.ts:450](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L450)
+[client.ts:451](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L451)
 
 ## Profiles
 
@@ -310,7 +310,7 @@ Add a new address to the profile
 
 #### Defined in
 
-[client.ts:334](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L334)
+[client.ts:335](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L335)
 
 ***
 
@@ -334,7 +334,7 @@ Add a new address to the profile
 
 #### Defined in
 
-[client.ts:341](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L341)
+[client.ts:342](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L342)
 
 ***
 
@@ -359,7 +359,7 @@ Add a new address to the profile
 
 #### Defined in
 
-[client.ts:527](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L527)
+[client.ts:528](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L528)
 
 ## IBANs
 
@@ -385,7 +385,7 @@ Fetch details about a single IBAN
 
 #### Defined in
 
-[client.ts:405](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L405)
+[client.ts:406](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L406)
 
 ***
 
@@ -411,7 +411,7 @@ Fetch all IBANs for the profile
 
 #### Defined in
 
-[client.ts:413](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L413)
+[client.ts:414](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L414)
 
 ***
 
@@ -436,7 +436,7 @@ Fetch all IBANs for the profile
 
 #### Defined in
 
-[client.ts:483](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L483)
+[client.ts:484](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L484)
 
 ***
 
@@ -460,7 +460,7 @@ Fetch all IBANs for the profile
 
 #### Defined in
 
-[client.ts:499](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L499)
+[client.ts:500](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L500)
 
 ## Orders
 
@@ -489,7 +489,7 @@ Connects to the order notifications socket
 
 #### Defined in
 
-[client.ts:636](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L636)
+[client.ts:637](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L637)
 
 ***
 
@@ -515,7 +515,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:694](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L694)
+[client.ts:695](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L695)
 
 ***
 
@@ -539,7 +539,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:433](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L433)
+[client.ts:434](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L434)
 
 ***
 
@@ -563,7 +563,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:426](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L426)
+[client.ts:427](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L427)
 
 ***
 
@@ -587,7 +587,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:464](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L464)
+[client.ts:465](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L465)
 
 ***
 
@@ -611,7 +611,7 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:542](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L542)
+[client.ts:543](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L543)
 
 ## Tokens
 
@@ -629,4 +629,4 @@ Closes the order notifications sockets
 
 #### Defined in
 
-[client.ts:441](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L441)
+[client.ts:442](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/client.ts#L442)

@@ -1,6 +1,6 @@
 # Type Alias: PKCERequest
 
-> **PKCERequest**: \{`address`: `string`;`chain`: [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md);`client_id`: `string`;`code_challenge`: `string`;`code_challenge_method`: `"S256"`;`redirect_uri`: `string`;`response_type`: `"code"`;`scope`: `string`;`signature`: `string`;`skipCreateAccount`: `boolean`;`state`: `string`; \}
+> **PKCERequest**: \{`address`: `string`;`chain`: [`Chain`](/docs/packages/sdk/type-aliases/Chain.md) \| [`ChainId`](/docs/packages/sdk/type-aliases/ChainId.md);`client_id`: `string`;`code_challenge`: `string`;`code_challenge_method`: `"S256"`;`redirect_uri`: `string`;`response_type`: `"code"`;`scope`: `string`;`signature`: `string`;`skip_create_account`: `boolean`;`skip_kyc`: `boolean`;`state`: `string`; \}
 
 ## Type declaration
 
@@ -15,7 +15,8 @@
 | `response_type` | `"code"` | the response type of the authentication flow, handled by the SDK | [types.ts:111](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L111) |
 | `scope` | `string` | the scope of the application | [types.ts:117](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L117) |
 | `signature` | `string` | the signature of the wallet to automatically link | [types.ts:121](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L121) |
-| `skipCreateAccount` | `boolean` | You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization | [types.ts:125](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L125) |
+| `skip_create_account` | `boolean` | You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization | [types.ts:125](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L125) |
+| `skip_kyc` | `boolean` | You can skip the KYC onboarding steps in the Authorization Flow and use the the details, additional data, and verifications API endpoints after you have gotten the authorization. | [types.ts:127](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L127) |
 | `state` | `string` | the state of the application | [types.ts:113](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L113) |
 
 ## Defined in

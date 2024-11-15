@@ -99,7 +99,7 @@ export const placeOrderMessage = (
  * @returns 'application/x-www-form-urlencoded' compatible string
  */
 export const urlEncoded = (
-  body: Record<string, string>
+  body: Record<string, string | boolean>
 ): string | undefined => {
   return body && Object.entries(body)?.length > 0
     ? Object.entries(body)

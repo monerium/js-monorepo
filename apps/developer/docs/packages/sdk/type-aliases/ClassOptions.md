@@ -6,8 +6,8 @@
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `environment` | [`ENV`](/docs/packages/sdk/type-aliases/ENV.md) | [types.ts:549](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L549) |
+| `environment` | [`ENV`](/docs/packages/sdk/type-aliases/ENV.md) | [types.ts:551](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L551) |
 
 ## Defined in
 
-[types.ts:548](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L548)
+[types.ts:550](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/types.ts#L550)
