@@ -1,0 +1,3762 @@
+openapi: 3.1.0
+info:
+  version: 2.0.0-alpha
+  title: Monerium API
+  description: |
+    API for developers to integrate Monerium payments, wallets, and user onboarding functionalities into their applications.
+
+    We have created new, more intuitive version 2 endpoints.
+    We are not introducing backward-breaking changes to the current v1 Monerium API.
+    They will continue to work if you have already integrated any existing endpoints.
+
+  termsOfService: "https://monerium.com/policies/business-terms-of-service/"
+  contact:
+    name: Monerium
+    url: "https://monerium.com"
+  license:
+    name: Apache 2.0
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "https://api.monerium.app"
+    description: "Production API - real money. Stable environment, publicly available. May be lagging behind other environments."
+  - url: "https://api.monerium.dev"
+    description: "Sandbox API - fake money. Stable environment, publicly available. Parity with production server while simulating periphery services."
+paths:
+  /:
+    get:
+      operationId: welcome
+      summary: Welcome
+      description: Returns a welcome message with a link to documentation and socials.
+      parameters: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hello:
+                    type: string
+                    example: Welcome to the Monerium API
+                  docs:
+                    type: string
+                    example: "https://monerium.dev"
+                  twitter:
+                    type: string
+                    example: "https://twitter.com/monerium"
+        "400":
+          description: Bad Request
+      security: []
+      tags:
+        - start
+  /auth:
+    post:
+      operationId: auth
+      summary: Authorization
+      description: |
+        Users must grant your application authorization to access their data.
+
+        This endpoint issues a Temporary Redirect (HTTP 307) to the [Authorization Code Flow](/docs/getting-started/auth-flow) where users can sign up, onboard, connect their wallets and authorize your app to access to their data.
+
+        Use the `Authorization Code Flow client_id` and the other parameters below to redirect users to the Monerium onboarding screen.
+
+        Upon authorization, users will be redirected back to your application `redirect_uri` with an authorization `code` in the query parameters.
+
+        This authorization code is then used to request an access token via the [token endpoint](/api-docs#operation/auth-token).
+
+        **Additional material**:
+        - [Getting started: Authorization Code Flow](/docs/getting-started/auth-flow)
+        - [Using the Monerium API: Authentication & Authorization](/docs/api#authorization)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  $ref: "#/components/schemas/AuthClientID"
+                code_challenge:
+                  description: |
+                    Generated challenge from the `code_verifier`.
+                    You must use the same `code_verifier` when [requesting an access token](/api-docs#operation/auth-token).
+
+                    Read more about [code challenges for PKCE](/docs/api#authorization)
+                  type: string
+                  example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
+                code_challenge_method:
+                  description: |
+                    Method used to generate the challenge (e.g., S256).
+
+                    The PKCE spec defines two methods, S256 and plain, the latter is discouraged.
+                  type: string
+                  example: S256
+                  default: plain
+                  enum:
+                    - plain
+                    - S256
+                response_type:
+                  description: The kind of credential that will be returned. Only `code` is supported.
+                  type: string
+                  default: code
+                state:
+                  description: |
+                    **Recommended.** The state parameter will be included when redirecting back to your application.
+                    It can be used to store request-specific data and/or prevent [CSRF attacks](https://auth0.com/docs/secure/attack-protection/state-parameters).
+                  type: string
+                redirect_uri:
+                  description: |
+                    The URL to which will redirect the browser after authorization has been granted by the user.
+
+                    **Required if**  there are more then one redirect URL's registered.</br>
+                    If present, must match one of the registered redirect URLs exactly.
+
+                    The Authorization Code will be available in the `code` URL parameter, like so: `https://your-app.com/monerium?code=AUTHORIZATION_CODE`
+
+                    Only URLs with the HTTPS-scheme are supported with the exception of http://localhost.
+                  type: string
+                  example: "http://localhost:3000/monerium"
+                address:
+                  description: You can force what address is to be linked in the Authorization Flow.
+                  $ref: "#/components/schemas/Address"
+                signature:
+                  description: "You can automatically link the address in the connect wallet step in the Authorization Flow by including same the signature used for [Link Address](#operation/link-address). The address will be automatically linked and the user continues to the next step. You must then also include the `address` property."
+                  type: string
+                  example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
+                skipCreateAccount:
+                  description: "You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the [Link Address](#operation/link-address) and [Request IBAN](#operation/request-iban) API endpoints after you have gotten the authorization"
+                  type: boolean
+                  example: true
+                chain:
+                  description: You can force what chain the address is linked to in the Authorization Flow.
+                  $ref: "#/components/schemas/Chain"
+              required:
+                - client_id
+                - code_challenge
+      responses:
+        "204":
+          description: No Content
+        "302":
+          description: FOUND
+          headers:
+            Location:
+              description: |
+                Uri to authorization flow with errors.
+              schema:
+                type: string
+              example: "https://sandbox.monerium.dev/login?error=server_error&error_description=No+such+client+ID"
+        "307":
+          description: TEMPORARY REDIRECT
+          headers:
+            Location:
+              description: Uri to authorization flow. Customer has to go through the Monerium onboarding screen and will eventually give the application permission to read their data.
+              schema:
+                type: string
+              example: "https://sandbox.monerium.dev/partners/a15806ac-e6d6-11ed-891c-2ea11c960b3f/auth?client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f&code_challenge=9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code"
+        "400":
+          description: Bad Request
+      security: []
+      tags:
+        - auth
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -i 'https://api.monerium.dev/auth' \
+            --header 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'code_challenge=9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0' \
+            --data-urlencode 'client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f' \
+            --data-urlencode 'redirect_uri=http://localhost:3000' \
+            --data-urlencode 'code_challenge_method=S256'
+    get:
+      operationId: auth-get
+      summary: Authorization
+      description: |
+        Same as [POST /auth](#operation/auth) using a GET request with the same properties as query parameters.
+      security: []
+      tags:
+        - auth
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: "curl https://api.monerium.dev/auth?code_challenge=9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0&client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f&redirect_uri=http://localhost:3000&code_challenge_method=S256"
+  /auth/signup:
+    post:
+      operationId: auth-signup
+      summary: Sign up
+      description: |-
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+
+        Create a user and profile by submitting the user's email address
+        that your platform has validated. The user can also use the email address
+        to generate a password and authenticate to the monerium app.
+        The Monerium API will return a profile UUID that you will use to submit
+        all of the customer's details.
+
+        Your app will be automatically authorized to access the user data.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  description: An email address used as username to authenticate.
+                  type: string
+                  format: email
+                  example: user@example.com
+              required:
+                - email
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    description: The user's email.
+                    type: string
+                    format: email
+                    example: user@example.com
+                  profile:
+                    description: The UUID for the new profile.
+                    example: 4f079ef8-6d26-11eb-9bc8-acde48001122
+                    $ref: "#/components/schemas/UUID"
+        "304":
+          description: |-
+            Not modified (user already exists).
+            <br /> Use [the authorization flow](#operation/auth) if the user is already a Monerium user. The user is then redirected back to your application, and you can continue with the other operations.
+        "403":
+          description:
+            $ref: "#/components/schemas/ForbiddenPartnerError/description"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenPartnerError"
+      security:
+        - BearerAuth: []
+      tags:
+        - auth
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/auth/signup' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "email": "user@example.com"
+            }'
+  /auth/token:
+    post:
+      operationId: auth-token
+      summary: Access token
+      description: |
+        API users can authenticate themselves by providing an [OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc6750) access token.
+
+        You get two types of `client_id` when you register your app:
+
+        ![client IDs](/assets/client_ids.png)
+
+        **Authorization Code Flow and refresh token**
+
+        For mobile and web apps that cannot securely store a client secret without exposing it to the users.
+
+        Your application acquires an authorization `code` through the [PKCE authorization flow](/docs/api#auth-code).
+        you can use this authorization code to obtain an `access_token` and a `refresh_token` using `grant_type=authorization_code`.
+
+        The access token can then be used to authenticate all requests for the following hour, after which the token must be refreshed using the `refresh_token` with `grant_type=refresh_token`.
+
+        **Client Credentials Authorization**
+
+        For backend servers which can hide their secrets from users.
+
+        Request an `access_token` by using the `client_id` and `client_secret` with `grant_type=client_credentials`.
+
+        The access token can then be used to authenticate all requests for the following hour, after which you can get a new one.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              oneOf:
+                - allOf:
+                    - description: Authorization code flow
+                      title: Authorization code flow
+                      properties:
+                        client_id:
+                          $ref: "#/components/schemas/AuthClientID"
+                        grant_type:
+                          type: string
+                          enum:
+                            - authorization_code
+                        code:
+                          description: |
+                            The authorization code that was acquired from authorization flow.
+                          type: string
+                          example: BvTYQprmQzKt8YSn3xsTWQ
+                        code_verifier:
+                          description: |
+                            The randomized string that was used to create the `code_challenge` when a customer/user enters the partner authorization flow.
+                            Read more about [code challenges for PKCE](/docs/api#authorization)
+                          type: string
+                          example: KO2yF8CUSxU8KJepixDmXdiCOFTMMZFLDmVjNd4J2VhbFUSSgU1lXl0aYyWYK8hIZIEH9bEBDeJ78CIuNoeOIcZOybzzqFlIGedtclJ7ZTKF6GmRBZ4fdMvg6OXnf2dl
+                        redirect_uri:
+                          description: |
+                            The same `redirect_uri` that was used to acquire the `authorization_code`.
+                          type: string
+                          example: "http://localhost:3000/monerium"
+                      required:
+                        - code
+                        - grant_type
+                        - client_id
+                        - code_verifier
+                        - redirect_uri
+                - allOf:
+                    - description: Fetch updated access token with refresh token.
+                      title: Refresh token
+                      properties:
+                        client_id:
+                          $ref: "#/components/schemas/AuthClientID"
+                        grant_type:
+                          type: string
+                          enum:
+                            - refresh_token
+                        refresh_token:
+                          description: |
+                            The refresh token acquired from the authorization flow
+                          type: string
+                      required:
+                        - client_id
+                        - grant_type
+                        - refresh_token
+                - allOf:
+                    - description: Client credentials.
+                      title: Client credentials
+                      properties:
+                        client_id:
+                          $ref: "#/components/schemas/CredentialsClientID"
+                        grant_type:
+                          type: string
+                          enum:
+                            - client_credentials
+                        client_secret:
+                          description: |
+                            Secret that was created when the app was registered.
+                            Read more: [Client Credentials.](docs/api#auth-client-credentials)
+                          type: string
+                      required:
+                        - client_id
+                        - grant_type
+                        - client_secret
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+        "400":
+          description: |
+            BAD REQUEST
+
+            <br />
+            Note that there are two types of client_id for your app,
+            * **Client Credentials Authorization client_id** that you use for `grant_type="client_credentials"`
+            * **Authorization Code Flow client_id** that you use for `grant_type="authorization_code"` or `grant_type="refresh_token"`
+
+            <br />
+
+            ![client IDs](/assets/client_ids.png)
+
+            <br />
+            You get the following error when you are using the wrong client_id for the grant_type:
+
+            ```json
+            {
+              "code": 400,
+              "status": "Bad Request",
+              "message": "The client is not authorized to request a token using this method."
+            }
+            ```
+
+            Example response when you are using refresh token generated by client credentials:
+            ```json
+            {
+              "code": 400,
+              "status": "Bad Request",
+              "message": "Client id must be the same from previous token"
+            }
+            ```
+
+            You should not use refresh token when you can use client credentials.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                wrongClientId:
+                  summary: Wrong client ID
+                  value:
+                    code: 400
+                    status: Bad Request
+                    message: The client is not authorized to request a token using this method.
+                refreshTokenError:
+                  summary: Refresh token error
+                  value:
+                    code: 400
+                    status: Bad Request
+                    message: Client id must be the same from previous token.
+      security: []
+      tags:
+        - auth
+      x-codeSamples:
+        - lang: bash
+          label: Auth code
+          source: |-
+            curl --location --request POST 'https://api.monerium.dev/auth/token' \
+            --header 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'grant_type=authorization_code' \
+            --data-urlencode 'client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f' \
+            --data-urlencode 'code=BvTYQprmQzKt8YSn3xsTWQ' \
+            --data-urlencode 'code_verifier=KO2yF8CUSxU8KJepixDmXdiCOFTMMZFLDmVjNd4J2VhbFUSSgU1lXl0aYyWYK8hIZIEH9bEBDeJ78CIuNoeOIcZOybzzqFlIGedtclJ7ZTKF6GmRBZ4fdMvg6OXnf2dl' \
+            --data-urlencode 'redirect_uri=http://localhost:3000'
+        - lang: bash
+          label: Refresh token
+          source: |-
+            curl --location --request POST 'https://api.monerium.dev/auth/token' \
+            --header 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'grant_type=refresh_token' \
+            --data-urlencode 'client_id=1337' \
+            --data-urlencode 'refresh_token=ay5GEeN4Q8ywCgKykxZN6Q'
+        - lang: bash
+          label: Client credentials
+          source: |-
+            curl --location --request POST 'https://api.monerium.dev/auth/token' \
+            --header 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode 'grant_type=client_credentials' \
+            --data-urlencode 'client_id=1b3a17ef-460f-47b0-84c6-4495e18589b3' \
+            --data-urlencode 'client_secret=samplepassword'
+  /webhooks:
+    post:
+      operationId: register-subscription
+      summary: Register subscription
+      description: "Register webhook subscription to receive notifications like [profile update](#operation/webhook-profile-updated) on specified endpoint."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  description: The URL where the notification will be sent.
+                  type: string
+                  example: "https://yourdomain.com/webhook"
+                secret:
+                  description: |
+                    A secret key used to verify the authenticity of webhook notifications.
+                    Each notification is sent with a webhook-signature header, which contains a minified JSON payload encrypted using the secret key via the HMAC-SHA256 scheme.
+                    The secret key must be a base64-encoded, random value between 24 and 64 bytes, prefixed with `whsec_`.
+                  type: string
+                  example: whsec_mUt3nH+3wx/djdHf8RHn9yJMMiAhq10b
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+      security:
+        - BearerAuth: []
+      tags:
+        - webhooks
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/webhooks/register' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data-raw '{
+              "url": "https://yourdomain.com/webhook",
+              "secret": "whsec_mUt3nH+3wx/djdHf8RHn9yJMMiAhq10b"
+            }'
+  "/profiles/{profile}/details":
+    put:
+      operationId: submit-profile-details
+      summary: Submit profile details
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+
+        Submit the required compliance information to onboard a customer. This endpoint supports two profile types: Personal and Corporate.
+        Each profile type requires specific details and optionally supports additional form and verification data.
+
+        **Required Details:**
+        - For Personal profiles, provide the `PersonalDetails` object, which includes personal information such as name, address and details of ID document.
+          - Optionally, provide the `PersonalForm` and `PersonalVerifications` if you intend to share complete KYC data (**work in progress**).
+        - For Corporate profiles, provide the `CorporateDetails` object, which includes company information and details of representatives, final beneficiaries, and directors.
+          - Optionally, provide the `CorporateForm` and `CorporateVerifications` if you intend to share complete KYC data (**work in progress**).
+
+        **Note:**
+        - The fields `form` and `verifications` are required only if client and Monerium agreed to share complete KYC data.
+        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
+        - Once a profile is approved, you cannot change the profile kind.
+        - Notifications about profile state can be received via [webhooks](#operation/webhook-profile-updated).
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+        - name: profile
+          in: path
+          description: The ID of the profile
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                - title: Personal
+                  properties:
+                    personal:
+                      description: Details for an individual
+                      type: object
+                      allOf:
+                        - $ref: "#/components/schemas/PersonalDetails"
+                        - type: object
+                          properties:
+                            idDocument:
+                              $ref: "#/components/schemas/IdDocument"
+                            form:
+                              $ref: "#/components/schemas/PersonalForm"
+                            verifications:
+                              $ref: "#/components/schemas/PersonalVerifications"
+                      required:
+                        - idDocument
+                - title: Corporate
+                  properties:
+                    corporate:
+                      description: Details for a company
+                      type: object
+                      allOf:
+                        - $ref: "#/components/schemas/CorporateDetails"
+                        - type: object
+                          properties:
+                            form:
+                              $ref: "#/components/schemas/CorporateForm"
+                            verifications:
+                              $ref: "#/components/schemas/CorporateVerifications"
+      responses:
+        "202":
+          description: |
+            Accepted
+
+            The applicant details have been received and will be processed by Monerium.
+            The profile will get an outcome of either approved or rejected once processed.
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                status: Bad Request
+                message: Validation errors
+                errors:
+                  firstName: First name is missing
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description:
+            $ref: "#/components/schemas/ForbiddenPartnerError/description"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenPartnerError"
+        "409":
+          description: |
+            Conflict
+
+            This error occurs when the profile details have already been approved and need not be submitted again.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: The error code for conflict.
+                    type: integer
+                    format: int32
+                    enum:
+                      - 409
+                  status:
+                    description: The status for conflict.
+                    type: string
+                    enum:
+                      - Conflict
+                  message:
+                    description: A short message about the error.
+                    type: string
+                    enum:
+                      - The profile details have already been approved and need not be submitted again
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X PUT 'https://api.monerium.dev/profiles/30f730fd-e51f-11ed-9e13-cacb9390199c/details' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "personal": {
+                "idDocument": {
+                  "number": "A1234566788",
+                  "kind": "passport"
+                },
+                "firstName": "Jane",
+                "lastName": "Doe",
+                "address": "Pennylane 123",
+                "postalCode": "7890",
+                "city": "Liverpool",
+                "country": "FR",
+                "countryState": "Merseyside",
+                "nationality": "FR",
+                "birthday": "1990-05-15"
+              }
+            }'
+  /profiles:
+    get:
+      operationId: profiles
+      summary: Profiles
+      description: Retrieves a list of all profiles that your application has access to.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+        - name: state
+          in: query
+          description: Filter the list on the state of profiles
+          required: false
+          schema:
+            $ref: "#/components/schemas/ProfileState"
+        - name: kind
+          in: query
+          description: Filter the list on the kind of profiles
+          required: false
+          schema:
+            $ref: "#/components/schemas/ProfileKind"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profiles:
+                    $ref: "#/components/schemas/Profiles"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            # Get all approved personal profiles
+            curl https://api.monerium.dev/profiles?state=approved&kind=personal \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json"
+  "/profiles/{profile}":
+    get:
+      operationId: profile
+      summary: Profile
+      description: Retrieves details about a single profile.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+        - name: profile
+          in: path
+          description: The ID of the profile
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/profiles/4f079ef8-6d26-11eb-9bc8-acde48001122 \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json"
+  /addresses:
+    post:
+      operationId: link-address
+      summary: Link address
+      description: |
+        A blockchain address, often called a public key or wallet address, is a unique identifier within a blockchain that serves as a destination for sending, receiving, or storing digital assets, such as the EURe onchain fiat token.
+
+        The customer's address is linked to Monerium to request an IBAN for it and perform cross-chain transactions. Linking the address requires a signature to prove that the customer owns the address.
+
+        **Externally Owned Accounts (EOAs)** can generate offchain 65 byte signatures with the user having control of the account via a private key managed by a software wallet like MetaMask or a hardware wallet like Ledger.
+
+        **Smart Contract Accounts (SCAs) or Smart Accounts (SAs)**, are different from EOAs as they are smart contracts (code) immutably linked to the blockchain like the Safe wallet. Monerium supports [ERC-1271: Standard Signature Validation Method for Contracts](https://eips.ethereum.org/EIPS/eip-1271), which can be implemented in two ways.
+
+        1. **Offchain**: The signatures are collected offchain and set in the "signature" field of the request. For multisig wallets, the signatures are concatenated in a 65 byte array.
+        2. **Onchain**: The signatures are collected and validated onchain by the smart contract. The "signature" field in the request is set to "0x" and the Monerium infrastructure will verify the onchain with the connected SCA. The SCA emits an event `SignMsg(bytes32 indexed msgHash)` after signing that the Monerium infrastructure validates the signature and completes connecting the wallet.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profile:
+                  description: Profile ID that owns the address.
+                  $ref: "#/components/schemas/UUID"
+                address:
+                  $ref: "#/components/schemas/Address"
+                chain:
+                  $ref: "#/components/schemas/Chain"
+                message:
+                  description: Fixed message to be signed with the private key corresponding to the given address. </br></br><strong><code>I hereby declare that I am the address owner.</code></strong>
+                  type: string
+                  example: I hereby declare that I am the address owner.
+                signature:
+                  oneOf:
+                    - title: EOA address
+                      $ref: "#/components/schemas/SignatureEOA"
+                    - title: Safe onchain
+                      $ref: "#/components/schemas/SignatureSafeOnchain"
+                    - title: Safe offchain
+                      $ref: "#/components/schemas/SignatureSafeOffchain"
+              required:
+                - address
+                - message
+                - chain
+                - signature
+      responses:
+        "201":
+          description: |
+            **CREATED**
+
+            Monerium was able to validate the signature and link the wallet.
+          content:
+            application/json:
+              schema:
+                type: object
+        "202":
+          description: |
+            **ACCEPTED**
+
+            The Monerium infrastructure will validate if the onchain signature has taken place and link the address.
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                status: Bad Request
+                message: Validation errors
+                errors:
+                  address: Address missing
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - addresses
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/addresses' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "profile": "a78d8ff2-e51f-11ed-9e13-cacb9390199c",
+              "address": "0x59cFC408d310697f9D3598e1BE75B0157a072407",
+              "chain": "gnosis",
+              "message": "I hereby declare that I am the address owner.",
+              "signature": "0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f"
+            }'
+        - lang: JS
+          label: JS
+          source: |-
+            /**
+            * This script demonstrates how to add addresses to a Monerium profile
+            * and create signatures for EOA, Safe onchain transactions, and Safe offchain messages.
+            *
+            * Prerequisites:
+            * 1. Install Node.js from https://nodejs.org/ (if not already installed).
+            * 2. Create a folder for this project and navigate to it in your terminal.
+            * 3. Create a file called `reqNewAddressV2.js` and paste this script into it.
+            * 4. Install the required npm packages by running:
+            *    npm install dotenv @monerium/sdk ethers @safe-global/protocol-kit @safe-global/safe-core-sdk-types @safe-global/api-kit axios
+            * 5. Create a `.env` file in your project directory and add your environment variables:
+            *    SAFE_ADDRESS=your_safe_address
+            *    PRIVATE_KEY=your_private_key
+            *    PRIVATE_KEY_2=your_second_private_key (if using Safe)
+            *    INFURA_PROJECT_ID=your_infura_project_id
+            *    ACCESS_TOKEN=your_access_token
+            *    PROFILE_ID=profile_that_owns_the_address
+            *    CLIENT_ID=your_client_id
+            *    CLIENT_SECRET=your_client_secret
+            * 6. Run the script using:
+            *    node reqNewAddressV2.js [eoa|safe-onchain|safe-offchain]
+            *
+            * Note: Replace the placeholder values in the `.env` file with your actual values.
+            * Tips
+            *  Create a Safe on Sepolia and a Punk wallet (https://punkwallet.io/)
+            *  Make the punk wallet a owner of the safe and use that private key
+            */
+
+            require("dotenv").config();
+            const { MoneriumClient } = require("@monerium/sdk");
+            const { ethers } = require('ethers');
+            const Safe = require("@safe-global/protocol-kit");
+            const SafeApi = require("@safe-global/api-kit").default;
+            const { OperationType } = require("@safe-global/safe-core-sdk-types");
+            const axios = require("axios");
+
+            // Retrieve environment variables
+            const clientId = process.env.CLIENT_ID;
+            const clientSecret = process.env.CLIENT_SECRET;
+            const profileId = process.env.PROFILE_ID;
+            const safeAddress = process.env.SAFE_ADDRESS;
+            const privateKey = process.env.PRIVATE_KEY;
+            const privateKey2 = process.env.PRIVATE_KEY_2;
+            const infuraProjectId = process.env.INFURA_PROJECT_ID;
+            const message = "I hereby declare that I am the address owner.";
+
+            // Using the Monerium SDK to handle the requests.
+            // https://www.npmjs.com/package/@monerium/sdk
+            const monerium = new MoneriumClient({
+              environment: "sandbox",
+              clientId,
+              clientSecret,
+            });
+
+            // Get the wallet type from command line arguments
+            const walletType = process.argv[2];
+
+            /**
+            * The main function that handles the address linking process.
+            * Depending on the wallet type, it will create the appropriate signature and link the address to the profile.
+            */
+            const request = async () => {
+              let signature, address;
+
+              switch (walletType) {
+                case "eoa":
+                  address = process.env.EOA_ADDRESS;
+                  signature = await signEOA(message);
+                  break;
+                case "safe-onchain":
+                  address = process.env.SAFE_ADDRESS;
+                  signature = await signOnchain(message);
+                  break;
+                case "safe-offchain":
+                  address = process.env.SAFE_ADDRESS;
+                  signature = await signOffchain(message);
+                  break;
+                default:
+                  if (!walletType) {
+                    console.error(
+                      "Wallet type parameter missing. Please use 'eoa','safe-onchain', or 'safe-offchain'. Example: node reqNewAddressV2.js eoa"
+                    );
+                    return;
+                  }
+                  console.error(
+                    `Unsupported wallet type ${walletType}. Please use 'eoa','safe-onchain', or 'safe-offchain'.`
+                  );
+                  return;
+              }
+
+              if (!signature) {
+                console.error("Signature is missing");
+                return;
+              }
+
+              // get access to Monerium API using client credentials
+              await monerium.getAccess();
+
+              // Define the request payload
+              const data = {
+                profile: profileId,
+                message,
+                address,
+                signature,
+                chain: "ethereum",
+              };
+
+              console.log("linking wallet", data);
+
+              // Perform the POST request using axios
+              axios
+                .post('https://api.monerium.dev/addresses', data, {
+                  headers: {
+                    Authorization: `Bearer ${monerium.bearerProfile.access_token}`,
+                    "Accept": "application/vnd.monerium.api-v2+json",
+                    "Content-Type": "application/json",
+                  },
+                })
+                .then((response) => {
+                  console.log("Monerium Response:", response.data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error.response ? error.response.data : error.message);
+                });
+            };
+
+
+            // Function to sign a message using an EOA (Externally Owned Account)
+            const signEOA = async (message) => {
+              const wallet = new ethers.Wallet(privateKey);
+              return await wallet.signMessage(message);
+            };
+
+            // Function to sign a message using Safe onchain transactions for a wallet with two owners.
+            const signOnchain = async () => {
+              // Initialize Safe SDK with provider, signer, and safe address
+              let kit = await Safe.default.init({
+                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
+                signer: privateKey,
+                safeAddress,
+              });
+
+              // Generate the hash of the message to be signed
+              const hash = Safe.hashSafeMessage(message);
+
+              // Get the SignMessageLib contract for the Safe version
+              const contract = await Safe.getSignMessageLibContract({
+                safeProvider: kit.getSafeProvider(),
+                safeVersion: "1.3.0",
+              });
+
+              // Encode the transaction data to sign the message
+              const txData = contract.encode("signMessage", [hash]);
+
+              // Prepare the transaction payload
+              const payload = {
+                to: await contract.getAddress(),
+                value: "0",
+                data: txData,
+                operation: OperationType.DelegateCall,
+              };
+
+              // Create the transaction
+              let tx = await kit.createTransaction({
+                transactions: [payload],
+              });
+
+              // // Sign the transaction with OWNER_1_ADDRESS
+              // // After this, the transaction contains the signature from OWNER_1_ADDRESS
+              tx = await kit.signTransaction(tx, Safe.SigningMethod.ETH_SIGN);
+
+              // // Connect OWNER_2_ADDRESS
+              kit = await Safe.default.init({
+                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
+                signer: privateKey2,
+                safeAddress,
+              });
+
+              // // Sign the transaction with OWNER_2_ADDRESS
+              // // After this, the transaction contains the signature from OWNER_1_ADDRESS and OWNER_2_ADDRESS
+              tx = await kit.signTransaction(tx, Safe.SigningMethod.ETH_SIGN);
+
+              // Execute the transaction and log the response
+              const response = await kit.executeTransaction(tx);
+              console.log("signature response:", response);
+              return "0x";
+            };
+
+            // Function to sign a message using Safe offchain messages for a wallet with two owners.
+            const signOffchain = async (message) => {
+              // Initialize Safe SDK with provider, signer, and safe address
+              let kit = await Safe.default.init({
+                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
+                signer: privateKey,
+                safeAddress,
+              });
+
+              // Create a new message object
+              let msgSafe = kit.createMessage(message);
+
+              // Sign the message with OWNER 1
+              msgSafe = await kit.signMessage(
+                msgSafe,
+                Safe.SigningMethod.ETH_SIGN,
+                safeAddress
+              );
+
+              // Sign with OWNER 2
+              kit = await Safe.default.init({
+                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
+                signer: privateKey2,
+                safeAddress,
+              });
+
+              msgSafe = await kit.signMessage(
+                msgSafe,
+                Safe.SigningMethod.ETH_SIGN,
+                safeAddress
+              );
+
+              // get the signature for OWNER 1
+              const signature = Array.from(msgSafe.signatures.values())[0];
+
+              // Instantiate the API Kit
+              // Use the chainId where you have the Safe account deployed
+              const apiKit = new SafeApi({ chainId: 11155111 });
+
+              // Propose the message
+              try {
+                await apiKit.addMessage(safeAddress, {
+                  message,
+                  signature: Safe.buildSignatureBytes([signature]),
+                });
+              } catch (error) {
+                const regex = /already exists/;
+
+                if (!error || !regex.test(error.message)) {
+                  console.error("Error:", error.message);
+                  return;
+                } else {
+                  console.log(error.message);
+                  console.log("Signature 1 has already been added, continuing...");
+                }
+              }
+
+              // Get the signature from OWNER_2_ADDRESS
+              const signatureOwner2 = Array.from(msgSafe.signatures.values())[1];
+
+              const safeMessageHash = await kit.getSafeMessageHash(
+                Safe.hashSafeMessage(message)
+              );
+
+              // Add signature from OWNER_2_ADDRESS
+              try {
+                await apiKit.addMessageSignature(
+                  safeMessageHash,
+                  Safe.buildSignatureBytes([signatureOwner2])
+                );
+              } catch (error) {
+                const regex = /already exists/;
+
+                if (!error || !regex.test(error.message)) {
+                  console.error("Error:", error.message);
+                  return;
+                } else {
+                  console.log(error.message);
+                  console.log("Signature 2 has already been added, continuing...");
+                }
+              }
+
+              // Get the message and confirmation status
+              const status = await apiKit.getMessage(safeMessageHash);
+              if (status?.preparedSignature) {
+                return status.preparedSignature;
+              }
+              return;
+            };
+
+            request();
+    get:
+      operationId: addresses
+      summary: Addresses
+      description: List of addresses that have been connected. You can filter the addresses by the profile ID and the chain they are connected to.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+        - name: profile
+          in: query
+          description: Filter the list on profile ID
+          required: false
+          schema:
+            $ref: "#/components/schemas/UUID"
+        - name: chain
+          in: query
+          description: Filter the list on the chain
+          required: false
+          schema:
+            $ref: "#/components/schemas/Chain"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addresses:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AddressObject"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - addresses
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            # Get all addresses for a profile on ethereum.
+            curl https://api.monerium.dev/addresses?profile=a78d8ff2-e51f-11ed-9e13-cacb9390199c&chain=ethereum \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json"
+  "/addresses/{address}":
+    get:
+      operationId: address
+      summary: Address
+      description: Get details for a single address by using the address public key after the address has been successfully linked to Monerium.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+        - name: address
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Address"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressObject"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - addresses
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/addresses/0x59cFC408d310697f9D3598e1BE75B0157a072407 \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json"
+  /ibans:
+    post:
+      operationId: request-iban
+      summary: Request IBAN
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+
+        Create an IBAN for a specified address and chain. All incoming EUR payments will automatically be routed to the linked address on that chain. Any linked address can use this IBAN for outgoing payments.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  $ref: "#/components/schemas/Address"
+                chain:
+                  $ref: "#/components/schemas/Chain"
+              required:
+                - address
+                - chain
+      responses:
+        "202":
+          description: |
+            **ACCEPTED**
+
+            The Monerium infrastructure will provision the IBAN and connect it to the address. This process can take a few seconds.
+          content:
+            application/json:
+              schema:
+                type: object
+        "304":
+          description: |
+            **Not modified**
+
+            An IBAN already exists for the profile. Your application can [move the existing IBAN to the address](#operation/move-iban).
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                status: Bad Request
+                message: Validation errors
+                errors:
+                  iban: Address missing
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - ibans
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/ibans' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "address": "0x59cFC408d310697f9D3598e1BE75B0157a072407",
+              "chain": "gnosis"
+            }'
+    get:
+      operationId: ibans
+      summary: IBANs
+      description: "List of IBANs that have been created. You can filter by the profile ID, address, or the chain they are connected to."
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+        - name: profile
+          in: query
+          description: Filter the list on profile ID
+          required: false
+          schema:
+            $ref: "#/components/schemas/UUID"
+        - name: chain
+          in: query
+          description: Filter the list on the chain
+          required: false
+          schema:
+            $ref: "#/components/schemas/Chain"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ibans:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/IBANObject"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - ibans
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            # Get all ibans for a profile.
+            curl https://api.monerium.dev/ibans?profile=a78d8ff2-e51f-11ed-9e13-cacb9390199 \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json"
+  "/ibans/{iban}":
+    get:
+      operationId: iban
+      summary: IBAN
+      description: Get details for a single IBAN.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+        - name: iban
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/IBAN"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IBANObject"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - ibans
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/ibans/EE73I9684012278810458214196 \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json"
+    patch:
+      operationId: move-iban
+      summary: Move IBAN
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+
+        Move an existing IBAN to a specified address an chain. All incoming EUR payments will automatically be routed to the address on that chain.
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderV2"
+        - name: iban
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/IBAN"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  $ref: "#/components/schemas/Address"
+                chain:
+                  $ref: "#/components/schemas/Chain"
+              required:
+                - address
+                - chain
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                status: Bad Request
+                message: Validation errors
+                errors:
+                  iban: Address missing
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - ibans
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X PATCH 'https://api.monerium.dev/ibans/EE73I9684012278810458214196' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "address": "0x59cFC408d310697f9D3598e1BE75B0157a072407",
+              "chain": "gnosis"
+            }'
+  /orders:
+    post:
+      operationId: post-orders
+      summary: Place order
+      description: |
+        An order represents an instruction to transfer funds from one account to another.
+        The transfer can occur within the blockchain ecosystem (cross-chain) or from a blockchain account to a traditional bank account via SEPA.
+
+        An order requires a signature from the wallet owner to authorize the processing of the order.
+        The wallet owner signs a specific message to prove ownership and consent for the transaction.
+
+        Attaching a supporting document for amounts above 15,000 EUR is required. Supporting document can be an invoice or an agreement.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewOrder"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      externalDocs:
+        description: Read more about how to upload a file.
+        url: /api-docs#operation/upload-file
+      tags:
+        - orders
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/orders' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            --data-raw '{
+              "address": "0x5731Ffc2747A25a8132A5d11768F95941Ae9c6ee",
+              "currency": "eur",
+              "chain": "ethereum",
+              "kind": "redeem",
+              "amount": "4",
+              "counterpart": {
+                "identifier": { "standard": "iban", "iban": "EE521273842688571285" },
+                "details": {
+                  "firstName": "Satoshi",
+                  "lastName": "Nakamoto",
+                  "country": "FR"
+                }
+              },
+              "message": "Send EUR 4 to EE521273842688571285 at 2024-06-07T18:25:19.948Z",
+              "signature": "0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f",
+              "memo": "Powered by Monerium"
+            }'
+        - lang: JS
+          label: JS
+          source: |-
+            /**
+            * This script demonstrates how to place an order with Monerium API
+            * and create signatures for EOA, Safe onchain transactions, and Safe offchain messages.
+            *
+            * Prerequisites:
+            * 1. Install Node.js from https://nodejs.org/ (if not already installed).
+            * 2. Create a folder for this project and navigate to it in your terminal.
+            * 3. Create a file called `reqNewAddress.js` and paste this script into it.
+            * 4. Install the required npm packages by running:
+            *    npm install dotenv @monerium/sdk ethers @safe-global/protocol-kit @safe-global/safe-core-sdk-types @safe-global/api-kit
+            * 5. Create a `.env` file in your project directory and add your environment variables:
+            *    SAFE_ADDRESS=your_safe_address
+            *    PRIVATE_KEY=your_private_key
+            *    PRIVATE_KEY_2=your_second_private_key (if using Safe)
+            *    INFURA_PROJECT_ID=your_infura_project_id
+            *    ACCESS_TOKEN=your_access_token
+            *    PROFILE_ID=profile_that_owns_the_address
+            *    CLIENT_ID=your_client_id
+            *    CLIENT_SECRET=your_client_secret
+            * 6. Run the script using:
+            *    node reqNewAddress.js [eoa|safe-onchain|safe-offchain]
+            *
+            * Note: Replace the placeholder values in the `.env` file with your actual values.
+            * Tips
+            *  Create a Safe on Sepolia and a Punk wallet (https://punkwallet.io/)
+            *  Make the punk wallet a owner of the safe and use that private key
+            */
+
+            require("dotenv").config();
+            const { MoneriumClient } = require("@monerium/sdk");
+            const { ethers } = require('ethers');
+            const Safe = require("@safe-global/protocol-kit");
+            const SafeApi = require("@safe-global/api-kit").default;
+            const { OperationType } = require("@safe-global/safe-core-sdk-types");
+
+            // Retrieve environment variables
+            const safeAddress = process.env.SAFE_ADDRESS;
+            const privateKey = process.env.PRIVATE_KEY;
+            const privateKey2 = process.env.PRIVATE_KEY_2;
+            const infuraProjectId = process.env.INFURA_PROJECT_ID;
+
+            function getRFC3339Time() {
+              const now = new Date();
+              const future = new Date(now.getTime() + 10 * 60000); // Add 10 minutes
+              return future.toISOString();
+            }
+            // order data
+            const amount = "4";
+            const iban = "EE521273842688571285";
+            const message = `Send EUR ${amount} to ${iban} at ${getRFC3339Time()}`;
+
+            // Using the Monerium SDK to handle the requests.
+            // https://www.npmjs.com/package/@monerium/sdk
+            const monerium = new MoneriumClient({
+              environment: "sandbox",
+              clientId,
+              clientSecret,
+            });
+
+            // Get the wallet type from command line arguments
+            const walletType = process.argv[2];
+
+            const request = async () => {
+              let signature, address;
+
+              switch (walletType) {
+                case "eoa":
+                  address = process.env.EOA_ADDRESS;
+                  signature = await signEOA(message);
+                  break;
+                case "safe-onchain":
+                  address = process.env.SAFE_ADDRESS;
+                  signature = await signOnchain(message);
+                  break;
+                case "safe-offchain":
+                  address = process.env.SAFE_ADDRESS;
+                  signature = await signOffchain(message);
+                  break;
+                default:
+                  if (!walletType) {
+                    console.error(
+                      "Wallet type parameter missing. Please use 'eoa','safe-onchain', or 'safe-offchain'. Example: node reqNewAddress.js eoa"
+                    );
+                    return;
+                  }
+                  console.error(
+                    `Unsupported wallet type ${walletType}. Please use 'eoa','safe-onchain', or 'safe-offchain'.`
+                  );
+                  return;
+              }
+
+              if (!signature) {
+                console.error("Signature is missing");
+                return;
+              }
+
+              // get access to Monerium API using client credentials
+              await monerium.getAccess();
+
+              // Define the request payload
+              const data = {
+                address,
+                currency: "eur",
+                chain: "ethereum",
+                kind: "redeem",
+                amount,
+                counterpart: {
+                  identifier: {
+                    standard: "iban",
+                    iban,
+                  },
+                  details: {
+                    firstName: "Satoshi",
+                    lastName: "Nakamoto",
+                    country: "FR",
+                  },
+                },
+                message,
+                signature,
+                memo: "uuu jeeeeee",
+              };
+
+              console.log("creating order", data);
+
+              try {
+                const response = await monerium.placeOrder(data, profileId);
+                console.log("success", response);
+              } catch (error) {
+                console.error(error);
+                return;
+              }
+            };
+
+            // Function to sign a message using an EOA (Externally Owned Account)
+            const signEOA = async (message) => {
+              const wallet = new ethers.Wallet(privateKey);
+              return await wallet.signMessage(message);
+            };
+
+            // Function to sign a message using Safe onchain transactions for a wallet with two owners.
+            const signOnchain = async () => {
+              // Initialize Safe SDK with provider, signer, and safe address
+              let kit = await Safe.default.init({
+                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
+                signer: privateKey,
+                safeAddress,
+              });
+
+              // Generate the hash of the message to be signed
+              const hash = Safe.hashSafeMessage(message);
+
+              // Get the SignMessageLib contract for the Safe version
+              const contract = await Safe.getSignMessageLibContract({
+                safeProvider: kit.getSafeProvider(),
+                safeVersion: "1.3.0",
+              });
+
+              // Encode the transaction data to sign the message
+              const txData = contract.encode("signMessage", [hash]);
+
+              // Prepare the transaction payload
+              const payload = {
+                to: await contract.getAddress(),
+                value: "0",
+                data: txData,
+                operation: OperationType.DelegateCall,
+              };
+
+              // Create the transaction
+              let tx = await kit.createTransaction({
+                transactions: [payload],
+              });
+
+              // // Sign the transaction with OWNER_1_ADDRESS
+              // // After this, the transaction contains the signature from OWNER_1_ADDRESS
+              tx = await kit.signTransaction(tx, Safe.SigningMethod.ETH_SIGN);
+
+              // // Connect OWNER_2_ADDRESS
+              kit = await Safe.default.init({
+                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
+                signer: privateKey2,
+                safeAddress,
+              });
+
+              // // Sign the transaction with OWNER_2_ADDRESS
+              // // After this, the transaction contains the signature from OWNER_1_ADDRESS and OWNER_2_ADDRESS
+              tx = await kit.signTransaction(tx, Safe.SigningMethod.ETH_SIGN);
+
+              // Execute the transaction and log the response
+              const response = await kit.executeTransaction(tx);
+              console.log("signature response:", response);
+              return "0x";
+            };
+
+            // Function to sign a message using Safe offchain messages for a wallet with two owners.
+            const signOffchain = async (message) => {
+              // Initialize Safe SDK with provider, signer, and safe address
+              let kit = await Safe.default.init({
+                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
+                signer: privateKey,
+                safeAddress,
+              });
+
+              // Create a new message object
+              let msgSafe = kit.createMessage(message);
+
+              // Sign the message with OWNER 1
+              msgSafe = await kit.signMessage(
+                msgSafe,
+                Safe.SigningMethod.ETH_SIGN,
+                safeAddress
+              );
+
+              // Sign with OWNER 2
+              kit = await Safe.default.init({
+                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
+                signer: privateKey2,
+                safeAddress,
+              });
+
+              msgSafe = await kit.signMessage(
+                msgSafe,
+                Safe.SigningMethod.ETH_SIGN,
+                safeAddress
+              );
+
+              // get the signature for OWNER 1
+              const signature = Array.from(msgSafe.signatures.values())[0];
+
+              // Instantiate the API Kit
+              // Use the chainId where you have the Safe account deployed
+              const apiKit = new SafeApi({ chainId: 11155111 });
+
+              // Propose the message
+              try {
+                await apiKit.addMessage(safeAddress, {
+                  message,
+                  signature: Safe.buildSignatureBytes([signature]),
+                });
+              } catch (error) {
+                const regex = /already exists/;
+
+                if (!error || !regex.test(error.message)) {
+                  console.error("Error:", error.message);
+                  return;
+                } else {
+                  console.log(error.message);
+                  console.log("Signature 1 has already been added, continuing...");
+                }
+              }
+
+              // Get the signature from OWNER_2_ADDRESS
+              const signatureOwner2 = Array.from(msgSafe.signatures.values())[1];
+
+              const safeMessageHash = await kit.getSafeMessageHash(
+                Safe.hashSafeMessage(message)
+              );
+
+              // Add signature from OWNER_2_ADDRESS
+              try {
+                await apiKit.addMessageSignature(
+                  safeMessageHash,
+                  Safe.buildSignatureBytes([signatureOwner2])
+                );
+              } catch (error) {
+                const regex = /already exists/;
+
+                if (!error || !regex.test(error.message)) {
+                  console.error("Error:", error.message);
+                  return;
+                } else {
+                  console.log(error.message);
+                  console.log("Signature 2 has already been added, continuing...");
+                }
+              }
+
+              // Get the message and confirmation status
+              const status = await apiKit.getMessage(safeMessageHash);
+              if (status?.preparedSignature) {
+                return status.preparedSignature;
+              }
+              return;
+            };
+
+            request();
+    get:
+      operationId: orders
+      summary: Orders
+      description: |
+        Retrieves all orders accessible by the authenticated user.
+        Query parameters can be used to filter and sort the result.
+      parameters:
+        - name: address
+          in: query
+          description: Get all orders belonging to a specific blockchain address.
+          schema:
+            example: "0x798728D5410aB4FB49d2C277A49baC5048aB43ca"
+            $ref: "#/components/schemas/Address"
+        - name: txHash
+          in: query
+          description: The blockchains transaction hash.
+          schema:
+            type: string
+            example: "0x692ff12125b71c167b3ea90bddb3b28edd60941851cb0cdd852cc3b6d79311cd"
+        - name: profile
+          in: query
+          description: The profile ID which the order belongs to.
+          schema:
+            example: 123e4567-e89b-12d3-a456-426614174000
+            $ref: "#/components/schemas/UUID"
+        - name: memo
+          in: query
+          schema:
+            $ref: "#/components/schemas/Memo"
+        - name: state
+          in: query
+          description: |
+            Get all orders in a particular state:
+
+            - `placed`: The order has been created but not yet processed.
+            - `pending`: The order is awaiting fulfillment (e.g., review, minting/burning tokens, or sending/receiving SEPA payment).
+            - `processed`: The order has been completed successfully.
+            - `rejected`: The order was rejected, possibly due to compliance reasons or insufficient funds.
+          schema:
+            type: string
+            enum:
+              - placed
+              - pending
+              - processed
+              - rejected
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - orders
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/orders \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+  /orders (websocket):
+    get:
+      operationId: orders-notifications
+      summary: Orders notifications
+      description: |
+        API consumers have the option to subscribe to a WebSocket for real-time order notifications.
+        This WebSocket complies with the standard WebSocket Protocol, allowing the use of standard WebSocket libraries for subscription.
+
+        The WebSocket emits an event when a order changes state:
+
+        - `placed`: The order has been created but not yet processed.
+        - `pending`: The order is awaiting fulfillment (e.g., review, minting/burning tokens, or sending/receiving SEPA payment).
+        - `processed`: The order has been completed successfully.
+        - `rejected`: The order was rejected, possibly due to compliance reasons or insufficient funds.
+      parameters:
+        - name: state
+          in: query
+          description: Subscribe to all orders in a specific state.
+          schema:
+            type: string
+            enum:
+              - placed
+              - pending
+              - processed
+              - rejected
+        - name: profile
+          in: query
+          description: Subscribe to all orders that belong to a specific profile UUID.
+          schema:
+            type: string
+            example: 6ca4f5a2-f6c9-11ec-81c1-62a51ab3b761
+      responses:
+        "101":
+          description: Switching Protocols
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+        default:
+          description: WebSocket messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+      security:
+        - BearerAuth: []
+      tags:
+        - orders
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            npm install -g wscat
+            wscat -c "wss://api.monerium.dev/orders?state=processed" --header "Authorization: Bearer YOUR_ACCESS_TOKEN"
+        - lang: js
+          label: JS
+          source: |-
+            const ws = new WebSocket('wss://api.monerium.dev/orders?state=processed&profile=4f079ef8-6d26-11eb-9bc8-acde48001122');
+
+            ws.onopen = () => {
+              console.log('Connected to the WebSocket server');
+            };
+
+            ws.onmessage = (event) => {
+              const data = JSON.parse(event.data);
+              console.log('Received order notification:', data);
+            };
+
+            ws.onclose = () => {
+              console.log('Disconnected from the WebSocket server');
+            };
+  "/orders/{orderId}":
+    get:
+      operationId: order
+      summary: Order
+      description: "Retrieve the details of an existing order. Supply the unique order ID from either an order creation or the order list, and Monerium will return the corresponding order information"
+      parameters:
+        - name: orderId
+          in: path
+          description: The ID of the order
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - orders
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/orders/b48f7ca4-e51f-11ed-9e13-cacb9390199c \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+  "/profiles/{profile}/balances":
+    get:
+      operationId: profile-balances
+      summary: Balances
+      description: "Retrieves the balance for each account within a profile, where each account corresponds to a specific token on a given chain."
+      parameters:
+        - name: profile
+          in: path
+          description: The ID of the profile
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountBalances"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - addresses
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/profiles/30f730fd-e51f-11ed-9e13-cacb9390199c/balances \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+  /files:
+    post:
+      operationId: upload-file
+      summary: File upload
+      description: "Upload documents for KYC onboarding and order support."
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  description: |
+                    Path to the file.
+
+                    Maximum length filename: **100**</br>
+                    Maximum size: **5 MB**</br>
+                    Allowed file types: **PDF**, **JPEG**</br>
+                  type: string
+                  example: doc.pdf
+                  title: file
+              required:
+                - file
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    description: File ID
+                    type: string
+                    example: 3ebc51a8-044f-11ed-8b1f-4a76448b7b21
+                  name:
+                    description: File name
+                    type: string
+                    example: doc.pdf
+                  type:
+                    description: File type
+                    type: string
+                    example: application/pdf
+                  size:
+                    description: File size
+                    type: integer
+                    example: 595101
+                  hash:
+                    type: string
+                    example: f2d8e62b44c59079536910eeb595f91833874a44aafc42c73c80588d91e7796b
+                  meta:
+                    type: object
+                    properties:
+                      uploadedBy:
+                        description: User ID of the uploader
+                        type: string
+                        example: 6d510620-f6c9-11ec-81c1-62a51ab3b761
+                      createdAt:
+                        type: string
+                        format: date
+                        example: "2024-07-15T15:03:11.990387Z"
+                      updatedAt:
+                        type: string
+                        format: date
+                        example: "2024-07-15T15:03:11.990387Z"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - files
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: "curl --form file='@doc.pdf' https://api.monerium.dev/files"
+  /tokens:
+    get:
+      operationId: tokens
+      summary: Tokens
+      description: "Information about the emoney tokens with tickers, symbols, decimals, token contract address and the chain information, we currently support Ethereum, Polygon and Gnosis.</br></br> Token addresses and details here: [/docs/tokens/](/docs/tokens)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        "401":
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenError"
+      security:
+        - BearerAuth: []
+      tags:
+        - start
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/tokens \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+components:
+  parameters:
+    AcceptHeaderV2:
+      name: Accept
+      in: header
+      required: true
+      description: Accept header to specify API version 2
+      schema:
+        type: string
+        example: application/vnd.monerium.api-v2+json
+  schemas:
+    Address:
+      description: The public key of the blockchain account.
+      type: string
+      example: "0x59cFC408d310697f9D3598e1BE75B0157a072407"
+      pattern: "^(?:0x)?[0-9a-fA-F]{40}$"
+    Currency:
+      description: "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase."
+      type: string
+      enum:
+        - eur
+        - usd
+        - gbp
+        - isk
+    Chain:
+      description: |
+        <span class="enumtitle">Enum:</span> <span class="enum">"gnosis"</span> <span class="enum">"polygon"</span> <span class="enum">"ethereum"</span></br>
+        Name of the blockchain
+      example: gnosis
+      oneOf:
+        - title: Gnosis
+          type: string
+          enum:
+            - gnosis
+          description: Gnosis Chain
+        - title: Polygon
+          type: string
+          enum:
+            - polygon
+          description: Polygon PoS
+        - title: Ethereum
+          type: string
+          enum:
+            - ethereum
+          description: Ethereum
+    ChainMultiSig:
+      allOf:
+        - description: |
+            <span class="enumtitle">Enum:</span>  <span class="enum">"gnosis"</span> <span class="enum">"polygon"</span> <span class="enum">"ethereum"</span></br>
+            The contract address's blockchain.
+        - $ref: "#/components/schemas/Chain"
+    CountryCode:
+      description: "Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)"
+      type: string
+      example: FR
+      maxLength: 2
+      minLength: 2
+    IBAN:
+      description: "The IBAN is a unique identifier for a bank account across different countries and includes a two-letter country code, two check digits, and a number of alphanumeric characters. It may include spaces for readability but should be stored without spaces."
+      type: string
+      example: EE127310138155512606682602
+      pattern: '^(?:[A-Z]{2}[0-9]{2}(?:\s?[0-9A-Z]{4}){1,7}\s?[0-9A-Z]{1,4})$'
+    Network:
+      description: |
+        <span class="enumtitle">Enum:</span>  <span class="enum">"chiado"</span> <span class="enum">"sepolia"</span> <span class="enum">"amoy"</span> <span class="enum">"mainnet"</span></br>
+        The blockchain network of the address.
+      oneOf:
+        - title: Sandbox
+          type: string
+          oneOf:
+            - title: Gnosis Chiado
+              type: string
+              enum:
+                - chiado
+              description: Gnosis Chain - Chiado testnet
+            - title: Polygon Amoy
+              type: string
+              enum:
+                - amoy
+              description: Polygon PoS - Amoy testnet
+            - title: Ethereum sepolia
+              type: string
+              enum:
+                - sepolia
+              description: Ethereum - sepolia testnet
+          description: |
+            Sandbox networks, Gnosis Chiado, Polygon Amoy, and Ethereum
+            sepolia
+        - title: Production
+          description: Production networks
+          type: string
+          enum:
+            - mainnet
+    NetworkMultiSig:
+      allOf:
+        - description: |
+            <span class="enumtitle">Enum:</span>  <span class="enum">"chiado"</span> <span class="enum">"sepolia"</span> <span class="enum">"amoy"</span> <span class="enum">"mainnet"</span></br>
+            The blockchain network of the contract address.
+        - $ref: "#/components/schemas/Network"
+    Memo:
+      description: |
+        UTF-8 Payment reference / memo. Can be used as filter parameters when querying
+        orders.
+      type: string
+      example: Powered by Monerium
+      maxLength: 140
+      minLength: 5
+    SignatureEOA:
+      description: The signature hash of signing the `message` with the private key associated with the given address.
+      type: string
+      pattern: "^0x[0-9a-fA-F]{130}$"
+      example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
+    SignatureSafeOnchain:
+      description: |
+        For Safe onchain signatures, your app needs to ensure that [the signature transaction is created](https://docs.safe.global/sdk/protocol-kit/guides/signatures/messages#on-chain-messages).
+
+        Setting the signature to `0x` let's the Monerium API know that this is an onchain signature.
+
+        The Monerium API supports [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) and will verify the signature using the wallet's `isValidSignature(messageHash, '0x')` method.
+
+        The Safe wallet has a predefined threshold for the number of signatures required to authorize a transaction.
+        For example, if the Safe wallet has 5 owners and a threshold of 3, at least 3 valid signatures are required to proceed with the transaction.
+
+        The Monerium API will continue to verify if the signature has been confirmed for up to 5 days.
+      type: string
+      pattern: "^0x$"
+      example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
+      enum:
+        - 0x
+    SignatureSafeOffchain:
+      description: |-
+        The Safe wallet supports [offchain signatures](https://docs.safe.global/sdk/protocol-kit/guides/signatures/messages#off-chain-messages).
+        The Safe wallet has a predefined threshold for the number of signatures required to authorize a transaction. For example, if the Safe wallet has 5 owners and a threshold of 3, at least 3 valid signatures are required to proceed with the transaction. Your app needs to ensure that the signature is created and confirmed by enough owners before performing the request.
+        The Monerium API supports [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) and will verify the signature using the wallet's `isValidSignature(messageHash, signature)` method.
+      type: string
+      example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
+    AddressObject:
+      type: object
+      properties:
+        profile:
+          description: The profile id that owns the address
+          $ref: "#/components/schemas/UUID"
+        address:
+          $ref: "#/components/schemas/Address"
+        chains:
+          description: list of chains that this address has been connected to
+          type: array
+          items:
+            $ref: "#/components/schemas/Chain"
+    IBANObject:
+      type: object
+      properties:
+        iban:
+          $ref: "#/components/schemas/IBAN"
+        bic:
+          description: |
+            The Bank Identifier Code (BIC) is an 8 or 11-character code used to identify banks and financial institutions worldwide.
+            It includes a bank code, country code, location code, and optional branch code.
+          type: string
+          example: EAPFESM2XXX
+        profile:
+          description: The profile id that owns the IBAN
+          $ref: "#/components/schemas/UUID"
+        address:
+          description: The address that this IBAN is connected to
+          $ref: "#/components/schemas/Address"
+        chain:
+          description: The chain that this IBAN is connected to
+          $ref: "#/components/schemas/Chain"
+    NewOrder:
+      type: object
+      properties:
+        address:
+          description: The address to redeem from. Can be any Monerium linked address.
+          $ref: "#/components/schemas/Address"
+        currency:
+          $ref: "#/components/schemas/Currency"
+        chain:
+          description: |
+            <span class="enumtitle">Enum:</span> <span class="enum">"gnosis"</span> <span class="enum">"polygon"</span> <span class="enum">"ethereum"</span></br>
+            The blockchain the address belongs to.
+          $ref: "#/components/schemas/Chain"
+        kind:
+          description: Identifier specifying the nature of the order. </br></br> Redeem order is when tokens are burned on blockchain and sent to bank.
+          type: string
+          enum:
+            - redeem
+        amount:
+          description: "The quantity of money sent, represented as a series of digits, possibly followed by a decimal point and up to two additional digits. The amount must be a non-negative value."
+          type: string
+          example: "1000"
+        counterpart:
+          $ref: "#/components/schemas/Counterpart"
+        message:
+          description: "A string message that the wallet owner must sign to authorize the processing of the order. This signed message verifies the consent of the wallet owner, ensuring that the transaction can proceed securely and legitimately."
+          oneOf:
+            - title: IBAN
+              description: |
+                For outgoing SEPA payments, the message is composed as such:
+
+                <code>Send \<CURRENCY\> \<AMOUNT\> to \<IBAN\> at \<TIMESTAMP\></code>
+                </br>
+
+                Where:
+
+                * `CURRENCY`: The order currency, the three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in uppercase.
+                * `AMOUNT`: The order amount.
+                * `IBAN`: The counterpart IBAN in uppercase with no spaces.
+                * `TIMESTAMP`: the timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format accurate to the minute. The timestamp must be within 5 minutes of the current time or any time in the future.
+
+                Example:
+
+                <code>Send EUR 1.23 to EE127310138155512606682602 at 2024-07-12T12:02:49Z</code>
+              type: string
+              pattern: '^Send\s([A-Z]{3})\s(\d+(\.\d{1,2})?)\sto\s([A-Z]{2}\d{2}\s?([A-Z0-9]{4}\s?){1,7}[A-Z0-9]{1,4})\sat\s(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z)$'
+              example: "Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z"
+            - title: Cross-chain transaction
+              description: |
+                For Cross-chain transaction, the message is composed as such:
+
+                <code>Send \<CURRENCY\> \<AMOUNT\> to \<ADDRESS\> on \<CHAIN\> at \<TIMESTAMP\></code>
+                </br>
+
+                Where:
+
+                * `CURRENCY`: The order currency, the three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in uppercase.
+                * `AMOUNT`: The order amount.
+                * `ADDRESS`: the recipient blockchain address `counterpart.identifier.address`.
+                * `CHAIN`: the recipient blockchain `counterpart.identifier.chain`.
+                * `TIMESTAMP`: the timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format accurate to the minute. The timestamp must be within 5 minutes of the current time or any time in the future.
+
+                Example:
+
+                <code>Send EUR 1.23 to 0x4B4c34f35b0Bb9Af56418FAdD4677ce45ADF7760 on ethereum at 2024-07-12T12:02:49Z</code>
+              type: string
+              pattern: '^Send\s([A-Z]{3})\s(\d+(\.\d{1,2})?)\sto\s([A-Z]{2}\d{2}\s?([A-Z0-9]{4}\s?){1,7}[A-Z0-9]{1,4})\sat\s(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z)$'
+              example: "Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z"
+        signature:
+          oneOf:
+            - title: EOA address
+              $ref: "#/components/schemas/SignatureEOA"
+            - title: Safe onchain
+              $ref: "#/components/schemas/SignatureSafeOnchain"
+            - title: Safe offchain
+              $ref: "#/components/schemas/SignatureSafeOffchain"
+        memo:
+          $ref: "#/components/schemas/Memo"
+        supportingDocumentId:
+          description: "File ID, required for orders with amount greater or equal to â‚¬15,000."
+          example: 3ebc51a8-044f-11ed-8b1f-4a76448b7b21
+          $ref: "#/components/schemas/UUID"
+      required:
+        - address
+        - currency
+        - chain
+        - kind
+        - amount
+        - signature
+        - message
+        - counterpart
+    Order:
+      type: object
+      properties:
+        id:
+          allOf:
+            - $ref: "#/components/schemas/UUID"
+            - description: The ID of the order.
+              example: 8c0fd7b1-01da-11ed-89c1-52c47a86c354
+        kind:
+          description: |-
+            Issue orders are created when payment is received and the token, e.g. EURe, is minted to the specified address and chain.
+            Redeem orders are created for sending outgoing payments. The tokens, e.g. EURe, are burned from the specified address and chain and then sent to the Counterpart.
+          type: string
+          example: redeem
+          enum:
+            - issue
+            - redeem
+        profile:
+          description: Unique identifier of the profile involved in the order.
+          example: 312c5cc4-4b06-11ed-a6cf-bac9bf26c37c
+          $ref: "#/components/schemas/UUID"
+        address:
+          example: "0x798728D5410aB4FB49d2C277A49baC5048aB43ca"
+          $ref: "#/components/schemas/Address"
+        chain:
+          $ref: "#/components/schemas/Chain"
+        currency:
+          $ref: "#/components/schemas/Currency"
+        amount:
+          description: The order amount.
+          type: string
+          example: "999"
+        counterpart:
+          $ref: "#/components/schemas/Counterpart"
+        memo:
+          $ref: "#/components/schemas/Memo"
+        rejectedReason:
+          description: Message stating why the order was rejected.  Only visible when the order has been rejected.
+          type: string
+          example: ""
+        supportingDocumentId:
+          description: The UUID of an File ID.
+          type: string
+          example: 3ebc51a8-044f-11ed-8b1f-4a76448b7b21
+        meta:
+          type: object
+          properties:
+            state:
+              description: |
+                The state of the order:
+
+                - `placed`: The order has been created but not yet processed.
+                - `pending`: The order is awaiting fulfillment (e.g., review, minting/burning tokens, or sending/receiving SEPA payment).
+                - `processed`: The order has been completed successfully.
+                - `rejected`: The order was rejected, possibly due to compliance reasons or insufficient funds.
+              type: string
+              example: placed
+              enum:
+                - placed
+                - pending
+                - processed
+                - rejected
+            receivedAmount:
+              description: "How much has Monerium received, for redeem orders: when Monerium receives an on-chain payment in EURe, for issue orders: when Monerium receives a SEPA payment in EUR"
+              type: string
+              example: "1000"
+            sentAmount:
+              description: "How much has Monerium sent, for redeem orders: when Monerium has received an on-chain payment in EURe, burned it and sent the SEPA transfer. For issue orders: when Monerium has received the SEPA payment in EUR, minted it on-chain and sent the payment"
+              type: string
+              example: "1000"
+            placedAt:
+              description: "When was the order placed. The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
+              $ref: "#/components/schemas/TimeStamp"
+            approvedAt:
+              description: "When was the order approved. Only visible when the order has been approved. The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
+              $ref: "#/components/schemas/TimeStamp"
+            processedAt:
+              description: "When was the order processed. Only visible when the order has been processed. The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
+              $ref: "#/components/schemas/TimeStamp"
+            rejectedAt:
+              description: "Timestamp written when the order was rejected. Only visible when the order has been rejected. The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
+              $ref: "#/components/schemas/TimeStamp"
+          required:
+            - state
+            - receivedAmount
+            - sentAmount
+            - placedAt
+      required:
+        - id
+        - kind
+        - profile
+        - address
+        - chain
+        - currency
+        - amount
+        - counterpart
+        - memo
+        - meta
+      title: Order
+    AccessToken:
+      type: object
+      properties:
+        access_token:
+          description: |
+            The token that must be used to authenticate API requests.
+            Example of using the access token in a request header:
+            ```
+            Authorization: Bearer EoWmpc2uSZar6h2bKgh
+            ```
+          type: string
+        expires_in:
+          description: The duration in seconds for which the access token is valid.
+          type: integer
+          example: 3600
+        refresh_token:
+          description: A token used to obtain a new access token after the current one expires.
+          type: string
+          example: cowYzCowQxGPUl4p15iwKA
+        token_type:
+          description: "The type of token returned. In this case, it is always 'Bearer'."
+          type: string
+          example: Bearer
+      example:
+        access_token: EoWmpc2uSZar6h2bKgh
+        expires_in: 3600
+        refresh_token: cowYzCowQxGPUl4p15iwKA
+        token_type: Bearer
+    AccountBalances:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            description: Unique identifier of the account.
+            type: string
+            example: a4611b07-f6c9-11ec-81c1-62a51ab3b761
+          address:
+            $ref: "#/components/schemas/Address"
+          chain:
+            $ref: "#/components/schemas/Chain"
+          balances:
+            description: The amount owned of currency
+            type: array
+            items:
+              type: object
+              properties:
+                currency:
+                  $ref: "#/components/schemas/Currency"
+                amount:
+                  description: The amount of currency.
+                  type: string
+                  example: "123.45"
+      example:
+        - address: "0xc5F3370131bB7ce0D28D83735447576aAeD1b993"
+          balances:
+            - amount: "0"
+              currency: eur
+            - amount: "0"
+              currency: gbp
+            - amount: "0"
+              currency: isk
+            - amount: "0"
+              currency: usd
+          chain: ethereum
+          id: a4611b07-f6c9-11ec-81c1-62a51ab3b761
+        - address: "0xc5F3370131bB7ce0D28D83735447576aAeD1b993"
+          balances:
+            - amount: "22"
+              currency: eur
+            - amount: "0"
+              currency: gbp
+            - amount: "0"
+              currency: isk
+            - amount: "0"
+              currency: usd
+          chain: polygon
+          id: a4611b07-f6c9-11ec-81c1-62a51ab3b761
+    Profiles:
+      type: array
+      items:
+        $ref: "#/components/schemas/Profile"
+    Profile:
+      type: object
+      properties:
+        id:
+          description: Unique identifier of the profile. The Profile ID is the main identifier used to represent ownership of other API resources
+          type: string
+          example: 4f079ef8-6d26-11eb-9bc8-acde48001122
+        kind:
+          $ref: "#/components/schemas/ProfileKind"
+        name:
+          description: The Profile name. This can be a corporate or an individual.
+          type: string
+          example: Jane Doe
+        state:
+          $ref: "#/components/schemas/ProfileState"
+    Tokens:
+      type: array
+      items:
+        type: object
+        properties:
+          currency:
+            $ref: "#/components/schemas/Currency"
+          ticker:
+            description: The traditional currency abbreviation.
+            enum:
+              - EUR
+              - GBP
+              - USD
+              - ISK
+          symbol:
+            description: The official symbol of the token used in DeFi platforms.
+            enum:
+              - EURe
+              - GBPe
+              - USDe
+              - ISKe
+          chain:
+            $ref: "#/components/schemas/Chain"
+          address:
+            description: The address of the token.
+            type: string
+            example: "0x905419e7a1f96a973ab8988ba19c84135c6f7122"
+          decimals:
+            description: Number of decimals used in the asset.
+            type: string
+      example:
+        - currency: eur
+          ticker: EUR
+          symbol: EURe
+          chain: ethereum
+          address: "0x3231cb76718cdef2155fc47b5286d82e6eda273f"
+          decimals: 18
+        - currency: gbp
+          ticker: GBP
+          symbol: GBPe
+          chain: ethereum
+          address: "0x7ba92741bf2a568abc6f1d3413c58c6e0244f8fd"
+          decimals: 18
+        - currency: isk
+          ticker: ISK
+          symbol: ISKe
+          chain: ethereum
+          address: "0xc642549743a93674cf38d6431f75d6443f88e3e2"
+          decimals: 18
+        - currency: usd
+          ticker: USD
+          symbol: USDe
+          chain: ethereum
+          address: "0xbc5142e0cc5eb16b47c63b0f033d4c2480853a52"
+          decimals: 18
+        - currency: eur
+          ticker: EUR
+          symbol: EURe
+          chain: polygon
+          address: "0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6"
+          decimals: 18
+        - currency: gbp
+          ticker: GBP
+          symbol: GBPe
+          chain: polygon
+          address: "0x75792CBDb361d80ba89271a079EfeE62c29FA324"
+          decimals: 18
+        - currency: isk
+          ticker: ISK
+          symbol: ISKe
+          chain: polygon
+          address: "0xf1bBf27A9D659D326efBfa5D284EBaeFB803983D"
+          decimals: 18
+        - currency: usd
+          ticker: USD
+          symbol: USDe
+          chain: polygon
+          address: "0x64E97c1a6535afD4a313eF46F88A64a34250B719"
+          decimals: 18
+    Counterpart:
+      description: "The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country."
+      type: object
+      properties:
+        identifier:
+          description: Counterpart account information.
+          oneOf:
+            - title: IBAN
+              type: object
+              required:
+                - standard
+                - iban
+              properties:
+                standard:
+                  description: An International Bank Account Number (IBAN) is used to send and receive payments from bank accounts. The IBAN may contain spaces.
+                  type: string
+                  example: iban
+                  enum:
+                    - iban
+                iban:
+                  $ref: "#/components/schemas/IBAN"
+            - title: Cross-chain
+              type: object
+              required:
+                - standard
+                - address
+                - chain
+              properties:
+                standard:
+                  description: Used to send cross chain transaction from one wallet to another on a different blockchain.
+                  type: string
+                  example: chain
+                  enum:
+                    - chain
+                address:
+                  $ref: "#/components/schemas/Address"
+                chain:
+                  $ref: "#/components/schemas/Chain"
+        details:
+          description: Details about the counterpart that can be either a corporate or an individual.
+          oneOf:
+            - title: Individual
+              type: object
+              description: The counterpart is an individual.
+              required:
+                - firstName
+                - lastName
+                - country
+              properties:
+                firstName:
+                  description: The first name of the individual. The middle name(s) can also be included here.
+                  type: string
+                  example: Satoshi
+                  minLength: 2
+                lastName:
+                  description: The last name of the individual.
+                  type: string
+                  example: Nakamoto
+                  minLength: 2
+                country:
+                  description: "The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart lives. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)."
+                  $ref: "#/components/schemas/CountryCode"
+            - title: Corporation
+              type: object
+              description: Only one naming method is required. Either companyName or firstName and lastName
+              required:
+                - companyName
+                - country
+              properties:
+                companyName:
+                  description: Used for outgoing payments when the recipient is a company
+                  type: string
+                  example: Monerium
+                country:
+                  description: "The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)."
+                  $ref: "#/components/schemas/CountryCode"
+      required:
+        - standard
+        - identifier
+        - details
+    Error:
+      description: The generic Error object structure for API error responses.
+      type: object
+      properties:
+        code:
+          description: The HTTP error code associated with the error.
+          type: integer
+          format: int32
+        status:
+          description: A brief status message corresponding to the error code.
+          type: string
+        message:
+          description: A detailed message explaining the error.
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+        - code
+        - status
+        - message
+    UnauthorizedError:
+      description: |
+        This error occurs when the user is not authenticated.
+        Example response:
+        ```json
+        {
+          "code": 401,
+          "status": "Unauthorized",
+          "message": "Not authenticated"
+        }
+        ```
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Error"
+        - type: object
+          properties:
+            code:
+              description: The error code for unauthorized access.
+              type: integer
+              format: int32
+              enum:
+                - 401
+            status:
+              description: The status message for unauthorized access.
+              type: string
+              enum:
+                - Unauthorized
+            message:
+              description: A short message about the error.
+              type: string
+              enum:
+                - Not authenticated
+    ForbiddenError:
+      description: |
+        This error occurs when the user does not have permission to access the requested resource.
+        Example response:
+        ```json
+        {
+          "code": 403,
+          "status": "Forbidden",
+          "message": "User user@example.com is forbidden"
+        }
+        ```
+      type: object
+      properties:
+        code:
+          description: The error code for forbidden access.
+          type: integer
+          format: int32
+          enum:
+            - 403
+        status:
+          description: The status for forbidden access.
+          type: string
+          enum:
+            - Forbidden
+        message:
+          description: A short message about the error.
+          type: string
+          example: User user@example.com is forbidden
+    ForbiddenPartnerError:
+      description: |
+        FORBIDDEN
+
+        This error occurs when your app does not have permission to access the requested endpoint.
+        You will need to contact the Monerium team to get access to this feature.
+      type: object
+      properties:
+        code:
+          description: The error code for forbidden access.
+          type: integer
+          format: int32
+          enum:
+            - 403
+        status:
+          description: The status for forbidden access.
+          type: string
+          enum:
+            - Forbidden
+        message:
+          description: A short message about the error.
+          type: string
+          example: Application from partner partner@example.com is not allowed to submit KYC data
+    UUID:
+      type: string
+      format: UUID
+      example: a78d8ff2-e51f-11ed-9e13-cacb9390199c
+      pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    AuthClientID:
+      description: |
+        The [Authorization Code Flow](/docs/getting-started/auth-flow) client ID of your application.
+      type: string
+      $ref: "#/components/schemas/UUID"
+    CredentialsClientID:
+      description: |
+        The [Client Credentials Authorization](docs/api#auth-client-credentials) client ID of your application.
+      type: string
+      $ref: "#/components/schemas/UUID"
+    PersonalDetails:
+      description: Personal information such as name, address, nationality, and date of birth.
+      type: object
+      properties:
+        firstName:
+          description: First name
+          type: string
+          example: Jane
+        lastName:
+          description: Last name
+          type: string
+          example: Doe
+        address:
+          description: Street and building number where the person lives.
+          type: string
+          example: Pennylane 123
+        postalCode:
+          description: Postal code where the person lives.
+          type: string
+          example: 7890
+        city:
+          description: City where the person lives.
+          type: string
+          example: Liverpool
+        country:
+          description: "Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the person lives"
+          example: GB
+          $ref: "#/components/schemas/CountryCode"
+        countryState:
+          description: State/County where the person lives.
+          type: string
+          example: Merseyside
+        nationality:
+          description: "Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) for the person's nationality."
+          example: GB
+          $ref: "#/components/schemas/CountryCode"
+        birthday:
+          description: |
+            The person's birthday in the format "YYYY-MM-DD" where:
+
+            * YYYY = date-fullyear  = 4DIGIT
+            * MM = date-month = 2DIGIT; 01-12
+            * DD = date-mday = 2DIGIT; 01-28, 01-29, 01-30, 01-31 based on month/year.
+          type: string
+          format: date
+          example: "1990-05-15"
+          pattern: '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$'
+      required:
+        - firstName
+        - lastName
+        - address
+        - postalCode
+        - city
+        - country
+        - nationality
+        - birthday
+    PersonalForm:
+      description: |
+        Personal form for capturing user details, including occupation, profession, fund origins, and financial information.
+
+        The following mappings between codes and their corresponding values are used:
+
+        **Occupation Codes:**
+        - `OCCUPATION_STUDENT`: Student
+        - `OCCUPATION_EMPLOYED`: Employed
+        - `OCCUPATION_SELF_EMPLOYED`: Self Employed
+        - `OCCUPATION_UNEMPLOYED`: Unemployed
+        - `OCCUPATION_RETIRED`: Retired
+
+        **Profession Codes:**
+        - `PROF_ACCOUNTANCY`: Accountancy
+        - `PROF_ADMINISTRATIVE`: Administrative
+        - `PROF_AGRICULTURE`: Agriculture
+        - `PROF_ARTS_ENTERTAINMENT_MEDIA`: Arts/Entertainment/Media
+        - `PROF_BROKER_DEALER`: Broker/Dealer
+        - `PROF_CATERING_HOSPITALITY_TOURISM`: Catering/Hospitality/Tourism
+        - `PROF_CHARITY`: Charity (Non-profit organization)
+        - `PROF_CONSTRUCTION_REAL_ESTATE`: Construction/Real Estate
+        - `PROF_DEALER_HIGH_VALUE_GOODS`: Dealer in high value goods
+        - `PROF_DEALER_PRECIOUS_METALS`: Dealer in precious metals
+        - `PROF_EDUCATION`: Education
+        - `PROF_EMERGENCY_SERVICES`: Emergency services
+        - `PROF_EXTRACTIVE_INDUSTRY`: Extractive industry
+        - `PROF_FINANCIAL_SERVICES_BANKING`: Financial services - Banking
+        - `PROF_FINANCIAL_SERVICES_INSURANCE`: Financial services - Insurance
+        - `PROF_FINANCIAL_SERVICES_OTHER`: Financial services - Other
+        - `PROF_FINANCIAL_SERVICES_PRIVATE_BANKING`: Financial services - Private Banking
+        - `PROF_GAMBLING`: Gambling
+        - `PROF_GOVERNMENT`: Government
+        - `PROF_HEALTH_CARE_MEDICAL`: Health care/Medical
+        - `PROF_INFORMATION_TECHNOLOGY`: Information technology
+        - `PROF_LEGAL`: Legal
+        - `PROF_MANUFACTURING`: Manufacturing
+        - `PROF_MARKETING`: Marketing
+        - `PROF_MILITARY_ARMS_DEFENSE`: Military / Arms trade / Defence
+        - `PROF_MONEY_SERVICE_BUSINESS`: Money service business
+        - `PROF_PENSIONER`: Pensioner
+        - `PROF_PUBLIC_PROCUREMENT`: Public procurement
+        - `PROF_RETAIL_SALES`: Retail sales
+
+        **Fund Origins Codes:**
+        - `FUND_ORIGIN_SALARY`: Salary
+        - `FUND_ORIGIN_DIVIDENDS`: Dividends
+        - `FUND_ORIGIN_INHERITANCE`: Inheritance
+        - `FUND_ORIGIN_SAVINGS`: Savings
+        - `FUND_ORIGIN_INVESTMENT`: Investment
+        - `FUND_ORIGIN_GIFT`: Gift
+        - `FUND_ORIGIN_MINING`: Mining
+        - `FUND_ORIGIN_REAL_ESTATE`: Real estate
+        - `FUND_ORIGIN_LOAN`: Loan
+
+        **Annual Income Codes:**
+        - `ANNUAL_INCOME_UNDER_10K`: Under â‚¬10,000
+        - `ANNUAL_INCOME_10K_TO_50K`: From â‚¬10,000 to â‚¬50,000
+        - `ANNUAL_INCOME_50K_TO_150K`: From â‚¬50,000 to â‚¬150,000
+        - `ANNUAL_INCOME_150K_TO_300K`: From â‚¬150,000 to â‚¬300,000
+        - `ANNUAL_INCOME_OVER_300K`: More than â‚¬300,000
+
+        **Monthly Turnover Codes:**
+        - `TURNOVER_UNDER_10K`: Under â‚¬10,000
+        - `TURNOVER_10K_TO_50K`: From â‚¬10,000 to â‚¬50,000
+        - `TURNOVER_50K_TO_150K`: From â‚¬50,000 to â‚¬150,000
+        - `TURNOVER_150K_TO_500K`: From â‚¬150,000 to â‚¬500,000
+        - `TURNOVER_OVER_500K`: More than â‚¬500,000
+
+        **Monthly Transaction Count Codes:**
+        - `TRANSACTION_COUNT_LESS_THAN_5`: Less than 5
+        - `TRANSACTION_COUNT_5_TO_50`: 5 to 50
+        - `TRANSACTION_COUNT_50_TO_100`: 50 to 100
+        - `TRANSACTION_COUNT_100_TO_200`: 100 to 200
+        - `TRANSACTION_COUNT_OVER_200`: More than 200
+
+        **Activity Codes:**
+        - `ACTIVITY_COMMERCE_SELLING`: Commerce Selling
+        - `ACTIVITY_COMMERCE_BUYING`: Commerce Buying
+        - `ACTIVITY_INVESTING_CRYPTO`: Investing in Crypto
+        - `ACTIVITY_OTHER`: Other
+
+      type: object
+      properties:
+        occupation:
+          description: The occupation code representing the individual's current employment status.
+          example: OCCUPATION_EMPLOYED
+          type: string
+          enum:
+            - OCCUPATION_STUDENT
+            - OCCUPATION_EMPLOYED
+            - OCCUPATION_SELF_EMPLOYED
+            - OCCUPATION_UNEMPLOYED
+            - OCCUPATION_RETIRED
+        profession:
+          description: The profession code representing the individual's professional field.
+          example: PROF_ACCOUNTANCY
+          type: string
+          enum:
+            - PROF_ACCOUNTANCY
+            - PROF_ADMINISTRATIVE
+            - PROF_AGRICULTURE
+            - PROF_ARTS_MEDIA
+            - PROF_BROKER_DEALER
+            - PROF_CATERING_HOSPITALITY
+            - PROF_CHARITY
+            - PROF_CONSTRUCTION_REAL_ESTATE
+            - PROF_DEALER_HIGH_VALUE_GOODS
+            - PROF_DEALER_PRECIOUS_METALS
+            - PROF_EDUCATION
+            - PROF_EMERGENCY_SERVICES
+            - PROF_EXTRACTIVE_INDUSTRY
+            - PROF_FIN_SERVICES_BANKING
+            - PROF_FIN_SERVICES_INSURANCE
+            - PROF_FIN_SERVICES_OTHER
+            - PROF_FIN_SERVICES_PRIVATE_BANKING
+            - PROF_GAMBLING
+            - PROF_GOVERNMENT
+            - PROF_HEALTHCARE_MEDICAL
+            - PROF_INFORMATION_TECHNOLOGY
+            - PROF_LEGAL
+            - PROF_MANUFACTURING
+            - PROF_MARKETING
+            - PROF_MILITARY_DEFENCE
+            - PROF_MONEY_SERVICE_BUSINESS
+            - PROF_PENSIONER
+            - PROF_PUBLIC_PROCUREMENT
+            - PROF_RETAIL_SALES
+        fundOrigin:
+          description: The code representing the origins of the individual's funds.
+          example: FUND_ORIGIN_SALARY
+          type: string
+          enum:
+            - FUND_ORIGIN_SALARY
+            - FUND_ORIGIN_DIVIDENDS
+            - FUND_ORIGIN_INHERITANCE
+            - FUND_ORIGIN_SAVINGS
+            - FUND_ORIGIN_INVESTMENT
+            - FUND_ORIGIN_GIFT
+            - FUND_ORIGIN_MINING
+            - FUND_ORIGIN_REAL_ESTATE
+            - FUND_ORIGIN_LOAN
+        annualIncome:
+          description: The code representing the individual's annual income range.
+          example: ANNUAL_INCOME_UNDER_10K
+          type: string
+          enum:
+            - ANNUAL_INCOME_UNDER_10K
+            - ANNUAL_INCOME_10K_TO_50K
+            - ANNUAL_INCOME_50K_TO_150K
+            - ANNUAL_INCOME_150K_TO_300K
+            - ANNUAL_INCOME_OVER_300K
+        monthlyTurnover:
+          description: The code representing the individual's monthly turnover range.
+          example: TURNOVER_UNDER_10K
+          type: string
+          enum:
+            - TURNOVER_UNDER_10K
+            - TURNOVER_10K_TO_50K
+            - TURNOVER_50K_TO_150K
+            - TURNOVER_150K_TO_500K
+            - TURNOVER_OVER_500K
+        monthlyTransactionCount:
+          description: The code representing the number of transactions the individual makes each month.
+          example: TRANSACTION_COUNT_LESS_THAN_5
+          type: string
+          enum:
+            - TRANSACTION_COUNT_LESS_THAN_5
+            - TRANSACTION_COUNT_5_TO_50
+            - TRANSACTION_COUNT_50_TO_100
+            - TRANSACTION_COUNT_100_TO_200
+            - TRANSACTION_COUNT_OVER_200
+        activities:
+          description: List of codes representing the individual's financial activities.
+          type: array
+          items:
+            type: string
+            enum:
+              - ACTIVITY_COMMERCE_SELLING
+              - ACTIVITY_COMMERCE_BUYING
+              - ACTIVITY_INVESTING_CRYPTO
+              - ACTIVITY_OTHER
+        activityOther:
+          description: A description of the other activity if the code `ACTIVITY_OTHER` is chosen.
+          example: farming airdrops
+          type: string
+        publicFunction:
+          description: Indicates whether the individual holds a politically exposed person (PEP) status.
+          type: boolean
+        fundOwner:
+          description: Indicates whether the individual is the owner of the funds.
+          type: boolean
+      required:
+        - occupation
+        - profession
+        - fundOrigin
+        - annualIncome
+        - monthlyTurnover
+        - monthlyTransactionCount
+        - activities
+        - publicFunction
+        - fundOwner
+    PersonalVerifications:
+      description: |
+        A list of verifications required for personal onboarding. Each type of verification in the list must be completed to ensure compliance.
+        Verification can have multiple documents (e.g. two sides of an ID document).
+
+        The kinds of verifications include:
+        - **idDocument**: Verification of the individual's identity document.
+        - **facialSimilarity**: Verification that the individual's face matches the provided identity document.
+        - **proofOfResidency**: Verification of the individual's residential address.
+        - **deviceIntelligence**: Analysis of the individual's device to detect potential fraud or risks.
+      type: array
+      items:
+        type: object
+        properties:
+          kind:
+            description: "The type of the verification."
+            type: string
+            enum:
+              - idDocument
+              - facialSimilarity
+              - proofOfResidency
+              - deviceIntelligence
+          documents:
+            type: array
+            items:
+              type: object
+              properties:
+                side:
+                  type: string
+                  enum:
+                    - back
+                    - front
+                fileId:
+                  $ref: "#/components/schemas/UUID"
+    CorporateDetails:
+      description: |
+        Company information such as name, registration number, address, and details of representatives, final beneficiaries, and directors.
+      type: object
+      properties:
+        name:
+          description: Name of the company.
+          type: string
+          example: Jane Doe's things
+        registrationNumber:
+          description: The company's registration number.
+          type: string
+          example: 123456
+        registrationDate:
+          description: The company's registration date.
+          type: string
+          format: date
+          example: "2022-02-01"
+          pattern: '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$'
+        vatNumber:
+          description: The company's VAT number.
+          type: string
+          example: 00001234
+        website:
+          description: The company's website.
+          type: string
+          example: https://janedoe.com/
+        address:
+          description: Street and building number where the corporate is located.
+          type: string
+          example: Pennylane 123
+        postalCode:
+          description: Postal code where the corporate is located.
+          type: string
+          example: 7890
+        city:
+          description: City where the corporate is located.
+          type: string
+          example: Liverpool
+        country:
+          description: "Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the corporate is located"
+          example: GB
+          $ref: "#/components/schemas/CountryCode"
+        countryState:
+          description: State/County where the corporate is located.
+          type: string
+          example: Merseyside
+        representatives:
+          description: List of individuals representing the company and authorized to act on its behalf.
+          type: array
+          items:
+            type: object
+            required:
+              - idDocument
+            properties:
+              idDocument:
+                $ref: "#/components/schemas/IdDocument"
+            allOf:
+              - $ref: "#/components/schemas/PersonalDetails"
+        finalBeneficiaries:
+          description: List of beneficial owner that owns 25% or more in a company.
+          type: array
+          items:
+            type: object
+            required:
+              - ownershipPercentage
+            properties:
+              ownershipPercentage:
+                description: Ownership in % that is between 25% and 100%.
+                type: string
+                format: number
+                example: 25
+                maximum: 100
+                minimum: 25
+                pattern: '^(?:25(?:\.0{1,2})?|2[6-9](?:\.\d{1,2})?|[3-9]\d(?:\.\d{1,2})?|100(?:\.0{1,2})?)$'
+            allOf:
+              - $ref: "#/components/schemas/PersonalDetails"
+        directors:
+          description: List of Individual who has powers to legally bind the company (power of procuration).
+          type: array
+          items:
+            type: object
+            allOf:
+              - $ref: "#/components/schemas/PersonalDetails"
+      required:
+        - name
+        - registrationNumber
+        - address
+        - postalCode
+        - city
+        - country
+        - countryState
+        - representatives
+        - finalBeneficiaries
+        - directors
+    CorporateForm:
+      description: |
+        Corporate form for capturing company details, including service, purpose, activity, fund origins, and financial information.
+
+        The following mappings between codes and their corresponding values are used:
+
+        **Legal Form Codes:**
+        - `LEGAL_FORM_PUBLIC_LIMITED`: Public limited
+        - `LEGAL_FORM_PRIVATE_LIMITED`: Private limited
+        - `LEGAL_FORM_PARTNERSHIPS`: Partnerships
+        - `LEGAL_FORM_SOLE_TRADERS_PROPRIETORSHIPS`: Sole traders/proprietorships
+        - `LEGAL_FORM_PUBLIC_AUTHORITIES`: Public authorities
+        - `LEGAL_FORM_NON_PROFIT`: Non profit
+        - `LEGAL_FORM_BRANCHES`: Branches
+        - `LEGAL_FORM_OTHER`: Other
+
+        **Purpose Codes:**
+        - `PURPOSE_COLLECTING_PAYMENTS`: Collecting payments for goods or services
+        - `PURPOSE_PAYING_FOR_GOODS_SERVICES`: Paying for goods or services
+        - `PURPOSE_BUY_SELL_CRYPTO`: Buy and/or sell cryptocurrencies
+        - `PURPOSE_ENGAGE_IN_DEFI`: Engage in DeFi (any sub-category)
+        - `PURPOSE_OTHER`: Other
+
+        **Activity Codes:**
+        - `ACTIVITY_ACCOMMODATION_FOOD_TRAVEL`: Accommodation/Food/Travel services
+        - `ACTIVITY_ACCOUNTING_LEGAL_CONSULTANCY`: Accounting/Legal/Consultancy
+        - `ACTIVITY_ADULT_ENTERTAINMENT`: Adult entertainment
+        - `ACTIVITY_ADVERTISING_MARKETING`: Advertising/Marketing
+        - `ACTIVITY_AGRICULTURE_FORESTRY_FISHING`: Agriculture/Forestry/Fishing
+        - `ACTIVITY_ARTS_ENTERTAINMENT_RECREATION`: Arts/Entertainment/Recreation
+        - `ACTIVITY_CHARITY`: Charity
+        - `ACTIVITY_CONSTRUCTION`: Construction
+        - `ACTIVITY_DEALER_HIGH_VALUE_GOODS`: Dealer in high value goods/metals/stones
+        - `ACTIVITY_ECOMMERCE`: Ecommerce
+        - `ACTIVITY_EDUCATION`: Education
+        - `ACTIVITY_EXTRACTIVE_INDUSTRY`: Extractive industry
+        - `ACTIVITY_GAMBLING`: Gambling
+        - `ACTIVITY_HEALTH_SERVICES`: Health services
+        - `ACTIVITY_MANUFACTURING`: Manufacturing
+        - `ACTIVITY_MARKETPLACE`: Marketplace
+        - `ACTIVITY_MEDIA_PUBLISHING`: Media/Publishing
+        - `ACTIVITY_MULTI_LEVEL_MARKETING`: Multi-level marketing
+        - `ACTIVITY_PERSONAL_INVESTMENT`: Personal investment
+        - `ACTIVITY_PUBLIC_SECTOR`: Public sector
+        - `ACTIVITY_REAL_ESTATE`: Real estate
+        - `ACTIVITY_RETAIL_WHOLESALE_TRADE`: Retail/Wholesale trade
+        - `ACTIVITY_SOCIAL_WORK`: Social work
+        - `ACTIVITY_SOFTWARE_TECHNOLOGY`: Software/Technology
+        - `ACTIVITY_TELECOM`: Telecom
+        - `ACTIVITY_TRANSPORTATION_STORAGE`: Transportation/Storage
+        - `ACTIVITY_UTILITIES`: Utilities
+        - `ACTIVITY_CRYPTO_SERVICES`: Crypto services (any sub-category)
+        - `ACTIVITY_FINANCIAL_INSTITUTION`: Financial institution (any sub-category)
+        - `ACTIVITY_OTHER`: Other
+
+        **Fund Origin Codes:**
+        - `FUND_ORIGIN_REVENUE_FROM_OPERATIONS`: Revenue from operations
+        - `FUND_ORIGIN_PROFIT_DIVIDENDS`: Profit or Dividends
+        - `FUND_ORIGIN_LOAN`: Loan
+        - `FUND_ORIGIN_INVESTMENTS_SHAREHOLDERS`: Investments from shareholders
+        - `FUND_ORIGIN_CUSTOMER_FUNDS`: Customer funds
+        - `FUND_ORIGIN_FUNDS_THIRD_PARTIES`: Funds owned by third parties
+
+        **Monthly Turnover Codes:**
+        - `TURNOVER_UNDER_100K`: Under â‚¬100,000
+        - `TURNOVER_100K_TO_250K`: Between â‚¬100,000 and â‚¬250,000
+        - `TURNOVER_OVER_250K`: More than â‚¬250,000
+
+        **Monthly Transaction Count Codes:**
+        - `TRANSACTION_COUNT_UNDER_100`: Under 100
+        - `TRANSACTION_COUNT_100_TO_250`: Between 100 and 250
+        - `TRANSACTION_COUNT_OVER_250`: More than 250
+
+      type: object
+      properties:
+        service:
+          description: "A brief description of the company's services."
+          type: string
+        legalForm:
+          description: The legal form of the company.
+          example: LEGAL_FORM_PRIVATE_LIMITED
+          type: string
+          enum:
+            - LEGAL_FORM_PUBLIC_LIMITED
+            - LEGAL_FORM_PRIVATE_LIMITED
+            - LEGAL_FORM_PARTNERSHIPS
+            - LEGAL_FORM_SOLE_TRADERS_PROPRIETORSHIPS
+            - LEGAL_FORM_PUBLIC_AUTHORITIES
+            - LEGAL_FORM_NON_PROFIT
+            - LEGAL_FORM_BRANCHES
+            - LEGAL_FORM_OTHER
+        purpose:
+          description: The code representing the primary purpose of the company.
+          example: PURPOSE_COLLECT_PAYMENTS
+          type: string
+          enum:
+            - PURPOSE_COLLECT_PAYMENTS
+            - PURPOSE_PAY_FOR_SERVICES
+            - PURPOSE_BUY_SELL_CRYPTO
+            - PURPOSE_ENGAGE_IN_DEFI
+            - PURPOSE_OTHER
+        activity:
+          description: The code representing the company's main activity.
+          example: ACTIVITY_ECOMMERCE
+          type: string
+          enum:
+            - ACTIVITY_ACCOMMODATION_FOOD_TRAVEL
+            - ACTIVITY_ACCOUNTING_LEGAL_CONSULTANCY
+            - ACTIVITY_ADULT_ENTERTAINMENT
+            - ACTIVITY_ADVERTISING_MARKETING
+            - ACTIVITY_AGRICULTURE_FORESTRY_FISHING
+            - ACTIVITY_ARTS_ENTERTAINMENT_RECREATION
+            - ACTIVITY_CHARITY
+            - ACTIVITY_CONSTRUCTION
+            - ACTIVITY_DEALER_HIGH_VALUE_GOODS
+            - ACTIVITY_ECOMMERCE
+            - ACTIVITY_EDUCATION
+            - ACTIVITY_EXTRACTIVE_INDUSTRY
+            - ACTIVITY_GAMBLING
+            - ACTIVITY_HEALTH_SERVICES
+            - ACTIVITY_MANUFACTURING
+            - ACTIVITY_MARKETPLACE
+            - ACTIVITY_MEDIA_PUBLISHING
+            - ACTIVITY_MULTI_LEVEL_MARKETING
+            - ACTIVITY_PERSONAL_INVESTMENT
+            - ACTIVITY_PUBLIC_SECTOR
+            - ACTIVITY_REAL_ESTATE
+            - ACTIVITY_RETAIL_WHOLESALE
+            - ACTIVITY_SOCIAL_WORK
+            - ACTIVITY_SOFTWARE_TECHNOLOGY
+            - ACTIVITY_TELECOM
+            - ACTIVITY_TRANSPORT_STORAGE
+            - ACTIVITY_UTILITIES
+            - ACTIVITY_CRYPTO_SERVICES
+            - ACTIVITY_FINANCIAL_INSTITUTION
+            - ACTIVITY_OTHER
+        fundOrigin:
+          description: The code representing the origins of the company's funds.
+          example: FUND_ORIGIN_REVENUE_OPERATIONS
+          type: string
+          enum:
+            - FUND_ORIGIN_REVENUE_OPERATIONS
+            - FUND_ORIGIN_PROFIT_DIVIDENDS
+            - FUND_ORIGIN_LOAN
+            - FUND_ORIGIN_INVESTMENTS_SHAREHOLDERS
+            - FUND_ORIGIN_CUSTOMER_FUNDS
+            - FUND_ORIGIN_THIRD_PARTY_FUNDS
+        monthlyTurnover:
+          description: The code representing the company's monthly turnover range.
+          example: TURNOVER_UNDER_100K
+          type: string
+          enum:
+            - TURNOVER_UNDER_100K
+            - TURNOVER_100K_TO_250K
+            - TURNOVER_OVER_250K
+        monthlyTransactionCount:
+          description: The code representing the number of transactions the company typically makes each month.
+          example: TRANSACTION_COUNT_UNDER_100
+          type: string
+          enum:
+            - TRANSACTION_COUNT_UNDER_100
+            - TRANSACTION_COUNT_100_TO_250
+            - TRANSACTION_COUNT_OVER_250
+      required:
+        - service
+        - purpose
+        - activity
+        - fundOrigin
+        - monthlyTurnover
+        - monthlyTransactionCount
+    CorporateVerifications:
+      description: |
+        A list of verifications required for corporate onboarding. Each type of verification in the list must be completed to ensure compliance.
+        Verification can have multiple documents (e.g. two sides of an ID document).
+        The same file ID can be referenced in multiple verifications (e.g. one document containing company's name and address).
+
+        The types of verifications include:
+        - **corporateName**: A document proving the company's legal name.
+        - **corporateAddress**: A document proving the company's registered address.
+        - **registrationNumber**: A document proving the company's registration number.
+        - **dateOfRegistration**: A document proving the company's registration date.
+        - **beneficialOwnership**: A document identifying individuals with significant control over the company.
+        - **powerOfAttorney**: A document granting authority to act on behalf of the company.
+      type: array
+      items:
+        type: object
+        properties:
+          kind:
+            type: string
+            enum:
+              - corporateName
+              - corporateAddress
+              - registrationNumber
+              - dateOfRegistration
+              - beneficialOwnership
+              - powerOfAttorney
+          documents:
+            type: array
+            items:
+              type: object
+              properties:
+                side:
+                  type: string
+                  enum:
+                    - back
+                    - front
+                fileId:
+                  $ref: "#/components/schemas/UUID"
+              required:
+                - fileId
+        required:
+          - kind
+          - documents
+    IdDocument:
+      description: Details of the ID document used to verify the person's identity.
+      type: object
+      properties:
+        number:
+          description: The document number.
+          type: string
+          example: A1234566788
+        kind:
+          description: |
+            The type of ID document. Passports, National ID cards, and driving licenses are supported.
+
+            The ID document must verify the person's name, birthday, and nationality.
+          type: string
+          example: passport
+          enum:
+            - passport
+            - drivingLicense
+            - nationalIdentityCard
+      required:
+        - number
+        - kind
+    ProfileState:
+      description: |
+        The state of the profile lifecycle:
+
+        * `created`: The profile has been created but no details have been submitted.
+        * `pending`: The details have been submitted and are being processed.
+        * `approved`: The profile is active and all Monerium services are supported.
+        * `rejected`: The applicant details did not meet the compliance requirements of Monerium. Details can be fixed and re-submitted for processing.
+        * `blocked`: Monerium is unable to offer the applicant services because of compliance reasons. Details cannot be re-submitted.
+      type: string
+      example: pending
+      enum:
+        - created
+        - pending
+        - approved
+        - rejected
+        - blocked
+    ProfileKind:
+      description: String identifier specifying the type of the profile.
+      type: string
+      example: personal
+      enum:
+        - corporate
+        - personal
+    TimeStamp:
+      description: "The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
+      type: string
+      format: date-time
+      example: "2024-07-29T12:21:58.777884Z"
+      pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Use the access token obtained from the `/auth/token` endpoint.
+        Example:
+        ```
+        Authorization: Bearer EoWmpc2uSZar6h2bKgh
+        ```
+tags:
+  - name: changes
+    x-displayName: Changes
+    description: |
+      <p style="background: rgba(255, 165, 0, 0.1); padding: 30px; font-weight: bold">
+        Version 2 is still in alpha, expect some changes while we test everything and release a stable version.
+      </p>
+
+      <p style="background: rgba(255, 165, 0, 0.1); padding: 30px; font-weight: bold">
+        Endpoints or responses that have not been implemented are marked with WIP (Work In Progress).
+      </p>
+
+      ### Changes 2024-08-19:
+      * [PUT /profiles/{profile}/details](#operation/submit-profile-details) - added form and verifications for personal and corporate profiles (WIP).
+
+      ### Changes 2024-08-09:
+      * [POST /webhooks](#operation/register-webhook-subscription) - A new endpoint to register webhook subscription and receive notifications like profile updates.
+      * [Webhook for Profile notifications](#operation/webhook-profile-updated) - A webhook notification about profile updates.
+
+      ### Changes 2024-07-15:
+
+      * [PATCH /ibans/{iban}](#operation/move-iban) - Changed from PUT to PATCH request.
+      * [PUT /profiles/{profile}/details](#operation/submit-profile-details) - added 409 response when submitting details for an already approved profile.
+
+      ### Changes 2024-06-20:
+      * [POST /auth/signup](#operation/auth-signup) - Added a 304 response when trying to sign up existing users. This will require explicit authorization from the user using the authorization flow.
+      * [PUT /ibans/{iban}](#operation/move-iban) - New endpoint released to move existing IBANs to another wallet address.
+
+  - name: start
+    x-displayName: Getting started
+    description: |
+      Monerium offers a sandbox test environment for developers to integrate and test their applications:
+
+        - **Sandbox API URL:** `https://api.monerium.dev`
+        - **Sandbox web app:** `https://sandbox.monerium.dev`
+
+        Before onboarding users via your application, you must [register your application](/docs/getting-started/create-app) with Monerium.
+
+        When you are ready to go live, then you can register your application in our production environment:
+
+        - **Production API URL:** `https://api.monerium.app`
+        - **Production web app:** `https://monerium.app`
+
+        To access the version 2 of the Monerium API, you need to specify the Accept header in your requests.
+        This header ensures that you are using the correct version of the API and can access all v2 features and endpoints.
+        The Accept header must have the value `application/vnd.monerium.api-v2+json`.
+        Below are examples using curl and JavaScript (Fetch API).
+
+        ```bash
+          curl -X GET 'https://api.monerium.dev/profiles' \
+            -H 'Accept: application/vnd.monerium.api-v2+json' \
+            -H 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+        ```
+
+        ```js
+          fetch('https://api.monerium.dev/profiles', {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/vnd.monerium.api-v2+json',
+              'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+            }
+          })
+          .then(response => response.json())
+          .then(data => console.log(data))
+          .catch(error => console.error('Error:', error));
+        ```
+
+      ### Extra privileges
+
+      Some endpoints are marked with the following label:
+
+      <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+      </span>
+
+      Access to these endpoints need to be granted to your app by the Monerium team.
+
+      Monerium can offer applicable partners a KYC reliance or sharing agreement that can streamline the onboarding process for its customers.
+      It is worth noting that Monerium is always ultimately responsible for conducting due diligence and monitoring the business relationship.
+  - name: auth
+    x-displayName: Authentication
+    description: "Endpoint that handle user creation, authorization, and authentication."
+  - name: profiles
+    x-displayName: Profiles
+    description: "Customers are represented by profiles whose identifier is the profile ID created at [sign up](#operation/auth-signup). The profile can be either a person or a corporate. A profile owns most resources, such as IBANs and addresses."
+  - name: addresses
+    x-displayName: Addresses
+    description: "A blockchain address, often called a public key or wallet address, is a unique identifier within a blockchain that serves as a destination for sending, receiving, or storing digital assets, such as the EURe onchain fiat token."
+  - name: ibans
+    x-displayName: IBANs
+    description: "Monerium connects any web3 wallet to any euro bank account with a personal IBAN. All incoming euro payments are automatically minted as EURe tokens to the linked address. Sending EURe to traditional bank accounts is just as easy. With a signature from the wallet, the EURe is burned and sent as a euro to any bank account from the IBAN that is linked to the address."
+  - name: orders
+    x-displayName: Orders
+    description: |
+      An order represents an instruction to transfer funds to and from a wallet address.
+      The transfer can occur either within the blockchain ecosystem (cross-chain) or between the blockchain address and a traditional bank account via SEPA.
+  - name: files
+    x-displayName: Files
+    description: "Share files with Monerium."
+  - name: webhooks
+    x-displayName: Webhooks
+    description: Receive notifications with webhooks.
+webhooks:
+  profile.updated:
+    post:
+      operationId: webhook-profile-updated
+      summary: Profile updated
+      description: |
+        This notification represent a profile state update.
+        When an event is triggered, a POST request is sent to the endpoint specified during [registration](#operation/register-webhook-subscription).
+
+        The cURL example contain the example payload and headers that are sent.
+        Headers description:
+        - `webhook-id`: unique ID of webhook notification.
+        - `webhook-timestamp`: UNIX timestamp of webhook notification.
+        - `webhook-signature`: signature is a minified JSON payload encrypted using the secret key via the HMAC-SHA256 scheme, prefixed with "v1,".
+
+        Your webhook endpoint must respond with a `200 OK` status code to indicate successful receipt.
+        If the delivery fails, Monerium will retry with exponential backoff up to 10 times over 12 hours.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  description: The type of the event.
+                  type: string
+                  example: profile.updated
+                  enum:
+                    - profile.updated
+                timestamp:
+                  $ref: "#/components/schemas/TimeStamp"
+                data:
+                  $ref: "#/components/schemas/Profile"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      security: []
+      tags:
+        - webhooks
+      x-codeSamples:
+        - lang: curl4
+          label: CURL
+          source: |
+            curl -X POST "https://your-webhook-url.com/webhooks" \
+            -H "Content-Type: application/json" \
+            -H "webhook-id: 3f3d820e-d01c-4c56-8be4-b20053225679" \
+            -H "webhook-timestamp: 1723207444" \
+            -H "webhook-signature: v1,K5oZfzN95Z9UVu1EsfQmfVNQhnkZ2pj9o9NDN/H/pI4=" \
+            -d '{
+              "type": "profile.updated",
+              "timestamp": "2024-08-09T12:44:04.777884Z",
+              "data": {
+                "id": "4f079ef8-6d26-11eb-9bc8-acde48001122",
+                "kind": "personal",
+                "name": "Jane Doe",
+                "state": "pending"
+              }
+            }'
