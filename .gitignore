@@ -37,3 +37,7 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+apps/developer/docs/packages/sdk/
+apps/developer/docs/packages/SDK React Provider/
+apps/developer/docs/packages/typedoc-sidebar.cjs
