@@ -39,4 +39,4 @@ off-ramp:
 
 ## Defined in
 
-[utils.ts:86](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L86)
+[utils.ts:110](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L110)

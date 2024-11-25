@@ -1,6 +1,6 @@
 # Function: parseChain()
 
-> **parseChain**(`chain`: `string` \| `number`): `string`
+> **parseChain**(`chain`: `string` \| `number`): [`Chain`](/docs/packages/sdk/type-aliases/Chain.md)
 
 This will resolve the chainId number to the corresponding chain name.
 
@@ -12,10 +12,10 @@ This will resolve the chainId number to the corresponding chain name.
 
 ## Returns
 
-`string`
+[`Chain`](/docs/packages/sdk/type-aliases/Chain.md)
 
 chain name, 'ethereum', 'polygon', 'gnosis', etc.
 
 ## Defined in
 
-[utils.ts:48](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L48)
+[utils.ts:72](https://github.com/monerium/js-monorepo/blob/main/packages/sdk/src/utils.ts#L72)
