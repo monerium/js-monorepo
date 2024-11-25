@@ -11,6 +11,7 @@ import {
   parseChain,
   placeOrderMessage,
   rfc3339,
+  shortenIban,
   urlEncoded,
 } from '../src/utils';
 
@@ -53,7 +54,7 @@ describe('getMessage', () => {
       'DE89370400440532013000'
     );
     expect(message).toMatch(
-      /^Send EUR 100 to DE89370400440532013000 at \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[-+]\d{2}:\d{2})$/
+      /^Send EUR 100 to DE89...3000 at \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[-+]\d{2}:\d{2})$/
     );
   });
 });
@@ -136,7 +137,9 @@ describe('placeOrderMessage', () => {
     const iban = 'DE89370400440532013000';
     const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
-      new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
+      new RegExp(
+        `^Send EUR ${amount} to ${shortenIban(iban)} at ${timestampRegex}$`
+      )
     );
   });
 
@@ -145,7 +148,9 @@ describe('placeOrderMessage', () => {
     const iban = 'DE89370400440532013000';
     const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
-      new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
+      new RegExp(
+        `^Send EUR ${amount} to ${shortenIban(iban)} at ${timestampRegex}$`
+      )
     );
   });
 
@@ -154,7 +159,9 @@ describe('placeOrderMessage', () => {
     const iban = 'DE89370400440532013000';
     const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
-      new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
+      new RegExp(
+        `^Send EUR ${amount} to ${shortenIban(iban)} at ${timestampRegex}$`
+      )
     );
   });
   test('should format message with chainId', () => {
@@ -175,7 +182,7 @@ describe('placeOrderMessage', () => {
   });
   test('should format message with chainId as string', () => {
     const amount = 100;
-    const receiver = 'DE89370400440532013000';
+    const receiver = '0x1234';
     const chain = 'gnosis';
     const message = placeOrderMessage(
       amount,
@@ -229,6 +236,9 @@ describe('parseChain', () => {
     expect(parseChain(80002)).toBe('polygon');
     expect(parseChain(80002)).toBe('polygon');
     expect(parseChain('ethereum')).toBe('ethereum');
+    expect(parseChain('noble-1')).toBe('noble');
+    expect(parseChain('florin-1')).toBe('noble');
+    expect(parseChain('1')).toBe('ethereum');
     expect(() => parseChain(2)).toThrow('Chain not supported: 2');
   });
 });

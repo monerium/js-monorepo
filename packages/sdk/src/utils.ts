@@ -45,7 +45,7 @@ export const rfc3339 = (d: Date) => {
  * @param chain The chainId of the network
  * @returns chain name, 'ethereum', 'polygon', 'gnosis', etc.
  */
-export const parseChain = (chain: Chain | ChainId) => {
+export const parseChain = (chain: Chain | ChainId | number | string) => {
   if (typeof chain === 'number') {
     return getChain(chain);
   } else if (
@@ -55,7 +55,12 @@ export const parseChain = (chain: Chain | ChainId) => {
   ) {
     return 'noble';
   }
-  return chain;
+
+  try {
+    return getChain(parseInt(chain));
+  } catch (e) {
+    return chain;
+  }
 };
 
 /**

@@ -42,6 +42,7 @@ Renames and re-exports [MoneriumClient](/docs/packages/sdk/classes/MoneriumClien
 - [parseChain](/docs/packages/sdk/functions/parseChain.md)
 - [placeOrderMessage](/docs/packages/sdk/functions/placeOrderMessage.md)
 - [rfc3339](/docs/packages/sdk/functions/rfc3339.md)
+- [shortenIban](/docs/packages/sdk/functions/shortenIban.md)
 
 ## Variables
 

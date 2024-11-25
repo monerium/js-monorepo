@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import {
   Chain,
+  ChainId,
   constants,
   Currency,
   IdDocumentKind,
@@ -484,8 +485,9 @@ export default function Test() {
       moveIban({
         iban: formData.get('move-iban') as string,
         address:
-          (formData.get('move-address') as string) || (walletAddress as string),
-        chain: chainId,
+          (formData.get('move-iban-address') as string) ||
+          (walletAddress as string),
+        chain: (formData.get('move-iban-chain') as ChainId | Chain) || chainId,
       });
     }
     return (
