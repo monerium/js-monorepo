@@ -89,6 +89,9 @@ export const placeOrderMessage = (
   if (chain) {
     return `Send ${curr} ${amount} to ${receiver} on ${parseChain(chain)} at ${rfc3339(new Date())}`;
   }
+  if (curr === 'EUR') {
+    return `Send ${curr} ${amount} to ${shortenIban(receiver)} at ${rfc3339(new Date())}`;
+  }
   return `Send ${curr} ${amount} to ${receiver} at ${rfc3339(new Date())}`;
 };
 
@@ -145,6 +148,14 @@ export const getChain = (chainId: number): Chain => {
     default:
       throw new Error(`Chain not supported: ${chainId}`);
   }
+};
+
+export const shortenIban = (iban?: string) => {
+  if (typeof iban !== 'string' || !iban?.length) return iban;
+  const ns = iban.replace(/\s/g, ''); // remove spaces
+  return iban?.length > 11
+    ? `${ns.substring(0, 4)}...${ns.substring(ns.length - 4)}`
+    : iban;
 };
 
 export const getAmount = (
