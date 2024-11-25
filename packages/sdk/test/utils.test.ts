@@ -236,6 +236,7 @@ describe('parseChain', () => {
     expect(parseChain(80002)).toBe('polygon');
     expect(parseChain(80002)).toBe('polygon');
     expect(parseChain('ethereum')).toBe('ethereum');
+    expect(parseChain('noble')).toBe('noble');
     expect(parseChain('noble-1')).toBe('noble');
     expect(parseChain('florin-1')).toBe('noble');
     expect(parseChain('1')).toBe('ethereum');

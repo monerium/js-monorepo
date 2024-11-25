@@ -40,26 +40,50 @@ export const rfc3339 = (d: Date) => {
   );
 };
 
+const isValidCosmosChainName = (chain: string) => {
+  switch (chain) {
+    case 'noble':
+    case 'noble-1':
+    case 'florin-1':
+    case 'grand-1':
+      return true;
+    default:
+      return false;
+  }
+};
+
+const isValidEvmName = (chain: string) => {
+  switch (chain) {
+    case 'ethereum':
+    case 'polygon':
+    case 'gnosis':
+    case 'arbitrum':
+      return true;
+    default:
+      return false;
+  }
+};
+
 /**
  * This will resolve the chainId number to the corresponding chain name.
  * @param chain The chainId of the network
  * @returns chain name, 'ethereum', 'polygon', 'gnosis', etc.
  */
-export const parseChain = (chain: Chain | ChainId | number | string) => {
+export const parseChain = (chain: Chain | ChainId | number | string): Chain => {
   if (typeof chain === 'number') {
     return getChain(chain);
-  } else if (
-    chain === 'noble-1' ||
-    chain === 'florin-1' ||
-    chain === 'grand-1'
-  ) {
+  }
+  if (isValidCosmosChainName(chain)) {
     return 'noble';
+  }
+  if (isValidEvmName(chain)) {
+    return chain as Chain;
   }
 
   try {
     return getChain(parseInt(chain));
   } catch (e) {
-    return chain;
+    throw new Error(`Chain not supported: ${chain}`);
   }
 };
 
