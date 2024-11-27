@@ -634,7 +634,7 @@ export class MoneriumClient {
    * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications | API Document - Websocket}
 
    */
-  connectOrderNotifications({
+  subscribeOrderNotifications({
     filter,
     onMessage,
     onError,
@@ -692,7 +692,7 @@ export class MoneriumClient {
    * @param {OrderNotificationQueryParams} [params] - specify which socket to close or close all if not provided
    * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications | API Document - Websocket}
    */
-  disconnectOrderNotifications(params?: OrderNotificationQueryParams) {
+  unsubscribeOrderNotifications(params?: OrderNotificationQueryParams) {
     if (params) {
       const key = getKey({
         profile: params?.profile,
@@ -722,7 +722,7 @@ export class MoneriumClient {
     if (!isServer) {
       localStorage.removeItem(STORAGE_CODE_VERIFIER);
     }
-    this.disconnectOrderNotifications();
+    this.unsubscribeOrderNotifications();
     this.#authorizationHeader = undefined;
     this.bearerProfile = undefined;
   }

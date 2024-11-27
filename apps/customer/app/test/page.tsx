@@ -117,7 +117,7 @@ export default function Test() {
 
   useEffect(() => {
     if (context?.sdk) {
-      context?.sdk.connectOrderNotifications({
+      context?.sdk.subscribeOrderNotifications({
         filter: {
           state: OrderState.placed,
           profile: profile?.id as string,
@@ -133,7 +133,7 @@ export default function Test() {
        * This is not an issue in production mode.
        */
       if (context?.sdk) {
-        context?.sdk?.disconnectOrderNotifications();
+        context?.sdk?.unsubscribeOrderNotifications();
       }
     };
   }, [context]);
@@ -664,7 +664,7 @@ export default function Test() {
       <button
         type="submit"
         onClick={() => {
-          context?.sdk?.disconnectOrderNotifications();
+          context?.sdk?.unsubscribeOrderNotifications();
         }}
       >
         Close Order Notifications

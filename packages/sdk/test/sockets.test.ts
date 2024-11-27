@@ -29,14 +29,14 @@ describe('Sockets', () => {
     jest.spyOn(window, 'WebSocket').mockImplementation(() => mockWebSocket);
   });
   it('should subscribe', () => {
-    client.connectOrderNotifications();
+    client.subscribeOrderNotifications();
 
     expect(WebSocket).toHaveBeenCalledWith(
       'wss://api.monerium.dev/orders?access_token=accessToken'
     );
   });
   it('should subscribe to a specific event', () => {
-    client.connectOrderNotifications({
+    client.subscribeOrderNotifications({
       filter: {
         state: OrderState.pending,
         profile: 'test-profile',
@@ -48,7 +48,7 @@ describe('Sockets', () => {
     );
   });
   it('should subscribe to a specific event', () => {
-    client.connectOrderNotifications({
+    client.subscribeOrderNotifications({
       filter: {
         state: OrderState.pending,
         profile: 'test-profile',
@@ -58,7 +58,7 @@ describe('Sockets', () => {
     expect(WebSocket).toHaveBeenCalledWith(
       'wss://api.monerium.dev/orders?access_token=accessToken&profile=test-profile&state=pending'
     );
-    client.disconnectOrderNotifications();
+    client.unsubscribeOrderNotifications();
     expect(mockWebSocket.close).toHaveBeenCalled();
   });
 });

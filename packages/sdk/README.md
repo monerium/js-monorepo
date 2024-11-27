@@ -323,10 +323,10 @@ import { OrderState } from '@monerium/sdk';
 const [orderState, setOrderState] = useState<OrderState>();
 
 // Subscribe to all order events
-monerium.connectOrderNotifications();
+monerium.subscribeOrderNotifications();
 
 // Subscribe to specific order events
-monerium.connectOrderNotifications({ 
+monerium.subscribeOrderNotifications({ 
   filter: {
     state: OrderState.pending,
     profile: 'my-profile-id',
@@ -337,12 +337,12 @@ monerium.connectOrderNotifications({ 
 });
 
 // Unsubscribe from specific order events
-monerium.disconnectOrderNotifications({ 
+monerium.unsubscribeOrderNotifications({ 
   state: OrderState.pending,
   profile: 'my-profile-id'
 });
 // Unsubscribe from all order events
-monerium.disconnectOrderNotifications();
+monerium.unsubscribeOrderNotifications();
 
 ```
 

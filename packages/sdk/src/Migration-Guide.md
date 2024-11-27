@@ -1,12 +1,10 @@
-Migration Guide.
+# Migration Guide.
 
-# SDK
+## SDK
 
 - `getBalances` now only returns the balance for a specified address+chain. Defaults to only 'eur' currency, optional parameter accepts a list of currency codes.
 
-Preparing for pagination.
-
-- `getOrders` now returns an `orders` object which contains a list of orders.
+- `getOrders` now returns an `orders` object which contains a list of orders. Preparing for pagination.
 
 - `getAuthContext` removed, use `getProfiles` instead.
 
@@ -14,11 +12,11 @@ Preparing for pagination.
 
 - `Network` interface has been completely removed. You will find occasional `network` in responses, but it's in the process of being removed.
 
-- `Balance` interface renamed to `CurrencyBalance`.
+- `arbitrum` and `noble` support added.
 
-- `IBAN`, `SCAN` and `CrossChain` interfaces renamed to `IBANIdentifier`, `SCANIdentifier` and `CrossChainIdentifier`.
+- `placeOrderMessage` now has a shortened IBAN format.
 
-- `linkAddress` has been simplified to:
+- `linkAddress` now only creates an account for a single specified chain and has been simplified to:
 
   ```ts
    {
@@ -30,17 +28,19 @@ Preparing for pagination.
   ```
 
 - `skipCreateAccount` added to `authorize` method to skip the account creation step in the auth flow.
-- `skipKyc` added to `authorize` method to skip KYC in the auth flow.
+- `skipKyc` added to `authorize` method to skip KYC in the auth flow.Ye
 
 - Simplified websockets
+
+Renamed `subscribeToOrderNotifications`to `subscribeOrderNotifications` and `unsubscribeFromOrderNotifications` to `unsubscribeOrderNotifications`.
 
 ```ts
 const monerium = new MoneriumClient({...});
 // Subscribe to all order events
-monerium.connectOrderNotifications();
+monerium.subscribeOrderNotifications();
 
 // Subscribe to specific order events
-monerium.connectOrderNotifications({ 
+monerium.subscribeOrderNotifications({ 
   filter: {
     state: OrderState.pending,
     profile: 'my-profile-id',
@@ -51,28 +51,68 @@ monerium.connectOrderNotifications({ 
 });
 
 // Unsubscribe from specific order events
-monerium.disconnectOrderNotifications({ 
+monerium.unsubscribeOrderNotifications({ 
   state: OrderState.pending,
   profile: 'my-profile-id'
 });
 ```
 
+-
 - Interface `ClientCredentialsRequest` renamed to `ClientCredentialsPayload`
 - Interface `AuthCodeRequest` renamed to `AuthCodePayload`
 - Interface `RefreshTokenRequest` renamed to `RefreshTokenPayload`
+- Interface `Balance` renamed to `CurrencyBalance`.
+- Interface `IBAN` renamed to `IBANIdentifier`.
+- Interface `SCAN` renamed to `SCANIdentifier`.
+- Interface `CrossChain` renamed to `CrossChainIdentifier`.
 
 # New
 
-getAddresses
-getAddress
-getProfile
-getProfiles
-getIban
-getIbans
+- getAddresses
+- getAddress
+- getProfile
+- getProfiles
+- getIban
+- getIbans
+- moveIban
+- requestIban
+- CurrencyCode type
 
-CurrencyCode type
+Beta:
 
-### TODO?
+- signUp
+- submitProfileDetails
 
-- should connectOrderNotifications be renamed to subscribeOrderNotifications?
-- should disconnectOrderNotifications be renamed to unsubscribeOrderNotifications?
+## React Provider
+
+All query hooks now return the data response as `data`:
+
+```ts
+const { data, isLoading, isError } = useProfile();
+```
+
+- `useAuthContext` removed, use `useProfile` instead.
+- `useBalances` now only returns the balance for a specified address+chain. Defaults to only 'eur' currency, optional parameter accepts a list of currency codes.
+- `useLinkAddress` mutation, `linkAddress` now only creates an account for a single specified chain and has been simplified to:
+
+  ```ts
+   {
+     profile: "profile-id-that-owns-address", // optional
+     address: "0x1234...7890",
+     signature: "0x12341234...78907890",
+     chain: "ethereum"
+   }
+  ```
+
+New:
+
+- useAddress
+- useAddresses
+- useIban
+- useIbans
+- useRequestIban
+- useMoveIban
+
+Beta:
+
+- useSubmitProfileDetails
