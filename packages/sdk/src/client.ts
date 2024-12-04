@@ -371,7 +371,6 @@ export class MoneriumClient {
       ? urlEncoded(params as unknown as Record<string, string>)
       : undefined;
     const url = searchParams ? `addresses?${searchParams}` : 'addresses';
-    // return this.#api<Order[]>('get', url);
     return this.#api('get', url);
   }
 

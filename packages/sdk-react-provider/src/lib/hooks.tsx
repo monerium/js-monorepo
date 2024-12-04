@@ -1008,6 +1008,80 @@ export function useLinkAddress({
   };
 }
 
+/**
+ * API consumers have the option to subscribe to a WebSocket for real-time order notifications. This WebSocket complies with the standard WebSocket Protocol, allowing the use of standard WebSocket libraries for subscription.
+ *
+ * The WebSocket emits an event when a order changes state:
+ *
+ * `placed`: The order has been created but not yet processed.
+ *
+ * `pending`: The order is awaiting fulfillment (e.g., review, minting/burning tokens, or sending/receiving SEPA payment).
+ *
+ * `processed`: The order has been completed successfully.
+ *
+ * `rejected`: The order was rejected, possibly due to compliance reasons or insufficient funds.
+ * @group Hooks
+ * @category Orders
+ * @param {Object} params
+ * @param {OrderState} [params.state] Filter based on the state of the order.
+ * @param {string} [params.profile] Filter based on the profile id of the order.
+ * @param {Function} params.onMessage Callback function to handle the order notification.
+ * @param {Function} [params.onError] Callback function to handle the error notification.
+ *
+ * @example
+ * ```ts
+ * const {
+ *    state,
+ *    profile,
+ *    onMessage,
+ *    onError
+ * } = useSubscribeOrderNotification();
+ * ```
+ * @see {@link https://monerium.dev/api-docs/v1#operation/orders-notifications| API Documentation}
+ * @returns {Function} Unsubscribe from order notifications.
+ */
+
+export const useSubscribeOrderNotification = ({
+  state,
+  profile,
+  onMessage,
+  onError,
+}: {
+  state?: OrderState;
+  profile?: string;
+  onMessage: (order: Order) => void;
+  onError?: ((err: Event) => void) | undefined;
+}) => {
+  const sdk = useSdk();
+
+  useEffect(() => {
+    if (sdk) {
+      sdk.subscribeOrderNotifications({
+        filter: {
+          state: state,
+          profile: profile,
+        },
+        onMessage: onMessage,
+        onError: onError,
+      });
+    }
+    return () => {
+      /**
+       * Note that in development mode, React Strict mode will cause this
+       * cleanup function to be called twice on client side route changes.
+       * So a socket will be immediately closed and opened again.
+       * This is not an issue in production mode.
+       */
+      if (sdk) {
+        sdk?.unsubscribeOrderNotifications({ state: state, profile: profile });
+      }
+    };
+  }, [sdk, profile, state]);
+
+  return () =>
+    sdk?.unsubscribeOrderNotifications({ state: state, profile: profile });
+};
+
 /** Export types for documentation */
 export type {
   Address,

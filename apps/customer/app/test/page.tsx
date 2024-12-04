@@ -32,10 +32,10 @@ import {
   useProfile,
   useRequestIban,
   useSubmitProfileDetails,
+  useSubscribeOrderNotification,
   useTokens,
 } from '@monerium/sdk-react-provider';
 export default function Test() {
-  const queryClient = useQueryClient();
   /**
    * Wagmi
    */
@@ -115,32 +115,11 @@ export default function Test() {
     );
   };
 
-  useEffect(() => {
-    if (context?.sdk) {
-      context?.sdk.subscribeOrderNotifications({
-        filter: {
-          state: OrderState.placed,
-          profile: profile?.id as string,
-        },
-        onMessage: handleOrderNotification,
-      });
-    }
-    return () => {
-      /**
-       * Note that in development mode, React Strict mode will cause this
-       * cleanup function to be called twice on client side route changes.
-       * So a socket will be immediately closed and opened again.
-       * This is not an issue in production mode.
-       */
-      if (context?.sdk) {
-        context?.sdk?.unsubscribeOrderNotifications();
-      }
-    };
-  }, [context]);
-
-  /**
-   *
-   */
+  let unsubscribe = useSubscribeOrderNotification({
+    state: OrderState.placed,
+    profile: profile?.id as string,
+    onMessage: handleOrderNotification,
+  });
 
   const Input = ({
     name,
@@ -664,7 +643,7 @@ export default function Test() {
       <button
         type="submit"
         onClick={() => {
-          context?.sdk?.unsubscribeOrderNotifications();
+          unsubscribe();
         }}
       >
         Close Order Notifications
