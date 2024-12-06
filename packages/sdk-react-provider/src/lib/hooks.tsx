@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import MoneriumClient, {
@@ -164,6 +164,7 @@ export function useProfile({
 } = {}) {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
+
   const { data } = useProfiles();
 
   const profileToUse = profile || (data?.profiles?.[0]?.id as string);

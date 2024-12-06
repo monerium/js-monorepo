@@ -80,7 +80,6 @@ monerium.unsubscribeOrderNotifications({ 
 
 Beta:
 
-- signUp
 - submitProfileDetails
 
 ## React Provider

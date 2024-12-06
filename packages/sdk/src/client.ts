@@ -9,6 +9,7 @@ import {
   queryParams,
   rest,
 } from './helpers';
+import { createDebugger } from './helpers/debug.helpers';
 import { getKey } from './helpers/internal.helpers';
 import type {
   Address,
@@ -47,8 +48,6 @@ import type {
   RefreshTokenPayload,
   RequestIbanPayload,
   ResponseStatus,
-  SignUpPayload,
-  SignUpResponse,
   SubmitProfileDetailsPayload,
   SupportingDoc,
   Token,
@@ -56,7 +55,8 @@ import type {
 import { mapChainIdToChain, parseChain, urlEncoded } from './utils';
 
 // import pjson from "../package.json";
-const { STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } = constants;
+const { STORAGE_CODE_VERIFIER, STORAGE_ACCESS_TOKEN, STORAGE_ACCESS_EXPIRY } =
+  constants;
 
 const isServer = typeof window === 'undefined';
 
@@ -77,24 +77,12 @@ const isServer = typeof window === 'undefined';
  *  redirectUri: 'http://your-redirect-url.com/monerium'
  * });
  *
- * // or - server only
- * new MoneriumClient({
- *  environment: 'sandbox',
- *  clientId: 'your-client-id',
- *  clientSecret: 'your-client-secret'
- * })
  *```
  */
 export class MoneriumClient {
   #env: Environment;
 
   #authorizationHeader?: string;
-  /**
-   * The PKCE code verifier
-   * @deprecated, use localStorage, will be removed in v3
-   * @hidden
-   * */
-  codeVerifier?: string;
   /**
    * The bearer profile will be available after authentication, it includes the `access_token` and `refresh_token`
    * */
@@ -107,6 +95,8 @@ export class MoneriumClient {
    * The client is authorized if the bearer profile is available
    */
   isAuthorized = !!this.bearerProfile;
+
+  #debug: (message: string) => void = () => {};
 
   #client?: BearerTokenCredentials;
   /**
@@ -127,6 +117,8 @@ export class MoneriumClient {
     if (typeof envOrOptions === 'string') {
       this.#env = MONERIUM_CONFIG.environments[envOrOptions];
     } else {
+      this.#debug = createDebugger(envOrOptions.debug ?? false);
+
       this.#env =
         MONERIUM_CONFIG.environments[envOrOptions.environment || 'sandbox'];
 
@@ -138,6 +130,7 @@ export class MoneriumClient {
           redirectUri,
         };
       } else {
+        this.#debug('Client credentials detected');
         console.error(
           '\x1b[31m%s\x1b[0m',
           'Use client credentials only on the server where the secret is secure!'
@@ -185,6 +178,7 @@ export class MoneriumClient {
       skip_kyc: params?.skipKyc,
     });
 
+    this.#debug(`Authorization URL: ${authFlowUrl}`);
     // Redirect to the authFlow
     window.location.assign(authFlowUrl);
   }
@@ -211,30 +205,25 @@ export class MoneriumClient {
    * await monerium.getAccess();
    * ```
    */
-  async getAccess(
-    client?: AuthorizationCodeCredentials | ClientCredentials
-  ): Promise<boolean> {
-    const clientId = client?.clientId || this.#client?.clientId;
-    const clientSecret =
-      (client as ClientCredentials)?.clientSecret ||
-      (this.#client as ClientCredentials)?.clientSecret;
+  async getAccess(refreshToken?: string): Promise<boolean> {
+    const clientId = this.#client?.clientId;
+    const clientSecret = (this.#client as ClientCredentials)?.clientSecret;
 
     if (clientSecret) {
-      console.error(
-        '\x1b[31m%s\x1b[0m',
-        'Use client credentials only on the server where the secret is secure!'
-      );
       if (isServer) {
         await this.#clientCredentialsAuthorization(
           this.#client as ClientCredentials
         );
+        return !!this?.bearerProfile;
       }
-      return !!this?.bearerProfile;
+      console.error(
+        '\x1b[31m%s\x1b[0m',
+        'Use client credentials only on the server where the secret is secure!'
+      );
     }
 
-    const redirectUri =
-      (client as AuthorizationCodeCredentials)?.redirectUri ||
-      (this.#client as AuthorizationCodeCredentials)?.redirectUri;
+    const redirectUri = (this.#client as AuthorizationCodeCredentials)
+      ?.redirectUri;
 
     if (!clientId) {
       throw new Error('Missing ClientId');
@@ -250,20 +239,58 @@ export class MoneriumClient {
     const state =
       new URLSearchParams(window.location.search).get('state') || undefined;
 
-    const refreshToken =
-      localStorage.getItem(STORAGE_REFRESH_TOKEN) || undefined;
+    const accessToken = window.localStorage.getItem(STORAGE_ACCESS_TOKEN);
+    const expiry = window.localStorage.getItem(STORAGE_ACCESS_EXPIRY);
 
-    if (refreshToken) {
-      await this.#refreshTokenAuthorization(clientId, refreshToken);
-    } else if (authCode) {
+    if (authCode) {
+      this.#debug('Using auth code from auth flow to authorize');
       await this.#authCodeAuthorization(
         clientId,
         redirectUri as string,
         authCode,
         state
       );
+      this.#debug(this.bearerProfile ? 'Authorized' : 'Not authorized');
+      return !!this.bearerProfile;
     }
 
+    if (refreshToken) {
+      this.#debug('Using refresh token to authorize');
+      await this.#refreshTokenAuthorization(clientId, refreshToken);
+      this.#debug(this.bearerProfile ? 'Authorized' : 'Not authorized');
+      return !!this.bearerProfile;
+    }
+
+    if (accessToken && expiry) {
+      const now = new Date();
+      if (parseInt(expiry) < now.getTime()) {
+        window.localStorage.removeItem(STORAGE_ACCESS_TOKEN);
+        window.localStorage.removeItem(STORAGE_ACCESS_EXPIRY);
+        this.isAuthorized = false;
+        this.bearerProfile = undefined;
+        throw new Error('Access token has expired');
+      } else {
+        this.#debug(
+          'Access token should still be valid, checking if it is authorized...'
+        );
+        try {
+          this.#authorizationHeader = `Bearer ${accessToken}`;
+          this.isAuthorized = true;
+          await this.getTokens();
+          this.#debug('Authorized');
+          return true;
+        } catch (error) {
+          this.#debug('Access token is invalid.');
+          window.localStorage.removeItem(STORAGE_ACCESS_TOKEN);
+          window.localStorage.removeItem(STORAGE_ACCESS_EXPIRY);
+          this.isAuthorized = false;
+          this.bearerProfile = undefined;
+          throw new Error('Access token is invalid.');
+        }
+      }
+    }
+
+    this.#debug(this.bearerProfile ? 'Authorized' : 'Not authorized');
     return !!this.bearerProfile;
   }
 
@@ -300,16 +327,24 @@ export class MoneriumClient {
         this.isAuthorized = !!res;
         this.#authorizationHeader = `Bearer ${res?.access_token}`;
         if (!isServer) {
+          const now = new Date();
+          const expiry = now.getTime() + res?.expires_in * 1000;
+
           window.localStorage.setItem(
-            STORAGE_REFRESH_TOKEN,
-            this.bearerProfile?.refresh_token || ''
+            STORAGE_ACCESS_TOKEN,
+            res?.access_token || ''
+          );
+          window.localStorage.setItem(
+            STORAGE_ACCESS_EXPIRY,
+            expiry?.toString()
           );
         }
       })
       .catch((err) => {
         if (!isServer) {
           localStorage.removeItem(STORAGE_CODE_VERIFIER);
-          localStorage.removeItem(STORAGE_REFRESH_TOKEN);
+          localStorage.removeItem(STORAGE_ACCESS_TOKEN);
+          localStorage.removeItem(STORAGE_ACCESS_EXPIRY);
           cleanQueryString();
         }
         throw new Error(err?.message);
@@ -509,18 +544,6 @@ export class MoneriumClient {
   }
 
   /**
-   * @group Authentication
-   * @see {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth-signup | API Documentation}
-   */
-  signUp(payload: SignUpPayload): Promise<SignUpResponse> {
-    return this.#api<SignUpResponse>(
-      'post',
-      `auth/signup`,
-      JSON.stringify(payload)
-    );
-  }
-
-  /**
    * @group Profiles
    * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details | API Documentation}
    */
@@ -575,7 +598,7 @@ export class MoneriumClient {
    * Triggered when the client has claimed an authorization code
    * 1. Code Verifier is picked up from the localStorage
    * 2. auth service is called to claim the tokens
-   * 3. Refresh token is stored in the localStorage
+   * 3. Access token is stored in the localStorage
    */
   #authCodeAuthorization = async (
     clientId: string,
@@ -588,9 +611,7 @@ export class MoneriumClient {
     if (!codeVerifier) {
       throw new Error('Code verifier not found');
     }
-
-    /** @deprecated, use localStorage, will be removed in v3 */
-    this.codeVerifier = codeVerifier;
+    this.#debug('Use code verifier to authorize');
 
     this.state = state;
 
@@ -732,7 +753,8 @@ export class MoneriumClient {
    */
   async revokeAccess() {
     if (!isServer) {
-      localStorage.removeItem(STORAGE_REFRESH_TOKEN);
+      localStorage.removeItem(STORAGE_ACCESS_TOKEN);
+      localStorage.removeItem(STORAGE_ACCESS_EXPIRY);
     }
     this.disconnect();
   }
@@ -748,7 +770,6 @@ export class MoneriumClient {
    */
   getAuthFlowURI = (args: PKCERequestArgs): string => {
     const url = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, args);
-    this.codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER) as string;
     return url;
   };
 }

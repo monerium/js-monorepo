@@ -464,16 +464,6 @@ export interface SupportingDoc {
   meta: SupportingDocMetadata;
 }
 
-// -- signUp
-
-export interface SignUpPayload {
-  email: string;
-}
-export interface SignUpResponse {
-  email: string;
-  profile: string;
-}
-
 // -- linkAddress
 
 export interface LinkAddress {
@@ -549,6 +539,7 @@ export interface OrderNotificationQueryParams {
 
 export type ClassOptions = {
   environment?: ENV;
+  debug?: boolean;
 } & BearerTokenCredentials;
 
 export interface AuthFlowOptions {

@@ -3,7 +3,6 @@ import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useQueryClient } from '@tanstack/react-query';
 
 import {
   Chain,
@@ -670,7 +669,15 @@ export default function Test() {
             </button>
           </>
         ) : (
-          <button type="submit" onClick={revokeAccess}>
+          <button
+            type="submit"
+            onClick={() => {
+              window.localStorage.removeItem(
+                'monerium.insecurely_store_refresh_token'
+              );
+              revokeAccess();
+            }}
+          >
             Revoke Access
           </button>
         )}

@@ -131,20 +131,6 @@ process.env.CI !== 'true' &&
         );
       }, 15000);
     });
-    describe('Authentications', () => {
-      test.skip('signup', async () => {
-        let user;
-        try {
-          user = await client.signUp({ email: 'test@gmail.com' });
-        } catch (error) {
-          console.error(error);
-        }
-        expect(user).toMatchObject({
-          email: 'test@gmail.com',
-          profile: DEFAULT_PROFILE,
-        });
-      });
-    });
     describe('IBANs', () => {
       const expectedIban = 'IS90 7440 0562 4145 5210 3666 89';
       test('get IBANs', async () => {

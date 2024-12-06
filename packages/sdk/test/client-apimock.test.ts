@@ -130,25 +130,6 @@ describe('MoneriumClient', () => {
       );
     });
   });
-  describe('Authentications', () => {
-    test('signUp', async () => {
-      await client.signUp({ email: 'test@gmail.com' }).catch(() => ({}));
-
-      expect(fetchMock?.mock?.calls?.length).toEqual(1);
-
-      expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
-        `https://api.monerium.dev/auth/signup`
-      );
-      expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
-        expect.objectContaining({
-          method: 'POST',
-          body: JSON.stringify({
-            email: 'test@gmail.com',
-          }),
-        })
-      );
-    });
-  });
 
   describe('IBANs', () => {
     //

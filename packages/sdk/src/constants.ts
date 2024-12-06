@@ -8,7 +8,11 @@ export default {
    */
   STORAGE_CODE_VERIFIER: 'monerium.sdk.code_verifier',
   /**
-   * The key used to store the refresh token in the local storage.
+   * The key used to store the access token in the local storage.
    */
-  STORAGE_REFRESH_TOKEN: 'monerium.sdk.refresh_token',
+  STORAGE_ACCESS_TOKEN: 'monerium.sdk.access_token',
+  /**
+   * The unix timestamp used to calculate the expiration time of the access token.
+   */
+  STORAGE_ACCESS_EXPIRY: 'monerium.sdk.access_expiry',
 };

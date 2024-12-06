@@ -40,6 +40,7 @@ const WalletList = memo(
               <>
                 {filteredList?.map((add, i) => (
                   <WalletItem
+                    key={i}
                     address={add.address}
                     chain={selectedChain}
                     currency={selectedCurrency}
