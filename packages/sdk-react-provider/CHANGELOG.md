@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.3.0...sdk-react-provider-v0.4.0) (2024-12-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* API v2 ([#96](https://github.com/monerium/js-monorepo/issues/96))
+
+### Features
+
+* API v2 ([#96](https://github.com/monerium/js-monorepo/issues/96)) ([1b4fe12](https://github.com/monerium/js-monorepo/commit/1b4fe12830f21323eb10a529e6258fa67533e7ab))
+
 ## [0.3.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.2.0...sdk-react-provider-v0.3.0) (2024-08-16)
 
 
