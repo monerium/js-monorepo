@@ -14,6 +14,9 @@ import { AuthorizeParams } from './types';
  * @param params.clientId - Monerium auth flow client id.
  * @param params.redirectUri - Monerium auth flow redirect url.
  * @param params.environment - Monerium environment.
+ * @param params.onRefreshTokenUpdate - Callback that is called when the refresh token is updated. Store it securely.
+ * @param params.refreshToken - Provide the securely stored refresh token to reconnect.
+ * @param params.debug - Enable debug mode.
  * @returns
  */
 export const MoneriumProvider = ({

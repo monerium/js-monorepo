@@ -44,7 +44,6 @@ Wrap your app in the `QueryClientProvider` React Context Provider and pass a ne
 Inside the `QueryClientProvider`, wrap your app in the `MoneriumProvider` React Context Provider and pass the auth flow's `clientId`, `redirectUri`, and `environment` configuration.
 
 ```tsx
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { MoneriumProvider } from '@monerium/sdk-react-provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -57,17 +56,18 @@ const root = createRoot(rootElement);
 const queryClient = new QueryClient();
 
 root.render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <MoneriumProvider
-        clientId="f99e629b-6dca-11ee-8aa6-5273f65ed05b"
-        redirectUri="https://pntvgs.csb.app/"
-        environment="sandbox"
-      >
-        <App />
-      </MoneriumProvider>
-    </QueryClientProvider>
-  </StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <MoneriumProvider
+      clientId="f99e629b-6dca-11ee-8aa6-5273f65ed05b"
+      redirectUri="https://pntvgs.csb.app/"
+      environment="sandbox"
+      // You should store the refresh token in a secure way
+      onRefreshTokenUpdate={(token) => setRefreshToken(token)}
+      refreshToken={refreshToken}
+    >
+      <App />
+    </MoneriumProvider>
+  </QueryClientProvider>
 );
 ```
 

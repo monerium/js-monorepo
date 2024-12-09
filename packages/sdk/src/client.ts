@@ -188,7 +188,7 @@ export class MoneriumClient {
    *
    * @group Authentication
    *
-   * @param {AuthorizationCodeCredentials | ClientCredentials} client - the client credentials
+   * @param {string} refreshToken - provide the refresh token to get a new access token
    *
    * @returns boolean to indicate if access has been granted
    *
@@ -203,6 +203,13 @@ export class MoneriumClient {
    *  });
    *
    * await monerium.getAccess();
+   *
+   * const refreshToken = monerium.bearerProfile?.refresh_token;
+   *
+   * // TODO: store the refresh token securely
+   *
+   * // reconnect...
+   * await monerium.getAccess(refreshToken);
    * ```
    */
   async getAccess(refreshToken?: string): Promise<boolean> {
