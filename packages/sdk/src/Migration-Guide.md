@@ -2,6 +2,10 @@
 
 ## SDK
 
+- Due to security concerns, the refresh token is no longer automatically kept in localStorage. You must manage it yourself. It can be accessed from `bearerProfile` through the `MoneriumClient` instance. You must then provide it to the `getAccess` method.
+
+- `getAccess` no longer accepts `clientId` nor `redirectUri` as parameters. These are now set in the `MoneriumClient` constructor.
+
 - `getBalances` now only returns the balance for a specified address+chain. Defaults to only 'eur' currency, optional parameter accepts a list of currency codes.
 
 - `getOrders` now returns an `orders` object which contains a list of orders. Preparing for pagination.
@@ -84,7 +88,21 @@ Beta:
 
 ## React Provider
 
-All query hooks now return the data response as `data`:
+- Due to security concerns, the refresh token is no longer automatically kept in localStorage. You must manage it yourself. It can be accessed from accessed and provided through the `MoneriumProvider`.
+
+```ts
+<MoneriumProvider
+    clientId="f99e629b-6dca-11ee-8aa6-5273f65ed03b"
+    redirectUri={'http://example.com'}
+    environment="sandbox"
+    debug={true}
+    refreshToken={refreshToken}
+    onRefreshTokenUpdate={(token) => storeToken(token)}>
+    {children}
+</MoneriumProvider>
+```
+
+- All query hooks now return the data response as `data`:
 
 ```ts
 const { data, isLoading, isError } = useProfile();

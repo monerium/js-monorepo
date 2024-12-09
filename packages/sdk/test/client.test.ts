@@ -15,8 +15,7 @@ import { MoneriumClient } from '../src/index';
 import { getChain } from '../src/utils';
 import { APP_ONE_AUTH_FLOW_CLIENT_ID, APP_ONE_REDIRECT_URL } from './constants';
 
-const { LINK_MESSAGE, STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } =
-  constants;
+const { LINK_MESSAGE, STORAGE_CODE_VERIFIER, STORAGE_ACCESS_TOKEN } = constants;
 
 const message = LINK_MESSAGE;
 
@@ -162,23 +161,23 @@ process.env.CI !== 'true' &&
     });
 
     test('authorize with refresh token attempt', async () => {
-      const client = new MoneriumClient();
-      localStorage.setItem(STORAGE_REFRESH_TOKEN, 'testRefreshToken');
+      const client = new MoneriumClient({
+        clientId: APP_ONE_AUTH_FLOW_CLIENT_ID,
+        redirectUri: APP_ONE_REDIRECT_URL,
+      });
+      localStorage.setItem(STORAGE_ACCESS_TOKEN, 'testRefreshToken');
 
       const getItemSpy = jest.spyOn(window.localStorage, 'getItem');
 
       try {
-        await client.getAccess({
-          clientId: APP_ONE_AUTH_FLOW_CLIENT_ID,
-          redirectUri: APP_ONE_REDIRECT_URL,
-        });
+        await client.getAccess();
       } catch (err) {
         expect((err as Error).message).toBe(
           'Failed to handle access request: Unable to load refresh token info: Access not found via code: testRefreshToken'
         );
       }
 
-      expect(getItemSpy).toHaveBeenCalledWith(STORAGE_REFRESH_TOKEN);
+      expect(getItemSpy).toHaveBeenCalledWith(STORAGE_ACCESS_TOKEN);
 
       getItemSpy.mockRestore();
     });
