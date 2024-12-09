@@ -1,6 +1,6 @@
 # Migration Guide.
 
-## SDK
+## SDK to v3.0.0
 
 - Due to security concerns, the refresh token is no longer automatically kept in localStorage. You must manage it yourself. It can be accessed from `bearerProfile` through the `MoneriumClient` instance. You must then provide it to the `getAccess` method.
 
@@ -86,7 +86,7 @@ Beta:
 
 - submitProfileDetails
 
-## React Provider
+## React Provider to v1.0.0
 
 - Due to security concerns, the refresh token is no longer automatically kept in localStorage. You must manage it yourself. It can be accessed from accessed and provided through the `MoneriumProvider`.
 
@@ -129,6 +129,7 @@ New:
 - useIbans
 - useRequestIban
 - useMoveIban
+- useSubscribeOrderNotification
 
 Beta:
 
