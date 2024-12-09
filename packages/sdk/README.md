@@ -107,6 +107,9 @@ await monerium.getProfiles();
 
 // Access tokens are now available for use.
 const { access_token, refresh_token } = monerium.bearerProfile as BearerProfile;
+
+// Use refresh token to get a new access token
+await monerium.getAccess(refresh_token);
 ```
 
 API documentation:
