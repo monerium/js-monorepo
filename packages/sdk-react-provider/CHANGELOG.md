@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.0.0...sdk-react-provider-v1.0.1) (2024-12-09)
+
+
+### Bug Fixes
+
+* docs deploy ([#101](https://github.com/monerium/js-monorepo/issues/101)) ([26181c8](https://github.com/monerium/js-monorepo/commit/26181c8d7a38c39e7d32d79c7ddb60238013810d))
+
 ## [1.0.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.3.0...sdk-react-provider-v1.0.0) (2024-12-09)
 
 
