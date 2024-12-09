@@ -15,6 +15,11 @@ This Turborepo includes the following packages/apps:
 - `@repo/stylelint-config`: `stylelint` configurations
 - `@repo/typescript-config`: `tsconfig.json`'s used throughout the monorepo
 
+### Migration Guide
+
+> SDK 3.0.0 and React Provider 1.0.0
+> [SDK Migration Guide](apps/developer/docs/MigrationGuide.md)
+
 ### Utilities
 
 - [TurboRepo](https://turbo.build/repo) for monorepo management

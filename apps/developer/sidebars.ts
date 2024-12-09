@@ -54,6 +54,10 @@ const sidebars: SidebarsConfig = {
       },
       items: require('./docs/packages/sdk-react-provider/typedoc-sidebar.cjs'),
     },
+    {
+      type: 'doc',
+      id: 'MigrationGuide',
+    },
   ],
 };
 
