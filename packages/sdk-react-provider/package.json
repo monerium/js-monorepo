@@ -24,7 +24,8 @@
   "files": [
     "dist/index.js",
     "dist/index.mjs",
-    "dist/index.d.ts"
+    "dist/index.d.ts",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup",
