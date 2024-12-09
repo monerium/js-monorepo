@@ -15,7 +15,10 @@
       "dependsOn": ["@monerium/sdk#type-map"]
     },
     "generate-docs": {
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "@monerium/sdk#build",
+        "@monerium/sdk-react-provider#build"
+      ],
       "outputs": ["docs/packages/**"]
     },
     "lint": {},
