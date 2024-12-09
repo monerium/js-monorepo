@@ -1,15 +1,30 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import MoneriumClient, {
-  AuthContext,
+  Address,
+  AddressesResponse,
   Balances,
+  Chain,
+  ChainId,
+  Currency,
+  CurrencyCode,
+  IBAN,
+  IBANsResponse,
   LinkAddress,
   LinkedAddress,
+  MoveIbanPayload,
   NewOrder,
   Order,
+  OrdersResponse,
   OrderState,
+  parseChain,
   Profile,
+  ProfilePermissions,
+  ProfilesResponse,
+  RequestIbanPayload,
+  ResponseStatus,
+  SubmitProfileDetailsPayload,
   Token,
 } from '@monerium/sdk';
 
@@ -18,27 +33,43 @@ import {
   MutationOptions,
   MutationResult,
   QueryOptions,
-  QueryResult,
   UseAuthReturn,
 } from './types';
 
 /**
  * @internal
- * Query keys
+ * Query keys for React query
  * */
 export const keys = {
   getAll: ['monerium'],
-  getAuthContext: ['monerium', 'auth-context'],
-  getProfile: (profileId: string) => [
+  getProfile: (profile: string) => [
     'monerium',
     'profile',
-    ...(profileId ? [profileId] : []),
+    ...(profile ? [profile] : []),
   ],
   getProfiles: ['monerium', 'profiles'],
-  getBalances: (profileId?: string) => [
+  getAddress: (address: string) => ['monerium', 'address', [address]],
+  getAddresses: (filter?: unknown) => [
+    'monerium',
+    'addresses',
+    ...(filter ? [filter] : []),
+  ],
+  getBalances: (
+    address: string,
+    chain: Chain,
+    currencies?: CurrencyCode | CurrencyCode[]
+  ) => [
     'monerium',
     'balances',
-    ...(profileId ? [profileId] : []),
+    address,
+    chain,
+    ...(currencies ? [...currencies] : []),
+  ],
+  getIban: (iban: string) => ['monerium', 'iban', iban],
+  getIbans: (filter?: unknown) => [
+    'monerium',
+    'ibans',
+    ...(filter ? [filter] : []),
   ],
   getTokens: ['monerium', 'tokens'],
   getOrder: (orderId: string) => ['monerium', 'order', orderId],
@@ -47,6 +78,9 @@ export const keys = {
     'orders',
     ...(filter ? [filter] : []),
   ],
+  submitProfileDetails: ['monerium', 'submit-profile-details'],
+  moveIban: ['monerium', 'move-iban'],
+  requestIban: ['monerium', 'request-iban'],
   placeOrder: ['monerium', 'place-order'],
   linkAddress: ['monerium', 'link-address'],
 };
@@ -64,13 +98,14 @@ function useSdk(): MoneriumClient | undefined {
 /**
  * # Redirect to the Monerium auth flow.
  * @group Hooks
+ * @category Authentication
  * @example
  * ```ts
  * const { authorize, isAuthorized, isLoading, error } = useAuth();
  *
  * authorize(); // Redirects to the Monerium auth flow.
  *
- * // To opt-in to automated wallet linking, pass the address, signature and chain.
+ * // Opt-in to automated wallet linking with these parameters.
  * authorize({ address, signature, chain }).
  * ```
  *
@@ -99,69 +134,15 @@ export function useAuth(): UseAuthReturn {
 }
 
 /**
- * # Get the authentication context.
+ * If no `profile` id is provided, the default profile is used.
  * @group Hooks
- *
- * @param {Object} [params] No required parameters.
- * @param {QueryOptions<AuthContext>} [params.query] {@inheritDoc QueryOptions}
- *
- * @example
- * ```ts
- * const {
- *    authContext, // useQuery's `data` property
- *    isLoading,
- *    isError,
- *    error,
- *    refetch,
- *    ...moreUseQueryResults
- * } = useAuthContext();
- * ```
- *
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/auth-context)
- *
- * [AuthContext interface](/docs/packages/SDK/interfaces/AuthContext.md)
- */
-export function useAuthContext({
-  query,
-}: {
-  query?: QueryOptions<AuthContext>;
-} = {}): QueryResult<'authContext', AuthContext> {
-  const { isAuthorized } = useAuth();
-  const sdk = useSdk();
-
-  const { data, ...rest } = useQuery({
-    ...query,
-    queryKey: keys.getAuthContext,
-    queryFn: async () => {
-      if (!sdk) {
-        throw new Error('No SDK instance available');
-      }
-      if (!isAuthorized) {
-        throw new Error('User not authorized');
-      }
-      return sdk.getAuthContext();
-    },
-    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
-  });
-  return {
-    authContext: data,
-    ...rest,
-  };
-}
-
-/**
- * # Get single profile
- * If no `profileId` is provided, the default profile is used.
- * @group Hooks
+ * @category Profiles
  * @param {Object} params
- * @param {string} [params.profileId] The id of the profile.
- * @param {QueryOptions<Profile>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
  * const {
- *    profile, // useQuery's `data` property
+ *    data
  *    isLoading,
  *    isError,
  *    error,
@@ -170,27 +151,27 @@ export function useAuthContext({
  * } = useProfile();
  * ```
 
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profile)
- *
- * [Profile interface](/docs/packages/SDK/interfaces/Profile.md)
+ * @see {@link https://monerium.dev/api-docs#operation/profile | API Documentation}
  */
 export function useProfile({
-  profileId,
+  profile,
   query,
 }: {
-  profileId?: string;
+  /** The id of the profile */
+  profile?: string;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Profile>;
-} = {}): QueryResult<'profile', Profile> {
+} = {}) {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
-  const { authContext } = useAuthContext();
 
-  const profileIdToUse = profileId || (authContext?.defaultProfile as string);
+  const { data } = useProfiles();
 
-  const { data, ...rest } = useQuery({
+  const profileToUse = profile || (data?.profiles?.[0]?.id as string);
+
+  return useQuery({
     ...query,
-    queryKey: keys.getProfile(profileIdToUse),
+    queryKey: keys.getProfile(profileToUse),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -198,31 +179,28 @@ export function useProfile({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      if (!profileIdToUse) {
+      if (!profileToUse) {
         throw new Error('Profile Id is required');
       }
 
-      return sdk.getProfile(profileIdToUse);
+      return sdk.getProfile(profileToUse);
     },
     enabled: Boolean(
-      sdk && isAuthorized && profileIdToUse && (query?.enabled ?? true)
+      sdk && isAuthorized && profileToUse && (query?.enabled ?? true)
     ),
   });
-  return {
-    profile: data,
-    ...rest,
-  };
 }
 /**
  * # Get profiles
  * @group Hooks
+ * @category Profiles
+ *
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Profile[]>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
  * const {
- *    profiles, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -230,21 +208,18 @@ export function useProfile({
  *    ...moreUseQueryResults
  * } = useProfiles();
  * ```
-
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profiles)
- *
- * [Profile interface](/docs/packages/SDK/interfaces/Profile.md)
+ * @see {@link https://monerium.dev/api-docs#operation/profiles | API Documentation}
  */
 export function useProfiles({
   query,
 }: {
-  query?: QueryOptions<Profile[]>;
-} = {}): QueryResult<'profiles', Profile[]> {
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<ProfilesResponse>;
+} = {}) {
   const { isAuthorized } = useAuth();
   const sdk = useSdk();
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getProfiles,
     queryFn: async () => {
@@ -258,21 +233,15 @@ export function useProfiles({
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
-  return {
-    profiles: data,
-    ...rest,
-  };
 }
 /**
- * # Get tokens
  * @group Hooks
  * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Token[]>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
  * const {
- *    tokens, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -281,17 +250,17 @@ export function useProfiles({
  * } = useTokens();
  * ```
 
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/tokens)
- *
- * [Token interface](/docs/packages/SDK/interfaces/Token.md)
+ * @see {@link https://monerium.dev/api-docs#operation/tokens | API Documentation}
  */
 export function useTokens({
   query,
-}: { query?: QueryOptions<Token[]> } = {}): QueryResult<'tokens', Token[]> {
+}: {
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<Token[]>;
+} = {}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getTokens,
     queryFn: async () => {
@@ -305,48 +274,41 @@ export function useTokens({
     },
     enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
   });
-  return {
-    tokens: data,
-    ...rest,
-  };
 }
 
 /**
- * # Get balances
  * @group Hooks
- * @param {Object} [params] No required parameters.
- * @param {QueryOptions<Balances[]>} [params.profileId] Fetch balances for a specific profile.
- * @param {QueryOptions<Balances[]>} [params.query] {@inheritDoc QueryOptions}
+ * @category Addresses
+ * @param {Object} params 
 
  * @example
  * ```ts
  * const {
- *    balances, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
  *    refetch,
  *    ...moreUseQueryResults
- * } = useBalances();
+ * } = useAddress();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profile-balances)
- *
- * [Balances interface](/docs/packages/SDK/interfaces/Balances.md)
+ * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address | API Documentation}
  */
-export function useBalances({
-  profileId,
-  query,
+export function useAddress({
+  address,
+  query = {},
 }: {
-  profileId?: string;
-  query?: QueryOptions<Balances[]>;
-} = {}): QueryResult<'balances', Balances[]> {
+  /** Fetch a specific address. */
+  address: string;
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<Address>;
+}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
 
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
-    queryKey: keys.getBalances(profileId),
+    queryKey: keys.getAddress(address),
     queryFn: async () => {
       if (!sdk) {
         throw new Error('No SDK instance available');
@@ -354,26 +316,225 @@ export function useBalances({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.getBalances(profileId);
-    },
-    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
-  });
-  return {
-    balances: data,
-    ...rest,
-  };
-}
 
+      if (!address) {
+        throw new Error('Address is required');
+      }
+
+      return sdk.getAddress(address);
+    },
+    enabled: Boolean(
+      sdk && isAuthorized && address && (query?.enabled ?? true)
+    ),
+  });
+}
 /**
- * # Get single order
  * @group Hooks
- * @param {Object} params
- * @param {Object} params.orderId The id of the order.
- * @param {QueryOptions<Order>} [params.query] {@inheritDoc QueryOptions}
+ * @category Addresses
+ * @param {Object} [params] No required parameters.
+ * @param {Object} [params.profile] Filter based on profile id.
+ * @param {Object} [params.chain] Filter based on chain - CURRENTLY RETURNS AN ERROR.
  * @example
  * ```ts
  * const {
- *    order, // useQuery's `data` property
+ *    data,
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useAddresses();
+ * ```
+ * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses | API Documentation}
+ */
+export function useAddresses({
+  profile,
+  chain,
+  query = {},
+}: {
+  profile?: string;
+  chain?: Chain | ChainId;
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<AddressesResponse>;
+} = {}) {
+  const sdk = useSdk();
+
+  const { isAuthorized } = useAuth();
+
+  return useQuery({
+    ...query,
+    queryKey: keys.getAddresses({
+      profile,
+      chain: chain ? parseChain(chain) : undefined,
+    }),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+      return sdk.getAddresses({ profile, chain });
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+}
+/**
+ * # Get balance for a an address on a give chain
+ * @group Hooks
+ * @category Addresses
+ * @param {Object} params
+ * @param {QueryOptions<Balances>} params.address The address to fetch the balance for.
+ * @param {QueryOptions<Balances>} params.chain The chain to fetch the balance for.
+ * @param {QueryOptions<Balances>} [params.currencies] One or many: `eur`, `usd`, `gbp`, `isk`
+ * @example
+ * ```ts
+ * const {
+ *    data,
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useBalances();
+ * ```
+ * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances | API Documentation}
+ *
+ */
+export function useBalances({
+  address,
+  chain,
+  currencies,
+  query,
+}: {
+  address: string;
+  chain: Chain | ChainId;
+  currencies?: Currency | Currency[];
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<Balances>;
+}) {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  return useQuery({
+    ...query,
+    queryKey: keys.getBalances(address, parseChain(chain), currencies),
+    staleTime: 1000 * 60 * 5,
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+      return sdk.getBalances(address, chain, currencies);
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+}
+
+/**
+ * @group Hooks
+ * @category IBANs
+ * @param {Object} params
+ * @example
+ * ```ts
+ * const {
+ *    data,
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useIBAN();
+ * ```
+ * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/iban | API Documentation}
+ */
+export function useIBAN({
+  iban,
+  query,
+}: {
+  /** Fetch a specific IBAN */
+  iban: string;
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<IBAN>;
+}) {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  return useQuery({
+    ...query,
+    queryKey: keys.getIban(iban),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.getIban(iban);
+    },
+    enabled: Boolean(sdk && isAuthorized && iban && (query?.enabled ?? true)),
+  });
+}
+/**
+ * @group Hooks
+ * @category IBANs
+ * @param {Object} [params] No required parameters.
+ * @example
+ * ```ts
+ * const {
+ *    data,
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useIBANs();
+ * ```
+ * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans | API Documentation}
+ */
+export function useIBANs({
+  profile,
+  chain,
+  query = {},
+}: {
+  /** Fetch IBANs for a specific profile. */
+  profile?: string;
+  /** Fetch IBANs for a specific chain. */
+  chain?: Chain | ChainId;
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<IBANsResponse>;
+} = {}) {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  return useQuery({
+    ...query,
+    queryKey: keys.getIbans({ profile, chain }),
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.getIbans({ profile, chain });
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+}
+
+/**
+ * @group Hooks
+ * @category Orders
+ * @param {Object} params
+ * @example
+ * ```ts
+ * const {
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -381,21 +542,20 @@ export function useBalances({
  *    ...moreUseQueryResults
  * } = useOrder();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/order)
- *
- * [Order interface](/docs/packages/SDK/interfaces/Order.md)
+ * @see {@link https://monerium.dev/api-docs#operation/order| API Documentation}
  */
 export function useOrder({
   orderId,
   query = {},
 }: {
+  /**  The id of the order. */
   orderId: string;
+  /** {@inheritDoc QueryOptions} */
   query?: QueryOptions<Order>;
-}): QueryResult<'order', Order> {
+}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getOrder(orderId),
     queryFn: async () => {
@@ -413,27 +573,22 @@ export function useOrder({
     },
     enabled: Boolean(sdk && isAuthorized && orderId && (query.enabled ?? true)),
   });
-  return {
-    order: data,
-    ...rest,
-  };
 }
 
 /**
- * # Get orders
  * @group Hooks
+ * @category Orders
  * @param {Object} [params] No required parameters.
  * @param {Object} [params.address] Filter based on the blockchain address associated with the order.
  * @param {Object} [params.memo] Filter by the payment memo/reference..
  * @param {Object} [params.profile] Filter based on the profile ID associated with the order.
  * @param {Object} [params.state] Filter based on the state of the order.
  * @param {Object} [params.txHash] Filter based on the blockchain transaction hash.
- * @param {QueryOptions<Order[]>} [params.query] {@inheritDoc QueryOptions}
  *
  * @example
  * ```ts
  * const {
- *    orders, // useQuery's `data` property
+ *    data,
  *    isLoading,
  *    isError,
  *    error,
@@ -441,25 +596,23 @@ export function useOrder({
  *    ...moreUseQueryResults
  * } = useOrders();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/orders)
- *
- * [Order interface](/docs/packages/SDK/interfaces/Order.md)
+ * @see {@link https://monerium.dev/api-docs#operation/orders | API Documentation}
  */
 export function useOrders({
   query = {},
   ...filters
 }: {
-  query?: QueryOptions<Order[]>;
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<OrdersResponse>;
   address?: string;
   txHash?: string;
   profile?: string;
   memo?: string;
   state?: OrderState;
-} = {}): QueryResult<'orders', Order[]> {
+} = {}) {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
-  const { data, ...rest } = useQuery({
+  return useQuery({
     ...query,
     queryKey: keys.getOrders(filters),
     queryFn: async () => {
@@ -474,21 +627,242 @@ export function useOrders({
     },
     enabled: Boolean(sdk && isAuthorized && (query.enabled ?? true)),
   });
-  return {
-    orders: data,
-    ...rest,
-  };
 }
 
 /**
- * # Place an order.
+ * Submit the required compliance information to onboard the customer.
+ *
+ * Note that you won't be able to change the profile "kind" from personal to corporate or vice versa once the profile has been approved.
+ * @group Hooks
+ * @category Profiles
+ * @param param
+ * @param {string} param.profile The id of the profile to submit to.
+ *
+ * @example
+ * ```ts
+ * const {
+ *    submitProfileDetails, // useMutation's `mutateAsync` property
+ *    isPending,
+ *    isError,
+ *    error,
+ *    status,
+ *    ...moreUseMutationResults
+ * } = useSubmitProfileDetails();
+ * ```
+ * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details | API Documentation}}
+ */
+
+export function useSubmitProfileDetails({
+  profile,
+  mutation = {},
+}: {
+  profile: string;
+  /** {@inheritDoc MutationOptions} */
+  mutation?: MutationOptions<
+    ResponseStatus,
+    Error,
+    SubmitProfileDetailsPayload
+  >;
+}): MutationResult<
+  'submitProfileDetails',
+  ResponseStatus,
+  Error,
+  SubmitProfileDetailsPayload
+> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, ...rest } = useMutation({
+    ...mutation,
+    mutationKey: keys.submitProfileDetails,
+    mutationFn: async (body: SubmitProfileDetailsPayload) => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.submitProfileDetails(profile, body);
+    },
+    onSuccess(data, variables, context) {
+      // Refetch all orders on success.
+      queryClient.invalidateQueries({
+        queryKey: keys.getProfile(profile),
+      });
+      // Allow the caller to add custom logic on success.
+      mutation?.onSuccess?.(data, variables, context);
+    },
+    onError(error, vars, context) {
+      // Allow the caller to add custom logic on error.
+      mutation?.onError?.(error, vars, context);
+      throw error;
+    },
+  });
+  return {
+    submitProfileDetails: mutateAsync,
+    ...rest,
+  };
+}
+/**
+ * Create an IBAN for a specified address and chain.
+ * All incoming EUR payments will automatically be routed to the linked address on that chain.
+ * Any linked address can use this IBAN for outgoing payments.
+ * @group Hooks
+ * @category IBANs
+ * @param {Object} [params] No required parameters.
+ *
+ * @example
+ * ```ts
+ * const {
+ *    requestIban, // useMutation's `mutateAsync` property
+ *    isPending,
+ *    isError,
+ *    error,
+ *    status,
+ *    ...moreUseMutationResults
+ * } = useRequestIban();
+ * ```
+ * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban | API Documentation}}
+ */
+
+export function useRequestIban({
+  mutation = {},
+}: {
+  /** {@inheritDoc MutationOptions} */
+  mutation?: MutationOptions<ResponseStatus, Error, RequestIbanPayload>;
+} = {}): MutationResult<
+  'requestIban',
+  ResponseStatus,
+  Error,
+  RequestIbanPayload
+> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  const { mutateAsync, ...rest } = useMutation({
+    ...mutation,
+    mutationKey: keys.requestIban,
+    mutationFn: async ({
+      address,
+      chain,
+      emailNotifications,
+    }: RequestIbanPayload) => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.requestIban({ address, chain, emailNotifications });
+    },
+    onSuccess(data, variables, context) {
+      // Allow the caller to add custom logic on success.
+      mutation?.onSuccess?.(data, variables, context);
+    },
+    onError(error, vars, context) {
+      // Allow the caller to add custom logic on error.
+      mutation?.onError?.(error, vars, context);
+      throw error;
+    },
+  });
+  return {
+    requestIban: mutateAsync,
+    ...rest,
+  };
+}
+/**
+ * Move an existing IBAN to a specified address an chain.
+ * All incoming EUR payments will automatically be routed to the address on that chain.
+ * @group Hooks
+ * @category IBANs
+ * @param {Object} [params] No required parameters.
+ *
+ * @example
+ * ```ts
+ * const {
+ *    moveIban, // useMutation's `mutateAsync` property
+ *    isPending,
+ *    isError,
+ *    error,
+ *    status,
+ *    ...moreUseMutationResults
+ * } = useMoveIban();
+ * ```
+ * @see {@link https://monerium.dev/api-docs/v2#tag/ibans/operation/move-iban | API Documentation}
+ */
+
+export function useMoveIban({
+  mutation = {},
+}: {
+  /** {@inheritDoc MutationOptions} */
+  mutation?: MutationOptions<
+    ResponseStatus,
+    Error,
+    MoveIbanPayload & { iban: string }
+  >;
+} = {}): MutationResult<
+  'moveIban',
+  ResponseStatus,
+  Error,
+  MoveIbanPayload & { iban: string }
+> {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, ...rest } = useMutation({
+    ...mutation,
+    mutationKey: keys.moveIban,
+    mutationFn: async ({
+      iban,
+      address,
+      chain,
+    }: MoveIbanPayload & { iban: string }) => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.moveIban(iban, { address, chain });
+    },
+    onSuccess(data, variables, context) {
+      // Refetch all orders on success.
+      queryClient.invalidateQueries({
+        queryKey: keys.getIban(variables.iban),
+      });
+      queryClient.invalidateQueries({
+        queryKey: keys.getIbans(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: keys.getAddress(variables.address),
+      });
+      // Allow the caller to add custom logic on success.
+      mutation?.onSuccess?.(data, variables, context);
+    },
+    onError(error, vars, context) {
+      // Allow the caller to add custom logic on error.
+      mutation?.onError?.(error, vars, context);
+      throw error;
+    },
+  });
+  return {
+    moveIban: mutateAsync,
+    ...rest,
+  };
+}
+/**
  * When the order has been placed, the orders query will be invalidated and re-fetched.
  *
  * If the order amount is above 15000, a supporting document is required.
  * @group Hooks
+ * @category Orders
  * @param param
  * @param {File} param.supportingDocument Supporting document file.
- * @param {Object} param.mutation {@inheritDoc MutationOptions}
  *
  * @example
  * ```ts
@@ -501,10 +875,7 @@ export function useOrders({
  *    ...moreUseMutationResults
  * } = usePlaceOrder();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/post-orders)
- *
- * [NewOrder type](/docs/packages/SDK/type-aliases/NewOrder.md)
+ * @see {@link https://monerium.dev/api-docs#operation/post-orders| API Documentation}
  */
 
 export function usePlaceOrder({
@@ -512,6 +883,7 @@ export function usePlaceOrder({
   mutation,
 }: {
   supportingDocument?: File;
+  /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<Order, Error, NewOrder>;
 } = {}): MutationResult<'placeOrder', Order, Error, NewOrder> {
   const sdk = useSdk();
@@ -552,6 +924,9 @@ export function usePlaceOrder({
       queryClient.invalidateQueries({
         queryKey: keys.getOrders(),
       });
+      queryClient.invalidateQueries({
+        queryKey: keys.getBalances(data.address, data.chain),
+      });
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
     },
@@ -568,12 +943,10 @@ export function usePlaceOrder({
 }
 /**
  * # Add address to profile.
- * When the address has been linked, the relevant profile query will be invalidated and re-fetched.
  *
  * @group Hooks
- * @param param
- * @param {File} param.profileId Which profile to link the address.
- * @param {Object} param.mutation {@inheritDoc MutationOptions}
+ * @category Profiles
+ * @param {Object} [params] No required parameters.
  *
  * @example
  * ```ts
@@ -586,18 +959,15 @@ export function usePlaceOrder({
  *    ...moreUseMutationResults
  * } = useLinkAddress();
  * ```
- * @see
- * [API Documentation](https://monerium.dev/api-docs#operation/profile-addresses)
- *
- * [LinkAddress interface](/docs/packages/SDK/interfaces/LinkAddress.md)
+ * @see {@link https://monerium.dev/api-docs#operation/profile-addresses | API Documentation}
  */
+
 export function useLinkAddress({
-  profileId,
   mutation,
 }: {
-  profileId: string;
+  /** {@inheritDoc MutationOptions} */
   mutation?: MutationOptions<LinkedAddress, Error, LinkAddress>;
-}): MutationResult<'linkAddress', LinkedAddress, Error, LinkAddress> {
+} = {}): MutationResult<'linkAddress', LinkedAddress, Error, LinkAddress> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const queryClient = useQueryClient();
@@ -612,13 +982,18 @@ export function useLinkAddress({
       if (!isAuthorized) {
         throw new Error('User not authorized');
       }
-      return sdk.linkAddress(profileId, body);
+      return sdk.linkAddress(body);
     },
     onSuccess(data, variables, context) {
       // Refetch all orders on success.
       queryClient.invalidateQueries({
-        queryKey: keys.getProfile(profileId),
+        queryKey: keys.getAddresses(),
       });
+      if (variables.profile) {
+        queryClient.invalidateQueries({
+          queryKey: keys.getProfile(variables.profile),
+        });
+      }
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
     },
@@ -633,3 +1008,93 @@ export function useLinkAddress({
     ...rest,
   };
 }
+
+/**
+ * API consumers have the option to subscribe to a WebSocket for real-time order notifications. This WebSocket complies with the standard WebSocket Protocol, allowing the use of standard WebSocket libraries for subscription.
+ *
+ * The WebSocket emits an event when a order changes state:
+ *
+ * `placed`: The order has been created but not yet processed.
+ *
+ * `pending`: The order is awaiting fulfillment (e.g., review, minting/burning tokens, or sending/receiving SEPA payment).
+ *
+ * `processed`: The order has been completed successfully.
+ *
+ * `rejected`: The order was rejected, possibly due to compliance reasons or insufficient funds.
+ * @group Hooks
+ * @category Orders
+ * @param {Object} params
+ * @param {OrderState} [params.state] Filter based on the state of the order.
+ * @param {string} [params.profile] Filter based on the profile id of the order.
+ * @param {Function} params.onMessage Callback function to handle the order notification.
+ * @param {Function} [params.onError] Callback function to handle the error notification.
+ *
+ * @example
+ * ```ts
+ * const {
+ *    state,
+ *    profile,
+ *    onMessage,
+ *    onError
+ * } = useSubscribeOrderNotification();
+ * ```
+ * @see {@link https://monerium.dev/api-docs/v1#operation/orders-notifications| API Documentation}
+ * @returns {Function} Unsubscribe from order notifications.
+ */
+
+export const useSubscribeOrderNotification = ({
+  state,
+  profile,
+  onMessage,
+  onError,
+}: {
+  state?: OrderState;
+  profile?: string;
+  onMessage: (order: Order) => void;
+  onError?: ((err: Event) => void) | undefined;
+}) => {
+  const sdk = useSdk();
+
+  useEffect(() => {
+    if (sdk) {
+      sdk.subscribeOrderNotifications({
+        filter: {
+          state: state,
+          profile: profile,
+        },
+        onMessage: onMessage,
+        onError: onError,
+      });
+    }
+    return () => {
+      /**
+       * Note that in development mode, React Strict mode will cause this
+       * cleanup function to be called twice on client side route changes.
+       * So a socket will be immediately closed and opened again.
+       * This is not an issue in production mode.
+       */
+      if (sdk) {
+        sdk?.unsubscribeOrderNotifications({ state: state, profile: profile });
+      }
+    };
+  }, [sdk, profile, state]);
+
+  return () =>
+    sdk?.unsubscribeOrderNotifications({ state: state, profile: profile });
+};
+
+/** Export types for documentation */
+export type {
+  Address,
+  Balances,
+  IBAN,
+  MoveIbanPayload,
+  LinkAddress,
+  Profile,
+  ProfilePermissions,
+  Token,
+  SubmitProfileDetailsPayload,
+  NewOrder,
+  ResponseStatus,
+  Order,
+};

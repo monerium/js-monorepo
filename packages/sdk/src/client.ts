@@ -6,67 +6,97 @@ import {
   isAuthCode,
   isClientCredentials,
   isRefreshToken,
+  queryParams,
   rest,
 } from './helpers';
+import { createDebugger } from './helpers/debug.helpers';
+import { getKey } from './helpers/internal.helpers';
 import type {
+  Address,
+  AddressesQueryParams,
+  AddressesResponse,
   AuthArgs,
-  AuthCodeRequest,
-  AuthContext,
+  AuthCodePayload,
   AuthFlowOptions,
   AuthorizationCodeCredentials,
   Balances,
   BearerProfile,
   BearerTokenCredentials,
+  Chain,
+  ChainId,
   ClassOptions,
   ClientCredentials,
-  ClientCredentialsRequest,
-  DeprecatedAuthorizationCodeCredentials,
+  ClientCredentialsPayload,
+  Currency,
   ENV,
   Environment,
+  IBAN,
+  IbansQueryParams,
+  IBANsResponse,
   LinkAddress,
   LinkedAddress,
-  MoneriumEvent,
-  MoneriumEventListener,
+  MoveIbanPayload,
   NewOrder,
   Order,
   OrderFilter,
-  OrderNotification,
-  OrderState,
+  OrderNotificationQueryParams,
+  OrdersResponse,
   PKCERequestArgs,
   Profile,
-  RefreshTokenRequest,
+  ProfilesQueryParams,
+  ProfilesResponse,
+  RefreshTokenPayload,
+  RequestIbanPayload,
+  ResponseStatus,
+  SubmitProfileDetailsPayload,
   SupportingDoc,
   Token,
 } from './types';
-import { mapChainIdToChain, urlEncoded } from './utils';
+import { mapChainIdToChain, parseChain, urlEncoded } from './utils';
 
 // import pjson from "../package.json";
-const { STORAGE_CODE_VERIFIER, STORAGE_REFRESH_TOKEN } = constants;
+const { STORAGE_CODE_VERIFIER, STORAGE_ACCESS_TOKEN, STORAGE_ACCESS_EXPIRY } =
+  constants;
 
 const isServer = typeof window === 'undefined';
 
+/**
+ * In the [Monerium UI](https://monerium.app/), create an application to get the `clientId` and register your `redirectUri`.
+ * ```ts
+ * import { MoneriumClient } from '@monerium/sdk';
+ *
+ * const monerium = new MoneriumClient() // defaults to `sandbox`
+ *
+ * // or
+ * new MoneriumClient('production')
+ *
+ * // or
+ * new MoneriumClient({
+ *  environment: 'sandbox',
+ *  clientId: 'your-client-id',
+ *  redirectUri: 'http://your-redirect-url.com/monerium'
+ * });
+ *
+ *```
+ */
 export class MoneriumClient {
   #env: Environment;
 
   #authorizationHeader?: string;
   /**
-   * The PKCE code verifier
-   * @deprecated, use localStorage, will be removed in v3
-   * @hidden
-   * */
-  codeVerifier?: string;
-  /**
    * The bearer profile will be available after authentication, it includes the `access_token` and `refresh_token`
    * */
   bearerProfile?: BearerProfile;
   /**
-   * The socket will be available after subscribing to an event
+   * Sockets will be available after subscribing to an event
    * */
-  #socket?: WebSocket;
-  /** The subscriptions map will be available after subscribing to an event */
-  #subscriptions: Map<OrderState, MoneriumEventListener> = new Map();
-
+  #sockets?: Map<string, WebSocket> = new Map();
+  /**
+   * The client is authorized if the bearer profile is available
+   */
   isAuthorized = !!this.bearerProfile;
+
+  #debug: (message: string) => void = () => {};
 
   #client?: BearerTokenCredentials;
   /**
@@ -76,16 +106,6 @@ export class MoneriumClient {
 
   /**
    * @defaultValue `sandbox`
-   * @example
-   * new MoneriumClient() // defaults to `sandbox`
-   *
-   * new MoneriumClient('production')
-   *
-   * new MoneriumClient({
-   *  environment: 'sandbox',
-   *  clientId: 'your-client-id',
-   *  redirectUri: 'your-redirect-url'
-   * })
    * */
   constructor(envOrOptions?: ENV | ClassOptions) {
     // No arguments, default to sandbox
@@ -93,23 +113,28 @@ export class MoneriumClient {
       this.#env = MONERIUM_CONFIG.environments['sandbox'];
       return;
     }
-    // String argument
+
     if (typeof envOrOptions === 'string') {
       this.#env = MONERIUM_CONFIG.environments[envOrOptions];
     } else {
+      this.#debug = createDebugger(envOrOptions.debug ?? false);
+
       this.#env =
         MONERIUM_CONFIG.environments[envOrOptions.environment || 'sandbox'];
 
-      if (!isServer) {
+      if (!isServer && !(envOrOptions as ClientCredentials)?.clientSecret) {
         const { clientId, redirectUri } =
           envOrOptions as AuthorizationCodeCredentials;
-        const { redirectUrl } =
-          envOrOptions as DeprecatedAuthorizationCodeCredentials;
         this.#client = {
-          clientId: clientId as string,
-          redirectUri: redirectUri || (redirectUrl as string),
+          clientId,
+          redirectUri,
         };
       } else {
+        this.#debug('Client credentials detected');
+        console.error(
+          '\x1b[31m%s\x1b[0m',
+          'Use client credentials only on the server where the secret is secure!'
+        );
         const { clientId, clientSecret } = envOrOptions as ClientCredentials;
         this.#client = {
           clientId: clientId as string,
@@ -123,46 +148,52 @@ export class MoneriumClient {
    * Construct the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
+   *
+   * @group Authentication
+   * @see {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth | API Documentation}
+   * @param {AuthFlowOptions} [params] - the auth flow params
    * @returns string
-   * {@link https://monerium.dev/api-docs#operation/auth}
-   * @category Auth
+   *
    */
-  async authorize(client?: AuthFlowOptions) {
+  async authorize(params?: AuthFlowOptions) {
     const clientId =
-      client?.clientId ||
+      params?.clientId ||
       (this.#client as AuthorizationCodeCredentials)?.clientId;
     const redirectUri =
-      client?.redirectUri ||
-      client?.redirectUrl ||
+      params?.redirectUri ||
       (this.#client as AuthorizationCodeCredentials)?.redirectUri;
 
     if (!clientId) {
       throw new Error('Missing ClientId');
     }
-    if (!redirectUri) {
-      throw new Error('Missing RedirectUri');
-    }
 
     const authFlowUrl = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, {
       client_id: clientId,
       redirect_uri: redirectUri,
-      address: client?.address,
-      signature: client?.signature,
-      chain: client?.chain,
-      state: client?.state,
-      scope: client?.scope,
+      address: params?.address,
+      signature: params?.signature,
+      chain: params?.chain,
+      state: params?.state,
+      skip_create_account: params?.skipCreateAccount,
+      skip_kyc: params?.skipKyc,
     });
 
+    this.#debug(`Authorization URL: ${authFlowUrl}`);
     // Redirect to the authFlow
     window.location.assign(authFlowUrl);
   }
 
   /**
-   * Will redirect to the authorization code flow and store the code verifier in the local storage
+   * Will use the authorization code flow code to get access token
+   *
+   * @group Authentication
+   *
    * @param {AuthorizationCodeCredentials | ClientCredentials} client - the client credentials
+   *
    * @returns boolean to indicate if access has been granted
-   * @category Auth
+   *
    * @example
+   * ```ts
    *   import { MoneriumClient } from '@monerium/sdk';
    *  // Initialize the client with credentials
    *  const monerium = new MoneriumClient({
@@ -172,32 +203,27 @@ export class MoneriumClient {
    *  });
    *
    * await monerium.getAccess();
+   * ```
    */
-  async getAccess(
-    client?:
-      | AuthorizationCodeCredentials
-      | ClientCredentials
-      | DeprecatedAuthorizationCodeCredentials
-  ): Promise<boolean> {
-    const clientId = client?.clientId || this.#client?.clientId;
-    const clientSecret =
-      (client as ClientCredentials)?.clientSecret ||
-      (this.#client as ClientCredentials)?.clientSecret;
+  async getAccess(refreshToken?: string): Promise<boolean> {
+    const clientId = this.#client?.clientId;
+    const clientSecret = (this.#client as ClientCredentials)?.clientSecret;
 
     if (clientSecret) {
-      if (!isServer) {
-        throw new Error('Only use client credentials on server side');
+      if (isServer) {
+        await this.#clientCredentialsAuthorization(
+          this.#client as ClientCredentials
+        );
+        return !!this?.bearerProfile;
       }
-      await this.#clientCredentialsAuthorization(
-        this.#client as ClientCredentials
+      console.error(
+        '\x1b[31m%s\x1b[0m',
+        'Use client credentials only on the server where the secret is secure!'
       );
-      return !!this.bearerProfile;
     }
 
-    const redirectUri =
-      (client as AuthorizationCodeCredentials)?.redirectUri ||
-      (client as DeprecatedAuthorizationCodeCredentials)?.redirectUrl ||
-      (this.#client as AuthorizationCodeCredentials)?.redirectUri;
+    const redirectUri = (this.#client as AuthorizationCodeCredentials)
+      ?.redirectUri;
 
     if (!clientId) {
       throw new Error('Missing ClientId');
@@ -213,41 +239,79 @@ export class MoneriumClient {
     const state =
       new URLSearchParams(window.location.search).get('state') || undefined;
 
-    const refreshToken =
-      localStorage.getItem(STORAGE_REFRESH_TOKEN) || undefined;
+    const accessToken = window.localStorage.getItem(STORAGE_ACCESS_TOKEN);
+    const expiry = window.localStorage.getItem(STORAGE_ACCESS_EXPIRY);
 
-    if (refreshToken) {
-      await this.#refreshTokenAuthorization(clientId, refreshToken);
-    } else if (authCode) {
+    if (authCode) {
+      this.#debug('Using auth code from auth flow to authorize');
       await this.#authCodeAuthorization(
         clientId,
         redirectUri as string,
         authCode,
         state
       );
+      this.#debug(this.bearerProfile ? 'Authorized' : 'Not authorized');
+      return !!this.bearerProfile;
     }
 
+    if (refreshToken) {
+      this.#debug('Using refresh token to authorize');
+      await this.#refreshTokenAuthorization(clientId, refreshToken);
+      this.#debug(this.bearerProfile ? 'Authorized' : 'Not authorized');
+      return !!this.bearerProfile;
+    }
+
+    if (accessToken && expiry) {
+      const now = new Date();
+      if (parseInt(expiry) < now.getTime()) {
+        window.localStorage.removeItem(STORAGE_ACCESS_TOKEN);
+        window.localStorage.removeItem(STORAGE_ACCESS_EXPIRY);
+        this.isAuthorized = false;
+        this.bearerProfile = undefined;
+        throw new Error('Access token has expired');
+      } else {
+        this.#debug(
+          'Access token should still be valid, checking if it is authorized...'
+        );
+        try {
+          this.#authorizationHeader = `Bearer ${accessToken}`;
+          this.isAuthorized = true;
+          await this.getTokens();
+          this.#debug('Authorized');
+          return true;
+        } catch (error) {
+          this.#debug('Access token is invalid.');
+          window.localStorage.removeItem(STORAGE_ACCESS_TOKEN);
+          window.localStorage.removeItem(STORAGE_ACCESS_EXPIRY);
+          this.isAuthorized = false;
+          this.bearerProfile = undefined;
+          throw new Error('Access token is invalid.');
+        }
+      }
+    }
+
+    this.#debug(this.bearerProfile ? 'Authorized' : 'Not authorized');
     return !!this.bearerProfile;
   }
 
   /**
-   * {@link https://monerium.dev/api-docs#operation/auth-token}
+   * https://monerium.dev/api-docs-v2#tag/auth/operation/auth-token
    */
   async #grantAccess(args: AuthArgs): Promise<BearerProfile> {
     let params:
-      | AuthCodeRequest
-      | RefreshTokenRequest
-      | ClientCredentialsRequest;
+      | AuthCodePayload
+      | RefreshTokenPayload
+      | ClientCredentialsPayload;
 
     if (isAuthCode(args)) {
-      params = { ...args, grant_type: 'authorization_code' } as AuthCodeRequest;
+      params = { ...args, grant_type: 'authorization_code' } as AuthCodePayload;
     } else if (isRefreshToken(args)) {
-      params = { ...args, grant_type: 'refresh_token' } as RefreshTokenRequest;
+      params = { ...args, grant_type: 'refresh_token' } as RefreshTokenPayload;
     } else if (isClientCredentials(args)) {
       params = {
         ...args,
         grant_type: 'client_credentials',
-      } as ClientCredentialsRequest;
+      } as ClientCredentialsPayload;
     } else {
       throw new Error('Authorization grant type could not be detected.');
     }
@@ -263,16 +327,24 @@ export class MoneriumClient {
         this.isAuthorized = !!res;
         this.#authorizationHeader = `Bearer ${res?.access_token}`;
         if (!isServer) {
+          const now = new Date();
+          const expiry = now.getTime() + res?.expires_in * 1000;
+
           window.localStorage.setItem(
-            STORAGE_REFRESH_TOKEN,
-            this.bearerProfile?.refresh_token || ''
+            STORAGE_ACCESS_TOKEN,
+            res?.access_token || ''
+          );
+          window.localStorage.setItem(
+            STORAGE_ACCESS_EXPIRY,
+            expiry?.toString()
           );
         }
       })
       .catch((err) => {
         if (!isServer) {
           localStorage.removeItem(STORAGE_CODE_VERIFIER);
-          localStorage.removeItem(STORAGE_REFRESH_TOKEN);
+          localStorage.removeItem(STORAGE_ACCESS_TOKEN);
+          localStorage.removeItem(STORAGE_ACCESS_EXPIRY);
           cleanQueryString();
         }
         throw new Error(err?.message);
@@ -290,88 +362,139 @@ export class MoneriumClient {
     return this.bearerProfile as BearerProfile;
   }
 
-  // -- Read Methods
   /**
-   * {@link https://monerium.dev/api-docs#operation/auth-context}
-   * @category Auth
+   * @group Profiles
+   * @param {string} profile - the id of the profile to fetch.
+   * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile | API Documentation}
    */
-  getAuthContext(): Promise<AuthContext> {
-    return this.#api<AuthContext>('get', `auth/context`);
+  getProfile(profile: string): Promise<Profile> {
+    return this.#api<Profile>('get', `profiles/${profile}`);
+  }
+  /**
+   * @group Profiles
+   * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profiles | API Documentation}
+   */
+  getProfiles(params?: ProfilesQueryParams): Promise<ProfilesResponse> {
+    return this.#api<ProfilesResponse>('get', `profiles${queryParams(params)}`);
+  }
+  /**
+   *
+   * Get details for a single address by using the address public key after the address has been successfully linked to Monerium.
+   *
+   * @group Addresses
+   * @param {string} address - The public key of the blockchain account.
+   *
+   * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address | API Documentation}
+   *
+   * @example
+   * ```ts
+   *  monerium.getAddress('0x1234567890abcdef1234567890abcdef12345678')
+   * ```
+   */
+  getAddress(address: string): Promise<Address> {
+    return this.#api<Address>('get', `addresses/${address}`);
   }
 
   /**
-   * {@link https://monerium.dev/api-docs#operation/profile}
-   * @param {string} profileId - the id of the profile to fetch.
-   * @category Profiles
+   * @group Addresses
+   * @param {AddressesQueryParams} [params] - No required parameters.
+   * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses | API Documentation}
    */
-  getProfile(profileId: string): Promise<Profile> {
-    return this.#api<Profile>('get', `profiles/${profileId}`);
-  }
-  /**
-   * {@link https://monerium.dev/api-docs#operation/profiles}
-   * @category Profiles
-   */
-  getProfiles(): Promise<Profile[]> {
-    return this.#api<Profile[]>('get', `profiles`);
-  }
-  /**
-   * {@link https://monerium.dev/api-docs#operation/profile-balances}
-   * @param {string=} profileId - the id of the profile to fetch balances.
-   * @category Accounts
-   */
-  getBalances(profileId?: string): Promise<Balances[]> {
-    if (profileId) {
-      return this.#api<Balances[]>('get', `profiles/${profileId}/balances`);
-    } else {
-      return this.#api<Balances[]>('get', `balances`);
-    }
+  getAddresses(params?: AddressesQueryParams): Promise<AddressesResponse> {
+    params = mapChainIdToChain(params);
+    const searchParams = params
+      ? urlEncoded(params as unknown as Record<string, string>)
+      : undefined;
+    const url = searchParams ? `addresses?${searchParams}` : 'addresses';
+    return this.#api('get', url);
   }
 
   /**
-   * {@link https://monerium.dev/api-docs#operation/orders}
-   * @category Orders
+   * @group Addresses
+   * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances| API Documentation}
    */
-  getOrders(filter?: OrderFilter): Promise<Order[]> {
-    const searchParams = urlEncoded(filter as Record<string, string>);
-    const url = searchParams ? `orders?${searchParams}` : 'orders';
-    return this.#api<Order[]>('get', url);
+  getBalances(
+    address: string,
+    chain: Chain | ChainId,
+    currencies?: Currency | Currency[]
+  ): Promise<Balances> {
+    const currencyParams = Array.isArray(currencies)
+      ? currencies.map((currency) => `currency=${currency}`).join('&')
+      : currencies
+        ? `currency=${currencies}`
+        : '';
+
+    return this.#api<Balances>(
+      'get',
+      `balances/${parseChain(chain)}/${address}${currencyParams ? `?${currencyParams}` : ''}`
+    );
+  }
+
+  /**
+   * Fetch details about a single IBAN
+   *
+   * @group IBANs
+   * @param {string} iban - the IBAN to fetch.
+   * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/iban | API Documentation}
+   */
+  getIban(iban: string): Promise<IBAN> {
+    return this.#api<IBAN>('get', `ibans/${encodeURI(iban)}`);
   }
   /**
-   * {@link https://monerium.dev/api-docs#operation/order}
-   * @category Orders
+   * Fetch all IBANs for the profile
+   * @group IBANs
+   * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans | API Documentation}
+   */
+  getIbans(queryParameters?: IbansQueryParams): Promise<IBANsResponse> {
+    const { profile, chain } = queryParameters || {};
+    const params = queryParams({
+      profile,
+      chain: chain ? parseChain(chain) : '',
+    });
+    return this.#api<IBANsResponse>('get', `ibans${params}`);
+  }
+
+  /**
+   * @group Orders
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders | API Documentation}
+   */
+  getOrders(filter?: OrderFilter): Promise<OrdersResponse> {
+    return this.#api<OrdersResponse>('get', `orders${queryParams(filter)}`);
+  }
+  /**
+   * @group Orders
+   * @see {@link https://monerium.dev/api-docs-v2#tag/order | API Documentation}
    */
   getOrder(orderId: string): Promise<Order> {
     return this.#api<Order>('get', `orders/${orderId}`);
   }
 
   /**
-   * {@link https://monerium.dev/api-docs#operation/tokens}
-   * @category Tokens
+   * @group Tokens
+   * @see {@link https://monerium.dev/api-docs-v2#tag/tokens | API Documentation}
    */
   getTokens(): Promise<Token[]> {
     return this.#api<Token[]>('get', 'tokens');
   }
 
-  // -- Write Methods
-
   /**
-   * {@link https://monerium.dev/api-docs#operation/profile-addresses}
-   * @category Accounts
+   * Add a new address to the profile
+   * @group Addresses
+   * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address | API Documentation}
    */
-  linkAddress(profileId: string, body: LinkAddress): Promise<LinkedAddress> {
-    body = mapChainIdToChain(body);
-    body.accounts = body.accounts.map((account) => mapChainIdToChain(account));
-
-    return this.#api(
+  linkAddress(payload: LinkAddress): Promise<LinkedAddress> {
+    payload = mapChainIdToChain(payload);
+    return this.#api<LinkedAddress>(
       'post',
-      `profiles/${profileId}/addresses`,
-      JSON.stringify(body)
+      `addresses`,
+      JSON.stringify(payload)
     );
   }
 
   /**
-   * {@link https://monerium.dev/api-docs#operation/post-orders}
-   * @category Orders
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders | API Documentation}
+   *
+   * @group Orders
    */
   placeOrder(order: NewOrder): Promise<Order> {
     const body = {
@@ -387,11 +510,61 @@ export class MoneriumClient {
   }
 
   /**
-   * {@link https://monerium.dev/api-docs#operation/supporting-document}
-   * @category Orders
+   * @group IBANs
+   * @param {string} iban - the IBAN to move.
+   * @param {MoveIbanPayload} payload - the payload to move the IBAN.
+   * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/move-iban | API Documentation}
+   */
+  moveIban(
+    iban: string,
+    { address, chain }: MoveIbanPayload
+  ): Promise<ResponseStatus> {
+    return this.#api<ResponseStatus>(
+      'patch',
+      `ibans/${iban}`,
+      JSON.stringify({ address, chain: parseChain(chain) })
+    );
+  }
+
+  /**
+   * @group IBANs
+   * @param {RequestIbanPayload} payload
+   * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban | API Documentation}
+   */
+  requestIban({
+    address,
+    chain,
+    emailNotifications = true,
+  }: RequestIbanPayload): Promise<ResponseStatus> {
+    return this.#api<ResponseStatus>(
+      'post',
+      `ibans`,
+      JSON.stringify({ address, chain: parseChain(chain), emailNotifications })
+    );
+  }
+
+  /**
+   * @group Profiles
+   * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details | API Documentation}
+   */
+  submitProfileDetails(
+    profile: string,
+    body: SubmitProfileDetailsPayload
+  ): Promise<ResponseStatus> {
+    return this.#api<ResponseStatus>(
+      'put',
+      `profiles/${profile}/details`,
+      JSON.stringify(body)
+    );
+  }
+
+  /**
+   * @group Orders
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/supporting-document | API Documentation}
    */
   uploadSupportingDocument(document: File): Promise<SupportingDoc> {
     const formData = new FormData();
+
     formData.append('file', document as unknown as Blob);
 
     return rest<SupportingDoc>(`${this.#env.api}/files`, 'post', formData, {
@@ -399,24 +572,25 @@ export class MoneriumClient {
     });
   }
 
-  // -- Helper Methods
-
   async #api<T>(
     method: string,
     resource: string,
     body?: BodyInit | Record<string, string>,
     isFormEncoded?: boolean
   ): Promise<T> {
+    const headers: Record<string, string> = {
+      Authorization: this.#authorizationHeader || '',
+      Accept: 'application/vnd.monerium.api-v2+json',
+      'Content-Type': `application/${
+        isFormEncoded ? 'x-www-form-urlencoded' : 'json'
+      }`,
+    };
+
     return rest<T>(
       `${this.#env.api}/${resource}`,
-      method,
+      method.toUpperCase(),
       isFormEncoded ? urlEncoded(body as Record<string, string>) : body,
-      {
-        Authorization: this.#authorizationHeader || '',
-        'Content-Type': `application/${
-          isFormEncoded ? 'x-www-form-urlencoded' : 'json'
-        }`,
-      }
+      headers
     );
   }
 
@@ -424,7 +598,7 @@ export class MoneriumClient {
    * Triggered when the client has claimed an authorization code
    * 1. Code Verifier is picked up from the localStorage
    * 2. auth service is called to claim the tokens
-   * 3. Refresh token is stored in the localStorage
+   * 3. Access token is stored in the localStorage
    */
   #authCodeAuthorization = async (
     clientId: string,
@@ -437,9 +611,7 @@ export class MoneriumClient {
     if (!codeVerifier) {
       throw new Error('Code verifier not found');
     }
-
-    /** @deprecated, use localStorage, will be removed in v3 */
-    this.codeVerifier = codeVerifier;
+    this.#debug('Use code verifier to authorize');
 
     this.state = state;
 
@@ -474,112 +646,130 @@ export class MoneriumClient {
     });
   };
 
-  // -- Notifications
   /**
    * Connects to the order notifications socket
-   * @category Orders
+   *
+   * @group Orders
+   * @param {OrderNotificationQueryParams} [params]
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications | API Document - Websocket}
+
    */
-  async connectOrderSocket() {
-    // When the user is authenticated, we connect to the order notifications socket in case
-    // the user has subscribed to any event
-    if (this.bearerProfile?.access_token && this.#subscriptions.size > 0) {
-      this.#socket = this.subscribeToOrderNotifications();
+  subscribeOrderNotifications({
+    filter,
+    onMessage,
+    onError,
+  }: {
+    /** specify which type of orders to listen to */
+    filter?: OrderNotificationQueryParams;
+    onMessage?: (data: Order) => void;
+    onError?: (err: Event) => void;
+  } = {}): WebSocket | undefined {
+    if (!this.bearerProfile?.access_token) return;
+
+    const { profile, state } = filter || {};
+    const params = queryParams({
+      access_token: this.bearerProfile?.access_token,
+      profile,
+      state,
+    });
+
+    let socket;
+    const key = getKey({ profile, state });
+    if (this.#sockets?.has(key)) {
+      socket = this.#sockets.get(key) as WebSocket;
+    } else {
+      const socketUrl = `${this.#env.wss}/orders${params}`;
+      socket = new WebSocket(socketUrl);
+      this.#sockets?.set(key, socket);
+    }
+
+    socket.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+    socket.onmessage = (data) => {
+      const parsedData = JSON.parse(data.data);
+      if (onMessage) {
+        onMessage(parsedData);
+      }
+    };
+    socket.onclose = () => {
+      console.log('WebSocket connection closed');
+      this.#sockets?.delete(params);
+    };
+    socket.onerror = (err) => {
+      if (onError) {
+        onError(err);
+      }
+      console.error('WebSocket error:', err);
+    };
+    return socket;
+  }
+
+  /**
+   * Closes the order notifications sockets
+   *
+   * @group Orders
+   * @param {OrderNotificationQueryParams} [params] - specify which socket to close or close all if not provided
+   * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/orders-notifications | API Document - Websocket}
+   */
+  unsubscribeOrderNotifications(params?: OrderNotificationQueryParams) {
+    if (params) {
+      const key = getKey({
+        profile: params?.profile,
+        state: params?.state,
+      });
+      const socket = this.#sockets?.get(key);
+      if (socket) {
+        socket.close();
+        this.#sockets?.delete(key);
+      }
+    } else {
+      this.#sockets?.forEach((socket) => {
+        socket?.close();
+      });
+
+      this.#sockets?.clear();
+      this.#sockets = undefined;
     }
   }
+
   /**
-   * Subscribes to the order notifications socket
-   * @category Orders
-   */
-  subscribeToOrderNotifications = (): WebSocket => {
-    const socketUrl = `${this.#env.wss}/profiles/${this.bearerProfile?.profile}/orders?access_token=${this.bearerProfile?.access_token}`;
-
-    const socket = new WebSocket(socketUrl);
-
-    socket.addEventListener('open', () => {
-      console.info(`Socket connected: ${socketUrl}`);
-    });
-
-    socket.addEventListener('error', (event) => {
-      console.error(event);
-      throw new Error(`Socket error: ${socketUrl}`);
-    });
-
-    socket.addEventListener('message', (event) => {
-      const notification = JSON.parse(event.data) as OrderNotification;
-
-      this.#subscriptions.get(notification.meta.state as OrderState)?.(
-        notification
-      );
-    });
-
-    socket.addEventListener('close', () => {
-      console.info(`Socket connection closed: ${socketUrl}`);
-    });
-
-    return socket;
-  };
-  /**
-   * Cleanups the socket and the subscriptions
-   * @category Auth
+   * Cleanups the localstorage and websocket connections
+   *
+   * @group Authentication
    */
   async disconnect() {
     if (!isServer) {
       localStorage.removeItem(STORAGE_CODE_VERIFIER);
     }
-    this.#subscriptions.clear();
-    this.#socket?.close();
+    this.unsubscribeOrderNotifications();
     this.#authorizationHeader = undefined;
     this.bearerProfile = undefined;
   }
   /**
    * Revokes access
-   * @category Auth
+   *
+   * @group Authentication
    */
   async revokeAccess() {
     if (!isServer) {
-      localStorage.removeItem(STORAGE_REFRESH_TOKEN);
+      localStorage.removeItem(STORAGE_ACCESS_TOKEN);
+      localStorage.removeItem(STORAGE_ACCESS_EXPIRY);
     }
     this.disconnect();
   }
 
   /**
-   * Subscribe to MoneriumEvent to receive notifications using the Monerium API (WebSocket)
-   * We are setting a subscription map because we need the user to have a token to start the WebSocket connection
-   * {@link https://monerium.dev/api-docs#operation/profile-orders-notifications}
-   * @param event The event to subscribe to
-   * @param handler The handler to be called when the event is triggered
-   * @category Orders
-   */
-
-  subscribeOrders(event: MoneriumEvent, handler: MoneriumEventListener): void {
-    this.#subscriptions.set(event as OrderState, handler);
-  }
-
-  /**
-   * Unsubscribe from MoneriumEvent and close the socket if there are no more subscriptions
-   * @param event The event to unsubscribe from
-   * @category Orders
-   */
-  unsubscribeOrders(event: MoneriumEvent): void {
-    this.#subscriptions.delete(event as OrderState);
-
-    if (this.#subscriptions.size === 0) {
-      this.#socket?.close();
-      this.#socket = undefined;
-    }
-  }
-
-  // -- Getters (mainly for testing)
-  /**
+   *
    * @hidden
    */
   getEnvironment = (): Environment => this.#env;
   /**
+   *
    * @hidden
    */
   getAuthFlowURI = (args: PKCERequestArgs): string => {
     const url = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, args);
-    this.codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER) as string;
     return url;
   };
 }

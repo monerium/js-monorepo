@@ -102,8 +102,8 @@ const monerium = new MoneriumClient({
 
 await monerium.getAccess();
 
-// Retrieve authentication data after successful authentication.
-await monerium.getAuthContext();
+// Retrieve profiles the client has access to.
+await monerium.getProfiles();
 
 // Access tokens are now available for use.
 const { access_token, refresh_token } = monerium.bearerProfile as BearerProfile;
@@ -112,7 +112,6 @@ const { access_token, refresh_token } = monerium.bearerProfile as BearerProfile;
 API documentation:
 
 - [/auth/token](https://monerium.dev/api-docs#operation/auth-token)
-- [/auth/context](https://monerium.dev/api-docs#operation/auth-context)
 
 #### Initialize and authenticate using Authorization Code Flow with PKCE
 
@@ -124,7 +123,7 @@ First, you have to navigate the user to the Monerium authentication flow. This c
 import { MoneriumClient } from '@monerium/sdk';
 
 export function App() {
-  const [authCtx, setAuthCtx] = useState<AuthContext | null>(null);
+  const [profiles, setProfiles] = useState<Profile[] | null>(null);
   const [monerium, setMonerium] = useState<MoneriumClient>();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
@@ -157,7 +156,8 @@ export function App() {
     const fetchData = async () => {
       if (monerium && isAuthorized) {
         try {
-          setAuthCtx(await monerium.getAuthContext());
+          const { profiles } = await monerium.getProfiles();
+          setProfiles(profiles);
         } catch (err) {
           console.error('Error fetching data:', err);
         }
@@ -170,7 +170,7 @@ export function App() {
     <div>
       {!isAuthorized && <button onClick={() => monerium?.authorize()}>Connect</button>}
 
-      <p>{authCtx?.name || authCtx?.email}</p>
+      <p>{profiles[0]?.name}</p>
     </div>
   );
 }
@@ -180,26 +180,24 @@ API documentation:
 
 - [/auth](https://monerium.dev/api-docs#operation/auth)
 - [/auth/token](https://monerium.dev/api-docs#operation/auth-token)
-- [/auth/context](https://monerium.dev/api-docs#operation/auth-context)
 
 #### Get account information
 
 ```ts
-// Get all profiles for the authenticated user.
-const authCtx: AuthContext = await monerium.getAuthContext();
+// Get all profiles
+const { profiles }: Profile[] = await monerium.getProfiles();
 
 // Fetching all accounts for a specific profile
 const { id: profileId, accounts }: Profile = await monerium.getProfile(
-  authCtx.profiles[0].id
+  profiles[0].id
 );
 
 // Fetching all balances for a specific profile
-const balances: Balances = await monerium.getBalances(profileId);
+const balances: Balances = await monerium.getBalances();
 ```
 
 API documentation:
 
-- [/auth/context](https://monerium.dev/api-docs#operation/auth-context)
 - [/profile](https://monerium.dev/api-docs#operation/profile)
 - [/profile/&#123;profileId&#123;/balances](https://monerium.dev/api-docs#operation/profile-balances)
 
@@ -235,14 +233,12 @@ const signature = await walletClient.signMessage({
 })
 
 // Link a new address to Monerium and create accounts for ethereum and gnosis.
-await monerium.linkAddress(profileId, {
+await monerium.linkAddress({
+  profile: 'your-profile-id',
   address: '0xUserAddress72413Fa92980B889A1eCE84dD', // user wallet address
   message: LINK_MESSAGE
   signature,
-  accounts: [
-    {"currency":"eur","chain":"ethereum"},
-    {"currency":"eur","chain":"gnosis"}
-  ],
+  chain: 'ethereum',
 } as LinkAddress);
 ```
 
@@ -325,28 +321,29 @@ API documentation:
 ```ts
 import { OrderState } from '@monerium/sdk';
 const [orderState, setOrderState] = useState<OrderState>();
-// Subscribe to order events
-monerium.subscribeOrders(OrderState.pending, (notification) => {
-  setOrderState(notification.meta.state);
+
+// Subscribe to all order events
+monerium.subscribeOrderNotifications();
+
+// Subscribe to specific order events
+monerium.subscribeOrderNotifications({ 
+  filter: {
+    state: OrderState.pending,
+    profile: 'my-profile-id',
+  },
+  // optional callback functions
+  onMessage: (order) => console.log(order)
+  onError: (error) => console.error(error)
 });
 
-monerium.subscribeOrders(OrderState.placed, (notification) => {
-  setOrderState(notification.meta.state);
+// Unsubscribe from specific order events
+monerium.unsubscribeOrderNotifications({ 
+  state: OrderState.pending,
+  profile: 'my-profile-id'
 });
+// Unsubscribe from all order events
+monerium.unsubscribeOrderNotifications();
 
-monerium.subscribeOrders(OrderState.rejected, (notification) => {
-  setOrderState(notification.meta.state);
-  setTimeout(() => {
-    setOrderState(undefined);
-  }, 5000);
-});
-
-monerium.subscribeOrders(OrderState.processed, (notification) => {
-  setOrderState(notification.meta.state);
-  setTimeout(() => {
-    setOrderState(undefined);
-  }, 5000);
-});
 ```
 
 ## API Reference

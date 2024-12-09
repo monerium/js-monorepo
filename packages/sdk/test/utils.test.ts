@@ -3,22 +3,15 @@ import SHA256 from 'crypto-js/sha256.js';
 import timezone_mock from 'timezone-mock';
 
 import { generateRandomString } from '../src/helpers';
-import {
-  Balances,
-  Currency,
-  KYC,
-  PaymentStandard,
-  Profile,
-  ProfileType,
-} from '../src/types';
+import { Balances, Currency } from '../src/types';
 import {
   getAmount,
   getChain,
-  getIban,
   mapChainIdToChain,
   parseChain,
   placeOrderMessage,
   rfc3339,
+  shortenIban,
   urlEncoded,
 } from '../src/utils';
 
@@ -61,7 +54,7 @@ describe('getMessage', () => {
       'DE89370400440532013000'
     );
     expect(message).toMatch(
-      /^Send EUR 100 to DE89370400440532013000 at \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[-+]\d{2}:\d{2})$/
+      /^Send EUR 100 to DE89...3000 at \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[-+]\d{2}:\d{2})$/
     );
   });
 });
@@ -103,7 +96,6 @@ describe('url params', () => {
           id: 'testId',
           address: 'testAddress',
           chain: 'ethereum',
-          network: 'mainnet',
           balances: [
             {
               currency: Currency.eur,
@@ -123,7 +115,6 @@ describe('url params', () => {
           id: 'testId',
           address: 'testAddress',
           chain: 'polygon',
-          network: 'mainnet',
           balances: [
             {
               currency: Currency.eur,
@@ -138,103 +129,6 @@ describe('url params', () => {
       expect(result).toBe('0');
     });
   });
-
-  describe('getIban', () => {
-    test('should return the correct IBAN for a given address and chain', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013001',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'gnosis',
-            network: 'mainnet',
-          },
-        ],
-      };
-
-      const result = getIban(profile, 'testAddress1', 100);
-
-      expect(result).toBe('DE89370400440532013001');
-    });
-
-    test('should return an empty string if no account with the given address exists', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-          {
-            address: 'testAddress2',
-            iban: 'DE89370400440532013001',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'mainnet',
-          },
-        ],
-      };
-
-      const result = getIban(profile, 'testAddress3', 1);
-
-      expect(result).toBe('');
-    });
-
-    test('should return an empty string if the account with the given address does not have an IBAN', () => {
-      const profile: Profile = {
-        id: 'testId',
-        name: 'testName',
-        kyc: {} as KYC,
-        email: 'testEmail',
-        kind: 'personal' as ProfileType,
-        accounts: [
-          {
-            address: 'testAddress1',
-            iban: 'DE89370400440532013000',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'sepolia',
-          },
-          {
-            address: 'testAddress2',
-            currency: Currency.eur,
-            standard: 'iban' as PaymentStandard,
-            chain: 'ethereum',
-            network: 'sepolia',
-          },
-        ],
-      };
-
-      const result = getIban(profile, 'testAddress2', 11155111);
-
-      expect(result).toBe('');
-    });
-  });
 });
 
 describe('placeOrderMessage', () => {
@@ -243,7 +137,9 @@ describe('placeOrderMessage', () => {
     const iban = 'DE89370400440532013000';
     const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
-      new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
+      new RegExp(
+        `^Send EUR ${amount} to ${shortenIban(iban)} at ${timestampRegex}$`
+      )
     );
   });
 
@@ -252,7 +148,9 @@ describe('placeOrderMessage', () => {
     const iban = 'DE89370400440532013000';
     const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
-      new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
+      new RegExp(
+        `^Send EUR ${amount} to ${shortenIban(iban)} at ${timestampRegex}$`
+      )
     );
   });
 
@@ -261,7 +159,9 @@ describe('placeOrderMessage', () => {
     const iban = 'DE89370400440532013000';
     const message = placeOrderMessage(amount, 'eur' as Currency, iban);
     expect(message).toMatch(
-      new RegExp(`^Send EUR ${amount} to ${iban} at ${timestampRegex}$`)
+      new RegExp(
+        `^Send EUR ${amount} to ${shortenIban(iban)} at ${timestampRegex}$`
+      )
     );
   });
   test('should format message with chainId', () => {
@@ -282,7 +182,7 @@ describe('placeOrderMessage', () => {
   });
   test('should format message with chainId as string', () => {
     const amount = 100;
-    const receiver = 'DE89370400440532013000';
+    const receiver = '0x1234';
     const chain = 'gnosis';
     const message = placeOrderMessage(
       amount,
@@ -336,6 +236,10 @@ describe('parseChain', () => {
     expect(parseChain(80002)).toBe('polygon');
     expect(parseChain(80002)).toBe('polygon');
     expect(parseChain('ethereum')).toBe('ethereum');
+    expect(parseChain('noble')).toBe('noble');
+    expect(parseChain('noble-1')).toBe('noble');
+    expect(parseChain('florin-1')).toBe('noble');
+    expect(parseChain('1')).toBe('ethereum');
     expect(() => parseChain(2)).toThrow('Chain not supported: 2');
   });
 });

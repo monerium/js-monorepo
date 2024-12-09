@@ -16,6 +16,18 @@ const queryClient = new QueryClient();
 const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
 
 function Providers({ children }: { children: React.ReactNode }) {
+  const [refreshToken, setRefreshToken] = React.useState<string | undefined>(
+    undefined
+  );
+  React.useEffect(() => {
+    let rToken = window.localStorage.getItem(
+      'monerium.insecurely_store_refresh_token'
+    );
+    if (rToken) {
+      setRefreshToken(rToken);
+    }
+  }, []);
+
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
@@ -24,6 +36,17 @@ function Providers({ children }: { children: React.ReactNode }) {
             clientId="f99e629b-6dca-11ee-8aa6-5273f65ed05b"
             redirectUri={`${baseUrl}/dashboard`}
             environment="sandbox"
+            debug={true}
+            refreshToken={refreshToken}
+            onRefreshTokenUpdate={(token) => {
+              if (token) {
+                window.localStorage.setItem(
+                  'monerium.insecurely_store_refresh_token',
+                  token
+                );
+                setRefreshToken(token);
+              }
+            }}
           >
             <StyleProviders>{children}</StyleProviders>
           </MoneriumProvider>

@@ -1,5 +1,12 @@
-import { Balances, Chain, ChainId, Currency, Profile } from './types';
+import { Balances, Chain, ChainId, Currency } from './types';
 
+/**
+ *
+ * @param d Date to be formatted
+ * @returns RFC3339 date format.
+ * @example 2023-04-30T12:00:00+01:00
+ * @example 2023-04-30T02:08:15Z
+ */
 export const rfc3339 = (d: Date) => {
   if (d.toString() === 'Invalid Date') {
     throw d;
@@ -33,16 +40,51 @@ export const rfc3339 = (d: Date) => {
   );
 };
 
+const isValidCosmosChainName = (chain: string) => {
+  switch (chain) {
+    case 'noble':
+    case 'noble-1':
+    case 'florin-1':
+    case 'grand-1':
+      return true;
+    default:
+      return false;
+  }
+};
+
+const isValidEvmName = (chain: string) => {
+  switch (chain) {
+    case 'ethereum':
+    case 'polygon':
+    case 'gnosis':
+    case 'arbitrum':
+      return true;
+    default:
+      return false;
+  }
+};
+
 /**
  * This will resolve the chainId number to the corresponding chain name.
  * @param chain The chainId of the network
  * @returns chain name, 'ethereum', 'polygon', 'gnosis', etc.
  */
-export const parseChain = (chain: Chain | ChainId) => {
+export const parseChain = (chain: Chain | ChainId | number | string): Chain => {
   if (typeof chain === 'number') {
     return getChain(chain);
   }
-  return chain;
+  if (isValidCosmosChainName(chain)) {
+    return 'noble';
+  }
+  if (isValidEvmName(chain)) {
+    return chain as Chain;
+  }
+
+  try {
+    return getChain(parseInt(chain));
+  } catch (e) {
+    throw new Error(`Chain not supported: ${chain}`);
+  }
 };
 
 /**
@@ -51,7 +93,19 @@ export const parseChain = (chain: Chain | ChainId) => {
  * @param currency The currency to be sent
  * @param receiver The receiver of the funds
  * @param chain The chainId of the network if it's a cross-chain transaction
- * @returns string
+ * @returns
+ * cross-chain:
+ * ```ts
+ *  Send {CURRENCY} {AMOUNT} to {RECEIVER} on {CHAIN} at {DATE}`
+ * ```
+ *
+ * off-ramp:
+ * ```ts
+ *  Send {CURRENCY} {AMOUNT} to {RECEIVER} at {DATE}
+ * ```
+ * @example `Send EUR 1 to 0x1234123412341234123412341234123412341234 on ethereum at 2023-04-30T12:00:00+01:00`
+ *
+ * @example `Send EUR 1 to IS1234123412341234 at 2023-04-30T12:00:00+01:00`
  */
 export const placeOrderMessage = (
   amount: string | number,
@@ -64,6 +118,9 @@ export const placeOrderMessage = (
   if (chain) {
     return `Send ${curr} ${amount} to ${receiver} on ${parseChain(chain)} at ${rfc3339(new Date())}`;
   }
+  if (curr === 'EUR') {
+    return `Send ${curr} ${amount} to ${shortenIban(receiver)} at ${rfc3339(new Date())}`;
+  }
   return `Send ${curr} ${amount} to ${receiver} at ${rfc3339(new Date())}`;
 };
 
@@ -74,10 +131,11 @@ export const placeOrderMessage = (
  * @returns 'application/x-www-form-urlencoded' compatible string
  */
 export const urlEncoded = (
-  body: Record<string, string>
+  body: Record<string, string | boolean>
 ): string | undefined => {
   return body && Object.entries(body)?.length > 0
     ? Object.entries(body)
+        .filter(([_, value]) => value !== undefined) // Filter out undefined values
         .map(
           ([key, value]) =>
             `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
@@ -87,8 +145,20 @@ export const urlEncoded = (
 };
 
 /**
- * Get the corresponding Monerium SDK Chain from the current chain id
- * @returns The Chain
+ * This will resolve the chainId number to the corresponding chain name.
+ * @param chainId The chainId of the network
+ * @returns chain name
+ * @example
+ * ```ts
+ * getChain(1) // 'ethereum'
+ * getChain(11155111) // 'ethereum'
+ *
+ * getChain(100) // 'gnosis'
+ * getChain(10200) // 'gnosis'
+ *
+ * getChain(137) // 'polygon'
+ * getChain(80002) // 'polygon'
+ * ```
  */
 export const getChain = (chainId: number): Chain => {
   switch (chainId) {
@@ -101,24 +171,20 @@ export const getChain = (chainId: number): Chain => {
     case 137:
     case 80002:
       return 'polygon';
+    case 42161:
+    case 421614:
+      return 'arbitrum';
     default:
       throw new Error(`Chain not supported: ${chainId}`);
   }
 };
 
-export const getIban = (
-  profile: Profile,
-  address: string,
-  chain: Chain | ChainId
-) => {
-  return (
-    profile.accounts.find(
-      (account) =>
-        account.address === address &&
-        account.iban &&
-        account.chain === parseChain(chain)
-    )?.iban ?? ''
-  );
+export const shortenIban = (iban?: string) => {
+  if (typeof iban !== 'string' || !iban?.length) return iban;
+  const ns = iban.replace(/\s/g, ''); // remove spaces
+  return iban?.length > 11
+    ? `${ns.substring(0, 4)}...${ns.substring(ns.length - 4)}`
+    : iban;
 };
 
 export const getAmount = (
@@ -130,7 +196,7 @@ export const getAmount = (
   if (!balances || !address || !chain) return '0';
   const curr = currency || Currency.eur;
 
-  const balance = balances.find(
+  const balance = balances?.find(
     (account) =>
       account.address === address && account.chain === parseChain(chain)
   )?.balances;

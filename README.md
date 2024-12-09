@@ -15,6 +15,11 @@ This Turborepo includes the following packages/apps:
 - `@repo/stylelint-config`: `stylelint` configurations
 - `@repo/typescript-config`: `tsconfig.json`'s used throughout the monorepo
 
+### Migration Guide
+
+> SDK 3.0.0 and React Provider 1.0.0
+> [SDK Migration Guide](apps/developer/docs/MigrationGuide.md)
+
 ### Utilities
 
 - [TurboRepo](https://turbo.build/repo) for monorepo management
@@ -35,7 +40,7 @@ To build all apps and packages, run the following command:
 
 ```
 cd js-monorepo
-pnpm build
+turbo build
 ```
 
 ### Develop
@@ -44,7 +49,7 @@ To develop all apps and packages, run the following command:
 
 ```
 cd js-monorepo
-pnpm dev
+turbo dev
 ```
 
 Note: use `pnpm dev --log-order stream` for a more traditional log output.

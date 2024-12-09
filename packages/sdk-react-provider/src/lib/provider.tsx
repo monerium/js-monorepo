@@ -7,7 +7,7 @@ import { MoneriumContext } from './context';
 import { AuthorizeParams } from './types';
 
 /**
- * Place this provider at the root of your application.
+ * Wrap your application with the Monerium provider.
  * @group Provider
  * @param params
  * @param params.children - Rest of the application.
@@ -19,9 +19,11 @@ import { AuthorizeParams } from './types';
 export const MoneriumProvider = ({
   children,
   clientId,
-  redirectUrl,
   redirectUri,
   environment = 'sandbox',
+  refreshToken,
+  onRefreshTokenUpdate,
+  debug = false,
 }: {
   children: ReactNode;
   clientId: string;
@@ -29,23 +31,25 @@ export const MoneriumProvider = ({
   /** @deprecated use redirectUri */
   redirectUrl?: string;
   environment?: 'sandbox' | 'production';
+  refreshToken?: string;
+  onRefreshTokenUpdate?: (token: string) => void;
+  debug?: boolean;
 }) => {
   const queryClient = useQueryClient();
 
-  const [sdk, setSdk] = useState<MoneriumClient>();
+  const [sdk] = useState(() => {
+    // Initialize the SDK
+    return new MoneriumClient({
+      environment,
+      clientId,
+      redirectUri,
+      debug: debug,
+    });
+  });
+
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [error, setError] = useState<Error | unknown | null>(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
-
-  // Initialize the SDK
-  useEffect(() => {
-    const sdkInstance = new MoneriumClient({
-      environment: environment,
-      clientId,
-      redirectUri: redirectUri || redirectUrl,
-    });
-    setSdk(sdkInstance);
-  }, []);
 
   useEffect(() => {
     const connect = async () => {
@@ -56,6 +60,9 @@ export const MoneriumProvider = ({
           console.error('Failed to get access:', error);
         } finally {
           setLoadingAuth(false);
+          if (sdk?.bearerProfile) {
+            onRefreshTokenUpdate?.(sdk.bearerProfile.refresh_token);
+          }
         }
       }
     };
@@ -67,7 +74,26 @@ export const MoneriumProvider = ({
         sdk.disconnect();
       }
     };
-  }, [sdk]);
+  }, []);
+
+  useEffect(() => {
+    const reconnect = async () => {
+      if (sdk) {
+        try {
+          setIsAuthorized(await sdk.getAccess(refreshToken));
+        } catch (error) {
+          console.error('Failed to get access:', error);
+        } finally {
+          if (sdk?.bearerProfile) {
+            onRefreshTokenUpdate?.(sdk.bearerProfile.refresh_token);
+          }
+        }
+      }
+    };
+    if (refreshToken && !isAuthorized && !loadingAuth) {
+      reconnect();
+    }
+  }, [refreshToken]);
 
   const authorize = useCallback(
     async (params?: AuthorizeParams) => {

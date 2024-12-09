@@ -6,8 +6,9 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { LinkAddress, NewOrder } from '@monerium/sdk';
 
 import {
+  useAddress,
+  useAddresses,
   useAuth,
-  useAuthContext,
   useBalances,
   useLinkAddress,
   useOrder,
@@ -43,8 +44,10 @@ jest.mock('@monerium/sdk', () => {
     getOrders: mockHook('mockedOrders'),
     getOrder: mockHook('mockedOrder'),
     getProfile: mockHook('mockedProfile'),
-    getProfiles: mockHook('mockedProfiles'),
+    getProfiles: mockHook({ profiles: ['mockedProfiles'] }),
     getTokens: mockHook('mockedTokens'),
+    getAddress: mockHook('mockedAddress'),
+    getAddresses: mockHook({ addresses: ['mockedAddresses'] }),
     getBalances: mockHook('mockedBalances'),
     placeOrder: mockHook('mockedPlacedOrder'),
     linkAddress: mockHook('mockedLinkedAddress'),
@@ -53,6 +56,7 @@ jest.mock('@monerium/sdk', () => {
   return {
     MoneriumClient: jest.fn(() => mockMoneriumClient),
     MoneriumContext: jest.fn(() => null),
+    parseChain: jest.fn(),
   };
 });
 
@@ -109,23 +113,6 @@ describe('useAuth', () => {
   });
 });
 
-describe('useAuthContext', () => {
-  test('returns the auth context', async () => {
-    const { result } = renderHook(() => useAuthContext(), {
-      wrapper,
-    });
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(true);
-    });
-
-    await waitFor(() => {
-      expect(result.current.authContext).toBe('mockedAuthContext');
-      expect(result.current.isSuccess).toBe(true);
-      expect(result.current.isLoading).toBe(false);
-    });
-  });
-});
 describe('useOrder', () => {
   test('returns the order', async () => {
     const { result } = renderHook(() => useOrder({ orderId: '1234' }), {
@@ -137,7 +124,7 @@ describe('useOrder', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.order).toBe('mockedOrder');
+      expect(result.current.data).toBe('mockedOrder');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -172,7 +159,7 @@ describe('useOrders', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.orders).toBe('mockedOrders');
+      expect(result.current.data).toBe('mockedOrders');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -180,7 +167,7 @@ describe('useOrders', () => {
 });
 describe('useProfile', () => {
   test('returns the profile', async () => {
-    const { result } = renderHook(() => useProfile({ profileId: '1234' }), {
+    const { result } = renderHook(() => useProfile({ profile: '1234' }), {
       wrapper,
     });
 
@@ -189,7 +176,7 @@ describe('useProfile', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.profile).toBe('mockedProfile');
+      expect(result.current.data).toBe('mockedProfile');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -206,14 +193,14 @@ describe('useProfiles', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.profiles).toBe('mockedProfiles');
+      expect(result.current.data?.profiles?.[0]).toBe('mockedProfiles');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
   });
 });
 describe('useTokens', () => {
-  test('returns the profile', async () => {
+  test('returns the tokens', async () => {
     const { result } = renderHook(() => useTokens(), {
       wrapper,
     });
@@ -223,15 +210,35 @@ describe('useTokens', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.tokens).toBe('mockedTokens');
+      expect(result.current.data).toBe('mockedTokens');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
   });
 });
-describe('useBalances', () => {
-  test('returns the profile', async () => {
-    const { result } = renderHook(() => useBalances(), {
+describe('useAddress', () => {
+  test('returns the address info', async () => {
+    const { result } = renderHook(
+      () => useAddress({ address: 'mockedAddress' }),
+      {
+        wrapper,
+      }
+    );
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.data).toBe('mockedAddress');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+describe('useAddresses', () => {
+  test('returns the addresses info', async () => {
+    const { result } = renderHook(() => useAddresses(), {
       wrapper,
     });
 
@@ -240,7 +247,27 @@ describe('useBalances', () => {
     });
 
     await waitFor(() => {
-      expect(result.current.balances).toBe('mockedBalances');
+      expect(result.current.data?.addresses?.[0]).toBe('mockedAddresses');
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+});
+describe('useBalances', () => {
+  test('returns  balances', async () => {
+    const { result } = renderHook(
+      () => useBalances({ address: '0x1234', chain: 100 }),
+      {
+        wrapper,
+      }
+    );
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
+
+    await waitFor(() => {
+      expect(result.current.data).toBe('mockedBalances');
       expect(result.current.isSuccess).toBe(true);
       expect(result.current.isLoading).toBe(false);
     });
@@ -274,12 +301,9 @@ describe('usePlaceOrder', () => {
 });
 describe('useLinkAddress', () => {
   test('links address', async () => {
-    const { result } = renderHook(
-      () => useLinkAddress({ profileId: 'profileId-12345' }),
-      {
-        wrapper,
-      }
-    );
+    const { result } = renderHook(() => useLinkAddress(), {
+      wrapper,
+    });
     const { result: authResult } = renderHook(() => useAuth(), {
       wrapper,
     });

@@ -1,27 +1,14 @@
-import {
-  Dispatch,
-  memo,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ListItemText } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
+import { Dispatch, memo, SetStateAction } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import List from '@mui/material/List';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
 
-import { Balances, Currency } from '@monerium/sdk';
-import { useBalances } from '@monerium/sdk-react-provider';
+import { CurrencyCode } from '@monerium/sdk';
+import { useAddresses } from '@monerium/sdk-react-provider';
 
-import { Account, ChainSelection } from '../types';
-import { flattenSortAndSumBalances } from './utils';
+import { ChainSelection } from '../types';
+import WalletItem from './WalletItem';
 
 const WalletList = memo(
   ({
@@ -30,34 +17,15 @@ const WalletList = memo(
     setTotalBalance,
   }: {
     selectedChain: ChainSelection;
-    selectedCurrency: Currency;
+    selectedCurrency: CurrencyCode;
     setTotalBalance: Dispatch<SetStateAction<number>>;
   }) => {
-    const router = useRouter();
-    const [filteredList, setFilteredList] = useState<Account[]>();
-    const { balances, isLoading: loadingBalances } = useBalances({
-      query: {
-        refetchOnWindowFocus: false,
-      },
-    });
+    const { data, isLoading } = useAddresses();
 
-    const handleBalanceFiltering = useCallback(() => {
-      let filtered: Balances[] | undefined = balances;
-
-      if (!filtered) return;
-      if (selectedChain !== 'all') {
-        filtered = filtered?.filter((b) => b.chain === selectedChain);
-      }
-
-      let { list, sum } = flattenSortAndSumBalances(filtered, selectedCurrency);
-
-      setFilteredList(list);
-      setTotalBalance(sum);
-    }, [selectedChain, balances, selectedCurrency]);
-
-    useEffect(() => {
-      handleBalanceFiltering();
-    }, [selectedChain, selectedCurrency, balances]);
+    const filteredList =
+      selectedChain !== 'all'
+        ? data?.addresses?.filter((a) => a.chains?.includes(selectedChain))
+        : data?.addresses;
 
     return (
       <Card sx={{ m: 3 }}>
@@ -66,33 +34,21 @@ const WalletList = memo(
             Wallets
           </Typography>
           <List>
-            {loadingBalances ? (
+            {isLoading ? (
               <Typography variant="body1">Loading...</Typography>
             ) : (
               <>
-                {filteredList?.map((account, i) => (
-                  <ListItemButton
-                    key={i + account.id}
-                    onClick={() => router.push(`/wallet/${account.address}`)}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        alt="Currency"
-                        src={`/tokens/${account.currency}.png`}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={account.address}
-                      secondary={'testing'}
-                    />
-                    <p>
-                      {account.amount} {account.currency}
-                    </p>
-                  </ListItemButton>
+                {filteredList?.map((add, i) => (
+                  <WalletItem
+                    key={i}
+                    address={add.address}
+                    chain={selectedChain}
+                    currency={selectedCurrency}
+                  />
                 ))}
               </>
             )}
-            {!loadingBalances && balances?.length === 0 && (
+            {!isLoading && filteredList?.length === 0 && (
               <Typography variant="body1">No wallets found.</Typography>
             )}
           </List>
