@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/monerium/js-monorepo/compare/sdk-v2.15.0...sdk-v3.0.0) (2024-12-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* API v2 ([#96](https://github.com/monerium/js-monorepo/issues/96))
+
+### Features
+
+* API v2 ([#96](https://github.com/monerium/js-monorepo/issues/96)) ([1b4fe12](https://github.com/monerium/js-monorepo/commit/1b4fe12830f21323eb10a529e6258fa67533e7ab))
+
 ## [2.15.0](https://github.com/monerium/js-monorepo/compare/sdk-v2.14.0...sdk-v2.15.0) (2024-08-15)
 
 
