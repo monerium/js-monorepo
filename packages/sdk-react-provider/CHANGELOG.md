@@ -1,5 +1,57 @@
 # Changelog
 
+## [1.0.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.3.0...sdk-react-provider-v1.0.0) (2024-12-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* API v2 ([#96](https://github.com/monerium/js-monorepo/issues/96))
+
+### Features
+
+* API v2 ([#96](https://github.com/monerium/js-monorepo/issues/96)) ([1b4fe12](https://github.com/monerium/js-monorepo/commit/1b4fe12830f21323eb10a529e6258fa67533e7ab))
+* deprecating redirectUrl for redirectUri for consistency w Oauth2.0 ([90e8639](https://github.com/monerium/js-monorepo/commit/90e863940da8623462a29ce3ac59bdfdcf20271e))
+* remove chainId, chain should accept monerium chain name or chainId ([#85](https://github.com/monerium/js-monorepo/issues/85)) ([afbacb9](https://github.com/monerium/js-monorepo/commit/afbacb931eb15b00b69c3304bbcedcd9b156450c))
+* **sdk-react-provider:** complete refactor to use react-query async state management ([8bda8a7](https://github.com/monerium/js-monorepo/commit/8bda8a7cc6a6fe42449990825db14090c3948f69))
+* **sdk-react-provider:** export loadingAuth ([a265da2](https://github.com/monerium/js-monorepo/commit/a265da24220e16c5c07490dbe313f5c65aef07f3))
+
+
+### Bug Fixes
+
+* add token types to sdk, + adjust data fetching sdk-provider ([f745348](https://github.com/monerium/js-monorepo/commit/f745348e761372b146aae7d395c6574f30715dec))
+* cleanup ([ca0722f](https://github.com/monerium/js-monorepo/commit/ca0722fde7eb03ee578ee0d228433af359b74fc2))
+* sdk react provider version ([1c56511](https://github.com/monerium/js-monorepo/commit/1c565116fc29a655b970c2ab0864a039ab5af430))
+
+
+### Documentation
+
+* update docs with new chain property ([530606a](https://github.com/monerium/js-monorepo/commit/530606ad090851a47b688b8e1e3b82094f550d72))
+* update documentation and exclude docs from creatinga new package version ([85e1c39](https://github.com/monerium/js-monorepo/commit/85e1c394993e46417cdf209277f6985238f495f7))
+* update README ([8044580](https://github.com/monerium/js-monorepo/commit/804458074f45fbcc774cfa5a64d987b20d8e4b87))
+* update README ([e6862d8](https://github.com/monerium/js-monorepo/commit/e6862d833760a23ea845fb475d1fd51bf0c2b2ee))
+
+
+### Miscellaneous
+
+* add prepublish script ([7d8e225](https://github.com/monerium/js-monorepo/commit/7d8e2250c6b5ce6ece34bc6e0e625a948f104b42))
+* add sdk and sdk-react-provider ([89c318a](https://github.com/monerium/js-monorepo/commit/89c318af3a5948c7ab6616d9b59a7367f87457e4))
+* add stylelint ([5107d33](https://github.com/monerium/js-monorepo/commit/5107d33d79aec11219baef973767295622337721))
+* adjust npmrc and add minor change to trigger publish ([a32680e](https://github.com/monerium/js-monorepo/commit/a32680e32a3b933bc5aefd5cb8eceb2d409ef312))
+* auto sort import + prettier ([69ace9d](https://github.com/monerium/js-monorepo/commit/69ace9d62af48fb501e298af804a1703e9928d86))
+* cleanup ([4a46c4c](https://github.com/monerium/js-monorepo/commit/4a46c4c6ed7e651418376609f9efa1353c0b2840))
+* force new release sdk-react-provider ([382d968](https://github.com/monerium/js-monorepo/commit/382d96823976d34071b02aabc834cf582c099d02))
+* publish should work now, preparing for new versions of sdk and sdk-react-provider ([7e93031](https://github.com/monerium/js-monorepo/commit/7e930313fb54636afb71cd69d7ab860ed571ea6d))
+* release main ([5eed941](https://github.com/monerium/js-monorepo/commit/5eed941e5db57c14c297f8f63b35d59c1742ed50))
+* **sdk-react-provider:** fix deps ([a2ce8f9](https://github.com/monerium/js-monorepo/commit/a2ce8f93b8a5aa9d015d9ec2158b84ad1aac57ae))
+* set gitRevision to always be main to reduce changes in docs ([2540e69](https://github.com/monerium/js-monorepo/commit/2540e69707019b0073eac69f1e7ee50021836f8c))
+* switch to npm ([3c07134](https://github.com/monerium/js-monorepo/commit/3c07134e148e96df0fad519dde97b64cc5a12e33))
+* try adding npmrc to the root of every package, pnpm publish is failing in ci ([33cdd57](https://github.com/monerium/js-monorepo/commit/33cdd57dedf4d6d73baeeb4222856a1c825c0e28))
+* update docs ([ffeefd2](https://github.com/monerium/js-monorepo/commit/ffeefd2a9bccc0d18acecd9390a7bfced5720c17))
+* update packes packagejson + cleanup ([71ac566](https://github.com/monerium/js-monorepo/commit/71ac5662b4604154ecdd1d560ae1201aa852eb0e))
+* wip commitlint ([6812fb2](https://github.com/monerium/js-monorepo/commit/6812fb2c1ac0197a1531705f7c3285b8700a747f))
+* wip test ([e10ee82](https://github.com/monerium/js-monorepo/commit/e10ee826724348e2602775ffb4a5dca2cf61271b))
+* working tests for sdk + remove network ([086d856](https://github.com/monerium/js-monorepo/commit/086d8561a8a2a61c884c50f63488327a6a2a5574))
+
 ## [0.4.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v0.3.0...sdk-react-provider-v0.4.0) (2024-12-09)
 
 
