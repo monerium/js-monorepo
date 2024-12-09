@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.0.1...sdk-react-provider-v1.0.2) (2024-12-09)
+
+
+### Bug Fixes
+
+* refresh token doc ([#106](https://github.com/monerium/js-monorepo/issues/106)) ([234bbf3](https://github.com/monerium/js-monorepo/commit/234bbf316848e5008bd70bd9539e825b6d0a12dc))
+
 ## [1.0.1](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.0.0...sdk-react-provider-v1.0.1) (2024-12-09)
 
 
