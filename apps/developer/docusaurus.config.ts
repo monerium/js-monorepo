@@ -165,14 +165,14 @@ const config: Config = {
         alt: 'Monerium Logo',
         src: 'img/logo.png',
       },
-      items: [
-        { to: '/docs', label: 'Docs', position: 'left' },
-        {
-          href: 'https://github.com/monerium/js-monorepo',
-          label: 'GitHub',
-          position: 'right',
-        },
-      ],
+      // items: [
+      //   { to: '/docs', label: 'Docs', position: 'left' },
+      //   {
+      //     href: 'https://github.com/monerium/js-monorepo',
+      //     label: 'GitHub',
+      //     position: 'right',
+      //   },
+      // ],
     },
     footer: {
       style: 'dark',
