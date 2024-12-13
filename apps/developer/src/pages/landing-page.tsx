@@ -7,6 +7,9 @@ import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
+// This used to be the landing page.
+// Can now be accessed at http://localhost:3333/js-monorepo/landing-page
+
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (

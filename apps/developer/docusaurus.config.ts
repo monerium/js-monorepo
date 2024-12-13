@@ -147,6 +147,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          routeBasePath: '/', // set /docs/ as the root path
         },
         theme: {
           customCss: './src/css/custom.css',
