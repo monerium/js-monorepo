@@ -7,6 +7,9 @@ import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
+// This used to be the landing page.
+// Can now be accessed at http://localhost:3333/js-monorepo/landing-page
+
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
@@ -17,7 +20,7 @@ function HomepageHeader() {
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link className="button button--secondary button--lg" to="/docs/">
+          <Link className="button button--secondary button--lg" to="/">
             Let's go!
           </Link>
         </div>

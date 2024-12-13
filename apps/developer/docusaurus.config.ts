@@ -147,6 +147,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          routeBasePath: '/', // set /docs/ as the root path
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -164,14 +165,14 @@ const config: Config = {
         alt: 'Monerium Logo',
         src: 'img/logo.png',
       },
-      items: [
-        { to: '/docs', label: 'Docs', position: 'left' },
-        {
-          href: 'https://github.com/monerium/js-monorepo',
-          label: 'GitHub',
-          position: 'right',
-        },
-      ],
+      // items: [
+      //   { to: '/docs', label: 'Docs', position: 'left' },
+      //   {
+      //     href: 'https://github.com/monerium/js-monorepo',
+      //     label: 'GitHub',
+      //     position: 'right',
+      //   },
+      // ],
     },
     footer: {
       style: 'dark',
