@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.1.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.0.1...sdk-v3.1.0) (2025-01-06)
+
+
+### Features
+
+* sandbox chains now use testnet names (e.g. ethereum -&gt; sepolia, gnosis -> chiado ...)  ([#110](https://github.com/monerium/js-monorepo/issues/110)) ([40bfdf2](https://github.com/monerium/js-monorepo/commit/40bfdf2f65b41f3d89ab4af60e959506edaf6d67))
+
+
+### Bug Fixes
+
+* refresh token doc ([#106](https://github.com/monerium/js-monorepo/issues/106)) ([234bbf3](https://github.com/monerium/js-monorepo/commit/234bbf316848e5008bd70bd9539e825b6d0a12dc))
+
 ## [3.0.1](https://github.com/monerium/js-monorepo/compare/sdk-v3.0.0...sdk-v3.0.1) (2024-12-09)
 
 
