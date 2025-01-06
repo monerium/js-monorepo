@@ -79,10 +79,10 @@ importers:
         specifier: ^11.11.5
         version: 11.13.0(@emotion/react@11.13.0(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       '@monerium/sdk':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/sdk
       '@monerium/sdk-react-provider':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../../packages/sdk-react-provider
       '@mui/icons-material':
         specifier: ^5.15.19
@@ -207,7 +207,7 @@ importers:
         specifier: 3.5.2
         version: 3.5.2(esbuild@0.23.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       docusaurus-plugin-typedoc:
-        specifier: ^1.0.4
+        specifier: 1.0.4
         version: 1.0.4(typedoc-plugin-markdown@4.2.5(typedoc@0.26.5(typescript@5.2.2)))
       typescript:
         specifier: ~5.2.2
@@ -289,7 +289,7 @@ importers:
   packages/sdk-react-provider:
     dependencies:
       '@monerium/sdk':
-        specifier: workspace:latest
+        specifier: workspace:*
         version: link:../sdk
       '@tanstack/react-query':
         specifier: '>=5.0.0'
@@ -9545,6 +9545,7 @@ packages:
 
   sudo-prompt@9.2.1:
     resolution: {integrity: sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   superstruct@1.0.4:
     resolution: {integrity: sha512-7JpaAoX2NGyoFlI9NBh66BQXGONc+uE+MRS5i2iOBKuS4e+ccgMDjATgZldkah+33DakBxDHiss9kvUcGAO8UQ==}

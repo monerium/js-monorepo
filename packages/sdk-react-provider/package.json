@@ -35,10 +35,11 @@
     "pub:pre": "pnpm publish --no-git-checks --dry-run",
     "test": "jest",
     "test:watch": "jest --watch",
-    "type-map": "tsc --emitDeclarationOnly --declaration"
+    "type-map": "tsc --emitDeclarationOnly --declaration",
+    "clean": "rm -rf dist node_modules .turbo"
   },
   "dependencies": {
-    "@monerium/sdk": "workspace:latest"
+    "@monerium/sdk": "workspace:*"
   },
   "peerDependencies": {
     "@tanstack/react-query": ">=5.0.0",

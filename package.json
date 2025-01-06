@@ -12,9 +12,7 @@
     "lint:style": "turbo lint:style",
     "pub:pre": "turbo pub:pre",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "pnpm run clean:build && pnpm run clean:npm",
-    "clean:build": "rm -rf apps/customer/.next packages/sdk-react-provider/dist packages/sdk/dist",
-    "clean:npm": "rm -rf node_modules pnpm-lock.yaml packages/sdk-react-provider/node_modules apps/customer/node_modules",
+    "clean": "rm -rf node_modules pnpm-lock.yaml .turbo && turbo clean",
     "prepare": "husky"
   },
   "dependencies": {
@@ -37,8 +35,8 @@
     "ts-jest": "^29.1.4",
     "tsup": "^8.1.0",
     "turbo": "^2.0.14",
-    "typedoc": "^0.26.4",
-    "typedoc-plugin-markdown": "^4.2.5"
+    "typedoc": "0.26.11",
+    "typedoc-plugin-markdown": "4.2.5"
   },
   "packageManager": "pnpm@9.4.0",
   "engines": {

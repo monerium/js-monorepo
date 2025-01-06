@@ -63,7 +63,7 @@ describe('MoneriumClient', () => {
             address: PUBLIC_KEY,
             // message: message,
             signature: OWNER_SIGNATURE,
-            chain: 'ethereum',
+            chain: 'sepolia',
           }),
         })
       );
@@ -107,7 +107,7 @@ describe('MoneriumClient', () => {
       expect(fetchMock?.mock?.calls?.length).toEqual(1);
 
       expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
-        `https://api.monerium.dev/addresses?profile=mockTestProfile&chain=ethereum`
+        `https://api.monerium.dev/addresses?profile=mockTestProfile&chain=sepolia`
       );
       expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
         expect.objectContaining({
@@ -129,14 +129,37 @@ describe('MoneriumClient', () => {
         })
       );
     });
+    test('get balances - support old chain translation', async () => {
+      await client.getBalances('0x1234', 'ethereum').catch(() => ({}));
+
+      expect(fetchMock?.mock?.calls?.length).toEqual(1);
+
+      expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
+        `https://api.monerium.dev/balances/sepolia/0x1234`
+      );
+      expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
+        expect.objectContaining({
+          method: 'GET',
+        })
+      );
+    });
   });
 
   describe('IBANs', () => {
-    //
-    //
-    //
-    //
-    // TODO: add get Iban tests
+    test('get iban', async () => {
+      await client.getIban('IS1234').catch(() => ({}));
+
+      expect(fetchMock?.mock?.calls?.length).toEqual(1);
+
+      expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
+        `https://api.monerium.dev/ibans/IS1234`
+      );
+      expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
+        expect.objectContaining({
+          method: 'GET',
+        })
+      );
+    });
 
     test('move iban with chain', async () => {
       const body = {
@@ -155,7 +178,7 @@ describe('MoneriumClient', () => {
           method: 'PATCH',
           body: JSON.stringify({
             address: PUBLIC_KEY,
-            chain: 'ethereum',
+            chain: 'sepolia',
           }),
         })
       );
@@ -177,7 +200,7 @@ describe('MoneriumClient', () => {
           method: 'PATCH',
           body: JSON.stringify({
             address: PUBLIC_KEY,
-            chain: 'ethereum',
+            chain: 'sepolia',
           }),
         })
       );
@@ -200,12 +223,36 @@ describe('MoneriumClient', () => {
           method: 'POST',
           body: JSON.stringify({
             address: PUBLIC_KEY,
-            chain: 'ethereum',
+            chain: 'sepolia',
             emailNotifications: true,
           }),
         })
       );
     });
+  });
+  test('request iban with chainId - support old chain translation', async () => {
+    const body = {
+      address: PUBLIC_KEY,
+      chain: 'ethereum',
+      emailNotifications: true, // not sure if this should be here
+    };
+    await client.requestIban(body).catch(() => ({}));
+
+    expect(fetchMock?.mock?.calls?.length).toEqual(1);
+
+    expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
+      `https://api.monerium.dev/ibans`
+    );
+    expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({
+          address: PUBLIC_KEY,
+          chain: 'sepolia',
+          emailNotifications: true,
+        }),
+      })
+    );
   });
   describe('Orders', () => {
     test('place order with chainId', async () => {
@@ -260,7 +307,7 @@ describe('MoneriumClient', () => {
             },
             message: placeOrderMessage,
             memo: 'Powered by Monerium SDK',
-            chain: 'ethereum',
+            chain: 'sepolia',
           }),
         })
       );
@@ -310,7 +357,7 @@ describe('MoneriumClient', () => {
               identifier: {
                 standard: PaymentStandard.chain,
                 address: '0x1234567890123456789012345678901234567890',
-                chain: 'ethereum',
+                chain: 'sepolia',
               },
               details: {
                 firstName: 'Mockbank',
@@ -319,7 +366,7 @@ describe('MoneriumClient', () => {
             },
             message: placeOrderMessage,
             memo: 'Powered by Monerium SDK',
-            chain: 'ethereum',
+            chain: 'sepolia',
           }),
         })
       );

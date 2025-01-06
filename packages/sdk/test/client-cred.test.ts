@@ -24,6 +24,7 @@ import {
   APP_ONE_CREDENTIALS_SECRET,
   APP_ONE_OWNER_USER_ID,
   DEFAULT_PROFILE,
+  IBAN,
   OWNER_SIGNATURE,
   PUBLIC_KEY,
 } from './constants.js';
@@ -53,12 +54,12 @@ process.env.CI !== 'true' &&
       const tokens = await client.getTokens();
 
       const ethToken = tokens.find(
-        (t) => t.chain === 'ethereum' && t.symbol === 'EURe'
+        (t) => t.chain === 'sepolia' && t.symbol === 'EURe'
       );
 
       expect(ethToken).toMatchObject({
         address: '0x67b34b93ac295c985e856E5B8A20D83026b580Eb',
-        chain: 'ethereum',
+        chain: 'sepolia',
         currency: 'eur',
         decimals: 18,
         symbol: 'EURe',
@@ -84,7 +85,29 @@ process.env.CI !== 'true' &&
               linkedBy: APP_ONE_OWNER_USER_ID,
             }),
             profile: profiles?.[0]?.id as string,
-            state: '',
+            state: 'linked',
+          })
+        );
+      });
+      test('link address - support old chain translation', async () => {
+        const { profiles } = await client.getProfiles();
+
+        const res = await client.linkAddress({
+          // profile: profiles?.[0]?.id as string,
+          address: PUBLIC_KEY,
+          // message: message,
+          chain: 'ethereum',
+          signature: OWNER_SIGNATURE,
+        });
+
+        expect(res).toEqual(
+          expect.objectContaining({
+            address: PUBLIC_KEY,
+            meta: expect.objectContaining({
+              linkedBy: APP_ONE_OWNER_USER_ID,
+            }),
+            profile: profiles?.[0]?.id as string,
+            state: 'linked',
           })
         );
       });
@@ -92,7 +115,7 @@ process.env.CI !== 'true' &&
         const address = await client.getAddress(PUBLIC_KEY).catch(() => ({}));
 
         expect(address).toMatchObject({
-          chains: ['gnosis', 'ethereum', 'polygon'],
+          chains: ['arbitrumsepolia', 'sepolia', 'chiado'],
           address: PUBLIC_KEY,
           profile: DEFAULT_PROFILE,
         });
@@ -100,13 +123,28 @@ process.env.CI !== 'true' &&
       test('get addresses', async () => {
         const { addresses } = await client.getAddresses({
           profile: DEFAULT_PROFILE,
-          chain: 11155111,
+          chain: 10200,
         });
 
         expect(addresses).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              chains: ['ethereum'],
+              chains: ['chiado'],
+              address: PUBLIC_KEY,
+            }),
+          ])
+        );
+      });
+      test('get addresses - support old chain translation', async () => {
+        const { addresses } = await client.getAddresses({
+          profile: DEFAULT_PROFILE,
+          chain: 'gnosis',
+        });
+
+        expect(addresses).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              chains: ['chiado'],
               address: PUBLIC_KEY,
             }),
           ])
@@ -119,7 +157,7 @@ process.env.CI !== 'true' &&
         expect(balances).toEqual(
           expect.objectContaining({
             // id: '4b208818-44e3-11ed-adac-b2efc0e6677d',
-            chain: 'ethereum',
+            chain: 'sepolia',
             address: PUBLIC_KEY,
             balances: expect.arrayContaining([
               expect.objectContaining({
@@ -132,32 +170,31 @@ process.env.CI !== 'true' &&
       }, 15000);
     });
     describe('IBANs', () => {
-      const expectedIban = 'IS90 7440 0562 4145 5210 3666 89';
       test('get IBANs', async () => {
         const { ibans } = await client.getIbans({ profile: DEFAULT_PROFILE });
 
         expect(ibans).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              chain: 'gnosis',
+              chain: 'chiado',
               profile: DEFAULT_PROFILE,
-              iban: expectedIban,
+              iban: IBAN,
             }),
           ])
         );
       });
       test('get IBAN', async () => {
-        const iban = await client.getIban(expectedIban);
+        const iban = await client.getIban(IBAN);
         expect(iban).toEqual(
           expect.objectContaining({
-            chain: 'gnosis',
+            chain: 'chiado',
             profile: DEFAULT_PROFILE,
-            iban: expectedIban,
+            iban: IBAN,
           })
         );
       });
       test('move iban with chain', async () => {
-        const res = await client.moveIban('IS90 7440 0562 4145 5210 3666 89', {
+        const res = await client.moveIban(IBAN, {
           address: PUBLIC_KEY,
           chain: 10200,
         });
@@ -209,7 +246,7 @@ process.env.CI !== 'true' &&
 
       test('get order', async () => {
         const order = await client.getOrder(
-          '7859502a-4b5d-11ef-88d4-46da5b198e23'
+          '48525446-cc1f-11ef-92b5-aae55502171d'
         );
 
         expect(order.kind).toBe('redeem');
@@ -275,6 +312,38 @@ process.env.CI !== 'true' &&
             },
             message: placeOrderMessage,
             memo: 'Powered by Monerium SDK',
+            chain: 'sepolia',
+          })
+        ).rejects.toMatchObject({
+          errors: {
+            message: 'timestamp is expired',
+          },
+        });
+      });
+      test('place order timestamp error - support old chain translation', async () => {
+        const date = 'Thu, 29 Dec 2022 14:58 +00:00';
+        const placeOrderMessage = `Send EUR 10 to GR1601101250000000012300695 at ${date}`;
+        const placeOrderSignatureHash =
+          '0x23bf7e1b240d238b13cb293673c3419915402bb34435af62850b1d8e63f82c564fb73ab19691cf248594423dd01e441bb2ccb38ce2e2ecc514dfc3075bea829e1c';
+
+        await expect(
+          client.placeOrder({
+            amount: '10',
+            signature: placeOrderSignatureHash,
+            currency: Currency.eur,
+            address: PUBLIC_KEY,
+            counterpart: {
+              identifier: {
+                standard: PaymentStandard.iban,
+                iban: 'GR1601101250000000012300695',
+              },
+              details: {
+                firstName: 'Mockbank',
+                lastName: 'Testerson',
+              },
+            },
+            message: placeOrderMessage,
+            memo: 'Powered by Monerium SDK',
             chain: 'ethereum',
           })
         ).rejects.toMatchObject({
@@ -298,13 +367,6 @@ process.env.CI !== 'true' &&
         }
       });
     });
-    // test('move iban with chain', async () => {
-    //   const body = {
-    //     address: PUBLIC_KEY,
-    //     chain: 11155111,
-    //   };
-    //   await client.moveIban('IS1234', body)
-    // });
 
     describe('Profiles', () => {
       /**

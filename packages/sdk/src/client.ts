@@ -52,7 +52,11 @@ import type {
   SupportingDoc,
   Token,
 } from './types';
-import { mapChainIdToChain, parseChain, urlEncoded } from './utils';
+import {
+  mapChainIdToChain,
+  parseChainBackwardsCompatible,
+  urlEncoded,
+} from './utils';
 
 // import pjson from "../package.json";
 const { STORAGE_CODE_VERIFIER, STORAGE_ACCESS_TOKEN, STORAGE_ACCESS_EXPIRY } =
@@ -167,7 +171,7 @@ export class MoneriumClient {
       throw new Error('Missing ClientId');
     }
 
-    const authFlowUrl = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, {
+    const authFlowUrl = getAuthFlowUrlAndStoreCodeVerifier(this.#env, {
       client_id: clientId,
       redirect_uri: redirectUri,
       address: params?.address,
@@ -408,7 +412,7 @@ export class MoneriumClient {
    * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses | API Documentation}
    */
   getAddresses(params?: AddressesQueryParams): Promise<AddressesResponse> {
-    params = mapChainIdToChain(params);
+    params = mapChainIdToChain(this.#env.name, params);
     const searchParams = params
       ? urlEncoded(params as unknown as Record<string, string>)
       : undefined;
@@ -431,9 +435,11 @@ export class MoneriumClient {
         ? `currency=${currencies}`
         : '';
 
+    const chainParam = parseChainBackwardsCompatible(this.#env.name, chain);
+
     return this.#api<Balances>(
       'get',
-      `balances/${parseChain(chain)}/${address}${currencyParams ? `?${currencyParams}` : ''}`
+      `balances/${chainParam}/${address}${currencyParams ? `?${currencyParams}` : ''}`
     );
   }
 
@@ -456,7 +462,7 @@ export class MoneriumClient {
     const { profile, chain } = queryParameters || {};
     const params = queryParams({
       profile,
-      chain: chain ? parseChain(chain) : '',
+      chain: chain ? parseChainBackwardsCompatible(this.#env.name, chain) : '',
     });
     return this.#api<IBANsResponse>('get', `ibans${params}`);
   }
@@ -490,7 +496,7 @@ export class MoneriumClient {
    * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address | API Documentation}
    */
   linkAddress(payload: LinkAddress): Promise<LinkedAddress> {
-    payload = mapChainIdToChain(payload);
+    payload = mapChainIdToChain(this.#env.name, payload);
     return this.#api<LinkedAddress>(
       'post',
       `addresses`,
@@ -506,10 +512,13 @@ export class MoneriumClient {
   placeOrder(order: NewOrder): Promise<Order> {
     const body = {
       kind: 'redeem',
-      ...mapChainIdToChain(order),
+      ...mapChainIdToChain(this.#env.name, order),
       counterpart: {
         ...order.counterpart,
-        identifier: mapChainIdToChain(order.counterpart.identifier),
+        identifier: mapChainIdToChain(
+          this.#env.name,
+          order.counterpart.identifier
+        ),
       },
     };
 
@@ -529,7 +538,10 @@ export class MoneriumClient {
     return this.#api<ResponseStatus>(
       'patch',
       `ibans/${iban}`,
-      JSON.stringify({ address, chain: parseChain(chain) })
+      JSON.stringify({
+        address,
+        chain: parseChainBackwardsCompatible(this.#env.name, chain),
+      })
     );
   }
 
@@ -546,7 +558,11 @@ export class MoneriumClient {
     return this.#api<ResponseStatus>(
       'post',
       `ibans`,
-      JSON.stringify({ address, chain: parseChain(chain), emailNotifications })
+      JSON.stringify({
+        address,
+        chain: parseChainBackwardsCompatible(this.#env.name, chain),
+        emailNotifications,
+      })
     );
   }
 
@@ -776,7 +792,10 @@ export class MoneriumClient {
    * @hidden
    */
   getAuthFlowURI = (args: PKCERequestArgs): string => {
-    const url = getAuthFlowUrlAndStoreCodeVerifier(this.#env.api, args);
+    const url = getAuthFlowUrlAndStoreCodeVerifier(
+      this.#env,
+      mapChainIdToChain(this.#env.name, args)
+    );
     return url;
   };
 }

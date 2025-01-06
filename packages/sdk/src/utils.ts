@@ -1,4 +1,4 @@
-import { Balances, Chain, ChainId, Currency } from './types';
+import { Balances, Chain, ChainId, Currency, Environment } from './types';
 
 /**
  *
@@ -44,7 +44,7 @@ const isValidCosmosChainName = (chain: string) => {
   switch (chain) {
     case 'noble':
     case 'noble-1':
-    case 'florin-1':
+    case 'grand':
     case 'grand-1':
       return true;
     default:
@@ -55,9 +55,15 @@ const isValidCosmosChainName = (chain: string) => {
 const isValidEvmName = (chain: string) => {
   switch (chain) {
     case 'ethereum':
+    case 'sepolia':
     case 'polygon':
+    case 'amoy':
     case 'gnosis':
+    case 'chiado':
     case 'arbitrum':
+    case 'arbitrumsepolia':
+    case 'linea':
+    case 'lineasepolia':
       return true;
     default:
       return false;
@@ -69,12 +75,12 @@ const isValidEvmName = (chain: string) => {
  * @param chain The chainId of the network
  * @returns chain name, 'ethereum', 'polygon', 'gnosis', etc.
  */
-export const parseChain = (chain: Chain | ChainId | number | string): Chain => {
+export const parseChain = (chain: Chain | ChainId): Chain => {
   if (typeof chain === 'number') {
     return getChain(chain);
   }
   if (isValidCosmosChainName(chain)) {
-    return 'noble';
+    return chain.split('-')[0] as Chain;
   }
   if (isValidEvmName(chain)) {
     return chain as Chain;
@@ -85,6 +91,13 @@ export const parseChain = (chain: Chain | ChainId | number | string): Chain => {
   } catch (e) {
     throw new Error(`Chain not supported: ${chain}`);
   }
+};
+
+export const parseChainBackwardsCompatible = (
+  env: Environment['name'],
+  chain: Chain | ChainId
+) => {
+  return parseChain(chainNameBackwardsCompatibility(chain, env));
 };
 
 /**
@@ -151,29 +164,37 @@ export const urlEncoded = (
  * @example
  * ```ts
  * getChain(1) // 'ethereum'
- * getChain(11155111) // 'ethereum'
+ * getChain(11155111) // 'sepolia'
  *
  * getChain(100) // 'gnosis'
- * getChain(10200) // 'gnosis'
+ * getChain(10200) // 'chiado'
  *
  * getChain(137) // 'polygon'
- * getChain(80002) // 'polygon'
+ * getChain(80002) // 'amoy'
  * ```
  */
 export const getChain = (chainId: number): Chain => {
   switch (chainId) {
     case 1:
-    case 11155111:
       return 'ethereum';
+    case 11155111:
+      return 'sepolia';
     case 100:
-    case 10200:
       return 'gnosis';
+    case 10200:
+      return 'chiado';
     case 137:
-    case 80002:
       return 'polygon';
+    case 80002:
+      return 'amoy';
     case 42161:
-    case 421614:
       return 'arbitrum';
+    case 421614:
+      return 'arbitrumsepolia';
+    case 59144:
+      return 'linea';
+    case 59141:
+      return 'lineasepolia';
     default:
       throw new Error(`Chain not supported: ${chainId}`);
   }
@@ -204,12 +225,36 @@ export const getAmount = (
   return balance?.find((balance) => balance.currency === curr)?.amount || '0';
 };
 
-export const mapChainIdToChain = (body: any) => {
+const chainNameBackwardsCompatibility = (
+  chain: Chain | ChainId,
+  env: Environment['name']
+) => {
+  if (env === 'sandbox') {
+    switch (chain) {
+      case 'ethereum':
+        return 'sepolia';
+      case 'polygon':
+        return 'amoy';
+      case 'gnosis':
+        return 'chiado';
+      case 'arbitrum':
+        return 'arbitrumsepolia';
+      case 'noble':
+        return 'grand';
+      default:
+        return chain;
+    }
+  }
+  return chain;
+};
+
+export const mapChainIdToChain = (env: Environment['name'], body: any) => {
   if (body?.chain) {
     const { chain, ...rest } = body;
+
     return {
       ...rest,
-      chain: parseChain(chain),
+      chain: parseChain(chainNameBackwardsCompatibility(chain, env)),
     };
   }
   return body;

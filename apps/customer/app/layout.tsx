@@ -23,16 +23,28 @@ export const metadata: Metadata = {
     'Monerium issues onchain fiat – directly transferable between your wallet and bank accounts.',
 };
 
-export default function RootLayout({
+const fetchThemeMode = async () => {
+  const cookieStore = await cookies();
+  return cookieStore?.get('themeMode')?.value || 'light';
+};
+
+const LayoutWrapper = async ({ children }: { children: React.ReactNode }) => {
+  const themeMode = await fetchThemeMode();
+
+  return <Layout themeMode={themeMode}>{children}</Layout>;
+};
+
+const Layout = ({
   children,
-}: Readonly<{
+  themeMode,
+}: {
   children: React.ReactNode;
-}>) {
-  const cookieStore = cookies();
-  const themeMode = cookieStore?.get('themeMode')?.value || 'light';
+  themeMode: string;
+}) => {
   return (
     <html lang="en" data-mui-color-scheme={themeMode}>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>
+        {' '}
         <Providers>
           <ThemeModeToggle />
           {children}
@@ -40,4 +52,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default LayoutWrapper;
