@@ -11,6 +11,9 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "env": ["STANDALONE", "false"]
     },
+    "clean": {
+      "cache": false
+    },
     "@monerium/sdk-react-provider#dev": {
       "dependsOn": ["@monerium/sdk#type-map"]
     },

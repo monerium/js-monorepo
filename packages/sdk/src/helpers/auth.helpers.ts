@@ -6,11 +6,12 @@ import {
   AuthArgs,
   AuthCodePayload,
   ClientCredentialsPayload,
+  Environment,
   PKCERequest,
   PKCERequestArgs,
   RefreshTokenPayload,
 } from '../types';
-import { parseChain, urlEncoded } from '../utils';
+import { mapChainIdToChain, urlEncoded } from '../utils';
 
 /** Structure the Auth Flow params */
 export const getAuthFlowParams = (
@@ -33,7 +34,7 @@ export const getAuthFlowParams = (
     ? {
         address: address,
         ...(signature !== undefined ? { signature: signature } : {}),
-        ...(chain !== undefined ? { chain: parseChain(chain) } : {}),
+        ...(chain !== undefined ? { chain: chain } : {}),
       }
     : {};
 
@@ -82,7 +83,7 @@ export const generateCodeChallenge = (codeVerifier: string) => {
  * Constructs the Auth Flow URL and stores the code verifier in the local storage
  */
 export const getAuthFlowUrlAndStoreCodeVerifier = (
-  baseUrl: string,
+  environment: Environment,
   args: PKCERequestArgs
 ): string => {
   const codeVerifier = generateRandomString();
@@ -90,7 +91,7 @@ export const getAuthFlowUrlAndStoreCodeVerifier = (
 
   localStorage.setItem(constants.STORAGE_CODE_VERIFIER, codeVerifier || '');
 
-  return `${baseUrl}/auth?${getAuthFlowParams(args, codeChallenge)}`;
+  return `${environment.api}/auth?${getAuthFlowParams(mapChainIdToChain(environment.name, args), codeChallenge)}`;
 };
 
 /**

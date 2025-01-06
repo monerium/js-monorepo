@@ -218,27 +218,43 @@ describe('mapChainIdToChain', () => {
       chain: getChain(11155111),
     };
 
-    expect(mapChainIdToChain(body)).toEqual(expectedBody);
+    expect(mapChainIdToChain('sandbox', body)).toEqual(expectedBody);
+  });
+  it('should be backwards compatible', () => {
+    const body = { chain: 'ethereum' };
+    const expectedBody = {
+      chain: 'sepolia',
+    };
+
+    expect(mapChainIdToChain('sandbox', body)).toEqual(expectedBody);
+  });
+
+  it('should work on prod', () => {
+    const body = { chain: 'ethereum' };
+    const expectedBody = {
+      chain: 'ethereum',
+    };
+
+    expect(mapChainIdToChain('production', body)).toEqual(expectedBody);
   });
 
   it('should not modify the body object if chainId is not present', () => {
     const body = { someProperty: 'someValue' };
     const expectedBody = { ...body };
 
-    expect(mapChainIdToChain(body)).toEqual(expectedBody);
+    expect(mapChainIdToChain('sandbox', body)).toEqual(expectedBody);
   });
 });
 describe('parseChain', () => {
   it('chainIds to should be parsed to monerium chain identifier', () => {
     expect(parseChain(1)).toBe('ethereum');
-    expect(parseChain(11155111)).toBe('ethereum');
+    expect(parseChain(11155111)).toBe('sepolia');
     expect(parseChain(137)).toBe('polygon');
-    expect(parseChain(80002)).toBe('polygon');
-    expect(parseChain(80002)).toBe('polygon');
+    expect(parseChain(80002)).toBe('amoy');
     expect(parseChain('ethereum')).toBe('ethereum');
     expect(parseChain('noble')).toBe('noble');
     expect(parseChain('noble-1')).toBe('noble');
-    expect(parseChain('florin-1')).toBe('noble');
+    expect(parseChain('grand-1')).toBe('grand');
     expect(parseChain('1')).toBe('ethereum');
     expect(() => parseChain(2)).toThrow('Chain not supported: 2');
   });

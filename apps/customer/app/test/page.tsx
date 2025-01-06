@@ -35,6 +35,8 @@ import {
   useTokens,
 } from '@monerium/sdk-react-provider';
 export default function Test() {
+  // https://punkwallet.io/pk#0xc3dba5f61acf6675aee27b7141db8decf7d4e7514afafdd6b764e02138c53cac
+  const COUNTERPART_ADDRESS = '0x28Bd09f59A40A0B42dAC69Ef43ef7Ffa37F12Ead';
   /**
    * Wagmi
    */
@@ -542,9 +544,9 @@ export default function Test() {
         </select>
         <Input
           name="counterpart-identifier-address"
-          defaultValue="0x1f77Bdedb8751C525E5C4223eA86C32972FB2c68"
+          defaultValue={COUNTERPART_ADDRESS}
         />
-        <Input name="counterpart-identifier-chain" defaultValue="polygon" />
+        <Input name="counterpart-identifier-chain" defaultValue="amoy" />
         <Input name="counterpart-details-first-name" defaultValue="John" />
         <Input name="counterpart-details-last-name" defaultValue="Doe" />
         <Input name="counterpart-details-country" defaultValue="IS" />

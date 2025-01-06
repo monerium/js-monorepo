@@ -1,6 +1,6 @@
 // --- Config --- //
 
-export type Environment = { api: string; web: string; wss: string };
+export type Environment = { name: ENV; api: string; web: string; wss: string };
 
 export type Config = {
   environments: { production: Environment; sandbox: Environment };
@@ -8,18 +8,36 @@ export type Config = {
 
 export type ENV = 'sandbox' | 'production';
 
-export type Chain = 'ethereum' | 'gnosis' | 'polygon' | 'arbitrum' | 'noble';
+export type SandboxChain =
+  | 'sepolia'
+  | 'chiado'
+  | 'amoy'
+  | 'arbitrumsepolia'
+  | 'lineasepolia'
+  | 'grand';
+
+export type ProductionChain =
+  | 'ethereum'
+  | 'gnosis'
+  | 'polygon'
+  | 'arbitrum'
+  | 'linea'
+  | 'noble';
+
+export type Chain = string | ProductionChain | SandboxChain;
 
 export type EvmChainId =
   | number
-  | 1
-  | 11155111
-  | 100
-  | 137
-  | 10200
-  | 80002
-  | 42161
-  | 421614;
+  | 1 // ethereum mainnet
+  | 11155111 // ethereum sepolia
+  | 100 // gnosis
+  | 10200 // gnosis chiado
+  | 137 // polygon
+  | 80002 // polygon amoy
+  | 42161 // arbitrum
+  | 421614 // arbitrum sepolia
+  | 59141 // linea sepolia
+  | 59144; // linea
 
 export type ChainId = EvmChainId | CosmosChainId;
 

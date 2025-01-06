@@ -85,7 +85,7 @@ process.env.CI !== 'true' &&
       const challenge = generateCodeChallenge(codeVerifier as string);
 
       expect(authFlowUrl).toBe(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x&chain=ethereum`
+        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x&chain=sepolia`
       );
     });
 
@@ -103,7 +103,7 @@ process.env.CI !== 'true' &&
       const challenge = generateCodeChallenge(codeVerifier as string);
 
       expect(authFlowUrl).toBe(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x&chain=ethereum`
+        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x&chain=sepolia`
       );
     });
 
@@ -123,6 +123,25 @@ process.env.CI !== 'true' &&
       );
     });
 
+    test('connect wallet', async () => {
+      const client = new MoneriumClient();
+
+      await client.authorize({
+        redirectUri: 'http://example.com',
+        clientId: 'testClientId',
+        address: '0x1234',
+        signature: '0x5678',
+        chain: 'gnosis',
+      });
+
+      const codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER);
+      const challenge = generateCodeChallenge(codeVerifier as string);
+
+      expect(assignMock).toHaveBeenCalledWith(
+        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x1234&signature=0x5678&chain=chiado`
+      );
+      assignMock.mockRestore();
+    });
     test('redirect', async () => {
       const client = new MoneriumClient();
 
@@ -185,7 +204,7 @@ process.env.CI !== 'true' &&
     test('get chain and network from chainId', () => {
       expect(getChain(1)).toBe('ethereum');
       expect(getChain(137)).toBe('polygon');
-      expect(getChain(80002)).toBe('polygon');
+      expect(getChain(80002)).toBe('amoy');
     });
   });
 
