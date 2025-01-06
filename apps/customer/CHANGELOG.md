@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/monerium/js-monorepo/compare/customer-v0.2.0...customer-v0.3.0) (2025-01-06)
+
+
+### Features
+
+* sandbox chains now use testnet names (e.g. ethereum -&gt; sepolia, gnosis -> chiado ...)  ([#110](https://github.com/monerium/js-monorepo/issues/110)) ([40bfdf2](https://github.com/monerium/js-monorepo/commit/40bfdf2f65b41f3d89ab4af60e959506edaf6d67))
+
 ## [0.2.0](https://github.com/monerium/js-monorepo/compare/customer-v0.1.0...customer-v0.2.0) (2024-12-09)
 
 
