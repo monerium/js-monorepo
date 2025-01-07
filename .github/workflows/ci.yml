@@ -55,7 +55,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ../apps/developer/build
+          publish_dir: ./apps/developer/build
 
       - name: Test
         run: pnpm test
