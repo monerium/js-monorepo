@@ -52,12 +52,12 @@ jobs:
         run: pnpm build
 
       - name: Generate Documentation
-        if: github.ref == 'refs/heads/main'
+        if: ${{ needs.release-please.outputs.releases_created }}
         run: pnpm run generate-docs
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        if: github.ref == 'refs/heads/main'
+        if: ${{ needs.release-please.outputs.releases_created }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./apps/developer/build
