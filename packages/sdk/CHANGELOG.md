@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.1.0...sdk-v3.2.0) (2025-01-07)
+
+
+### Features
+
+* add authorize email query-param ([#112](https://github.com/monerium/js-monorepo/issues/112)) ([d55b947](https://github.com/monerium/js-monorepo/commit/d55b9471bed9b9789f26e293b6775c0a5c661329))
+
 ## [3.1.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.0.1...sdk-v3.1.0) (2025-01-06)
 
 
