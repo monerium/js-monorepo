@@ -666,6 +666,18 @@ export default function Test() {
             <button type="submit" onClick={authorize}>
               Authorize
             </button>
+            <button
+              type="submit"
+              onClick={() =>
+                authorize({
+                  email: 'test@test.is',
+                  skipCreateAccount: true,
+                  skipKyc: true,
+                })
+              }
+            >
+              Authorize min (skip KYC and Wallet Connection)
+            </button>
             <button type="submit" onClick={autoLink}>
               Authorize with auto linking.
             </button>

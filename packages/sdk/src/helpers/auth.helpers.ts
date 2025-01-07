@@ -26,6 +26,7 @@ export const getAuthFlowParams = (
     address,
     signature,
     chain,
+    email,
     skip_create_account,
     skip_kyc,
   } = args;
@@ -42,6 +43,7 @@ export const getAuthFlowParams = (
     client_id,
     redirect_uri,
     ...(scope !== undefined ? { scope: scope } : {}),
+    ...(email !== undefined ? { email: email } : {}),
     ...(state !== undefined ? { state: state } : {}),
     ...(skip_create_account !== undefined
       ? { skip_create_account: skip_create_account }
