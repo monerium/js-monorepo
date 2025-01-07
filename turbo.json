@@ -12,6 +12,7 @@
       "env": ["STANDALONE", "false"]
     },
     "developer#build": {
+      "cache": false,
       "dependsOn": [
         "@monerium/sdk#build",
         "@monerium/sdk-react-provider#build"
