@@ -59,7 +59,7 @@ jobs:
         id: docs-deployment
         uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
         with:
-          path: ./apps/developer/build
+          path: apps/developer/build
 
       # - name: Deploy to GitHub Pages
       #   uses: peaceiris/actions-gh-pages@v4
