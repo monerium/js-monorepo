@@ -178,6 +178,7 @@ export class MoneriumClient {
       signature: params?.signature,
       chain: params?.chain,
       state: params?.state,
+      email: params?.email,
       skip_create_account: params?.skipCreateAccount,
       skip_kyc: params?.skipKyc,
     });

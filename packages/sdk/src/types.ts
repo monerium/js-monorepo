@@ -131,6 +131,8 @@ export type PKCERequest = {
   state?: string;
   /** the redirect uri of the application */
   redirect_uri: string;
+  /** the email of the user to prefill the login form */
+  email?: string;
   /** the scope of the application */
   scope?: string;
   /** the address of the wallet to automatically link */
@@ -565,6 +567,8 @@ export interface AuthFlowOptions {
   clientId?: string;
   /** the redirect URI defined by your application */
   redirectUri?: string;
+  /** the email of the user to prefill the login form */
+  email?: string;
   /** the address your customer should link in auth flow */
   address?: string;
   /** the signature of the address */
