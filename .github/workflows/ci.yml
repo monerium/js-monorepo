@@ -51,9 +51,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Generate Documentation
-        run: pnpm run generate-docs
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

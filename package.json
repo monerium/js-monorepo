@@ -6,7 +6,6 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "docs": "turbo docs",
-    "generate-docs": "turbo generate-docs",
     "lint": "turbo lint",
     "test": "turbo test",
     "lint:style": "turbo lint:style",
