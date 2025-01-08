@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.1.0...sdk-react-provider-v1.1.1) (2025-01-08)
+
+
+### Bug Fixes
+
+* depend on workspace latest ([#115](https://github.com/monerium/js-monorepo/issues/115)) ([3641aff](https://github.com/monerium/js-monorepo/commit/3641aff775cfd30ceaaae7f14601f17e20527d94))
+
 ## [1.1.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.0.1...sdk-react-provider-v1.1.0) (2025-01-06)
 
 
