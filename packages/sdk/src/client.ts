@@ -133,7 +133,10 @@ export class MoneriumClient {
           clientId,
           redirectUri,
         };
-      } else {
+      } else if (
+        isServer &&
+        (envOrOptions as ClientCredentials)?.clientSecret
+      ) {
         this.#debug('Client credentials detected');
         console.error(
           '\x1b[31m%s\x1b[0m',
