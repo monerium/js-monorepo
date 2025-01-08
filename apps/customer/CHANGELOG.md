@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/monerium/js-monorepo/compare/customer-v0.4.0...customer-v0.4.1) (2025-01-08)
+
+
+### Bug Fixes
+
+* depend on workspace latest ([#115](https://github.com/monerium/js-monorepo/issues/115)) ([3641aff](https://github.com/monerium/js-monorepo/commit/3641aff775cfd30ceaaae7f14601f17e20527d94))
+
 ## [0.4.0](https://github.com/monerium/js-monorepo/compare/customer-v0.3.0...customer-v0.4.0) (2025-01-07)
 
 
