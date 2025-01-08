@@ -39,7 +39,7 @@
     "clean": "rm -rf dist node_modules .turbo"
   },
   "dependencies": {
-    "@monerium/sdk": "workspace:*"
+    "@monerium/sdk": "workspace:latest"
   },
   "peerDependencies": {
     "@tanstack/react-query": ">=5.0.0",
