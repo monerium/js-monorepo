@@ -647,7 +647,7 @@ export default function Test() {
   const authorizeSiwe = () => {
     const siwe_message = siweMessage({
       domain: 'localhost:3000',
-      address: walletAddress,
+      address: `${walletAddress}`,
       appName: 'SDK TEST APP',
       redirectUri: 'http://localhost:3000/dashboard',
       chainId: chainId,

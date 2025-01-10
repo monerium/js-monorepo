@@ -163,8 +163,8 @@ export const siweMessage = ({
   appName: string;
   redirectUri: string;
   chainId: EvmChainId;
-  issuedAt: string;
-  expiryAt: string;
+  issuedAt?: string;
+  expiryAt?: string;
   privacyPolicyUrl: string;
   termsOfServiceUrl: string;
 }) => {
