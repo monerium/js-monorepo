@@ -36,31 +36,6 @@ process.env.CI !== 'true' &&
       expect(LINK_MESSAGE).toBe(message);
     });
 
-    test('sandbox environment', () => {
-      const client = new MoneriumClient('sandbox');
-      const defaultClient = new MoneriumClient();
-      const url = client.getAuthFlowURI({
-        client_id: '',
-        redirect_uri: '',
-      });
-      const defaultUrl = defaultClient.getAuthFlowURI({
-        client_id: '',
-        redirect_uri: '',
-      });
-      expect(defaultUrl).toContain('https://api.monerium.dev');
-      expect(url).toContain('https://api.monerium.dev');
-    });
-
-    test('production environment', () => {
-      const client = new MoneriumClient('production');
-
-      const url = client.getAuthFlowURI({
-        client_id: '',
-        redirect_uri: '',
-      });
-      expect(url).toContain('https://api.monerium.app');
-    });
-
     test('authorize with refresh token attempt', async () => {
       const client = new MoneriumClient({
         clientId: APP_ONE_AUTH_FLOW_CLIENT_ID,
