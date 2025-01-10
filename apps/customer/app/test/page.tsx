@@ -1,5 +1,5 @@
 'use client';
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useState } from 'react';
 import Link from 'next/link';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -14,6 +14,8 @@ import {
   OrderState,
   PaymentStandard,
   placeOrderMessage,
+  rfc3339,
+  siweMessage,
 } from '@monerium/sdk';
 import {
   MoneriumContext,
@@ -48,11 +50,16 @@ export default function Test() {
    * Monerium queries
    */
   const context = useContext(MoneriumContext);
-  const { isAuthorized, authorize, revokeAccess, error: authError } = useAuth();
+
+  const {
+    isAuthorized,
+    authorize,
+    siwe,
+    revokeAccess,
+    error: authError,
+  } = useAuth();
 
   const { data: profile } = useProfile();
-
-  // const { authContext } = useAuthContext();
 
   const { data: orders } = useOrders();
 
@@ -634,7 +641,22 @@ export default function Test() {
 
   const autoLink = () => {
     signMessageAsync({ message: constants.LINK_MESSAGE }).then((signature) => {
-      authorize({ address, signature, chain: chainId });
+      authorize({ address: `${address}`, signature, chain: chainId });
+    });
+  };
+  const authorizeSiwe = () => {
+    const siwe_message = siweMessage({
+      domain: 'localhost:3000',
+      address: `${walletAddress}`,
+      appName: 'SDK TEST APP',
+      redirectUri: 'http://localhost:3000/dashboard',
+      chainId: chainId,
+      privacyPolicyUrl: 'https://example.com/privacy-policy',
+      termsOfServiceUrl: 'https://example.com/terms-of-service',
+    });
+
+    signMessageAsync({ message: siwe_message }).then((signature) => {
+      siwe({ message: siwe_message, signature });
     });
   };
 
@@ -663,7 +685,7 @@ export default function Test() {
       <p>
         {!isAuthorized ? (
           <>
-            <button type="submit" onClick={authorize}>
+            <button type="submit" onClick={() => authorize()}>
               Authorize
             </button>
             <button
@@ -680,6 +702,9 @@ export default function Test() {
             </button>
             <button type="submit" onClick={autoLink}>
               Authorize with auto linking.
+            </button>
+            <button type="submit" onClick={authorizeSiwe}>
+              Siwe.
             </button>
           </>
         ) : (

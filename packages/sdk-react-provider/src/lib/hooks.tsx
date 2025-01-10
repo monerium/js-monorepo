@@ -111,6 +111,7 @@ function useSdk(): MoneriumClient | undefined {
  *
  * @returns {UseAuthReturn}
  * - `authorize`  - Redirects to the Monerium auth flow.
+ * - `siwe`       - Sign in with Ethereum. https://monerium.com/siwe
  * - `isAuthorized` - Whether the user is authorized.
  * - `isLoading` - Whether the auth flow is loading.
  * - `error` - Error message if the auth flow fails.
@@ -123,9 +124,11 @@ export function useAuth(): UseAuthReturn {
   if (context === null) {
     throw new Error('useAuth must be used within a MoneriumProvider');
   }
+
   return {
     isAuthorized: context.isAuthorized,
     authorize: context.authorize,
+    siwe: context.siwe,
     isLoading: context.isLoading,
     error: context.error,
     disconnect: context.disconnect,

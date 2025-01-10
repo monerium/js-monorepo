@@ -2,10 +2,10 @@ import { MONERIUM_CONFIG } from './config';
 import constants from './constants';
 import {
   cleanQueryString,
-  getAuthFlowUrlAndStoreCodeVerifier,
   isAuthCode,
   isClientCredentials,
   isRefreshToken,
+  preparePKCEChallenge,
   queryParams,
   rest,
 } from './helpers';
@@ -18,6 +18,7 @@ import type {
   AuthArgs,
   AuthCodePayload,
   AuthFlowOptions,
+  AuthFlowSIWEOptions,
   AuthorizationCodeCredentials,
   Balances,
   BearerProfile,
@@ -41,7 +42,8 @@ import type {
   OrderFilter,
   OrderNotificationQueryParams,
   OrdersResponse,
-  PKCERequestArgs,
+  PKCERequest,
+  PKCESIWERequest,
   Profile,
   ProfilesQueryParams,
   ProfilesResponse,
@@ -152,41 +154,86 @@ export class MoneriumClient {
   }
 
   /**
-   * Construct the url to the authorization code flow and redirects,
+   * Constructs the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
+   *
+   * This authorization code is then used to request an access token via the token endpoint. (https://monerium.dev/api-docs#operation/auth-token)
    *
    * @group Authentication
    * @see {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth | API Documentation}
    * @param {AuthFlowOptions} [params] - the auth flow params
-   * @returns string
+   * @returns void
    *
    */
   async authorize(params?: AuthFlowOptions) {
-    const clientId =
-      params?.clientId ||
-      (this.#client as AuthorizationCodeCredentials)?.clientId;
-    const redirectUri =
-      params?.redirectUri ||
-      (this.#client as AuthorizationCodeCredentials)?.redirectUri;
+    const codeChallenge = preparePKCEChallenge();
 
-    if (!clientId) {
-      throw new Error('Missing ClientId');
-    }
+    const autoLink = params?.address
+      ? {
+          address: params?.address,
+          signature: params?.signature,
+          chain: params?.chain
+            ? parseChainBackwardsCompatible(this.#env.name, params?.chain)
+            : undefined,
+        }
+      : {};
 
-    const authFlowUrl = getAuthFlowUrlAndStoreCodeVerifier(this.#env, {
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      address: params?.address,
-      signature: params?.signature,
-      chain: params?.chain,
+    const queryParams = urlEncoded({
+      client_id: (this.#client as AuthorizationCodeCredentials)?.clientId,
+      redirect_uri: (this.#client as AuthorizationCodeCredentials)?.redirectUri,
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256' as PKCERequest['code_challenge_method'],
+      response_type: 'code' as PKCERequest['response_type'],
       state: params?.state,
-      email: params?.email,
       skip_create_account: params?.skipCreateAccount,
       skip_kyc: params?.skipKyc,
+      email: params?.email,
+      ...autoLink,
     });
 
-    this.#debug(`Authorization URL: ${authFlowUrl}`);
+    const authFlowUrl = `${this.#env.api}/auth?${queryParams}`;
+
+    this.#debug(`Auth flow URL: ${authFlowUrl}`);
+    // Redirect to the authFlow
+    window.location.assign(authFlowUrl);
+  }
+  /**
+   * Constructs the url to the authorization code flow and redirects,
+   * Code Verifier needed for the code challenge is stored in local storage
+   *
+   * "Sign in with Ethereum" (SIWE) flow can be used for existing Monerium customers.
+   *  In this case the payload must include a valid EIP-4361 (https://eips.ethereum.org/EIPS/eip-4361) message and signature.
+   *  On successful authorization the authorization code is returned at once.
+   *
+   * This authorization code is then used to request an access token via the token endpoint.
+   *
+   * https://monerium.com/siwe
+   *
+   * @group Authentication
+   * @see {@link https://monerium.dev/api-docs-v2#tag/auth/operation/auth | API Documentation}
+   * @param {AuthFlowSIWEOptions} [params] - the auth flow SIWE params
+   * @returns void
+   *
+   */
+  async siwe(params: AuthFlowSIWEOptions) {
+    const codeChallenge = preparePKCEChallenge();
+
+    const queryParams = urlEncoded({
+      client_id: (this.#client as AuthorizationCodeCredentials)?.clientId,
+      redirect_uri: (this.#client as AuthorizationCodeCredentials)?.redirectUri,
+      message: params.message,
+      signature: params.signature,
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256' as PKCESIWERequest['code_challenge_method'],
+      authentication_method: 'siwe' as PKCESIWERequest['authentication_method'],
+      state: params?.state,
+    });
+
+    const authFlowUrl = `${this.#env.api}/auth?${queryParams}`;
+
+    this.#debug(`Auth flow SIWE URL: ${authFlowUrl}`);
+
     // Redirect to the authFlow
     window.location.assign(authFlowUrl);
   }
@@ -791,15 +838,4 @@ export class MoneriumClient {
    * @hidden
    */
   getEnvironment = (): Environment => this.#env;
-  /**
-   *
-   * @hidden
-   */
-  getAuthFlowURI = (args: PKCERequestArgs): string => {
-    const url = getAuthFlowUrlAndStoreCodeVerifier(
-      this.#env,
-      mapChainIdToChain(this.#env.name, args)
-    );
-    return url;
-  };
 }

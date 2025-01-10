@@ -5,8 +5,11 @@
 import 'jest-localstorage-mock';
 import fetchMock from 'jest-fetch-mock';
 
-import { constants, MoneriumClient } from '../src/index';
+import constants from '../src/constants';
+import { generateCodeChallenge } from '../src/helpers';
+import { MoneriumClient } from '../src/index';
 import {
+  AuthFlowSIWEOptions,
   Chain,
   Currency,
   NewOrder,
@@ -17,14 +20,33 @@ import {
 } from '../src/types';
 import { OWNER_SIGNATURE, PUBLIC_KEY } from './constants';
 
-const message = constants.LINK_MESSAGE;
+const { STORAGE_CODE_VERIFIER } = constants;
+
+const assignMock = jest.fn();
+
+const clientId = 'testClientId';
+const redirectUri = 'http://example.com';
 
 let client: MoneriumClient;
 describe('MoneriumClient', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, 'location', {
+      value: {
+        assign: assignMock,
+      },
+      writable: true,
+    });
+  });
   beforeEach(async () => {
-    client = new MoneriumClient();
+    client = new MoneriumClient({ clientId, redirectUri });
     fetchMock.resetMocks();
   });
+  afterEach(() => {
+    window.localStorage.clear();
+    jest.restoreAllMocks();
+    assignMock.mockRestore();
+  });
+
   test('get tokens', async () => {
     await client.getTokens().catch(() => ({}));
 
@@ -38,6 +60,120 @@ describe('MoneriumClient', () => {
         method: 'GET',
       })
     );
+  });
+  describe('Authorize', () => {
+    const setupAuthorizeTest = async (
+      params?: Record<string, any>,
+      isSiwe: boolean = false
+    ) => {
+      if (isSiwe) {
+        await client.siwe(params as AuthFlowSIWEOptions).catch(() => ({}));
+      } else {
+        await client.authorize(params).catch(() => ({}));
+      }
+
+      const codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER);
+      const challenge = generateCodeChallenge(codeVerifier as string);
+
+      const assignedURL = assignMock.mock.calls[0][0]; // Retrieve the called URL
+
+      expect(assignMock).toHaveBeenCalled();
+      expect(assignedURL).toMatch(/^https:\/\/api\.monerium\.dev\/auth\?/);
+      expect(assignedURL).toContain(`code_challenge=${challenge}`);
+      expect(assignedURL).toContain(`code_challenge_method=S256`);
+
+      if (isSiwe) {
+        expect(assignedURL).toContain(`authentication_method=siwe`);
+      } else {
+        expect(assignedURL).toContain(`response_type=code`);
+      }
+
+      return assignedURL;
+    };
+    test('authorize', async () => {
+      const assignedURL = await setupAuthorizeTest();
+
+      expect(assignedURL).toContain(`client_id=${clientId}`);
+      expect(assignedURL).toContain(
+        `redirect_uri=${encodeURIComponent(redirectUri)}`
+      );
+    });
+    test('authorize - should skip incomplete autoLink params', async () => {
+      const args = {
+        signature: '0xShouldBeSkipped',
+        chain: 'ethereum',
+      };
+      const assignedURL = await setupAuthorizeTest(args);
+
+      expect(assignedURL).toContain(`client_id=${clientId}`);
+      expect(assignedURL).not.toContain(`signature=`);
+      expect(assignedURL).not.toContain(`chain=`);
+    });
+    test('authorize - should include autoLink params', async () => {
+      const args = {
+        address: '0xAddress',
+        signature: '0xSignature',
+        chain: 'ethereum',
+      };
+      const assignedURL = await setupAuthorizeTest(args);
+
+      expect(assignedURL).toContain(`client_id=${clientId}`);
+      expect(assignedURL).toContain(`address=${args.address}`);
+      expect(assignedURL).toContain(`signature=${args.signature}`);
+      expect(assignedURL).toContain(`chain=sepolia`);
+    });
+    test('authorize - should include various params', async () => {
+      const args = {
+        skipKyc: true,
+        skipCreateAccount: true,
+        signature: undefined,
+        email: 'test@email.is',
+      };
+      const assignedURL = await setupAuthorizeTest(args);
+
+      expect(assignedURL).toContain(`email=${encodeURIComponent(args.email)}`);
+      expect(assignedURL).toContain(`skip_kyc=${args.skipKyc}`);
+      expect(assignedURL).toContain(
+        `skip_create_account=${args.skipCreateAccount}`
+      );
+      expect(assignedURL).not.toContain('signature=');
+    });
+    test('siwe', async () => {
+      const args = {
+        message: '0xEIP-4361Message',
+        signature: 'signature',
+      };
+      const assignedURL = await setupAuthorizeTest(args, true);
+
+      expect(assignedURL).toContain(`client_id=${clientId}`);
+      expect(assignedURL).toContain(`message=${args.message}`);
+      expect(assignedURL).toContain(`signature=${args.signature}`);
+      expect(assignedURL).not.toContain(`state=`);
+    });
+    test('siwe - with state', async () => {
+      const args = {
+        message: '0xEIP-4361Message',
+        signature: 'signature',
+        state: 'fooBar',
+      };
+      const assignedURL = await setupAuthorizeTest(args, true);
+
+      expect(assignedURL).toContain(`client_id=${clientId}`);
+      expect(assignedURL).toContain(`message=${args.message}`);
+      expect(assignedURL).toContain(`signature=${args.signature}`);
+      expect(assignedURL).toContain(`state=${args.state}`);
+    });
+    test('siwe', async () => {
+      const args = {
+        message: '0xEIP-4361Message',
+        signature: 'signature',
+      };
+      const assignedURL = await setupAuthorizeTest(args, true);
+
+      expect(assignedURL).toContain(`client_id=${clientId}`);
+      expect(assignedURL).toContain(`message=${args.message}`);
+      expect(assignedURL).toContain(`signature=${args.signature}`);
+    });
   });
   describe('Addresses', () => {
     test('link address using chainId', async () => {

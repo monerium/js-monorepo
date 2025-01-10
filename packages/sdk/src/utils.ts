@@ -1,4 +1,12 @@
-import { Balances, Chain, ChainId, Currency, Environment } from './types';
+import { generateCodeChallenge, generateRandomString } from './helpers';
+import {
+  Balances,
+  Chain,
+  ChainId,
+  Currency,
+  Environment,
+  EvmChainId,
+} from './types';
 
 /**
  *
@@ -136,6 +144,46 @@ export const placeOrderMessage = (
   }
   return `Send ${curr} ${amount} to ${receiver} at ${rfc3339(new Date())}`;
 };
+/**
+ * https://monerium.com/siwe
+ */
+export const siweMessage = ({
+  domain,
+  address,
+  appName,
+  redirectUri,
+  chainId,
+  issuedAt = new Date().toISOString(),
+  expiryAt = new Date(Date.now() + 1000 * 60 * 5).toISOString(),
+  privacyPolicyUrl,
+  termsOfServiceUrl,
+}: {
+  domain: string;
+  address: string;
+  appName: string;
+  redirectUri: string;
+  chainId: EvmChainId;
+  issuedAt?: string;
+  expiryAt?: string;
+  privacyPolicyUrl: string;
+  termsOfServiceUrl: string;
+}) => {
+  return `${domain} wants you to sign in with your Ethereum account:
+${address}
+
+Allow ${appName} to access my data on Monerium
+
+URI: ${redirectUri}
+Version: 1
+Chain ID: ${chainId}
+Nonce: ${generateRandomString().slice(0, 16)}
+Issued At: ${issuedAt}
+Expiration Time: ${expiryAt}
+Resources:
+- https://monerium.com/siwe
+- ${privacyPolicyUrl}
+- ${termsOfServiceUrl}`;
+};
 
 /**
  * Replacement for URLSearchParams, Metamask snaps do not include node globals.
@@ -144,14 +192,14 @@ export const placeOrderMessage = (
  * @returns 'application/x-www-form-urlencoded' compatible string
  */
 export const urlEncoded = (
-  body: Record<string, string | boolean>
+  body: Record<string, string | boolean | number | undefined>
 ): string | undefined => {
   return body && Object.entries(body)?.length > 0
     ? Object.entries(body)
         .filter(([_, value]) => value !== undefined) // Filter out undefined values
         .map(
           ([key, value]) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+            `${encodeURIComponent(key)}=${encodeURIComponent(value as string | boolean | number)}`
         )
         .join('&')
     : '';
