@@ -144,14 +144,14 @@ export const placeOrderMessage = (
  * @returns 'application/x-www-form-urlencoded' compatible string
  */
 export const urlEncoded = (
-  body: Record<string, string | boolean>
+  body: Record<string, string | boolean | number | undefined>
 ): string | undefined => {
   return body && Object.entries(body)?.length > 0
     ? Object.entries(body)
         .filter(([_, value]) => value !== undefined) // Filter out undefined values
         .map(
           ([key, value]) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+            `${encodeURIComponent(key)}=${encodeURIComponent(value as string | boolean | number)}`
         )
         .join('&')
     : '';

@@ -6,23 +6,23 @@ import {
 } from '@tanstack/react-query';
 
 import type MoneriumClient from '@monerium/sdk';
-import { ChainId } from '@monerium/sdk';
+import type { AuthFlowOptions, AuthFlowSIWEOptions } from '@monerium/sdk';
 
 export type SdkInstance = {
   /** Monerium SDK instance. */
   sdk?: MoneriumClient;
 };
 
-export type AuthorizeParams =
-  | { address: string; signature: string; chainId?: ChainId }
-  | { state?: string; scope?: string }
-  | {};
-
 export type UseAuthReturn = {
   /**
    * Constructs the url and redirects to the Monerium auth flow.
    */
-  authorize: (params?: AuthorizeParams) => Promise<void>;
+  authorize: (params?: AuthFlowOptions) => Promise<void>;
+  /**
+   * Sign in with Ethereum.
+   * https://monerium.com/siwe
+   */
+  siwe: (params: AuthFlowSIWEOptions) => Promise<void>;
   /**
    * Indicates whether the SDK is authorized.
    */

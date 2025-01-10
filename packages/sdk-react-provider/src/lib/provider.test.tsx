@@ -46,7 +46,7 @@ const TestConsumerComponent = () => {
 
   return (
     <div>
-      <button onClick={authorize}>Authorize</button>
+      <button onClick={() => authorize()}>Authorize</button>
       {isAuthorized && <p>Authorized!</p>}
       {profile && <p data-testid="profile">{profile.name}</p>}
       {/* You can add more elements for other context values */}

@@ -6,56 +6,8 @@ import {
   AuthArgs,
   AuthCodePayload,
   ClientCredentialsPayload,
-  Environment,
-  PKCERequest,
-  PKCERequestArgs,
   RefreshTokenPayload,
 } from '../types';
-import { mapChainIdToChain, urlEncoded } from '../utils';
-
-/** Structure the Auth Flow params */
-export const getAuthFlowParams = (
-  args: PKCERequestArgs,
-  codeChallenge: string
-) => {
-  const {
-    client_id,
-    redirect_uri,
-    scope,
-    state,
-    address,
-    signature,
-    chain,
-    email,
-    skip_create_account,
-    skip_kyc,
-  } = args;
-
-  const autoLink = address
-    ? {
-        address: address,
-        ...(signature !== undefined ? { signature: signature } : {}),
-        ...(chain !== undefined ? { chain: chain } : {}),
-      }
-    : {};
-
-  return urlEncoded({
-    client_id,
-    redirect_uri,
-    ...(scope !== undefined ? { scope: scope } : {}),
-    ...(email !== undefined ? { email: email } : {}),
-    ...(state !== undefined ? { state: state } : {}),
-    ...(skip_create_account !== undefined
-      ? { skip_create_account: skip_create_account }
-      : {}),
-    ...(skip_kyc !== undefined ? { skip_kyc: skip_kyc } : {}),
-    code_challenge: codeChallenge,
-    code_challenge_method: 'S256' as PKCERequest['code_challenge_method'],
-    response_type: 'code' as PKCERequest['response_type'],
-
-    ...autoLink,
-  });
-};
 
 /**
  * Find a more secure way to generate a random string
@@ -81,19 +33,13 @@ export const generateCodeChallenge = (codeVerifier: string) => {
   return encodeBase64Url.stringify(SHA256(codeVerifier as string));
 };
 
-/**
- * Constructs the Auth Flow URL and stores the code verifier in the local storage
- */
-export const getAuthFlowUrlAndStoreCodeVerifier = (
-  environment: Environment,
-  args: PKCERequestArgs
-): string => {
+export const preparePKCEChallenge = (): string => {
   const codeVerifier = generateRandomString();
   const codeChallenge = generateCodeChallenge(codeVerifier);
 
   localStorage.setItem(constants.STORAGE_CODE_VERIFIER, codeVerifier || '');
 
-  return `${environment.api}/auth?${getAuthFlowParams(mapChainIdToChain(environment.name, args), codeChallenge)}`;
+  return codeChallenge;
 };
 
 /**

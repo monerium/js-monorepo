@@ -10,7 +10,6 @@
 import 'jest-localstorage-mock';
 
 import constants from '../src/constants';
-import { generateCodeChallenge } from '../src/helpers';
 import { MoneriumClient } from '../src/index';
 import { getChain } from '../src/utils';
 import { APP_ONE_AUTH_FLOW_CLIENT_ID, APP_ONE_REDIRECT_URL } from './constants';
@@ -19,19 +18,9 @@ const { LINK_MESSAGE, STORAGE_CODE_VERIFIER, STORAGE_ACCESS_TOKEN } = constants;
 
 const message = LINK_MESSAGE;
 
-const assignMock = jest.fn();
-
 // Can't run in CI because of Cloudflare
 process.env.CI !== 'true' &&
   describe('MoneriumClient', () => {
-    beforeAll(() => {
-      Object.defineProperty(window, 'location', {
-        value: {
-          assign: assignMock,
-        },
-        writable: true,
-      });
-    });
     afterEach(() => {
       window.localStorage.clear();
       jest.restoreAllMocks();
@@ -70,113 +59,6 @@ process.env.CI !== 'true' &&
         redirect_uri: '',
       });
       expect(url).toContain('https://api.monerium.app');
-    });
-
-    test('authorization code flow with chainId', async () => {
-      const client = new MoneriumClient();
-
-      const authFlowUrl = client.getAuthFlowURI({
-        redirect_uri: 'http://example.com',
-        client_id: 'testClientId',
-        address: '0x',
-        chain: 11155111,
-      });
-      const codeVerifier = window.localStorage.getItem(STORAGE_CODE_VERIFIER);
-      const challenge = generateCodeChallenge(codeVerifier as string);
-
-      expect(authFlowUrl).toBe(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x&chain=sepolia`
-      );
-    });
-
-    test('authorization code flow with chain and network', async () => {
-      const client = new MoneriumClient();
-
-      const authFlowUrl = client.getAuthFlowURI({
-        redirect_uri: 'http://example.com',
-        client_id: 'testClientId',
-        address: '0x',
-        chain: 'ethereum',
-      });
-
-      const codeVerifier = window.localStorage.getItem(STORAGE_CODE_VERIFIER);
-      const challenge = generateCodeChallenge(codeVerifier as string);
-
-      expect(authFlowUrl).toBe(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x&chain=sepolia`
-      );
-    });
-
-    test('authorization code flow without chain info', async () => {
-      const client = new MoneriumClient();
-
-      const test = client.getAuthFlowURI({
-        redirect_uri: 'http://example.com',
-        client_id: 'testClientId',
-      });
-
-      const codeVerifier = window.localStorage.getItem(STORAGE_CODE_VERIFIER);
-      const challenge = generateCodeChallenge(codeVerifier as string);
-
-      expect(test).toBe(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code`
-      );
-    });
-
-    test('connect wallet', async () => {
-      const client = new MoneriumClient();
-
-      await client.authorize({
-        redirectUri: 'http://example.com',
-        clientId: 'testClientId',
-        address: '0x1234',
-        signature: '0x5678',
-        chain: 'gnosis',
-      });
-
-      const codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER);
-      const challenge = generateCodeChallenge(codeVerifier as string);
-
-      expect(assignMock).toHaveBeenCalledWith(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x1234&signature=0x5678&chain=chiado`
-      );
-      assignMock.mockRestore();
-    });
-    test('redirect', async () => {
-      const client = new MoneriumClient();
-
-      await client.authorize({
-        redirectUri: 'http://example.com',
-        clientId: 'testClientId',
-      });
-
-      const codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER);
-      const challenge = generateCodeChallenge(codeVerifier as string);
-
-      expect(assignMock).toHaveBeenCalledWith(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code`
-      );
-      assignMock.mockRestore();
-    });
-    test('redirect w auto-link', async () => {
-      const client = new MoneriumClient({
-        clientId: 'testClientId',
-        redirectUri: 'http://example.com',
-      });
-
-      await client.authorize({
-        address: '0x1234',
-        signature: '0x5678',
-        chain: 137,
-      });
-
-      const codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER);
-      const challenge = generateCodeChallenge(codeVerifier as string);
-
-      expect(assignMock).toHaveBeenCalledWith(
-        `https://api.monerium.dev/auth?client_id=testClientId&redirect_uri=http%3A%2F%2Fexample.com&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&address=0x1234&signature=0x5678&chain=polygon`
-      );
-      assignMock.mockRestore();
     });
 
     test('authorize with refresh token attempt', async () => {

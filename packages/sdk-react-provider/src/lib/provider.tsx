@@ -1,10 +1,13 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { MoneriumClient } from '@monerium/sdk';
+import {
+  AuthFlowOptions,
+  AuthFlowSIWEOptions,
+  MoneriumClient,
+} from '@monerium/sdk';
 
 import { MoneriumContext } from './context';
-import { AuthorizeParams } from './types';
 
 /**
  * Wrap your application with the Monerium provider.
@@ -99,13 +102,27 @@ export const MoneriumProvider = ({
   }, [refreshToken]);
 
   const authorize = useCallback(
-    async (params?: AuthorizeParams) => {
+    async (params?: AuthFlowOptions) => {
       try {
         if (sdk) {
           await sdk.authorize(params);
         }
       } catch (err) {
         console.error('Error during authorization:', err);
+        setError(err);
+      }
+    },
+    [sdk]
+  );
+
+  const siwe = useCallback(
+    async (params: AuthFlowSIWEOptions) => {
+      try {
+        if (sdk) {
+          await sdk.siwe(params);
+        }
+      } catch (err) {
+        console.error('Error during sign in with ethereum:', err);
         setError(err);
       }
     },
@@ -131,6 +148,7 @@ export const MoneriumProvider = ({
       value={{
         sdk,
         authorize,
+        siwe,
         isAuthorized,
         isLoading: loadingAuth,
         error,
