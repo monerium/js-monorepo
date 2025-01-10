@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.2.1...sdk-v3.3.0) (2025-01-10)
+
+
+### Features
+
+* sign in with ethereum support ([#119](https://github.com/monerium/js-monorepo/issues/119)) ([ff9df26](https://github.com/monerium/js-monorepo/commit/ff9df2669615b43b934805d1710b026812e10c23))
+
 ## [3.2.1](https://github.com/monerium/js-monorepo/compare/sdk-v3.2.0...sdk-v3.2.1) (2025-01-08)
 
 
