@@ -36,6 +36,7 @@ export {
   getChain,
   parseChain,
   shortenIban,
+  siweMessage,
 } from './utils';
 
 export { MoneriumClient };

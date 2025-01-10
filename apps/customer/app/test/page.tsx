@@ -15,6 +15,7 @@ import {
   PaymentStandard,
   placeOrderMessage,
   rfc3339,
+  siweMessage,
 } from '@monerium/sdk';
 import {
   MoneriumContext,
@@ -644,27 +645,15 @@ export default function Test() {
     });
   };
   const authorizeSiwe = () => {
-    const date = new Date();
-    const issueDate = rfc3339(new Date(date.toISOString()));
-
-    date.setMinutes(date.getMinutes() + 5);
-    const expiryDate = date.toISOString();
-
-    const siwe_message = `localhost:3000 wants you to sign in with your Ethereum account:
-0xB64Fed2aFF534D5320BF401d0D5B93Ed7AbCf13E
-
-Allow SDK TEST APP to access my data on Monerium
-
-URI: http://localhost:3000/dashboard
-Version: 1
-Chain ID: 100
-Nonce: ${Math.random().toString(36).substring(2, 16)}
-Issued At: ${issueDate}
-Expiration Time: ${expiryDate}
-Resources:
-- https://monerium.com/siwe
-- https://example.com/privacy-policy
-- https://example.com/terms-of-service`;
+    const siwe_message = siweMessage({
+      domain: 'localhost:3000',
+      address: walletAddress,
+      appName: 'SDK TEST APP',
+      redirectUri: 'http://localhost:3000/dashboard',
+      chainId: chainId,
+      privacyPolicyUrl: 'https://example.com/privacy-policy',
+      termsOfServiceUrl: 'https://example.com/terms-of-service',
+    });
 
     signMessageAsync({ message: siwe_message }).then((signature) => {
       siwe({ message: siwe_message, signature });
