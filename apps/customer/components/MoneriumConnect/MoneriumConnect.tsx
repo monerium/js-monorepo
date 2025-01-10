@@ -15,14 +15,14 @@ export const MoneriumConnect = () => {
         href="https://monerium.com"
         size="large"
         variant="contained"
-        onClick={authorize}
+        onClick={() => {}}
       >
         Read more
       </Button>
       <Button
         size="large"
         variant="outlined"
-        onClick={authorize}
+        onClick={() => authorize()}
         startIcon={
           <Image
             src="/monerium-icon.png"
