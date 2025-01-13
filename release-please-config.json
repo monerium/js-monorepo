@@ -1,7 +1,6 @@
 {
   "pull-request-title-pattern": "Release ${component} ${version} :rocket:",
   "pull-request-header": ":robot: I have created a release *beep* *boop*",
-  "separate-pull-requests": true,
   "changelog-sections": [
     { "type": "feat", "section": "Features", "hidden": false },
     { "type": "fix", "section": "Bug Fixes", "hidden": false },
