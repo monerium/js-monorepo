@@ -20,7 +20,6 @@ import MoneriumClient, {
   OrderState,
   parseChain,
   Profile,
-  ProfilePermissions,
   ProfilesResponse,
   RequestIbanPayload,
   ResponseStatus,

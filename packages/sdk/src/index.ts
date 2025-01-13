@@ -20,7 +20,13 @@
  * })
  *
  * // Will redirect the user to Monerium's authentication code flow.
+ * await monerium.authorize();
+ *
+ * // Will use the authorization code flow code to get access token
  * await monerium.getAccess();
+ *
+ * // or use refresh token to get access token if provided.
+ * await monerium.getAccess(refreshToken);
  *
  * // Retrieve profiles the client has access to.
  * await monerium.getProfiles();
