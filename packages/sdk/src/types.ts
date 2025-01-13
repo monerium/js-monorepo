@@ -242,22 +242,18 @@ export interface Identifier {
   bic?: string;
 }
 
-export interface ProfilePermissions {
-  id: string;
-  kind: ProfileType;
-  name: string;
-  perms: Permission[];
-}
 export interface ProfilesResponse {
-  profiles: ProfilePermissions[];
+  profiles: Profile[];
 }
 export interface Profile {
   id: string;
   name: string;
   kind: ProfileType;
   state: ProfileState;
-  kyc: KYC;
+  // kyc: KYC;
 }
+/** @deprecated use Profile */
+export type ProfilePermissions = Profile;
 
 export interface ProfilesQueryParams {
   /** profile state to filter by */

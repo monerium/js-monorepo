@@ -1094,7 +1094,6 @@ export type {
   MoveIbanPayload,
   LinkAddress,
   Profile,
-  ProfilePermissions,
   Token,
   SubmitProfileDetailsPayload,
   NewOrder,
