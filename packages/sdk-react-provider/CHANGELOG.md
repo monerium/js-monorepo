@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.2.1...sdk-react-provider-v1.2.2) (2025-01-13)
+
+
+### Bug Fixes
+
+* incorrect statement in docs ([1e33b34](https://github.com/monerium/js-monorepo/commit/1e33b3439ac6e39ca8f81c21a7d9aef067b2bf81))
+
 ## [1.2.1](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.2.0...sdk-react-provider-v1.2.1) (2025-01-13)
 
 
