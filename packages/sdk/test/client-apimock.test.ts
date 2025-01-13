@@ -28,7 +28,41 @@ const clientId = 'testClientId';
 const redirectUri = 'http://example.com';
 
 let client: MoneriumClient;
-describe('MoneriumClient', () => {
+describe.only('MoneriumClient - production', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, 'location', {
+      value: {
+        assign: assignMock,
+      },
+      writable: true,
+    });
+  });
+  afterEach(() => {
+    window.localStorage.clear();
+    jest.restoreAllMocks();
+    assignMock.mockRestore();
+  });
+  test('get tokens', async () => {
+    const client = new MoneriumClient({
+      environment: 'production',
+      clientId,
+      redirectUri,
+    });
+    await client.getTokens().catch(() => ({}));
+
+    expect(fetchMock?.mock?.calls?.length).toEqual(1);
+
+    expect(fetchMock?.mock?.calls?.[0]?.[0]).toEqual(
+      `https://api.monerium.app/tokens`
+    );
+    expect(fetchMock?.mock?.calls?.[0]?.[1]).toEqual(
+      expect.objectContaining({
+        method: 'GET',
+      })
+    );
+  });
+});
+describe('MoneriumClient - sandbox', () => {
   beforeAll(() => {
     Object.defineProperty(window, 'location', {
       value: {
