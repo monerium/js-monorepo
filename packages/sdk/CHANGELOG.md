@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.3.1](https://github.com/monerium/js-monorepo/compare/sdk-v3.3.0...sdk-v3.3.1) (2025-01-13)
+
+
+### Bug Fixes
+
+* add prod test and join pull request together ([#124](https://github.com/monerium/js-monorepo/issues/124)) ([d031678](https://github.com/monerium/js-monorepo/commit/d031678c3e92057d87b371c87f9c1ee38d6266de))
+* profile type ([#123](https://github.com/monerium/js-monorepo/issues/123)) ([e39fac1](https://github.com/monerium/js-monorepo/commit/e39fac1bd155a35f1501f88a494de569444145fa))
+
 ## [3.3.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.2.1...sdk-v3.3.0) (2025-01-10)
 
 
