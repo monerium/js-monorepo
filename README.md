@@ -34,25 +34,39 @@ This Turborepo includes the following packages/apps:
 - [Lint-Staged](https://github.com/lint-staged/lint-staged) for running linters on staged files
 - [Release Please](https://github.com/googleapis/release-please) for automated releases
 
+### Install
+
+Install PNPM: https://pnpm.io/installation
+
+PNPM is a fast, disk space efficient package manager that uses hard links and symlinks to save space. **It is also optimized for monorepos.**
+
+```
+pnpm install
+```
+
 ### Build
 
 To build all apps and packages, run the following command:
 
-```
-cd js-monorepo
-turbo build
+```bash
+pnpm build
 ```
 
 ### Develop
 
-To develop all apps and packages, run the following command:
+To develop apps and packages, run the following command:
 
-```
-cd js-monorepo
-turbo dev
+```bash
+pnpm dev
 ```
 
 Note: use `pnpm dev --log-order stream` for a more traditional log output.
+
+The developer app is excluded because of how noisy the logs are. To include the developer app, run the following command:
+
+```bash
+pnpm dev:docs
+```
 
 ### Pipeline
 
