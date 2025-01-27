@@ -51,6 +51,6 @@
     "@testing-library/dom": "^10.1.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
-    "undici": "^6.19.4"
+    "undici": ">=6.21.1"
   }
 }

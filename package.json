@@ -5,6 +5,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:docs": "turbo dev & turbo dev:docs",
     "docs": "turbo docs",
     "lint": "turbo lint",
     "test": "turbo test",
