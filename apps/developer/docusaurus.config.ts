@@ -6,6 +6,9 @@ import { PluginOptions } from 'typedoc-plugin-markdown';
 
 // https://typedoc-plugin-markdown.org/schema.json
 const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
+  // not working properly when cross-referencing between packages
+  disableSources: true,
+
   cleanOutputDir: true,
   entryPointStrategy: 'Expand',
   gitRevision: 'main',
@@ -16,7 +19,7 @@ const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
   expandObjects: true,
   expandParameters: true,
 
-  hideParameterTypesInTitle: true,
+  hidePageTitle: true,
   hidePageHeader: true,
   hideGenerator: true,
 
@@ -113,7 +116,6 @@ const config: Config = {
         tsconfig: '../../packages/sdk/tsconfig.json',
         out: 'docs/packages/sdk',
         publicPath: '/docs/packages/sdk',
-        watch: process.env.TYPEDOC_WATCH,
       },
     ],
     [
@@ -125,7 +127,6 @@ const config: Config = {
         tsconfig: '../../packages/sdk-react-provider/tsconfig.json',
         out: 'docs/packages/sdk-react-provider',
         publicPath: '/docs/packages/sdk-react-provider',
-        watch: process.env.TYPEDOC_WATCH,
       },
     ],
   ],
@@ -144,6 +145,7 @@ const config: Config = {
   presets: [
     [
       'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
       {
         docs: {
           sidebarPath: './sidebars.ts',

@@ -115,7 +115,7 @@ process.env.CI !== 'true' &&
         const address = await client.getAddress(PUBLIC_KEY).catch(() => ({}));
 
         expect(address).toMatchObject({
-          chains: ['arbitrumsepolia', 'sepolia', 'chiado'],
+          chains: ['arbitrumsepolia', 'chiado', 'sepolia'],
           address: PUBLIC_KEY,
           profile: DEFAULT_PROFILE,
         });
