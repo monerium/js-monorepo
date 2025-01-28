@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.3](https://github.com/monerium/js-monorepo/compare/sdk-v3.3.2...sdk-v3.3.3) (2025-01-28)
+
+
+### Miscellaneous
+
+* update docs ([#128](https://github.com/monerium/js-monorepo/issues/128)) ([afa9832](https://github.com/monerium/js-monorepo/commit/afa983262f9707854c2238fa14383dd452d1f3ee))
+
 ## [3.3.2](https://github.com/monerium/js-monorepo/compare/sdk-v3.3.1...sdk-v3.3.2) (2025-01-13)
 
 

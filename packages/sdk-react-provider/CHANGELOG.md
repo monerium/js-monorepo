@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.3](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.2.2...sdk-react-provider-v1.2.3) (2025-01-28)
+
+
+### Bug Fixes
+
+* dependabot suggested updates + remove doc watch from dev task ([8357d5f](https://github.com/monerium/js-monorepo/commit/8357d5fee47a7310ae7a865c2bec7f878787ad81))
+
+
+### Miscellaneous
+
+* update docs ([#128](https://github.com/monerium/js-monorepo/issues/128)) ([afa9832](https://github.com/monerium/js-monorepo/commit/afa983262f9707854c2238fa14383dd452d1f3ee))
+
 ## [1.2.2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.2.1...sdk-react-provider-v1.2.2) (2025-01-13)
 
 
