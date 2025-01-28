@@ -6,6 +6,9 @@ import { PluginOptions } from 'typedoc-plugin-markdown';
 
 // https://typedoc-plugin-markdown.org/schema.json
 const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
+  // not working properly when cross-referencing between packages
+  disableSources: true,
+
   cleanOutputDir: true,
   entryPointStrategy: 'Expand',
   gitRevision: 'main',
