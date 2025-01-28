@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.1](https://github.com/monerium/js-monorepo/compare/customer-v0.5.0...customer-v0.5.1) (2025-01-28)
+
+
+### Bug Fixes
+
+* dependabot suggested updates + remove doc watch from dev task ([8357d5f](https://github.com/monerium/js-monorepo/commit/8357d5fee47a7310ae7a865c2bec7f878787ad81))
+
+
+### Miscellaneous
+
+* update docs ([#128](https://github.com/monerium/js-monorepo/issues/128)) ([afa9832](https://github.com/monerium/js-monorepo/commit/afa983262f9707854c2238fa14383dd452d1f3ee))
+
 ## [0.5.0](https://github.com/monerium/js-monorepo/compare/customer-v0.4.1...customer-v0.5.0) (2025-01-10)
 
 
