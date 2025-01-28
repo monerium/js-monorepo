@@ -53,13 +53,3 @@ At a high level, the entire authorization flow for a partner application works a
 Further reading:
 
 - [Proof Key for Code Exchange (PKCE) by OAuth Public Clients ](https://datatracker.ietf.org/doc/html/rfc7636)
-
-# Packages
-
-## [@monerium/sdk](packages/sdk/index.md)
-
-The goal of the SDK is to provide a simplified way for developers to interact with the Monerium API by abstracting the complexity of the OAuth 2.0 Authorization Framework.
-
-TBD
-
-## [@monerium/sdk-react-provider](packages/sdk-react-provider/index.md)

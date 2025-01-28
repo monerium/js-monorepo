@@ -3,6 +3,7 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import { TypeDocOptions } from 'typedoc';
 import { PluginOptions } from 'typedoc-plugin-markdown';
+import type * as Redocusaurus from 'redocusaurus';
 
 // https://typedoc-plugin-markdown.org/schema.json
 const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
@@ -19,7 +20,6 @@ const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
   expandObjects: true,
   expandParameters: true,
 
-  hidePageTitle: true,
   hidePageHeader: true,
   hideGenerator: true,
 
@@ -156,6 +156,28 @@ const config: Config = {
         },
       } satisfies Preset.Options,
     ],
+    [
+      'redocusaurus',
+      {
+        // Plugin Options for loading OpenAPI files
+        // https://redocusaurus.vercel.app/docs/getting-started/plugin-options
+        specs: [
+          // How to use a local instance of OpenAPI spec
+          // {
+          //   id: 'openapi',
+          //   spec: './src/openapi-v2.yaml',
+          //   route: '/docs/openapi/',
+          // },
+
+          // Let's use the remote instance for now.
+          {
+            id: 'api',
+            spec: 'https://monerium.dev/openapi-v2.yml',
+            route: '/docs/api/',
+          },
+        ],
+      },
+    ] satisfies Redocusaurus.PresetEntry,
   ],
 
   themeConfig: {
@@ -167,14 +189,27 @@ const config: Config = {
         alt: 'Monerium Logo',
         src: 'img/logo.png',
       },
-      // items: [
-      //   { to: '/docs', label: 'Docs', position: 'left' },
-      //   {
-      //     href: 'https://github.com/monerium/js-monorepo',
-      //     label: 'GitHub',
-      //     position: 'right',
-      //   },
-      // ],
+      items: [
+        { to: '/docs/api', label: 'API', position: 'left' },
+        { to: '/packages/sdk', label: 'SDK', position: 'left' },
+        {
+          to: '/packages/sdk-react-provider',
+          label: 'React',
+          position: 'left',
+        },
+        {
+          'aria-label': 'Discord Invite',
+          className: 'navbar--discord-link',
+          href: 'https://monerium.com/invite/discord',
+          position: 'right',
+        },
+        {
+          'aria-label': 'GitHub Repository',
+          className: 'navbar--github-link',
+          href: 'https://github.com/monerium/js-monorepo',
+          position: 'right',
+        },
+      ],
     },
     footer: {
       style: 'dark',
@@ -183,16 +218,12 @@ const config: Config = {
           title: 'Development',
           items: [
             {
-              label: 'API Documentation',
-              href: 'https://monerium.dev/api-docs',
-            },
-            {
               label: 'Developer Portal',
               href: 'https://monerium.dev/',
             },
             {
-              label: 'Telegram Group',
-              href: 'https://t.me/+W7efXd4p4zQyZjFk',
+              label: 'Discord',
+              href: 'https://monerium.com/invite/discord',
             },
             {
               label: 'Report an Issue',
