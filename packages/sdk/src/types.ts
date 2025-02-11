@@ -172,6 +172,7 @@ export enum Method {
   resource = 'resource',
   jwt = 'jwt',
   apiKey = 'apiKey',
+  bearer = 'bearer',
 }
 
 export enum ProfileType {
@@ -240,6 +241,26 @@ export enum IdDocumentKind {
 export interface Identifier {
   standard: PaymentStandard;
   bic?: string;
+}
+
+export interface AuthContext {
+  userId: string;
+  email: string;
+  name: string;
+  roles: [] | null;
+  auth: {
+    method: Method;
+    subject: string;
+    verified: boolean;
+    invited?: boolean;
+  };
+  defaultProfile: string;
+  profiles: {
+    id: string;
+    kind: ProfileType | 'unknown';
+    name: string;
+    perms: Permission[];
+  }[];
 }
 
 export interface ProfilesResponse {

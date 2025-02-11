@@ -22,6 +22,7 @@ import {
   useAddress,
   useAddresses,
   useAuth,
+  useAuthContext,
   useBalances,
   useIBAN,
   useIBANs,
@@ -60,6 +61,8 @@ export default function Test() {
   } = useAuth();
 
   const { data: profile } = useProfile();
+
+  const { data: authContext } = useAuthContext();
 
   const { data: orders } = useOrders();
 
@@ -725,6 +728,14 @@ export default function Test() {
         <>
           <h1>Queries</h1>
           <div>
+            <div>
+              <h2>AuthContext</h2>
+              <p>UserId: {authContext?.userId}</p>
+              <details>
+                <summary>Click to Expand</summary>
+                <PrettyPrintJson data={authContext} />
+              </details>
+            </div>
             <div>
               <h2>Profile</h2>
               <p>id: {profile?.id}</p>
