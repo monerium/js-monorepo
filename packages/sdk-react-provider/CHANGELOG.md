@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.2.3...sdk-react-provider-v1.3.0) (2025-02-12)
+
+
+### Features
+
+* add back auth context ([#131](https://github.com/monerium/js-monorepo/issues/131)) ([6878781](https://github.com/monerium/js-monorepo/commit/6878781c57abd2ea4fc2aa2a64e2cc4ef22617a2))
+
 ## [1.2.3](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.2.2...sdk-react-provider-v1.2.3) (2025-01-28)
 
 

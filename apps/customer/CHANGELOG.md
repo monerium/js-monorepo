@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/monerium/js-monorepo/compare/customer-v0.5.1...customer-v0.6.0) (2025-02-12)
+
+
+### Features
+
+* add back auth context ([#131](https://github.com/monerium/js-monorepo/issues/131)) ([6878781](https://github.com/monerium/js-monorepo/commit/6878781c57abd2ea4fc2aa2a64e2cc4ef22617a2))
+
 ## [0.5.1](https://github.com/monerium/js-monorepo/compare/customer-v0.5.0...customer-v0.5.1) (2025-01-28)
 
 
