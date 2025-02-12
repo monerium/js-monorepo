@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import MoneriumClient, {
   Address,
   AddressesResponse,
+  AuthContext,
   Balances,
   Chain,
   ChainId,
@@ -41,6 +42,7 @@ import {
  * */
 export const keys = {
   getAll: ['monerium'],
+  getAuthContext: ['monerium', 'auth-context'],
   getProfile: (profile: string) => [
     'monerium',
     'profile',
@@ -135,6 +137,50 @@ export function useAuth(): UseAuthReturn {
   };
 }
 
+/**
+ * @group Hooks
+ * @category Authentication
+ * @param {Object} params
+ *
+ * @example
+ * ```ts
+ * const {
+ *    data
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useAuthContext();
+ * ```
+
+ * @see {@link https://monerium.dev/api-docs/v2#tag/auth/operation/auth-context | API Documentation}
+ */
+export function useAuthContext({
+  query,
+}: {
+  /** {@inheritDoc QueryOptions} */
+  query?: QueryOptions<AuthContext>;
+} = {}) {
+  const { isAuthorized } = useAuth();
+  const sdk = useSdk();
+
+  return useQuery({
+    ...query,
+    queryKey: keys.getAuthContext,
+    queryFn: async () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      if (!isAuthorized) {
+        throw new Error('User not authorized');
+      }
+
+      return sdk.getAuthContext();
+    },
+    enabled: Boolean(sdk && isAuthorized && (query?.enabled ?? true)),
+  });
+}
 /**
  * If no `profile` id is provided, the default profile is used.
  * @group Hooks

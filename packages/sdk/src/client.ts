@@ -17,6 +17,7 @@ import type {
   AddressesResponse,
   AuthArgs,
   AuthCodePayload,
+  AuthContext,
   AuthFlowOptions,
   AuthFlowSIWEOptions,
   AuthorizationCodeCredentials,
@@ -424,6 +425,13 @@ export class MoneriumClient {
     return this.bearerProfile as BearerProfile;
   }
 
+  /**
+   * @group Authentication
+   * @see {@link https://monerium.dev/api-docs/v2#tag/auth/operation/auth-context | API Documentation}
+   */
+  getAuthContext(): Promise<AuthContext> {
+    return this.#api<AuthContext>('get', `auth/context`);
+  }
   /**
    * @group Profiles
    * @param {string} profile - the id of the profile to fetch.
