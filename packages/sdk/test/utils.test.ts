@@ -249,7 +249,10 @@ describe('parseChain', () => {
   it('chainIds to should be parsed to monerium chain identifier', () => {
     expect(parseChain(1)).toBe('ethereum');
     expect(parseChain(11155111)).toBe('sepolia');
-    expect(parseChain(59144)).toBe('scroll');
+    expect(parseChain(59144)).toBe('linea');
+    expect(parseChain(534352)).toBe('scroll');
+    expect(parseChain(501)).toBe('columbus');
+    expect(parseChain(500)).toBe('camino');
     expect(parseChain(137)).toBe('polygon');
     expect(parseChain(80002)).toBe('amoy');
     expect(parseChain('ethereum')).toBe('ethereum');
