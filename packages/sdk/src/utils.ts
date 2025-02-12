@@ -72,6 +72,10 @@ const isValidEvmName = (chain: string) => {
     case 'arbitrumsepolia':
     case 'linea':
     case 'lineasepolia':
+    case 'scroll':
+    case 'scrollsepolia':
+    case 'camino':
+    case 'columbus':
       return true;
     default:
       return false;
@@ -287,6 +291,12 @@ const chainNameBackwardsCompatibility = (
         return 'chiado';
       case 'arbitrum':
         return 'arbitrumsepolia';
+      case 'linea':
+        return 'lineasepolia';
+      case 'scroll':
+        return 'scrollsepolia';
+      case 'camino':
+        return 'columbus';
       case 'noble':
         return 'grand';
       default:
