@@ -14,6 +14,8 @@ export type SandboxChain =
   | 'amoy'
   | 'arbitrumsepolia'
   | 'lineasepolia'
+  | 'scrollsepolia'
+  | 'columbus'
   | 'grand';
 
 export type ProductionChain =
@@ -22,6 +24,8 @@ export type ProductionChain =
   | 'polygon'
   | 'arbitrum'
   | 'linea'
+  | 'scroll'
+  | 'camino'
   | 'noble';
 
 export type Chain = string | ProductionChain | SandboxChain;
@@ -32,12 +36,16 @@ export type EvmChainId =
   | 11155111 // ethereum sepolia
   | 100 // gnosis
   | 10200 // gnosis chiado
+  | 500 // camino
+  | 501 // camino columbus
   | 137 // polygon
   | 80002 // polygon amoy
   | 42161 // arbitrum
   | 421614 // arbitrum sepolia
   | 59141 // linea sepolia
-  | 59144; // linea
+  | 59144 // linea
+  | 534352 // scroll
+  | 534351; // scroll sepolia
 
 export type ChainId = EvmChainId | CosmosChainId;
 
