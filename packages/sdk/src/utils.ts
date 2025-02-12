@@ -247,6 +247,14 @@ export const getChain = (chainId: number): Chain => {
       return 'linea';
     case 59141:
       return 'lineasepolia';
+    case 534352:
+      return 'scroll';
+    case 534351:
+      return 'scrollsepolia';
+    case 501:
+      return 'columbus';
+    case 500:
+      return 'camino';
     default:
       throw new Error(`Chain not supported: ${chainId}`);
   }
