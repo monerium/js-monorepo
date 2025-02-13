@@ -16,11 +16,7 @@ export const MoneriumConnect = () => {
   const { address } = useAccount();
   const { authorize, siwe, error } = useAuth();
   const { signMessageAsync } = useSignMessage();
-  const [open, setOpen] = React.useState(error?.message);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
+  const [open, setOpen] = React.useState(!!(error as Error)?.message);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -61,8 +57,6 @@ export const MoneriumConnect = () => {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        // message={}
-        // action={action}
       >
         <Alert
           onClose={handleClose}
@@ -70,7 +64,7 @@ export const MoneriumConnect = () => {
           variant="filled"
           sx={{ width: '100%' }}
         >
-          {error?.message}
+          {(error as Error)?.message}
         </Alert>
       </Snackbar>
       <Box className={s.wrapper}>
