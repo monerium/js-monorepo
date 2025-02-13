@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/monerium/js-monorepo/compare/customer-v0.6.1...customer-v0.7.0) (2025-02-13)
+
+
+### Features
+
+* add ens support ([#135](https://github.com/monerium/js-monorepo/issues/135)) ([a83d2e5](https://github.com/monerium/js-monorepo/commit/a83d2e58e18342df19c1413fa9c14ff7d6964c65))
+
 ## [0.6.1](https://github.com/monerium/js-monorepo/compare/customer-v0.6.0...customer-v0.6.1) (2025-02-13)
 
 
