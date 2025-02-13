@@ -306,7 +306,8 @@ const chainNameBackwardsCompatibility = (
       case 'camino':
         return 'columbus';
       case 'noble':
-        return 'grand';
+        // return 'grand'; // TODO: this might be fixed at some point?
+        return 'noble';
       default:
         return chain;
     }
