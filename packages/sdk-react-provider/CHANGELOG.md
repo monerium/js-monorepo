@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.0...sdk-react-provider-v1.3.1) (2025-02-13)
+
+
+### Bug Fixes
+
+* change balances keys so they can be refrenced deterministically ([50b37b3](https://github.com/monerium/js-monorepo/commit/50b37b36bd7a6efeb5b42a9a4300dd9596e343c0))
+
 ## [1.3.0](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.2.3...sdk-react-provider-v1.3.0) (2025-02-12)
 
 
