@@ -1,17 +1,20 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { Balances } from '@monerium/sdk';
+import { Balances, Chain, Currency } from '@monerium/sdk';
 
-export function useTotalBalance() {
+export function useTotalBalance(chain?: Chain, currency?: Currency) {
   const queryClient = useQueryClient();
   return useQuery({
-    queryKey: ['monerium', 'total-balance'],
+    queryKey: ['monerium', 'total-balance', chain, currency],
     queryFn: () => {
       const queryCache = queryClient.getQueryCache();
       const balanceQueries = queryCache.findAll({
-        queryKey: ['monerium', 'balances'],
+        queryKey: [
+          'monerium',
+          'balances',
+          { currencies: [currency], ...(chain ? { chain } : {}) },
+        ],
       });
-
       // Get the latest data from all balance queries
       const balances = balanceQueries.map(
         (query) => query.state.data as Balances

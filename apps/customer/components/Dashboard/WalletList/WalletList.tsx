@@ -19,19 +19,17 @@ const WalletList = memo(
     selectedCurrency: Currency;
   }) => {
     const { data, isLoading } = useAddresses();
-
-    const filteredList =
-      selectedChain !== 'all'
-        ? data?.addresses?.filter((a) => a.chains?.includes(selectedChain))
-        : data?.addresses;
-
     const addressAndChain =
-      data?.addresses?.flatMap((address) => {
-        return address.chains.map((chain) => ({
-          address: address.address,
-          chain: chain,
-        }));
-      }) || [];
+      data?.addresses
+        ?.flatMap((address) => {
+          return address.chains.map((chain) => ({
+            address: address.address,
+            chain: chain,
+          }));
+        })
+        ?.filter((a) =>
+          selectedChain === 'all' ? true : a.chain === selectedChain
+        ) || [];
 
     return (
       <Card sx={{ m: 3 }}>
@@ -54,7 +52,7 @@ const WalletList = memo(
                 ))}
               </>
             )}
-            {!isLoading && filteredList?.length === 0 && (
+            {!isLoading && addressAndChain?.length === 0 && (
               <Typography variant="body1">No wallets found.</Typography>
             )}
           </List>

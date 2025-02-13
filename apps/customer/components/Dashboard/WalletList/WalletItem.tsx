@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 
-import { Currency } from '@monerium/sdk';
+import { Currency, shortenAddress } from '@monerium/sdk';
 import { useBalances } from '@monerium/sdk-react-provider';
 
 const WalletItem = ({
@@ -33,7 +33,7 @@ const WalletItem = ({
       <ListItemAvatar>
         <Avatar alt="Currency" src={`/tokens/${currency}.png`} />
       </ListItemAvatar>
-      <ListItemText primary={address} secondary={chain} />
+      <ListItemText primary={shortenAddress(address)} secondary={chain} />
       <p>{data?.balances?.[0]?.amount}</p>
     </ListItemButton>
   );

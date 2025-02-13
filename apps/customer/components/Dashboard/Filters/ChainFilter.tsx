@@ -2,7 +2,8 @@ import { Dispatch, memo, SetStateAction } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
-import ChainIcon from 'components/Chains/Icon';
+import { useTokens } from '@monerium/sdk-react-provider';
+
 import { ChainSelection } from '../types';
 
 const ChainFilter = memo(
@@ -13,6 +14,10 @@ const ChainFilter = memo(
     selected: ChainSelection;
     setSelected: Dispatch<SetStateAction<ChainSelection>>;
   }) => {
+    const { data: tokens } = useTokens();
+    const uniqueChains = Array.from(
+      new Set(tokens?.map((token) => token.chain))
+    );
     return (
       <Stack direction="row" spacing={1} sx={{ flexGrow: 1 }}>
         <Button
@@ -22,30 +27,16 @@ const ChainFilter = memo(
         >
           All chains
         </Button>
-        <Button
-          variant="plain"
-          onClick={() => setSelected('gnosis')}
-          disabled={selected === 'gnosis'}
-          startIcon={<ChainIcon chain="gnosis" />}
-        >
-          Gnosis
-        </Button>
-        <Button
-          variant="plain"
-          onClick={() => setSelected('polygon')}
-          disabled={selected === 'polygon'}
-          startIcon={<ChainIcon chain="polygon" />}
-        >
-          Polygon
-        </Button>
-        <Button
-          variant="plain"
-          onClick={() => setSelected('ethereum')}
-          disabled={selected === 'ethereum'}
-          startIcon={<ChainIcon chain="ethereum" />}
-        >
-          Ethereum
-        </Button>
+        {uniqueChains.map((chain) => (
+          <Button
+            key={chain}
+            variant="plain"
+            onClick={() => setSelected(chain)}
+            disabled={selected === chain}
+          >
+            {chain}
+          </Button>
+        ))}
       </Stack>
     );
   }

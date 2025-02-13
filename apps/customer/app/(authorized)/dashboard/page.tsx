@@ -19,7 +19,10 @@ function Dashboard() {
     Currency.eur
   );
 
-  const { data: totalBalance } = useTotalBalance();
+  const { data: totalBalance } = useTotalBalance(
+    selectedChain === 'all' ? undefined : selectedChain,
+    selectedCurrency
+  );
 
   return (
     <Box sx={{ pt: 7 }}>
