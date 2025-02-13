@@ -42,6 +42,7 @@ export {
   getChain,
   parseChain,
   shortenIban,
+  shortenAddress,
   siweMessage,
 } from './utils';
 

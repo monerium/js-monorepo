@@ -268,6 +268,13 @@ export const shortenIban = (iban?: string) => {
     : iban;
 };
 
+export const shortenAddress = (address?: string) => {
+  if (typeof address !== 'string' || !address?.length) return address;
+  return address?.length > 11
+    ? `${address.substring(0, 7)}...${address.substring(address.length - 5)}`
+    : address;
+};
+
 export const getAmount = (
   balances?: Balances[],
   address?: string,
