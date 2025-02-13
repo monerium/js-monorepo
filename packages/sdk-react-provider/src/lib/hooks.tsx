@@ -62,9 +62,11 @@ export const keys = {
   ) => [
     'monerium',
     'balances',
-    address,
-    chain,
-    ...(currencies ? [...currencies] : []),
+    {
+      currencies: currencies ? [...currencies] : [],
+      chain,
+      address,
+    },
   ],
   getIban: (iban: string) => ['monerium', 'iban', iban],
   getIbans: (filter?: unknown) => [
