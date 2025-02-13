@@ -63,7 +63,7 @@ export const MoneriumProvider = ({
         try {
           setIsAuthorized(await sdk.getAccess());
         } catch (error) {
-          console.error('Failed to get access:', error);
+          setError(error);
         } finally {
           setLoadingAuth(false);
           if (sdk?.bearerProfile) {
@@ -88,7 +88,7 @@ export const MoneriumProvider = ({
         try {
           setIsAuthorized(await sdk.getAccess(refreshToken));
         } catch (error) {
-          console.error('Failed to get access:', error);
+          setError(error);
         } finally {
           if (sdk?.bearerProfile) {
             onRefreshTokenUpdate?.(sdk.bearerProfile.refresh_token);

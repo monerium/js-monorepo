@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import { Currency } from '@monerium/sdk';
+import { useAuth } from '@monerium/sdk-react-provider';
 
 import ChainFilter from 'components/Dashboard/Filters/ChainFilter';
 import TokenFilter from 'components/Dashboard/Filters/TokenFilter';
@@ -24,6 +26,8 @@ function Dashboard() {
     selectedCurrency
   );
 
+  const { revokeAccess } = useAuth();
+
   return (
     <Box sx={{ pt: 7 }}>
       <Stack direction="row" sx={{ p: 3 }}>
@@ -42,6 +46,27 @@ function Dashboard() {
         selectedChain={selectedChain}
         selectedCurrency={selectedCurrency}
       />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          mt: 2, // adds some margin top, adjust as needed
+        }}
+      >
+        <Button
+          color="error"
+          size="large"
+          variant="outlined"
+          onClick={() => {
+            window.localStorage.removeItem(
+              'monerium.insecurely_store_refresh_token'
+            );
+            revokeAccess();
+          }}
+        >
+          Logout
+        </Button>
+      </Box>
     </Box>
   );
 }

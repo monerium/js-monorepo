@@ -296,6 +296,15 @@ export class MoneriumClient {
       throw new Error('This only works client side');
     }
 
+    const error =
+      new URLSearchParams(window.location.search).get('error') || undefined;
+    const errorDescription =
+      new URLSearchParams(window.location.search).get('error_description') ||
+      undefined;
+    if (error || errorDescription) {
+      throw new Error(errorDescription);
+    }
+
     const authCode =
       new URLSearchParams(window.location.search).get('code') || undefined;
 
