@@ -11,13 +11,15 @@ import TokenFilter from 'components/Dashboard/Filters/TokenFilter';
 import TotalBalance from 'components/Dashboard/TotalBalance';
 import { ChainSelection } from 'components/Dashboard/types';
 import WalletList from 'components/Dashboard/WalletList';
+import { useTotalBalance } from 'hooks/useTotalBalance';
 
 function Dashboard() {
   const [selectedChain, setSelectedChain] = useState<ChainSelection>('all');
-  const [totalBalance, setTotalBalance] = useState<number>(0.0);
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>(
     Currency.eur
   );
+
+  const { data: totalBalance } = useTotalBalance();
 
   return (
     <Box sx={{ pt: 7 }}>
@@ -28,10 +30,12 @@ function Dashboard() {
           setSelected={setSelectedCurrency}
         />
       </Stack>
-      <TotalBalance totalBalance={totalBalance} currency={selectedCurrency} />
+      <TotalBalance
+        totalBalance={totalBalance || 0.0}
+        currency={selectedCurrency}
+      />
 
       <WalletList
-        setTotalBalance={setTotalBalance}
         selectedChain={selectedChain}
         selectedCurrency={selectedCurrency}
       />

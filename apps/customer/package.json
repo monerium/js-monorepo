@@ -34,6 +34,7 @@
     "@repo/postcss-config": "workspace:*",
     "@repo/stylelint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@tanstack/react-query-devtools": "^5.66.0",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",

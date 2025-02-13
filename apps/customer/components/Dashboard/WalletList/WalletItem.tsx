@@ -1,12 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { ListItemText } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 
-import { CurrencyCode } from '@monerium/sdk';
+import { Currency } from '@monerium/sdk';
+import { useBalances } from '@monerium/sdk-react-provider';
 
 const WalletItem = ({
   address,
@@ -15,18 +16,25 @@ const WalletItem = ({
 }: {
   address: string;
   chain: string;
-  currency: CurrencyCode;
+  currency: Currency;
 }) => {
-  const router = useRouter();
+  // const router = useRouter();
+  const { data } = useBalances({
+    address: address,
+    chain: chain,
+    currencies: [currency],
+  });
+
   return (
     <ListItemButton
       key={address}
-      onClick={() => router.push(`/wallet/${address}`)}
+      // onClick={() => router.push(`/wallet/${address}`)}
     >
       <ListItemAvatar>
         <Avatar alt="Currency" src={`/tokens/${currency}.png`} />
       </ListItemAvatar>
-      <ListItemText primary={address} secondary={'testing'} />
+      <ListItemText primary={address} secondary={chain} />
+      <p>{data?.balances?.[0]?.amount}</p>
     </ListItemButton>
   );
 };

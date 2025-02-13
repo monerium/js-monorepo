@@ -1,10 +1,10 @@
-import { Dispatch, memo, SetStateAction } from 'react';
+import { memo } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 
-import { CurrencyCode } from '@monerium/sdk';
+import { Currency } from '@monerium/sdk';
 import { useAddresses } from '@monerium/sdk-react-provider';
 
 import { ChainSelection } from '../types';
@@ -14,11 +14,9 @@ const WalletList = memo(
   ({
     selectedChain,
     selectedCurrency,
-    setTotalBalance,
   }: {
     selectedChain: ChainSelection;
-    selectedCurrency: CurrencyCode;
-    setTotalBalance: Dispatch<SetStateAction<number>>;
+    selectedCurrency: Currency;
   }) => {
     const { data, isLoading } = useAddresses();
 
@@ -26,6 +24,14 @@ const WalletList = memo(
       selectedChain !== 'all'
         ? data?.addresses?.filter((a) => a.chains?.includes(selectedChain))
         : data?.addresses;
+
+    const addressAndChain =
+      data?.addresses?.flatMap((address) => {
+        return address.chains.map((chain) => ({
+          address: address.address,
+          chain: chain,
+        }));
+      }) || [];
 
     return (
       <Card sx={{ m: 3 }}>
@@ -38,11 +44,11 @@ const WalletList = memo(
               <Typography variant="body1">Loading...</Typography>
             ) : (
               <>
-                {filteredList?.map((add, i) => (
+                {addressAndChain?.map((add, i) => (
                   <WalletItem
                     key={i}
                     address={add.address}
-                    chain={selectedChain}
+                    chain={add.chain}
                     currency={selectedCurrency}
                   />
                 ))}

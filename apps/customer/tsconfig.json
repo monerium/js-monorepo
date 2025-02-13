@@ -9,6 +9,7 @@
     "paths": {
       "src/*": ["./*"],
       "components/*": ["./components/*"],
+      "hooks/*": ["./hooks/*"],
       "app/*": ["./app/*"]
     }
   },
