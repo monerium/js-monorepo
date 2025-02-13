@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.4.1](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.0...sdk-v3.4.1) (2025-02-13)
+
+
+### Bug Fixes
+
+* noble parsing ([210e2f3](https://github.com/monerium/js-monorepo/commit/210e2f3fbb1a78da28cc7d3778a2c903b06e1edb))
+
+
+### Miscellaneous
+
+* add shorten address helper ([cf2dc95](https://github.com/monerium/js-monorepo/commit/cf2dc9504efb4053e32a4bb3d5e45f74a4074089))
+
 ## [3.4.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.3.3...sdk-v3.4.0) (2025-02-12)
 
 

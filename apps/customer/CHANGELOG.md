@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/monerium/js-monorepo/compare/customer-v0.6.0...customer-v0.6.1) (2025-02-13)
+
+
+### Miscellaneous
+
+* display amount in demo app ([958e422](https://github.com/monerium/js-monorepo/commit/958e4226fc3595ff86f9f858b5eb8eb1459a4504))
+* improve demo app ([8bd19a5](https://github.com/monerium/js-monorepo/commit/8bd19a5a4cbfdf0d01718d65c0524f6105fa8d97))
+
 ## [0.6.0](https://github.com/monerium/js-monorepo/compare/customer-v0.5.1...customer-v0.6.0) (2025-02-12)
 
 
