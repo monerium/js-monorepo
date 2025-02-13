@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -14,28 +15,31 @@ export default function AuthorizedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const router = useRouter();
   const { isAuthorized, isLoading } = useAuth();
 
-  const router = useRouter();
+  useEffect(() => {
+    if (!isAuthorized && !isLoading) {
+      router.push('/');
+    }
+  }, [isAuthorized, isLoading, router]);
 
+  // Render loading screen if still loading
   if (isLoading) {
     return <LoadingScreen />;
   }
 
-  if (!isAuthorized && !isLoading) {
-    router?.push('/');
+  // Return null if not authorized
+  if (!isAuthorized) {
+    return null;
   }
 
-  if (isAuthorized) {
-    return (
-      <>
-        <Box sx={{ pb: 7 }}>
-          {children}
-          <Paper></Paper>
-          <BottomNavigation />
-        </Box>
-      </>
-    );
-  }
-  return null;
+  // Render main content if authorized
+  return (
+    <Box sx={{ pb: 7 }}>
+      {children}
+      <Paper></Paper>
+      <BottomNavigation />
+    </Box>
+  );
 }

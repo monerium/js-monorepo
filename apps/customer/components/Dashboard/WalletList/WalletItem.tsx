@@ -1,13 +1,14 @@
 'use client';
 
-import { ListItemText } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 
 import { Currency, shortenAddress } from '@monerium/sdk';
 import { useBalances } from '@monerium/sdk-react-provider';
 
+import Punk from 'components/Punk';
 import { useEns } from 'hooks/useEns';
 
 const WalletItem = ({
@@ -31,6 +32,7 @@ const WalletItem = ({
     <ListItemButton key={address}>
       <ListItemAvatar>
         <Avatar alt="Currency" src={`/tokens/${currency}.png`} />
+        {/* <Punk address={address} size={32} /> */}
       </ListItemAvatar>
       <ListItemText
         primary={ensName || shortenAddress(address)}

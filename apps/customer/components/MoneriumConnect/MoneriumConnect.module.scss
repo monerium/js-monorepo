@@ -1,12 +1,23 @@
 .wrapper {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    flex-grow: 1;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem;
 
     :global(.MuiButton-root) {
         margin: 16px;
         border-radius: 50px;
         text-wrap: nowrap;
     }
+}
+
+.topwrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+
+
 }
