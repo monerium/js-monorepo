@@ -1,5 +1,25 @@
 # Authorization
 
+When you [create an application](https://sandbox.monerium.dev/developers), you'll receive two sets of credentials:
+
+1. **Authorization Code Flow Credentials**
+
+   - A `client_id` specifically for user authentication flows.
+   - Used with PKCE for secure client-side applications.
+
+2. **Client Credentials**
+   - A different `client_id` and `client_secret` pair.
+   - Used for server-to-server authentication.
+
+> 💡 New to Monerium? You can experiment to understand how this fits into your platform in our [Sandbox](https://sandbox.monerium.dev).
+
+Choose the appropriate credentials based on your integration type:
+
+- Use Authorization Code Flow for user-facing applications (web apps, mobile apps)
+- Use Client Credentials for backend services and API integrations
+
+Jump to: [Client Credentials](#client-credentials-authorization)
+
 ## Authorization code flow with proof key for code exchange (PKCE)
 
 When public clients, e.g. native or single-page applications, request access tokens, some additional security concerns are posed that are not mitigated by the authorization code flow alone. This is because:
@@ -114,6 +134,8 @@ Endpoint documentation: [Access Token](https://monerium.dev/api-docs/v2#tag/auth
 
 ## Client credentials authorization
 
+> Note: client credentials are used to authenticate the application itself, not a user. This is useful when you want to access your own data. While you can access user data with client credentials, it is not recommended. Instead, use the authorization code flow to authenticate users.
+
 Confidential clients which can hide their credentials, e.g. backend servers, can be enlisted in Monerium's partner program, which enables them simultaneous access to multiple profiles which have granted authorization. These clients can get an access_token by submitting a POST or GET request to `/auth/token`:
 
 ```
@@ -122,6 +144,17 @@ Confidential clients which can hide their credentials, e.g. backend servers, can
   --data-urlencode 'client_id=1234567890abcdef' \
   --data-urlencode 'client_secret=27b871f28ab834b6be75c21578b4c944527fe34fce3952dc59f9c928b8502ee8' \
   --data-urlencode 'grant_type=client_credentials'
+```
+
+Response:
+
+```
+{
+  access_token: "your-access-token",
+  expires_in: 3600,
+  refresh_token: "your-refresh-token",
+  token_type: "Bearer"
+}
 ```
 
 Endpoint documentation: [Auth Token](https://monerium.dev/api-docs/v2#tag/auth/operation/auth-token)
