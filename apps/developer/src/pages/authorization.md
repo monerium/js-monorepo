@@ -1,23 +1,5 @@
 # Authorization
 
-When you [create an application](https://sandbox.monerium.dev/developers), you'll receive two sets of credentials:
-
-1. **Authorization Code Flow Credentials**
-
-   - A `client_id` specifically for user authentication flows.
-   - Used with PKCE for secure client-side applications.
-
-2. **Client Credentials**
-   - A different `client_id` and `client_secret` pair.
-   - Used for server-to-server authentication.
-
-> 💡 New to Monerium? You can experiment to understand how this fits into your platform in our [Sandbox](https://sandbox.monerium.dev).
-
-Choose the appropriate credentials based on your integration type:
-
-- Use Authorization Code Flow for user-facing applications (web apps, mobile apps)
-- Use Client Credentials for backend services and API integrations
-
 Jump to: [Client Credentials](#client-credentials-authorization)
 
 ## Authorization code flow with proof key for code exchange (PKCE)

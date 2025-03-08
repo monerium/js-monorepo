@@ -16,11 +16,23 @@ Once signed up, head over the [developer portal](https://sandbox.monerium.dev/de
 
 ### Obtaining Credentials
 
-After creating an app, users will receive a `client_id` for a client-side authentication flow and a `client_secret` and `client_id` for server-side authentication.
+After creating an app, you'll receive two sets of credentials:
 
-## Authentication Flows
+1. **Authorization Code Flow Credentials**
 
-### OAuth 2.0
+   - A `client_id` specifically for user authentication flows.
+   - Used with PKCE for secure client-side applications.
+
+2. **Client Credentials**
+   - A different `client_id` and `client_secret` pair.
+   - Used for server-to-server authentication.
+
+Choose the appropriate credentials based on your integration type:
+
+- Use Authorization Code Flow for user-facing applications (web apps, mobile apps)
+- Use Client Credentials for backend services and API integrations
+
+## Authorization Code Flow
 
 Our platform supports OAuth 2.0 for authentication. Here’s how to implement it:
 
@@ -33,9 +45,11 @@ Our platform supports OAuth 2.0 for authentication. Here’s how to implement it
 
 [In-depth guide](./authorization.md)
 
-### Server-Side Authentication
+### Client Credentials
 
 For server-side authentication, use the `client_id` and `client_secret` to obtain an access token.
+
+[In-depth guide](./authorization.md#client-credentials-authorization)
 
 Concepts:
 
