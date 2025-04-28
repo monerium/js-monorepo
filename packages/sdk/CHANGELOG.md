@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.2](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.1...sdk-v3.4.2) (2025-04-28)
+
+
+### Bug Fixes
+
+* sdk types, thanks to @PeterTheOne ([#140](https://github.com/monerium/js-monorepo/issues/140)) ([9ea0c8b](https://github.com/monerium/js-monorepo/commit/9ea0c8b7e623ac9046446c141dc39d4898b5a551))
+
 ## [3.4.1](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.0...sdk-v3.4.1) (2025-02-13)
 
 
