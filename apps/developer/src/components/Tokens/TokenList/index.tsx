@@ -30,7 +30,6 @@ export const TokenList: FC<TokenListProps> = ({ networks }) => {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
   };
-  console.log('networks', networks);
 
   return (
     <div id="token-list" className={styles.tokenList}>
