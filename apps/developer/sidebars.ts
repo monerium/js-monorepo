@@ -13,13 +13,26 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   typedocSidebar: [
     {
+      type: 'doc',
+      id: 'overview',
+    },
+    {
       type: 'category',
-      label: 'Welcome',
+      label: 'Getting Started',
       link: {
         type: 'doc',
-        id: 'index',
+        id: 'getting-started',
       },
-      items: ['index'],
+      items: ['authorization', 'environments', 'identifiers-and-formats'],
+    },
+    {
+      type: 'category',
+      label: 'Tokens',
+      link: {
+        type: 'doc',
+        id: 'tokens',
+      },
+      items: ['contracts-v2'],
     },
     {
       type: 'link',

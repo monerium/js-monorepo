@@ -1,0 +1,92 @@
+.tokenList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: black;
+}
+
+.chainRoot {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.chainRoot h6 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.chainRoot ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.chainRoot ul li {
+  margin-bottom: 0.5rem;
+}
+
+.chainTokens {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chainToken {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 0.375rem;
+  gap: 1rem;
+}
+
+.tColCurrency {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+}
+
+.tColAddress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: monospace;
+}
+
+.tColAddress button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: inherit;
+}
+
+.tColAddress a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tColAddress .version {
+  background-color: #e9ecef;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.tColAddress .legacy {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.tColAddress button:hover,
+.tColAddress a:hover {
+  opacity: 0.7;
+} 

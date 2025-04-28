@@ -1,0 +1,70 @@
+---
+title: Getting Started
+id: getting-started
+---
+
+# Monerium developer documentation
+
+## Introduction
+
+This guide will help you get started with the Monerium API to offer your users IBAN's directly connected to their blockchain address. This enables a seamless experience to collect and send money between bank accounts and blockchains over the SEPA network.
+
+## Getting Started
+
+### Sign Up
+
+To get started, head over to our [Sandbox](https://sandbox.monerium.dev) and sign up.
+
+### Creating an App
+
+Once signed up, head over the [developer portal](https://sandbox.monerium.dev/developers) and create an app.
+
+### Obtaining Credentials
+
+After creating an app, you will receive two distinct sets of credentials, each tailored for specific use cases. Below is a breakdown of these credentials and guidance on how to use them effectively.
+
+### Types of Credentials
+
+1. **Authorization Code Flow Credentials**
+
+   - `client_id`: A unique identifier for user authentication flows.
+   - **Use Case:** Designed for secure client-side applications, paired with PKCE (Proof Key for Code Exchange) to enhance security.
+   - **Ideal For:** User-facing applications such as web apps or mobile apps.
+
+2. **Client Credentials**
+   - `client_id` and `client_secret`: A pair of credentials used for server-to-server authentication.
+   - **Use Case:** Server-to-server authentication.
+   - **Ideal For:** Backend services and API integrations, where user interaction is not required.
+
+### Implementing Authorization Code Flow
+
+1. Redirect users to the authorization flow.
+2. Handle the returned authorization code.
+3. Exchange the code for an access token.
+
+[In-depth guide](./authorization)
+
+### Using Client Credentials
+
+For server-side authentication, follow these steps:
+
+1.  Use the `client_id` and `client_secret` to authenticate your application.
+2.  Request an access token directly from the authorization server.
+
+[In-depth guide](./authorization#client-credentials-authorization)
+
+### Key Concepts and References
+
+- OAuth 2.0: The foundational framework for authorization. [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749).
+
+- PKCE (Proof Key for Code Exchange): A security enhancement for public clients. [RFC 7636](https://www.rfc-editor.org/rfc/rfc7636)
+
+- Bearer Authentication: A method for transmitting access tokens. [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750)
+
+## Next steps.
+
+Head over to the [API Documentation](./docs/api) to get started with the Monerium API.
+
+## Need help?
+
+We have a [Discord server](https://monerium.com/invite/discord) where you can get help from the community and the Monerium team.
