@@ -224,6 +224,8 @@ export enum AccountState {
   requested = 'requested',
   approved = 'approved',
   pending = 'pending',
+  rejected = 'rejected',
+  closed = 'closed',
 }
 
 export interface KYC {
@@ -424,17 +426,14 @@ export interface SCANIdentifier extends Identifier {
   accountNumber: string;
 }
 
-export interface Individual {
-  name: string;
-  firstName: string;
-  lastName: string;
-  country?: string;
+export interface Individual extends CounterpartDetails {
+  firstName?: string;
+  lastName?: string;
+  address?: string;
 }
 
-export interface Corporation {
-  name: string;
+export interface Corporation extends CounterpartDetails {
   companyName: string;
-  country?: string;
 }
 
 export interface Issuer {
@@ -451,10 +450,22 @@ export interface Counterpart {
   details: Individual | Corporation | Issuer;
 }
 
+export interface CounterpartDetails {
+  name: string;
+  bank?: CounterpartBank;
+  country?: string;
+}
+
+export interface CounterpartBank {
+  name?: string;
+  address?: string;
+  bic?: string;
+}
+
 export interface OrderMetadata {
+  placedAt: string;
   processedAt?: string;
   rejectedReason?: string;
-  placedAt: string;
   txHashes?: string[];
   supportingDocumentId?: string;
 }
@@ -595,6 +606,8 @@ export interface IBAN {
   profile: string;
   address: string;
   chain: Chain;
+  state: AccountState;
+  emailNotifications: boolean;
 }
 
 export interface IBANsResponse {
