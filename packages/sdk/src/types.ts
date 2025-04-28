@@ -224,6 +224,8 @@ export enum AccountState {
   requested = 'requested',
   approved = 'approved',
   pending = 'pending',
+  rejected = 'rejected',
+  closed = 'closed',
 }
 
 export interface KYC {
@@ -235,6 +237,7 @@ export enum PaymentStandard {
   iban = 'iban',
   scan = 'scan',
   chain = 'chain',
+  account = 'account',
 }
 /**
  * The type of ID document. Passports, National ID cards, and driving licenses are supported.
@@ -409,37 +412,62 @@ export interface CrossChainIdentifier extends Identifier {
   chain: Chain | ChainId;
 }
 
+export interface BankAccountIdentifier extends Identifier {
+  /** The standard of the bank account. This is used to identify generic bank account. */
+  standard: PaymentStandard.account;
+  /** The account number of the bank account. */
+  accountNumber: number;
+  /** The address of the bank account holder. */
+  address: string;
+}
 export interface SCANIdentifier extends Identifier {
   standard: PaymentStandard.scan;
   sortCode: string;
   accountNumber: string;
 }
 
-export interface Individual {
-  firstName: string;
-  lastName: string;
-  country?: string;
+export interface Individual extends CounterpartDetails {
+  firstName?: string;
+  lastName?: string;
+  address?: string;
 }
 
-export interface Corporation {
+export interface Corporation extends CounterpartDetails {
   companyName: string;
-  country: string;
+}
+
+export interface Issuer {
+  /** The sender name. This can be a corporate or an individual. */
+  name: string;
 }
 
 export interface Counterpart {
-  identifier: IBANIdentifier | SCANIdentifier | CrossChainIdentifier;
-  details: Individual | Corporation;
+  identifier:
+    | IBANIdentifier
+    | SCANIdentifier
+    | CrossChainIdentifier
+    | BankAccountIdentifier;
+  details: Individual | Corporation | Issuer;
+}
+
+export interface CounterpartDetails {
+  name?: string;
+  bank?: CounterpartBank;
+  country?: string;
+}
+
+export interface CounterpartBank {
+  name?: string;
+  address?: string;
+  bic?: string;
 }
 
 export interface OrderMetadata {
-  approvedAt: string;
-  processedAt: string;
-  rejectedAt: string;
-  state: OrderState;
-  placedBy: string;
   placedAt: string;
-  receivedAmount: string;
-  sentAmount: string;
+  processedAt?: string;
+  rejectedReason?: string;
+  txHashes?: string[];
+  supportingDocumentId?: string;
 }
 
 export interface OrderFilter {
@@ -454,19 +482,17 @@ export interface OrderFilter {
 export interface Order {
   id: string;
   profile: string;
-  accountId: string;
   address: string;
   kind: OrderKind;
   chain: Chain;
   amount: string;
   currency: Currency;
-  totalFee: string;
-  fees: Fee[];
+  // totalFee: string;
+  // fees: Fee[];
   counterpart: Counterpart;
   memo: string;
-  rejectedReason: string;
-  supportingDocumentId: string;
   meta: OrderMetadata;
+  state: OrderState;
 }
 
 export interface OrdersResponse {
@@ -580,6 +606,8 @@ export interface IBAN {
   profile: string;
   address: string;
   chain: Chain;
+  state: AccountState;
+  emailNotifications: boolean;
 }
 
 export interface IBANsResponse {
