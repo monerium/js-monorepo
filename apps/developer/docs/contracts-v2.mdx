@@ -50,7 +50,7 @@ Although we have tried to be as prudent as possible in the migration, some diffi
 
 Your wallet may pick up the new token and show both V1 and V2 tokens with the same balance.
 
-![Example of a Safe wallet displaying both V1 and V2 tokens](../static/img/v2-double-wallet.png)
+![Example of a Safe wallet displaying both V1 and V2 tokens](../static/img/V2-double-wallet.png)
 
 We are working with the wallets and platforms to improve the icon and details for the V2 token. You can differentiate between the versions by the name and address:
 
@@ -63,7 +63,7 @@ We are working with the wallets and platforms to improve the icon and details fo
 
 When signing transactions using the V1 token on projects like [Aave](https://aave.com/) and [Curve](https://curve.fi/), you might see two EURe transfer events in the preview in your wallet.
 
-![Example of two events in a wallet preview when using Aave](../static/img/v2-double-events.png)
+![Example of two events in a wallet preview when using Aave](../static/img/V2-double-events.png)
 
 This behavior is expected because the V1 now forwards all transactions to V2 which manages the state of balances, approvals etc. Once the ecosystem has moved to V2, only one event is emitted, showing a single transfer event for EURe in the preview.
 
