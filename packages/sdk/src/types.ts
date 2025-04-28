@@ -235,6 +235,7 @@ export enum PaymentStandard {
   iban = 'iban',
   scan = 'scan',
   chain = 'chain',
+  account = 'account',
 }
 /**
  * The type of ID document. Passports, National ID cards, and driving licenses are supported.
@@ -409,6 +410,14 @@ export interface CrossChainIdentifier extends Identifier {
   chain: Chain | ChainId;
 }
 
+export interface BankAccountIdentifier extends Identifier {
+  /** The standard of the bank account. This is used to identify generic bank account. */
+  standard: PaymentStandard.account;
+  /** The account number of the bank account. */
+  accountNumber: number;
+  /** The address of the bank account holder. */
+  address: string;
+}
 export interface SCANIdentifier extends Identifier {
   standard: PaymentStandard.scan;
   sortCode: string;
@@ -416,30 +425,38 @@ export interface SCANIdentifier extends Identifier {
 }
 
 export interface Individual {
+  name: string;
   firstName: string;
   lastName: string;
   country?: string;
 }
 
 export interface Corporation {
+  name: string;
   companyName: string;
-  country: string;
+  country?: string;
+}
+
+export interface Issuer {
+  /** The sender name. This can be a corporate or an individual. */
+  name: string;
 }
 
 export interface Counterpart {
-  identifier: IBANIdentifier | SCANIdentifier | CrossChainIdentifier;
-  details: Individual | Corporation;
+  identifier:
+    | IBANIdentifier
+    | SCANIdentifier
+    | CrossChainIdentifier
+    | BankAccountIdentifier;
+  details: Individual | Corporation | Issuer;
 }
 
 export interface OrderMetadata {
-  approvedAt: string;
-  processedAt: string;
-  rejectedAt: string;
-  state: OrderState;
-  placedBy: string;
+  processedAt?: string;
+  rejectedReason?: string;
   placedAt: string;
-  receivedAmount: string;
-  sentAmount: string;
+  txHashes?: string[];
+  supportingDocumentId?: string;
 }
 
 export interface OrderFilter {
@@ -454,19 +471,17 @@ export interface OrderFilter {
 export interface Order {
   id: string;
   profile: string;
-  accountId: string;
   address: string;
   kind: OrderKind;
   chain: Chain;
   amount: string;
   currency: Currency;
-  totalFee: string;
-  fees: Fee[];
+  // totalFee: string;
+  // fees: Fee[];
   counterpart: Counterpart;
   memo: string;
-  rejectedReason: string;
-  supportingDocumentId: string;
   meta: OrderMetadata;
+  state: OrderState;
 }
 
 export interface OrdersResponse {
