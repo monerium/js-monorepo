@@ -451,7 +451,7 @@ export interface Counterpart {
 }
 
 export interface CounterpartDetails {
-  name: string;
+  name?: string;
   bank?: CounterpartBank;
   country?: string;
 }
