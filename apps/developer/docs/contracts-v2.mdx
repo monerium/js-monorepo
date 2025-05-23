@@ -1,0 +1,90 @@
+---
+title: Contracts V2
+id: contracts-v2
+---
+
+# What you need to know about the V2 token contracts
+
+## What is happening
+
+We are upgrading the token smart contracts (EURe, USDe, GBPe, and ISKe) from version 1 (V1) to version 2 (V2). Ackee Blockchain Security, an industry leader trusted by top-tier organizations in web3 like Safe and 1inch, audited the new smart contracts. The report is available here.
+
+**Don't worry — the version 1 of the tokens will continue to work as usual without switching to the version 2 token.**
+Version 1 of the tokens will still use the same address as before and operate with the version 2 contracts behind the scenes, ensuring your balance remains correct and you benefit from lower gas fees.
+
+The upgrade is a significant step towards adopting the most advanced and widely accepted ERC standards. By leveraging OpenZeppelin's community-vetted libraries, the tokens inherit industry best practices and benefit from enhanced security and functionality. OpenZeppelin provides a robust framework that simplifies the integration of complex features, such as Permit (ERC2612), facilitates a smoother upgrade process, and guarantees that our smart contracts remain compliant with evolving ERC standards.
+
+##When will this happen
+We will upgrade the tokens in phases:
+
+| Date                           | Chain    | Status       |
+| ------------------------------ | -------- | ------------ |
+| Sunday, 18th of August 2024    | Polygon  | ✅ completed |
+| Sunday, 25th of August 2024    | Gnosis   | ✅ completed |
+| Tuesday, 17th of December 2024 | Ethereum | ✅ completed |
+
+## Why the upgrade matters to you
+
+The upgrade of the tokens significantly benefits users with both cost savings and enhanced features.
+
+### 1. Gas cost efficiency
+
+The new contract includes optimized functions that significantly reduce gas consumption, making onchain transactions much cheaper for users.
+
+| ERC20 function                                                                   | V1 - Gas used | V2 - Gas used | Difference                                      |
+| -------------------------------------------------------------------------------- | ------------- | ------------- | ----------------------------------------------- |
+| **Transfer** <br/> <small>Sending tokens to another address</small>              | 91908         | 26245         | <span style={{color: "#6fbf7e"}}>**71%**</span> |
+| **Approve** <br/> <small>Allow someone to spend tokens from your account</small> | 68586         | 24858         | <span style={{color: "#6fbf7e"}}>**64%**</span> |
+
+### 2. A new feature, Permit (ERC2612)
+
+The V2 tokens now support [ERC-2612 Permit](https://eips.ethereum.org/EIPS/eip-2612). Developers can use ERC-2612 Permit instead of [ERC-20 Approve](https://eips.ethereum.org/EIPS/eip-20) to improve user experience by relying on gasless token approvals through off-chain signatures, eliminating the need for a separate on-chain approval transaction. Using Permit, developers can create more efficient and user-friendly applications.
+
+For more information, [read our tutorial.](https://github.com/monerium/smart-contracts/blob/v2.0.0/docs/permit.md)
+
+## How you are affected
+
+Although we have tried to be as prudent as possible in the migration, some difficulties are expected. We are working with the wallets, blockchain explorers, and DeFi protocols to migrate users and liquidity to the new tokens. Below is a list of how the upgrade may affect you.
+
+### 1. Wallets displaying both V1 and V2 tokens
+
+Your wallet may pick up the new token and show both V1 and V2 tokens with the same balance.
+
+![Example of a Safe wallet displaying both V1 and V2 tokens](../static/img/V2-double-wallet.png)
+
+We are working with the wallets and platforms to improve the icon and details for the V2 token. You can differentiate between the versions by the name and address:
+
+|                       | V1                                         | V2                                         |
+| --------------------- | ------------------------------------------ | ------------------------------------------ |
+| Name                  | Monerium EUR emoney                        | Monerium EURe                              |
+| Gnosis EURe address   | 0xcB444e90D8198415266c6a2724b7900fb12FC56E | 0x420CA0f9B9b604cE0fd9C18EF134C705e5Fa3430 |
+| Polygon EURe address  | 0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6 | 0xE0aEa583266584DafBB3f9C3211d5588c73fEa8d |
+| Ethereum EURe address | 0x3231Cb76718CDeF2155FC47b5286d82e6eDA273f | 0x39b8B6385416f4cA36a20319F70D28621895279D |
+
+When signing transactions using the V1 token on projects like [Aave](https://aave.com/) and [Curve](https://curve.fi/), you might see two EURe transfer events in the preview in your wallet.
+
+![Example of two events in a wallet preview when using Aave](../static/img/V2-double-events.png)
+
+This behavior is expected because the V1 now forwards all transactions to V2 which manages the state of balances, approvals etc. Once the ecosystem has moved to V2, only one event is emitted, showing a single transfer event for EURe in the preview.
+
+### 3. Event logs transitioning from V1 to V2
+
+If you’re a builder using EURe event logs, your indexer may have broken. Although both V1 and V2 will always show the same balance, there is a nuanced difference in how the two versions emit logs. The fix is transitioning from V1 logs at a specific block height to V2 logs.
+
+| Chain         | T - block height | V1 address                                 | V2 address                                 |
+| ------------- | ---------------- | ------------------------------------------ | ------------------------------------------ |
+| Gnosis EURe   | 35656951         | 0xcB444e90D8198415266c6a2724b7900fb12FC56E | 0x420CA0f9B9b604cE0fd9C18EF134C705e5Fa3430 |
+| Polygon EURe  | 60733237         | 0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6 | 0xE0aEa583266584DafBB3f9C3211d5588c73fEa8d |
+| Ethereum EURe | 21419972         | 0x3231Cb76718CDeF2155FC47b5286d82e6eDA273f | 0x39b8B6385416f4cA36a20319F70D28621895279D |
+
+When the `transfer` or `transferFrom` methods are called on the V1 token, two events are emitted, one for each version. When the same methods are called on the V2 token, an event is only emitted for that token. This means that V1 will have all the relevant information to reconstruct the state up to T, and V2 will have the appropriate information after T.
+
+## Continued support for version 1
+
+We understand that transitioning can take time, and users may have various needs and preferences. Therefore, it is important to note that the V1 tokens will continue to be supported. You can still use them as usual without any immediate need to upgrade.
+
+Whether you use the V1 token or the V2 token in your wallet, you will still experience reduced gas costs and see the same balance.
+
+## How to use the V2 tokens
+
+All information about token addresses, supported chains, etc., can be found at https://monerium.dev/docs/tokens.
