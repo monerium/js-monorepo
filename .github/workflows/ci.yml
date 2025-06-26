@@ -103,5 +103,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: docs-deployment
-        if: needs.release-please.outputs.releases_created == 'true'
         uses: actions/deploy-pages@v4
