@@ -141,10 +141,7 @@ export class MoneriumClient {
         (envOrOptions as ClientCredentials)?.clientSecret
       ) {
         this.#debug('Client credentials detected');
-        console.error(
-          '\x1b[31m%s\x1b[0m',
-          'Use client credentials only on the server where the secret is secure!'
-        );
+
         const { clientId, clientSecret } = envOrOptions as ClientCredentials;
         this.#client = {
           clientId: clientId as string,
