@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.3](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.2...sdk-v3.4.3) (2025-07-14)
+
+
+### Bug Fixes
+
+* remove incorrect console.error, closes [#143](https://github.com/monerium/js-monorepo/issues/143), thank you [@moltam89](https://github.com/moltam89) ([abb7dbb](https://github.com/monerium/js-monorepo/commit/abb7dbba3cc9eaac3dea13ff6bdbd957cb7a501c))
+
 ## [3.4.2](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.1...sdk-v3.4.2) (2025-04-28)
 
 
