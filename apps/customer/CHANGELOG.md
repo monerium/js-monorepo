@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/monerium/js-monorepo/compare/customer-v0.7.0...customer-v0.7.1) (2025-07-17)
+
+
+### Bug Fixes
+
+* send correct address in test page ([c788a22](https://github.com/monerium/js-monorepo/commit/c788a220d818970c877c70aa867ba075509947aa))
+
 ## [0.7.0](https://github.com/monerium/js-monorepo/compare/customer-v0.6.1...customer-v0.7.0) (2025-02-13)
 
 
