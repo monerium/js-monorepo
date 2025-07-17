@@ -644,7 +644,11 @@ export default function Test() {
 
   const autoLink = () => {
     signMessageAsync({ message: constants.LINK_MESSAGE }).then((signature) => {
-      authorize({ address: `${address}`, signature, chain: chainId });
+      authorize({
+        address: `${walletAddress}`,
+        signature,
+        chain: chainId,
+      });
     });
   };
   const authorizeSiwe = () => {
