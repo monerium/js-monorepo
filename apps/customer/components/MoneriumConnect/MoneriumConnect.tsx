@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { useSignMessage } from 'wagmi';
+import { useChainId, useSignMessage } from 'wagmi';
 import { useAccount } from 'wagmi';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,7 +18,7 @@ export const MoneriumConnect = () => {
   const { authorize, siwe, error } = useAuth();
   const { signMessageAsync } = useSignMessage();
   const [open, setOpen] = React.useState(!!(error as Error)?.message);
-
+  const chainId = useChainId();
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
@@ -34,7 +35,7 @@ export const MoneriumConnect = () => {
     address: `${address}`,
     appName: 'SDK TEST APP',
     redirectUri: 'http://localhost:3000/dashboard',
-    chainId: 1,
+    chainId: chainId,
     privacyPolicyUrl: 'https://example.com/privacy-policy',
     termsOfServiceUrl: 'https://example.com/terms-of-service',
   });
@@ -94,13 +95,16 @@ export const MoneriumConnect = () => {
             Connect
           </Button>
         </Box>
-        <Button
-          size="large"
-          variant="outlined"
-          onClick={() => signInWithEthereum()}
-        >
-          Sign In with Ethereum
-        </Button>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <ConnectButton />
+          <Button
+            size="large"
+            variant="outlined"
+            onClick={() => signInWithEthereum()}
+          >
+            Sign In with Ethereum
+          </Button>
+        </div>
       </Box>
     </>
   );

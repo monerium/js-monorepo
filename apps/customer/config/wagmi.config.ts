@@ -5,7 +5,7 @@ import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 const config = getDefaultConfig({
   appName: 'Monerium',
   projectId: 'YOUR_PROJECT_ID', // TODO
-  chains: [mainnet, sepolia],
+  chains: [sepolia],
   ssr: true,
   // transports: {
   //   [mainnet.id]: http("https://eth-mainnet.g.alchemy.com/v2/..."),
