@@ -491,6 +491,7 @@ export interface Order {
   // fees: Fee[];
   counterpart: Counterpart;
   memo: string;
+  referenceNumber?: string;
   meta: OrderMetadata;
   state: OrderState;
 }
