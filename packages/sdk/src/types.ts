@@ -491,7 +491,7 @@ export interface Order {
   // fees: Fee[];
   counterpart: Counterpart;
   memo: string;
-  referenceNumber?: string;
+  referenceNumber?: string; // see https://help.monerium.com/article/22-using-memos-and-references-in-sepa-payments
   meta: OrderMetadata;
   state: OrderState;
 }
