@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.4](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.3...sdk-v3.4.4) (2025-11-14)
+
+
+### Bug Fixes
+
+* add comment and trigger pleasse release ([1b0f5bb](https://github.com/monerium/js-monorepo/commit/1b0f5bba39dd527b7c975d604de63bf4f49e1276))
+
 ## [3.4.3](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.2...sdk-v3.4.3) (2025-07-14)
 
 
