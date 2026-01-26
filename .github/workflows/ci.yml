@@ -65,6 +65,43 @@ jobs:
       - name: Build docs for embedding (baseUrl=/developers/)
         run: BASE_URL=/developers/ pnpm --filter developer build
 
+      - name: Create docs tarball for release
+        run: |
+          cd apps/developer
+          tar -czf developer-docs-build.tar.gz -C build .
+          mv developer-docs-build.tar.gz ../../
+
+      - name: Upload docs build to GitHub Release
+        if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: developer-docs-build.tar.gz
+          tag_name: ${{ needs.release-please.outputs.tag_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload docs to continuous 'docs-latest' release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: developer-docs-build.tar.gz
+          tag_name: docs-latest
+          name: "Documentation Build (Latest)"
+          body: |
+            Latest documentation build from main branch.
+            Built with `baseUrl='/developers/'` for embedding.
+
+            **Download and extract:**
+            ```bash
+            curl -L https://github.com/${{ github.repository }}/releases/download/docs-latest/developer-docs-build.tar.gz -o docs.tar.gz
+            tar -xzf docs.tar.gz
+            ```
+
+            **Commit:** ${{ github.sha }}
+            **Date:** ${{ github.event.head_commit.timestamp }}
+          prerelease: false
+          draft: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload docs build (for embedding elsewhere)
         uses: actions/upload-artifact@v4
         with:
