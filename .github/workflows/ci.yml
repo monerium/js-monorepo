@@ -59,6 +59,9 @@ jobs:
         with:
           path: apps/developer/build
 
+      - name: Clean TypeDoc generated files and cache before rebuild
+        run: rm -rf apps/developer/docs/packages apps/developer/.docusaurus
+
       - name: Build docs for embedding (baseUrl=/developers/)
         run: BASE_URL=/developers/ pnpm --filter developer build
 

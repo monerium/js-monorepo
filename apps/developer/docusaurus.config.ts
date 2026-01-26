@@ -116,7 +116,7 @@ const config: Config = {
         entryPoints: ['../../packages/sdk/src/index.ts'],
         tsconfig: '../../packages/sdk/tsconfig.json',
         out: 'docs/packages/sdk',
-        publicPath: '/docs/packages/sdk',
+        publicPath: '/packages/sdk',
       },
     ],
     [
@@ -127,12 +127,14 @@ const config: Config = {
         entryPoints: ['../../packages/sdk-react-provider/src/index.ts'],
         tsconfig: '../../packages/sdk-react-provider/tsconfig.json',
         out: 'docs/packages/sdk-react-provider',
-        publicPath: '/docs/packages/sdk-react-provider',
+        publicPath: '/packages/sdk-react-provider',
       },
     ],
   ],
 
-  onBrokenLinks: 'throw',
+  // Allow broken links when building for embedding (BASE_URL is set)
+  // The TypeDoc publicPath is hardcoded and creates broken links when baseUrl changes
+  onBrokenLinks: process.env.BASE_URL ? 'warn' : 'throw',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
