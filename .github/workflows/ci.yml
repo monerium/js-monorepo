@@ -102,13 +102,6 @@ jobs:
           draft: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload docs build (for embedding elsewhere)
-        uses: actions/upload-artifact@v4
-        with:
-          name: developer-docs-build
-          path: apps/developer/build
-          retention-days: 90
-
       # - name: Deploy to GitHub Pages
       #   uses: peaceiris/actions-gh-pages@v4
       #   with:
