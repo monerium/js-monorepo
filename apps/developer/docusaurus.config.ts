@@ -101,7 +101,8 @@ const config: Config = {
   url: 'https://monerium.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/js-monorepo/',
+  // Can be overridden with BASE_URL environment variable
+  baseUrl: process.env.BASE_URL || '/js-monorepo/',
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'monerium', // Usually your GitHub org/user name.
