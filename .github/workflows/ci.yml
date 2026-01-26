@@ -70,7 +70,7 @@ jobs:
         with:
           name: developer-docs-build
           path: apps/developer/build
-          retention-days: 7
+          retention-days: 90
 
       # - name: Deploy to GitHub Pages
       #   uses: peaceiris/actions-gh-pages@v4
