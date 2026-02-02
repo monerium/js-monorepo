@@ -986,9 +986,10 @@ export function usePlaceOrder({
         queryKey: keys.getOrders(),
       });
       // Only invalidate balances if we got a full Order response (not a 202 multi-sig response)
-      if ('address' in data && 'chain' in data) {
+      const orderData = data as Order;
+      if (orderData.address && orderData?.chain) {
         queryClient.invalidateQueries({
-          queryKey: keys.getBalances(data.address, data.chain),
+          queryKey: keys.getBalances(orderData.address, orderData.chain),
         });
       }
       // Allow the caller to add custom logic on success.
