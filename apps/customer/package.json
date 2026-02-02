@@ -23,7 +23,7 @@
     "@rainbow-me/rainbowkit": "^2.1.2",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": ">=5.0.0",
-    "next": ">=14.0.0",
+    "next": "15.1.11",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
     "viem": "2.x",
