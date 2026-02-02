@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.5](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.4...sdk-v3.4.5) (2026-02-02)
+
+
+### Miscellaneous
+
+* support custom order id ([d1b874c](https://github.com/monerium/js-monorepo/commit/d1b874cdaedf273038130a3d8f2e3268573b5a7d))
+
 ## [3.4.4](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.3...sdk-v3.4.4) (2025-11-14)
 
 

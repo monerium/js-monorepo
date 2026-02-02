@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.3](https://github.com/monerium/js-monorepo/compare/customer-v0.7.2...customer-v0.7.3) (2026-02-02)
+
+
+### Miscellaneous
+
+* support custom order id ([d1b874c](https://github.com/monerium/js-monorepo/commit/d1b874cdaedf273038130a3d8f2e3268573b5a7d))
+* update next because of vulrnability ([38c6470](https://github.com/monerium/js-monorepo/commit/38c64700d82a3e995b5cd47ff231b5e41a0af032))
+
 ## [0.7.2](https://github.com/monerium/js-monorepo/compare/customer-v0.7.1...customer-v0.7.2) (2025-07-22)
 
 
