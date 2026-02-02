@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.6](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.5...sdk-v3.4.6) (2026-02-02)
+
+
+### Miscellaneous
+
+* add 202 response status for order endpoint ([3c2ce73](https://github.com/monerium/js-monorepo/commit/3c2ce7330b583bb682a2b3dd18bdddada78eab4b))
+
 ## [3.4.5](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.4...sdk-v3.4.5) (2026-02-02)
 
 

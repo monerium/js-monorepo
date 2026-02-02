@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.1...sdk-react-provider-v1.3.2) (2026-02-02)
+
+
+### Miscellaneous
+
+* add 202 response status for order endpoint ([3c2ce73](https://github.com/monerium/js-monorepo/commit/3c2ce7330b583bb682a2b3dd18bdddada78eab4b))
+
 ## [1.3.1](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.0...sdk-react-provider-v1.3.1) (2025-02-13)
 
 
