@@ -33,6 +33,7 @@ import {
   usePlaceOrder,
   useProfile,
   useRequestIban,
+  useSignatures,
   useSubmitProfileDetails,
   useSubscribeOrderNotification,
   useTokens,
@@ -95,6 +96,7 @@ export default function Test() {
   });
 
   const { data: tokens } = useTokens();
+  const { data: signatures } = useSignatures();
 
   /**
    * Monerium mutations
@@ -853,6 +855,13 @@ export default function Test() {
               <details>
                 <summary>Click to Expand, total: {tokens?.length}</summary>
                 <PrettyPrintJson data={tokens} />
+              </details>
+            </div>
+            <div>
+              <h2>Signatures</h2>
+              <details>
+                <summary>Click to Expand, total: {signatures?.total}</summary>
+                <PrettyPrintJson data={signatures} />
               </details>
             </div>
           </div>

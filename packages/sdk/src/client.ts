@@ -51,6 +51,8 @@ import type {
   RefreshTokenPayload,
   RequestIbanPayload,
   ResponseStatus,
+  SignaturesQueryParams,
+  SignaturesResponse,
   SubmitProfileDetailsPayload,
   SupportingDoc,
   Token,
@@ -556,6 +558,43 @@ export class MoneriumClient {
   }
 
   /**
+   * Get pending signatures for the authenticated user.
+   *
+   * Returns pending signatures that require user action, such as order signatures
+   * or link address signatures. Accepts filtering by address, chain, kind, and profile.
+   *
+   * @group Signatures
+   * @param {SignaturesQueryParams} [params] - Optional query parameters to filter signatures
+   * @see {@link https://monerium.dev/api-docs-v2#tag/signatures/operation/get-signatures | API Documentation}
+   *
+   * @example
+   * ```ts
+   * // Get all pending signatures
+   * const signatures = await monerium.getSignatures();
+   *
+   * // Get pending order signatures for a specific address
+   * const orderSignatures = await monerium.getSignatures({
+   *   address: '0x1234...',
+   *   kind: 'order'
+   * });
+   *
+   * // Get pending signatures on a specific chain
+   * const polygonSignatures = await monerium.getSignatures({
+   *   chain: 'polygon'
+   * });
+   * ```
+   */
+  getSignatures(params?: SignaturesQueryParams): Promise<SignaturesResponse> {
+    const queryParameters = params
+      ? mapChainIdToChain(this.#env.name, params)
+      : undefined;
+    return this.#api<SignaturesResponse>(
+      'get',
+      `signatures${queryParams(queryParameters)}`
+    );
+  }
+
+  /**
    * Add a new address to the profile
    * @group Addresses
    * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address | API Documentation}
@@ -574,24 +613,10 @@ export class MoneriumClient {
    *
    * **Note:** For multi-signature orders, the API returns a 202 Accepted response
    * with `{status: 202, statusText: "Accepted"}` instead of the full Order object.
-   * Check if the response has an `id` property to determine if it's a full Order.
    *
    * @returns Promise that resolves to either:
    * - `Order` - Full order object for regular orders
    * - `ResponseStatus` - Status object with `{status: 202, statusText: "Accepted"}` for multi-sig orders
-   *
-   * @example
-   * ```ts
-   * const result = await monerium.placeOrder(orderData);
-   *
-   * if ('id' in result) {
-   *   // Regular order - full Order object
-   *   console.log('Order placed:', result.id);
-   * } else {
-   *   // Multi-sig order - 202 Accepted
-   *   console.log('Multi-sig order accepted:', result.status);
-   * }
-   * ```
    *
    * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders | API Documentation}
    *

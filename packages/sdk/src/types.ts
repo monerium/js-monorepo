@@ -684,3 +684,69 @@ export type ResponseStatus = {
   status: number;
   statusText: string;
 };
+
+// -- Signatures
+
+/**
+ * Type of pending signature
+ */
+export type PendingSignatureKind = 'linkAddress' | 'order';
+
+/**
+ * Base interface for pending signatures
+ */
+interface PendingSignatureBase {
+  kind: PendingSignatureKind;
+  chain: Chain;
+  address: string;
+  createdAt: string;
+}
+
+/**
+ * Pending signature for an order
+ */
+export interface PendingOrderSignature extends PendingSignatureBase {
+  id: string;
+  kind: 'order';
+  amount: string;
+  counterpart: Counterpart;
+  currency: Currency;
+}
+
+/**
+ * Pending signature for linking an address
+ */
+export interface PendingLinkAddressSignature extends PendingSignatureBase {
+  kind: 'linkAddress';
+}
+
+/**
+ * Union type for all pending signature types
+ */
+export type PendingSignature =
+  | PendingOrderSignature
+  | PendingLinkAddressSignature;
+
+/**
+ * Query parameters for fetching pending signatures
+ */
+export interface SignaturesQueryParams {
+  /** Filter by blockchain address */
+  address?: string;
+  /** Filter by blockchain network */
+  chain?: Chain | ChainId;
+  /** Filter by signature request kind */
+  kind?: PendingSignatureKind;
+  /** UUID of the profile (defaults to authenticated user's default profile) */
+  profile?: string;
+}
+
+/**
+ * Response from the signatures endpoint
+ */
+export interface SignaturesResponse {
+  /** Array of pending signatures */
+  pending: PendingSignature[];
+  /** Total number of pending signatures */
+  total: number;
+}

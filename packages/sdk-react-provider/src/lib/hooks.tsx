@@ -24,6 +24,8 @@ import MoneriumClient, {
   ProfilesResponse,
   RequestIbanPayload,
   ResponseStatus,
+  SignaturesQueryParams,
+  SignaturesResponse,
   SubmitProfileDetailsPayload,
   Token,
 } from '@monerium/sdk';
@@ -86,6 +88,11 @@ export const keys = {
   requestIban: ['monerium', 'request-iban'],
   placeOrder: ['monerium', 'place-order'],
   linkAddress: ['monerium', 'link-address'],
+  getSignatures: (filter?: unknown) => [
+    'monerium',
+    'signatures',
+    ...(filter ? [filter] : []),
+  ],
 };
 
 /** Internal hook to use SDK */
@@ -998,6 +1005,72 @@ export function usePlaceOrder({
     ...rest,
   };
 }
+/**
+ * Get pending signatures for the authenticated user.
+ *
+ * Returns pending signatures that require user action, such as order signatures
+ * or link address signatures. Accepts filtering by address, chain, kind, and profile.
+ *
+ * @group Hooks
+ * @category Signatures
+ * @param {Object} params
+ * @param {SignaturesQueryParams} params.query - Optional query parameters to filter signatures
+ *
+ * @example
+ * ```ts
+ * // Get all pending signatures
+ * const {
+ *    data: signatures,
+ *    isLoading,
+ *    isError,
+ *    error,
+ *    refetch,
+ *    ...moreUseQueryResults
+ * } = useSignatures();
+ *
+ * // Get pending order signatures for a specific address
+ * const { data: orderSignatures } = useSignatures({
+ *   query: {
+ *     address: '0x1234...',
+ *     kind: 'order'
+ *   }
+ * });
+ *
+ * // Check the kind of signature
+ * signatures?.pending.forEach(sig => {
+ *   if (sig.kind === 'order') {
+ *     console.log('Order signature:', sig.id, sig.amount);
+ *   } else {
+ *     console.log('Link address signature');
+ *   }
+ * });
+ * ```
+ * @see {@link https://monerium.dev/api-docs-v2#tag/signatures/operation/get-signatures | API Documentation}
+ */
+export function useSignatures({
+  query,
+  options,
+}: {
+  query?: SignaturesQueryParams;
+  /** {@inheritDoc QueryOptions} */
+  options?: QueryOptions<SignaturesResponse>;
+} = {}) {
+  const sdk = useSdk();
+  const { isAuthorized } = useAuth();
+
+  return useQuery<SignaturesResponse>({
+    ...options,
+    queryKey: keys.getSignatures(query),
+    queryFn: () => {
+      if (!sdk) {
+        throw new Error('No SDK instance available');
+      }
+      return sdk.getSignatures(query);
+    },
+    enabled: Boolean(sdk && isAuthorized && (options?.enabled ?? true)),
+  });
+}
+
 /**
  * # Add address to profile.
  *
