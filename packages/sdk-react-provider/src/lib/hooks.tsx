@@ -329,7 +329,7 @@ export function useTokens({
 /**
  * @group Hooks
  * @category Addresses
- * @param {Object} params 
+ * @param {Object} params
 
  * @example
  * ```ts
@@ -909,6 +909,10 @@ export function useMoveIban({
  * When the order has been placed, the orders query will be invalidated and re-fetched.
  *
  * If the order amount is above 15000, a supporting document is required.
+ *
+ * **Note:** For multi-signature orders, the API returns a 202 Accepted response
+ * with `{status: 202, statusText: "Accepted"}` instead of the full Order object.
+ *
  * @group Hooks
  * @category Orders
  * @param param
@@ -934,8 +938,8 @@ export function usePlaceOrder({
 }: {
   supportingDocument?: File;
   /** {@inheritDoc MutationOptions} */
-  mutation?: MutationOptions<Order, Error, NewOrder>;
-} = {}): MutationResult<'placeOrder', Order, Error, NewOrder> {
+  mutation?: MutationOptions<Order | ResponseStatus, Error, NewOrder>;
+} = {}): MutationResult<'placeOrder', Order | ResponseStatus, Error, NewOrder> {
   const sdk = useSdk();
   const { isAuthorized } = useAuth();
   const queryClient = useQueryClient();
@@ -974,9 +978,12 @@ export function usePlaceOrder({
       queryClient.invalidateQueries({
         queryKey: keys.getOrders(),
       });
-      queryClient.invalidateQueries({
-        queryKey: keys.getBalances(data.address, data.chain),
-      });
+      // Only invalidate balances if we got a full Order response (not a 202 multi-sig response)
+      if ('address' in data && 'chain' in data) {
+        queryClient.invalidateQueries({
+          queryKey: keys.getBalances(data.address, data.chain),
+        });
+      }
       // Allow the caller to add custom logic on success.
       mutation?.onSuccess?.(data, variables, context);
     },

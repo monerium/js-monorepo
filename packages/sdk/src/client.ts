@@ -570,11 +570,34 @@ export class MoneriumClient {
   }
 
   /**
+   * Place a new order.
+   *
+   * **Note:** For multi-signature orders, the API returns a 202 Accepted response
+   * with `{status: 202, statusText: "Accepted"}` instead of the full Order object.
+   * Check if the response has an `id` property to determine if it's a full Order.
+   *
+   * @returns Promise that resolves to either:
+   * - `Order` - Full order object for regular orders
+   * - `ResponseStatus` - Status object with `{status: 202, statusText: "Accepted"}` for multi-sig orders
+   *
+   * @example
+   * ```ts
+   * const result = await monerium.placeOrder(orderData);
+   *
+   * if ('id' in result) {
+   *   // Regular order - full Order object
+   *   console.log('Order placed:', result.id);
+   * } else {
+   *   // Multi-sig order - 202 Accepted
+   *   console.log('Multi-sig order accepted:', result.status);
+   * }
+   * ```
+   *
    * @see {@link https://monerium.dev/api-docs-v2#tag/orders/operation/post-orders | API Documentation}
    *
    * @group Orders
    */
-  placeOrder(order: NewOrder): Promise<Order> {
+  placeOrder(order: NewOrder): Promise<Order | ResponseStatus> {
     const body = {
       kind: 'redeem',
       ...mapChainIdToChain(this.#env.name, order),
@@ -587,7 +610,11 @@ export class MoneriumClient {
       },
     };
 
-    return this.#api<Order>('post', `orders`, JSON.stringify(body));
+    return this.#api<Order | ResponseStatus>(
+      'post',
+      `orders`,
+      JSON.stringify(body)
+    );
   }
 
   /**
