@@ -498,6 +498,7 @@ export default function Test() {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
 
+      const id = formData.get('id') as string;
       const amount = formData.get('amount') as string;
       const currency = formData.get('currency') as Currency;
       const counterpartIdentifierAddress = formData.get(
@@ -517,6 +518,7 @@ export default function Test() {
       signMessageAsync({ message: msg }).then((signature) => {
         alert(`Signature: '${signature}'`);
         placeOrder({
+          id: id,
           address: walletAddress as string,
           amount: amount,
           currency: currency,
@@ -543,6 +545,7 @@ export default function Test() {
     }
     return (
       <form onSubmit={placingOrder}>
+        <Input name="id" defaultValue="" />
         <Input name="amount" defaultValue="1.33" />
 
         <label htmlFor="currency">currency:</label>

@@ -520,6 +520,8 @@ export interface Token {
 export type NewOrder = NewOrderByAddress | NewOrderByAccountId;
 
 export interface NewOrderCommon {
+  /** The unique identifier of the order */
+  id?: string;
   amount: string;
   signature: string;
   currency: Currency;
