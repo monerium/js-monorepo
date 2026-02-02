@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.4](https://github.com/monerium/js-monorepo/compare/customer-v0.7.3...customer-v0.7.4) (2026-02-02)
+
+
+### Miscellaneous
+
+* add signatures endpoint ([05f4190](https://github.com/monerium/js-monorepo/commit/05f41905073a127357b29750e3f4c958ef083665))
+
 ## [0.7.3](https://github.com/monerium/js-monorepo/compare/customer-v0.7.2...customer-v0.7.3) (2026-02-02)
 
 

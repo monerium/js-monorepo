@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.7](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.6...sdk-v3.4.7) (2026-02-02)
+
+
+### Miscellaneous
+
+* add signatures endpoint ([05f4190](https://github.com/monerium/js-monorepo/commit/05f41905073a127357b29750e3f4c958ef083665))
+
 ## [3.4.6](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.5...sdk-v3.4.6) (2026-02-02)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.3](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.2...sdk-react-provider-v1.3.3) (2026-02-02)
+
+
+### Miscellaneous
+
+* add signatures endpoint ([05f4190](https://github.com/monerium/js-monorepo/commit/05f41905073a127357b29750e3f4c958ef083665))
+* dont use in syntax ([2b7d008](https://github.com/monerium/js-monorepo/commit/2b7d008f7a8485d14f6d2fe921a2e5fc3672688d))
+
 ## [1.3.2](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.1...sdk-react-provider-v1.3.2) (2026-02-02)
 
 
