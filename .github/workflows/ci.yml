@@ -13,10 +13,12 @@ jobs:
     outputs:
       release_created_sdk: ${{ steps.release.outputs['packages/sdk--release_created'] }}
       release_created_sdk_react_provider: ${{ steps.release.outputs['packages/sdk-react-provider--release_created'] }}
+      release_created_developer: ${{ steps.release.outputs['apps/developer--release_created'] }}
       release_created: ${{ steps.release.outputs.release_created }}
       releases_created: ${{ steps.release.outputs.releases_created }}
       pr_created: ${{ steps.release.outputs.prs_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
+      tag_name_developer: ${{ steps.release.outputs['apps/developer--tag_name'] }}
       sha: ${{ steps.release.outputs.sha }}
     steps:
       - uses: googleapis/release-please-action@v4
@@ -29,9 +31,11 @@ jobs:
         run: |
           echo "Release created SDK: ${{ steps.release.outputs['packages/sdk--release_created']  }}"
           echo "Release created React Provider: ${{ steps.release.outputs['packages/sdk-react-provider--release_created'] }}"
+          echo "Release created Developer: ${{ steps.release.outputs['apps/developer--release_created'] }}"
           echo "Releases created: ${{ steps.release.outputs.releases_created }}"
           echo "PR created: ${{ steps.release.outputs.prs_created }}"
           echo "Release tag_name: ${{ steps.release.outputs.tag_name }}"
+          echo "Release tag_name Developer: ${{ steps.release.outputs['apps/developer--tag_name'] }}"
           echo "Release sha: ${{ steps.release.outputs.sha }}"
   build:
     env:
@@ -72,11 +76,11 @@ jobs:
           mv developer-docs-build.tar.gz ../../
 
       - name: Upload docs build to GitHub Release
-        if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+        if: ${{ needs.release-please.outputs.release_created_developer == 'true' }}
         uses: softprops/action-gh-release@v2
         with:
           files: developer-docs-build.tar.gz
-          tag_name: ${{ needs.release-please.outputs.tag_name }}
+          tag_name: ${{ needs.release-please.outputs.tag_name_developer }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload docs to continuous 'docs-latest' release

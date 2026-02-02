@@ -15,6 +15,9 @@
     "apps/customer": {
       "package-name": "customer"
     },
+    "apps/developer": {
+      "package-name": "developer"
+    },
     "packages/sdk": {
       "package-name": "@monerium/sdk",
       "exclude-paths": ["packages/sdk/docs", "packages/sdk/README.md"]
