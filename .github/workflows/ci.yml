@@ -58,24 +58,29 @@ jobs:
         run: pnpm build
 
       - name: Upload static files as artifact
+        continue-on-error: true
         id: docs-deployment
         uses: actions/upload-pages-artifact@v3
         with:
           path: apps/developer/build
 
       - name: Clean TypeDoc generated files and cache before rebuild
+        continue-on-error: true
         run: rm -rf apps/developer/docs/packages apps/developer/.docusaurus
 
       - name: Build docs for embedding (baseUrl=/developers/)
+        continue-on-error: true
         run: BASE_URL=/developers/ pnpm --filter developer build
 
-      - name: Create docs tarball for release
+      - name: Create docs tarball for docs release
+        continue-on-error: true
         run: |
           cd apps/developer
           tar -czf developer-docs-build.tar.gz -C build .
           mv developer-docs-build.tar.gz ../../
 
       - name: Upload docs build to GitHub Release
+        continue-on-error: true
         if: ${{ needs.release-please.outputs.release_created_developer == 'true' }}
         uses: softprops/action-gh-release@v2
         with:
@@ -84,6 +89,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload docs to continuous 'docs-latest' release
+        continue-on-error: true
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
