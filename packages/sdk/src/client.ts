@@ -63,7 +63,6 @@ import {
   urlEncoded,
 } from './utils';
 
-// import pjson from "../package.json";
 const { STORAGE_CODE_VERIFIER, STORAGE_ACCESS_TOKEN, STORAGE_ACCESS_EXPIRY } =
   constants;
 
