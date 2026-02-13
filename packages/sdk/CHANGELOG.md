@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.8](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.7...sdk-v3.4.8) (2026-02-13)
+
+
+### Miscellaneous
+
+* trigger release for sdk because pipeline previously failed ([032e2e6](https://github.com/monerium/js-monorepo/commit/032e2e66a8157f0baebf1ea314eab3edb786d8a3))
+
 ## [3.4.7](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.6...sdk-v3.4.7) (2026-02-02)
 
 
