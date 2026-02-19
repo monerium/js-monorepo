@@ -1,7 +1,9 @@
 import nextConfig from 'eslint-config-next';
+import tseslint from 'typescript-eslint';
 
 export default [
   ...nextConfig,
+  ...tseslint.configs.recommended,
   {
     rules: {
       // Customize rules here
@@ -26,6 +28,11 @@ export default [
       'dist/',
       '*.config.js',
       '*.config.mjs',
+      '.postcssrc.js',
+      '.lintstagedrc.js',
+      'jest.*.js',
+      'test/**/*.test.{ts,tsx,mjs,js}',
+      '**/*.test.{ts,tsx,mjs,js}',
       'coverage/',
     ],
   },

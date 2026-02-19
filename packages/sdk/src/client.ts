@@ -349,7 +349,7 @@ export class MoneriumClient {
           await this.getTokens();
           this.#debug('Authorized');
           return true;
-        } catch (error) {
+        } catch (_error) {
           this.#debug('Access token is invalid.');
           window.localStorage.removeItem(STORAGE_ACCESS_TOKEN);
           window.localStorage.removeItem(STORAGE_ACCESS_EXPIRY);

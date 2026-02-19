@@ -1,9 +1,16 @@
+import path from 'path';
+import React from 'react';
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import { TypeDocOptions } from 'typedoc';
 import { PluginOptions } from 'typedoc-plugin-markdown';
 import type * as Redocusaurus from 'redocusaurus';
+
+// redoc.lib.js is a UMD bundle that assumes React is available as a global.
+// jiti (used by Docusaurus to load plugins server-side) doesn't provide one,
+// so we set it here before any plugin is loaded.
+(global as any).React = React;
 
 // https://typedoc-plugin-markdown.org/schema.json
 const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
@@ -165,17 +172,10 @@ const config: Config = {
         // Plugin Options for loading OpenAPI files
         // https://redocusaurus.vercel.app/docs/getting-started/plugin-options
         specs: [
-          // How to use a local instance of OpenAPI spec
-          // {
-          //   id: 'openapi',
-          //   spec: './src/openapi-v2.yaml',
-          //   route: '/docs/openapi/',
-          // },
-
-          // Let's use the remote instance for now.
           {
             id: 'api',
-            spec: 'https://monerium.dev/openapi-v2.yml',
+            spec: path.resolve(__dirname, '../../packages/openapi/openapi.yml'),
+            // require.resolve('@monerium/openapi'),
             route: '/docs/api/',
           },
         ],

@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// eslint-disable-next-line no-redeclare
 import { screen } from '@testing-library/dom';
 import { render, waitFor } from '@testing-library/react';
 

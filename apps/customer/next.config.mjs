@@ -12,6 +12,9 @@ const isStandalone = process.env.STANDALONE === 'true';
 
 const nextConfig = {
   reactStrictMode: false,
+  turbopack: {
+    root: path.resolve(__dirname, '../../'),
+  },
   images: {
     remotePatterns: [
       {

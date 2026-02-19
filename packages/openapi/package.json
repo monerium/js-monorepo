@@ -1,0 +1,29 @@
+{
+  "name": "@monerium/openapi",
+  "version": "0.1.0",
+  "description": "Monerium OpenAPI specification",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monerium/js-monorepo.git",
+    "directory": "packages/openapi"
+  },
+  "bugs": {
+    "url": "https://github.com/monerium/js-monorepo/issues"
+  },
+  "main": "./openapi.yml",
+  "files": [
+    "openapi.yml",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "redocly preview-docs ./openapi.yml",
+    "validate": "redocly lint ./openapi.yml",
+    "clean": "rm -rf dist node_modules .turbo"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^1.25.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

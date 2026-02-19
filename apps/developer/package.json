@@ -15,6 +15,7 @@
     "clean": "rm -rf build node_modules .turbo"
   },
   "dependencies": {
+    "@monerium/openapi": "workspace:*",
     "@docusaurus/core": "3.7.0",
     "@docusaurus/preset-classic": "3.7.0",
     "@mdx-js/react": "^3.0.0",

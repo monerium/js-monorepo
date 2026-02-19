@@ -24,7 +24,7 @@ export const consoleCurl = (
   body: BodyInit | Record<string, string> | undefined,
   headers: Record<string, string> | undefined
 ) => {
-  if (process.env.NODE_ENV !== 'test') return;
+  if (globalThis.process?.env?.NODE_ENV !== 'test') return;
   // Log the curl command
   let curl = `curl -X ${method.toUpperCase()} '${url}'`;
   if (headers) {

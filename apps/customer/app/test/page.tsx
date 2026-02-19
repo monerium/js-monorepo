@@ -1,5 +1,5 @@
 'use client';
-import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -14,7 +14,6 @@ import {
   OrderState,
   PaymentStandard,
   placeOrderMessage,
-  rfc3339,
   siweMessage,
 } from '@monerium/sdk';
 import {
@@ -108,7 +107,7 @@ export default function Test() {
 
   const { placeOrder, error: placeOrderError } = usePlaceOrder({
     mutation: {
-      onSuccess: (data, variables) => {
+      onSuccess: (data) => {
         console.log('onSuccess callback', data);
       },
       onError: (error) => {
@@ -128,11 +127,15 @@ export default function Test() {
     );
   };
 
-  let unsubscribe = useSubscribeOrderNotification({
+  const unsubscribe = useSubscribeOrderNotification({
     state: OrderState.placed,
     profile: profile?.id as string,
     onMessage: handleOrderNotification,
   });
+
+  useEffect(() => {
+    return () => unsubscribe();
+  }, [unsubscribe]);
 
   const Input = ({
     name,

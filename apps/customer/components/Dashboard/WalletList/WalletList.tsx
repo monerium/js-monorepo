@@ -61,4 +61,5 @@ const WalletList = memo(
     );
   }
 );
+WalletList.displayName = 'WalletList';
 export default WalletList;

@@ -40,4 +40,5 @@ const TokenFilter = memo(
     );
   }
 );
+TokenFilter.displayName = 'TokenFilter';
 export default TokenFilter;

@@ -1,0 +1,7 @@
+# This file tells Redocly's linter to ignore specific rule violations at
+# specific locations. See https://redocly.com/docs/cli/ignore-file/
+# Generated/maintained alongside packages/openapi/openapi.yml
+
+./openapi.yml:
+  operation-2xx-response:
+    - '#/paths/~1auth/post/responses'

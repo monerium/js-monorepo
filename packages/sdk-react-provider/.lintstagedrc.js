@@ -1,3 +1,5 @@
+// @ts-nocheck
+/* eslint-disable */
 module.exports = {
   '*.{ts,tsx}': (filenames) => [
     `prettier --write ${filenames.join(' ')}`,

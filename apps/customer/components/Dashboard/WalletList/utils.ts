@@ -19,8 +19,8 @@ export function flattenSortAndSumBalances(
       // If the balance is found, flatten it to the root
       if (balance) {
         const { amount } = balance;
-        // eslint-disable-next-line no-unused-vars
-        const { balances, ...rest } = account; // Exclude the balances property
+         
+        const { balances: _balances, ...rest } = account; // Exclude the balances property
         acc.list.push({
           ...rest,
           amount, // Add the amount property to the root

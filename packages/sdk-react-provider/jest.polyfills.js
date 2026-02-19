@@ -1,4 +1,5 @@
 // jest.polyfills.js
+/* eslint-disable @typescript-eslint/no-require-imports, no-undef */
 /**
  * @note The block below contains polyfills for Node.js globals
  * required for Jest to function when running JSDOM tests.

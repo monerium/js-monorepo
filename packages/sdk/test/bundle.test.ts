@@ -2,10 +2,8 @@
  * @jest-environment node
  */
 
-const MoneriumClient =
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  require('../dist/index.js').MoneriumClient;
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+const MoneriumClient = require('../dist/index.js').MoneriumClient;
+
 const constants = require('./constants');
 
 const {

@@ -1,5 +1,5 @@
 import { ResponseStatus } from '../types';
-import { consoleCurl } from './internal.helpers';
+// import { consoleCurl } from './internal.helpers';
 
 export const rest = async <T = ResponseStatus>(
   url: string,
@@ -30,7 +30,7 @@ export const rest = async <T = ResponseStatus>(
           } as T;
       }
     }
-  } catch (err) {
+  } catch (_err) {
     throw text;
   }
 

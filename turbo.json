@@ -16,7 +16,8 @@
       "cache": false,
       "dependsOn": [
         "@monerium/sdk#build",
-        "@monerium/sdk-react-provider#build"
+        "@monerium/sdk-react-provider#build",
+        "@monerium/openapi#build"
       ],
       "outputs": ["docs/packages/**"]
     },

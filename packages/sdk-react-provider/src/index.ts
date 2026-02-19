@@ -12,7 +12,7 @@
  *
  * ### Wrap App in Context Provider
  *
- * Wrap your app in the `QueryClientProvider` React Context Provider and pass a new `QueryClient` instance to the `client` property
+ * Wrap your app in the `QueryClientProvider` React Context Provider and pass a new `QueryClient` instance to the `client` property
  *
  * Inside the `QueryClientProvider`, wrap your app in the `MoneriumProvider` React Context Provider and pass the auth flow's `clientId`, `redirectUri`, and `environment` configuration.
  *

@@ -1,4 +1,4 @@
-import { generateCodeChallenge, generateRandomString } from './helpers';
+import { generateRandomString } from './helpers';
 import {
   Balances,
   Chain,
@@ -100,7 +100,7 @@ export const parseChain = (chain: Chain | ChainId): Chain => {
 
   try {
     return getChain(parseInt(chain));
-  } catch (e) {
+  } catch (_e) {
     throw new Error(`Chain not supported: ${chain}`);
   }
 };
