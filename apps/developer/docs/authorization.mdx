@@ -125,27 +125,146 @@ Further reading:
 
 ## Client credentials authorization
 
-> Note: client credentials are used to authenticate the application itself, not a user. This is useful when you want to access your own data. While you can access user data with client credentials, it is not recommended. Instead, use the authorization code flow to authenticate users.
+The Client Credentials flow is used for server-to-server authentication where your application acts on its own behalf, not on behalf of a specific user. This is the authentication method for both **Personal** and **White-label** app types.
 
-Confidential clients which can hide their credentials, e.g. backend servers, can be enlisted in Monerium's partner program, which enables them simultaneous access to multiple profiles which have granted authorization. These clients can get an access_token by submitting a POST or GET request to `/auth/token`:
+### When to Use Client Credentials
 
-```
- curl --location --request POST 'http://api.monerium.app/auth/token' \
+- **Personal apps**: Your application performs automated actions on your own Monerium account (e.g., backend scripts, scheduled jobs, internal tooling)
+- **White-label apps**: Your platform manages users and their payment accounts directly, with Monerium fully abstracted from end users
+
+:::warning Security Requirements
+Client credentials (`client_secret`) must be stored securely and never exposed in client-side code. Only use this flow in environments where you can securely store secrets, such as backend servers.
+:::
+
+### Authentication Flow
+
+The client credentials flow is simpler than OAuth, involving just two steps:
+
+1. **Request Access Token** - Exchange your credentials for an access token
+2. **Use Access Token** - Make API calls with the token
+
+### Step 1: Request an Access Token
+
+Submit a POST request to `/auth/token` with your `client_id` and `client_secret`:
+
+```sh
+curl --location --request POST 'https://api.monerium.dev/auth/token' \
   --header 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'client_id=1234567890abcdef' \
   --data-urlencode 'client_secret=27b871f28ab834b6be75c21578b4c944527fe34fce3952dc59f9c928b8502ee8' \
   --data-urlencode 'grant_type=client_credentials'
 ```
 
-Response:
+**Successful Response:**
 
-```
+```json
 {
-  access_token: "your-access-token",
-  expires_in: 3600,
-  refresh_token: "your-refresh-token",
-  token_type: "Bearer"
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "refresh_token": "your-refresh-token"
 }
+```
+
+| Field | Description |
+|-------|-------------|
+| `access_token` | The token to use for API requests |
+| `token_type` | Always "Bearer" |
+| `expires_in` | Token lifetime in seconds (typically 3600 = 1 hour) |
+| `refresh_token` | Token to request a new access token when it expires |
+
+**Error Response:**
+
+```json
+{
+  "error": "invalid_client",
+  "error_description": "Client authentication failed"
+}
+```
+
+| Error Code | Description |
+|------------|-------------|
+| `invalid_client` | Invalid `client_id` or `client_secret` |
+| `invalid_request` | Missing required parameters |
+| `unauthorized_client` | Client not authorized to use this grant type |
+
+### Step 2: Use the Access Token
+
+Include the access token in the `Authorization` header for all API requests:
+
+```sh
+curl --location 'https://api.monerium.dev/profiles' \
+  --header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...'
+```
+
+### Refreshing the Access Token
+
+When your access token expires, use the refresh token to obtain a new one without re-authenticating:
+
+```sh
+curl --location --request POST 'https://api.monerium.dev/auth/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'grant_type=refresh_token' \
+  --data-urlencode 'refresh_token=your-refresh-token' \
+  --data-urlencode 'client_id=1234567890abcdef' \
+  --data-urlencode 'client_secret=27b871f28ab834b6be75c21578b4c944527fe34fce3952dc59f9c928b8502ee8'
+```
+
+The response will contain a new `access_token` and `refresh_token`.
+
+### Security Best Practices
+
+:::danger Keep Your Secrets Safe
+- **Never commit** `client_secret` to version control
+- **Store securely** using environment variables or secret management services (e.g., AWS Secrets Manager, HashiCorp Vault)
+- **Rotate regularly** - Generate new credentials periodically
+- **Use HTTPS only** - Never send credentials over unencrypted connections
+- **Monitor usage** - Watch for unusual API activity that might indicate compromised credentials
+:::
+
+### Complete Example
+
+Here's a complete Node.js example:
+
+```javascript
+// Store credentials in environment variables
+const CLIENT_ID = process.env.MONERIUM_CLIENT_ID;
+const CLIENT_SECRET = process.env.MONERIUM_CLIENT_SECRET;
+
+async function getAccessToken() {
+  const params = new URLSearchParams({
+    grant_type: 'client_credentials',
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET
+  });
+
+  const response = await fetch('https://api.monerium.dev/auth/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Authentication failed: ${error.error_description}`);
+  }
+
+  const { access_token, expires_in, refresh_token } = await response.json();
+  return { access_token, expires_in, refresh_token };
+}
+
+async function makeApiRequest(accessToken) {
+  const response = await fetch('https://api.monerium.dev/profiles', {
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+
+  return response.json();
+}
+
+// Usage
+const { access_token } = await getAccessToken();
+const profiles = await makeApiRequest(access_token);
+console.log(profiles);
 ```
 
 Endpoint documentation: [Access Token](docs/api#tag/auth/operation/auth-token)

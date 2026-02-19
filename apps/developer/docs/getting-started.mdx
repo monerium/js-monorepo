@@ -3,68 +3,150 @@ title: Getting Started
 id: getting-started
 ---
 
-# Monerium developer documentation
+# Getting Started
 
-## Introduction
+Welcome to Monerium! This guide will help you integrate the Monerium API to offer your users IBANs directly connected to their blockchain addresses. Enable seamless money transfers between bank accounts and blockchains over the SEPA network.
 
-This guide will help you get started with the Monerium API to offer your users IBAN's directly connected to their blockchain address. This enables a seamless experience to collect and send money between bank accounts and blockchains over the SEPA network.
+## Overview
 
-## Getting Started
+Before you begin, determine which integration type fits your needs:
 
-### Sign Up
+:::tip Choose Your Integration Type
 
-To get started, head over to our [Sandbox](https://sandbox.monerium.dev) and sign up.
+**Building a user-facing app?** → [OAuth](#oauth) - Users authenticate with their Monerium accounts
 
-### Creating an App
+**Automating your own account?** → [Personal](#personal) - Run scripts and backend jobs on your account
 
-Once signed up, head over the [developer portal](https://sandbox.monerium.dev/developers) and create an app.
+**Managing accounts for your users?** → [White-label](#white-label) - Full platform control, Monerium abstracted away
 
-### Obtaining Credentials
+:::
 
-After creating an app, you will receive two distinct sets of credentials, each tailored for specific use cases. Below is a breakdown of these credentials and guidance on how to use them effectively.
+---
 
-### Types of Credentials
+## Setup
 
-1. **Authorization Code Flow Credentials**
+### 1. Create Your Account
 
-   - `client_id`: A unique identifier for user authentication flows.
-   - **Use Case:** Designed for secure client-side applications, paired with PKCE (Proof Key for Code Exchange) to enhance security.
-   - **Ideal For:** User-facing applications such as web apps or mobile apps.
+Head over to our [Sandbox](https://sandbox.monerium.dev) and sign up for a developer account.
 
-2. **Client Credentials**
-   - `client_id` and `client_secret`: A pair of credentials used for server-to-server authentication.
-   - **Use Case:** Server-to-server authentication.
-   - **Ideal For:** Backend services and API integrations, where user interaction is not required.
+### 2. Create an App
 
-### Implementing Authorization Code Flow
+Once signed up, go to the [developer portal](https://sandbox.monerium.dev/developers) and create a new app. You'll need to select an app type based on your use case.
 
-1. Redirect users to the authorization flow.
-2. Handle the returned authorization code.
-3. Exchange the code for an access token.
+---
 
-[In-depth guide](./authorization)
+## App Types
 
-### Using Client Credentials
+Choose the authentication flow that matches your integration needs:
 
-For server-side authentication, follow these steps:
+### 🔐 OAuth (User-facing Apps) {#oauth}
 
-1.  Use the `client_id` and `client_secret` to authenticate your application.
-2.  Request an access token directly from the authorization server.
+**Authentication:** [Authorization Code Flow with PKCE (Proof Key for Code Exchange)](#auth-flow)
 
-[In-depth guide](./authorization#client-credentials-authorization)
+**How it works:** Your app acts on behalf of Monerium users with their explicit consent. Users sign in with their Monerium credentials and grant your app permission to access their accounts.
 
-### Key Concepts and References
+**Credentials you'll receive:**
+- `client_id` - Unique identifier for OAuth flows
 
-- OAuth 2.0: The foundational framework for authorization. [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749).
+**Best for:**
+- Web applications
+- Mobile apps
+- Any app where users authenticate and control their own data
 
-- PKCE (Proof Key for Code Exchange): A security enhancement for public clients. [RFC 7636](https://www.rfc-editor.org/rfc/rfc7636)
+**Pricing:** Free
 
-- Bearer Authentication: A method for transmitting access tokens. [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750)
+**Next steps:** [OAuth Implementation Guide →](./authorization)
 
-## Next steps.
+---
 
-Head over to the [API Documentation](./docs/api) to get started with the Monerium API.
+### 🤖 Personal (Own Account) {#personal}
 
-## Need help?
+**Authentication:** [Client Credentials Flow](#client-credentials)
 
-We have a [Discord server](https://monerium.com/invite/discord) where you can get help from the community and the Monerium team.
+**How it works:** Your app performs automated actions directly on your own Monerium account, such as processing payments or checking balances.
+
+**Credentials you'll receive:**
+- `client_id` - Unique identifier
+- `client_secret` - Secret key for authentication (keep secure!)
+
+**Best for:**
+- Backend scripts
+- Scheduled jobs
+- Internal tooling and automation
+
+**Pricing:** Free
+
+**Next steps:** [Client Credentials Guide →](./authorization#client-credentials-authorization)
+
+---
+
+### 🏢 White-label (Managed Users) {#white-label}
+
+**Authentication:** [Client Credentials Flow](#client-credentials)
+
+**How it works:** Your platform manages users and their payment accounts directly. Monerium is fully abstracted away from your end users—they never see or interact with Monerium.
+
+**Credentials you'll receive:**
+- `client_id` - Unique identifier
+- `client_secret` - Secret key for authentication (keep secure!)
+
+**Best for:**
+- Payment platforms
+- Fintech applications
+- Services requiring full control over user payment flows
+
+**Pricing:** €5,000/month
+
+:::info Enterprise Solution
+This is an enterprise solution for platforms that want to offer IBAN accounts under their own brand. Contact us to discuss your requirements.
+:::
+
+**Next steps:** [Client Credentials Guide →](./authorization#client-credentials-authorization)
+
+---
+
+## Implementation Guides
+
+### OAuth - Authorization Code Flow with PKCE (Proof Key for Code Exchange) {#auth-flow}
+
+For user-facing applications using OAuth with PKCE:
+
+1. Redirect users to the Monerium authorization endpoint
+2. Handle the returned authorization code
+3. Exchange the code for an access token
+4. Use the access token to make API calls
+
+**[📖 Read the OAuth guide →](./authorization)**
+
+### Client Credentials {#client-credentials}
+
+For server-to-server authentication (Personal and White-label):
+
+1. Securely store your `client_id` and `client_secret`
+2. Request an access token from the authorization server
+3. Use the access token to make API calls
+
+**[📖 Read the Client Credentials guide →](./authorization#client-credentials-authorization)**
+
+---
+
+## Additional Resources
+
+### Key OAuth Concepts
+
+- **OAuth 2.0** - The foundational framework for authorization. [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
+- **PKCE** - Security enhancement for public clients. [RFC 7636](https://www.rfc-editor.org/rfc/rfc7636)
+- **Client Credentials Grant** - Server-to-server authentication flow. [RFC 6749 §4.4](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4)
+- **Bearer Authentication** - Method for transmitting access tokens. [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750)
+
+### API Documentation
+
+Explore the complete API reference:
+
+**[📖 View API Documentation →](./docs/api)**
+
+---
+
+## Need Help?
+
+Join our [Discord server](https://monerium.com/invite/discord) to get help from the community and the Monerium team.
