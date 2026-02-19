@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/monerium/js-monorepo/compare/developer-v1.0.0...developer-v1.1.0) (2026-02-19)
+
+
+### Features
+
+* devex ([#160](https://github.com/monerium/js-monorepo/issues/160)) ([96703be](https://github.com/monerium/js-monorepo/commit/96703be2c4387bffc65ae7b6c4cbeb792a1eefe5))
+
 ## 1.0.0 (2026-02-02)
 
 
