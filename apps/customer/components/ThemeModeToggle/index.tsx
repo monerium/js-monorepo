@@ -3,7 +3,7 @@
 import { ThemeModeToggle } from './ThemeModeToggle';
 
 /* ThemeModeToggle wrapper */
-export default () => {
+const ThemeModeToggleWrapper = () => {
   return (
     <div
       style={{
@@ -18,3 +18,7 @@ export default () => {
     </div>
   );
 };
+
+ThemeModeToggleWrapper.displayName = 'ThemeModeToggleWrapper';
+
+export default ThemeModeToggleWrapper;

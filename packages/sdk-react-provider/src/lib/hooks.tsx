@@ -743,17 +743,17 @@ export function useSubmitProfileDetails({
 
       return sdk.submitProfileDetails(profile, body);
     },
-    onSuccess(data, variables, context) {
+    onSuccess(data, variables, context, mutationContext) {
       // Refetch all orders on success.
       queryClient.invalidateQueries({
         queryKey: keys.getProfile(profile),
       });
       // Allow the caller to add custom logic on success.
-      mutation?.onSuccess?.(data, variables, context);
+      mutation?.onSuccess?.(data, variables, context, mutationContext);
     },
-    onError(error, vars, context) {
+    onError(error, vars, context, mutationContext) {
       // Allow the caller to add custom logic on error.
-      mutation?.onError?.(error, vars, context);
+      mutation?.onError?.(error, vars, context, mutationContext);
       throw error;
     },
   });
@@ -815,13 +815,13 @@ export function useRequestIban({
 
       return sdk.requestIban({ address, chain, emailNotifications });
     },
-    onSuccess(data, variables, context) {
+    onSuccess(data, variables, context, mutationContext) {
       // Allow the caller to add custom logic on success.
-      mutation?.onSuccess?.(data, variables, context);
+      mutation?.onSuccess?.(data, variables, context, mutationContext);
     },
-    onError(error, vars, context) {
+    onError(error, vars, context, mutationContext) {
       // Allow the caller to add custom logic on error.
-      mutation?.onError?.(error, vars, context);
+      mutation?.onError?.(error, vars, context, mutationContext);
       throw error;
     },
   });
@@ -887,8 +887,8 @@ export function useMoveIban({
 
       return sdk.moveIban(iban, { address, chain });
     },
-    onSuccess(data, variables, context) {
-      // Refetch all orders on success.
+    onSuccess(data, variables, context, mutationContext) {
+      // Refetch the iban on success.
       queryClient.invalidateQueries({
         queryKey: keys.getIban(variables.iban),
       });
@@ -899,11 +899,11 @@ export function useMoveIban({
         queryKey: keys.getAddress(variables.address),
       });
       // Allow the caller to add custom logic on success.
-      mutation?.onSuccess?.(data, variables, context);
+      mutation?.onSuccess?.(data, variables, context, mutationContext);
     },
-    onError(error, vars, context) {
+    onError(error, vars, context, mutationContext) {
       // Allow the caller to add custom logic on error.
-      mutation?.onError?.(error, vars, context);
+      mutation?.onError?.(error, vars, context, mutationContext);
       throw error;
     },
   });
@@ -980,7 +980,7 @@ export function usePlaceOrder({
 
       return sdk.placeOrder(newBody);
     },
-    onSuccess(data, variables, context) {
+    onSuccess(data, variables, context, mutationContext) {
       // Refetch all orders on success.
       queryClient.invalidateQueries({
         queryKey: keys.getOrders(),
@@ -993,11 +993,11 @@ export function usePlaceOrder({
         });
       }
       // Allow the caller to add custom logic on success.
-      mutation?.onSuccess?.(data, variables, context);
+      mutation?.onSuccess?.(data, variables, context, mutationContext);
     },
-    onError(error, vars, context) {
+    onError(error, vars, context, mutationContext) {
       // Allow the caller to add custom logic on error.
-      mutation?.onError?.(error, vars, context);
+      mutation?.onError?.(error, vars, context, mutationContext);
       throw error;
     },
   });
@@ -1115,7 +1115,7 @@ export function useLinkAddress({
       }
       return sdk.linkAddress(body);
     },
-    onSuccess(data, variables, context) {
+    onSuccess(data, variables, context, mutationContext) {
       // Refetch all orders on success.
       queryClient.invalidateQueries({
         queryKey: keys.getAddresses(),
@@ -1126,11 +1126,11 @@ export function useLinkAddress({
         });
       }
       // Allow the caller to add custom logic on success.
-      mutation?.onSuccess?.(data, variables, context);
+      mutation?.onSuccess?.(data, variables, context, mutationContext);
     },
-    onError(error, vars, context) {
+    onError(error, vars, context, mutationContext) {
       // Allow the caller to add custom logic on error.
-      mutation?.onError?.(error, vars, context);
+      mutation?.onError?.(error, vars, context, mutationContext);
       throw error;
     },
   });

@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch --onSuccess 'pnpm type-map'",
+    "dev": "tsup --watch",
     "typedoc": "typedoc",
     "lint": "eslint . --fix",
     "pub:pre": "pnpm publish --no-git-checks --dry-run",
@@ -48,9 +48,11 @@
     "react-dom": ">=18.2.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@testing-library/dom": "^10.1.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
+    "typescript-eslint": "^8.56.0",
     "undici": ">=6.21.1"
   }
 }

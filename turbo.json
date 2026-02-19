@@ -24,7 +24,7 @@
       "cache": false
     },
     "@monerium/sdk-react-provider#dev": {
-      "dependsOn": ["@monerium/sdk#type-map"]
+      "dependsOn": ["@monerium/sdk#build"]
     },
     "lint": {},
     "lint:style": {},
@@ -41,7 +41,6 @@
       "dependsOn": ["build"],
       "cache": false,
       "persistent": true
-    },
-    "type-map": {}
+    }
   }
 }

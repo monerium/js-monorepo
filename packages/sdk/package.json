@@ -41,11 +41,13 @@
     "crypto-js": "^4.2.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/crypto-js": "^4.2.2",
     "jest-fetch-mock": "^3.0.3",
     "jest-localstorage-mock": "^2.4.26",
     "timezone-mock": "^1.3.6",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "typescript-eslint": "^8.56.0"
   },
   "engines": {
     "node": ">= 16.15"

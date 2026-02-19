@@ -2,8 +2,7 @@
   "extends": "@repo/typescript-config/react-library.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
-    "types": ["@monerium/sdk"]
+    "rootDir": "src"
   },
   "include": ["src"],
   "exclude": ["node_modules", "jest.config.js"]

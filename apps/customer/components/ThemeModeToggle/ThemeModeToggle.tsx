@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import Cookie from 'js-cookie';
 import DarkModeOutlined from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlined from '@mui/icons-material/LightModeOutlined';
@@ -8,15 +8,17 @@ import { useColorScheme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 
 export const ThemeModeToggle = () => {
-  const [isMounted, setIsMounted] = useState(false);
   const { mode, setMode } = useColorScheme();
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  // Use useSyncExternalStore to safely handle SSR/client hydration
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   if (!isMounted) {
-    // SSR
+    // SSR - prevent hydration mismatch
     return null;
   }
 

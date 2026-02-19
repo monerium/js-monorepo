@@ -3,7 +3,7 @@
  */
 
 // Login: monerium-test-sdk@maildrop.cc
-// Password: Passw0rd!
+// Password in 1Password
 
 // punkWallet: https://punkwallet.io/pk#0x30fa9f64fb85dab6b4bf045443e08315d6570d4eabce7c1363acda96042a6e1a
 
@@ -27,15 +27,13 @@ import {
   IBAN,
   OWNER_SIGNATURE,
   PUBLIC_KEY,
-} from './constants.js';
+} from './constants';
 
-const { LINK_MESSAGE } = constants;
-
-const message = LINK_MESSAGE;
+const { LINK_MESSAGE: _LINK_MESSAGE } = constants;
 
 let client: MoneriumClient;
 
-process.env.CI !== 'true' &&
+if (process.env.CI !== 'true') {
   beforeAll(async () => {
     client = new MoneriumClient({
       clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
@@ -43,12 +41,13 @@ process.env.CI !== 'true' &&
     });
     try {
       await client.getAccess();
-    } catch (error) {
+    } catch (_error) {
       console.error('Error, could not authenticate');
     }
   });
+}
 
-process.env.CI !== 'true' &&
+if (process.env.CI !== 'true') {
   describe('MoneriumClient', () => {
     test('get tokens', async () => {
       const tokens = await client.getTokens();
@@ -419,8 +418,10 @@ process.env.CI !== 'true' &&
       });
     });
   });
+}
 
-process.env.CI === 'true' &&
+if (process.env.CI === 'true') {
   it('SKIPPED', () => {
     expect(true).toBe(true);
   });
+}

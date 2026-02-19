@@ -1,10 +1,9 @@
-const path = require('path');
-
-const buildEslintCommand = (filenames) =>
-  `next lint --fix --dir . --file ${filenames.map((f) => path.relative(process.cwd(), f)).join(' --file ')}`;
-
 module.exports = {
-  '*.{ts,tsx}': ['prettier --write', buildEslintCommand],
-  '*.{js, json,md}': ['prettier --write'],
+  '*.{ts,tsx}': (filenames) => [
+    `prettier --write ${filenames.join(' ')}`,
+    // Run ESLint on each file separately to avoid memory/timeout issues
+    ...filenames.map((filename) => `eslint --fix --cache '${filename}'`),
+  ],
+  '*.{js,json,md}': ['prettier --write'],
   '*.{css,scss,sass}': ['pnpm lint:style'],
 };

@@ -1,5 +1,8 @@
 module.exports = {
-  '*.{ts,tsx}': ['prettier --write', 'pnpm lint'],
+  '*.{ts,tsx}': (filenames) => [
+    `prettier --write ${filenames.join(' ')}`,
+    `eslint --fix --cache ${filenames.join(' ')}`,
+  ],
   '*.{js,json,md}': ['prettier --write'],
   '*.{css,scss,sass}': ['pnpm lint:style'],
 };

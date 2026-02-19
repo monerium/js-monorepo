@@ -21,7 +21,7 @@ function Providers({ children }: { children: React.ReactNode }) {
     undefined
   );
   React.useEffect(() => {
-    let rToken = window.localStorage.getItem(
+    const rToken = window.localStorage.getItem(
       'monerium.insecurely_store_refresh_token'
     );
     if (rToken) {
@@ -35,7 +35,7 @@ function Providers({ children }: { children: React.ReactNode }) {
         <ReactQueryDevtools initialIsOpen={false} />
         <RainbowKitProvider>
           <MoneriumProvider
-            clientId="9ee602d1-cc19-11ef-92b5-aae55502171d"
+            clientId="9ee602d1-cc19-11ef-92b5-aae55502171d" // User: monerium-test-sdk@maildrop.cc, password in 1password
             redirectUri={`${baseUrl}/dashboard`}
             environment="sandbox"
             debug={true}

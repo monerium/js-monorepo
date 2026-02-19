@@ -31,10 +31,10 @@ export const MoneriumConnect = () => {
   };
 
   const message = siweMessage({
-    domain: 'localhost:3000',
+    domain: 'localhost:5000',
     address: `${address}`,
     appName: 'SDK TEST APP',
-    redirectUri: 'http://localhost:3000/dashboard',
+    redirectUri: 'http://localhost:5000/dashboard',
     chainId: chainId,
     privacyPolicyUrl: 'https://example.com/privacy-policy',
     termsOfServiceUrl: 'https://example.com/terms-of-service',
