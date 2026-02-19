@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/monerium/js-monorepo/compare/customer-v0.7.4...customer-v0.8.0) (2026-02-19)
+
+
+### Features
+
+* devex ([#160](https://github.com/monerium/js-monorepo/issues/160)) ([96703be](https://github.com/monerium/js-monorepo/commit/96703be2c4387bffc65ae7b6c4cbeb792a1eefe5))
+
 ## [0.7.4](https://github.com/monerium/js-monorepo/compare/customer-v0.7.3...customer-v0.7.4) (2026-02-02)
 
 
