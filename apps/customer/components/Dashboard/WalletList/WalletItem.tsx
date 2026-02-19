@@ -8,7 +8,9 @@ import ListItemText from '@mui/material/ListItemText';
 import { Currency, shortenAddress } from '@monerium/sdk';
 import { useBalances } from '@monerium/sdk-react-provider';
 
-import Punk from 'components/Punk';
+// import Punk from 'components/Punk';
+import { getChainConfig } from 'config/chains';
+import ChainIcon from 'components/Chains/Icon';
 import { useEns } from 'hooks/useEns';
 
 const WalletItem = ({
@@ -32,11 +34,18 @@ const WalletItem = ({
     <ListItemButton key={address}>
       <ListItemAvatar>
         <Avatar alt="Currency" src={`/tokens/${currency}.png`} />
-        {/* <Punk address={address} size={32} /> */}
+        {/*<Punk address={address} size={32} />*/}
       </ListItemAvatar>
       <ListItemText
         primary={ensName || shortenAddress(address)}
-        secondary={chain}
+        secondary={
+          <span
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+          >
+            <ChainIcon chain={chain} size={16} />
+            {getChainConfig(chain)?.name ?? chain}
+          </span>
+        }
       />
       <p>{data?.balances?.[0]?.amount}</p>
     </ListItemButton>

@@ -29,7 +29,7 @@ function Dashboard() {
   const { revokeAccess } = useAuth();
 
   return (
-    <Box sx={{ pt: 7 }}>
+    <Box>
       <Stack direction="row" sx={{ p: 3 }}>
         <ChainFilter selected={selectedChain} setSelected={setSelectedChain} />
         <TokenFilter
@@ -41,18 +41,11 @@ function Dashboard() {
         totalBalance={totalBalance || 0.0}
         currency={selectedCurrency}
       />
-
       <WalletList
         selectedChain={selectedChain}
         selectedCurrency={selectedCurrency}
       />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          mt: 2, // adds some margin top, adjust as needed
-        }}
-      >
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <Button
           color="error"
           size="large"

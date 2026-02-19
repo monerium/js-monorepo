@@ -3,12 +3,13 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import Toolbar from '@mui/material/Toolbar';
 
 import { useAuth } from '@monerium/sdk-react-provider';
 
 import { LoadingScreen } from 'components/LoadingScreen';
 import BottomNavigation from 'components/Navigation/BottomNavigation';
+import { TopBar } from 'components/Navigation/TopBar';
 
 export default function AuthorizedLayout({
   children,
@@ -24,22 +25,23 @@ export default function AuthorizedLayout({
     }
   }, [isAuthorized, isLoading, router]);
 
-  // Render loading screen if still loading
   if (isLoading) {
     return <LoadingScreen />;
   }
 
-  // Return null if not authorized
   if (!isAuthorized) {
     return null;
   }
 
-  // Render main content if authorized
   return (
-    <Box sx={{ pb: 7 }}>
-      {children}
-      <Paper></Paper>
+    <>
+      <TopBar />
+      <Box sx={{ pb: 7 }}>
+        {/* Toolbar acts as a spacer so content isn't hidden under the fixed AppBar */}
+        <Toolbar />
+        {children}
+      </Box>
       <BottomNavigation />
-    </Box>
+    </>
   );
 }

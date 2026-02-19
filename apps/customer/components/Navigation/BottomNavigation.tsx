@@ -1,14 +1,19 @@
-import { useState } from 'react';
+'use client';
+import { usePathname, useRouter } from 'next/navigation';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import MenuIcon from '@mui/icons-material/Menu';
-import RepeatIcon from '@mui/icons-material/Repeat';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import GridViewIcon from '@mui/icons-material/GridView';
 import MUIBottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
 
+const routes = ['/dashboard', '/receive', '/send', '/bridge'];
+
 const BottomNavigation = () => {
-  const [value, setValue] = useState(0);
+  const router = useRouter();
+  const pathname = usePathname();
+  const value = pathname ? Math.max(routes.indexOf(pathname), 0) : 0;
 
   return (
     <Paper
@@ -18,17 +23,15 @@ const BottomNavigation = () => {
       <MUIBottomNavigation
         showLabels
         value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
+        onChange={(_, newValue) => {
+          const route = routes[newValue];
+          if (route) router.push(route);
         }}
       >
-        <BottomNavigationAction label="Accounts" icon={<MenuIcon />} />
-        <BottomNavigationAction label="Add money" icon={<AddIcon />} />
-        <BottomNavigationAction
-          label="Send money"
-          icon={<ArrowForwardIcon />}
-        />
-        <BottomNavigationAction label="Swap" icon={<RepeatIcon />} />
+        <BottomNavigationAction label="Accounts" icon={<GridViewIcon />} />
+        <BottomNavigationAction label="Receive" icon={<AddIcon />} />
+        <BottomNavigationAction label="Send" icon={<ArrowForwardIcon />} />
+        <BottomNavigationAction label="Bridge" icon={<CompareArrowsIcon />} />
       </MUIBottomNavigation>
     </Paper>
   );

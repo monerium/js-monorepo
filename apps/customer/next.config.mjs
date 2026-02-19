@@ -12,6 +12,15 @@ const isStandalone = process.env.STANDALONE === 'true';
 
 const nextConfig = {
   reactStrictMode: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'monerium.app',
+        pathname: '/assets/chains/**',
+      },
+    ],
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
