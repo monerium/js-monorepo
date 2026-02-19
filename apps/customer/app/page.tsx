@@ -9,9 +9,7 @@ import Typography from '@mui/material/Typography';
 import { useAuth } from '@monerium/sdk-react-provider';
 
 import { MoneriumConnect } from 'components/MoneriumConnect/MoneriumConnect';
-import { LoadingScreen } from 'src/components/LoadingScreen';
-
-import s from './page.module.scss';
+import { LoadingScreen } from 'components/LoadingScreen';
 
 export default function Home() {
   const { isAuthorized, isLoading } = useAuth();
@@ -21,32 +19,80 @@ export default function Home() {
     if (isAuthorized) {
       router.push('/dashboard');
     }
-  }, [isAuthorized]);
+  }, [isAuthorized, router]);
 
-  if (!isLoading && !isAuthorized) {
-    return (
-      <Container component="main" maxWidth="md">
-        <Box className={s.logoWrapper}>
+  if (isLoading) return <LoadingScreen />;
+  if (isAuthorized) return null;
+
+  return (
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        px: 2,
+        py: 6,
+      }}
+    >
+      <Container
+        maxWidth="sm"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 4,
+        }}
+      >
+        {/* Logo */}
+        <Box sx={{ position: 'relative', width: 140, height: 40 }}>
           <Image
-            className={s.logo}
             src="/monerium-logo.png"
-            alt="Monerium logo"
+            alt="Monerium"
             fill
             style={{ objectFit: 'contain' }}
             priority
           />
         </Box>
-        <Typography variant="h1" sx={{ paddingBottom: 2 }}>
-          Onchain fiat infrastructure for builders and businesses
-        </Typography>
-        <Typography variant="h3">
-          Transfer regular money directly between offchain banks and web3 easily
-          and instantly. All onchain fiat minted through Monerium is fully
-          authorized, fully regulated, and fully backed.
-        </Typography>
+
+        {/* Hero text */}
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography
+            component="h1"
+            sx={{
+              fontSize: 'clamp(2rem, 6vw, 2.75rem)',
+              fontWeight: 800,
+              letterSpacing: '-0.03em',
+              lineHeight: 1.15,
+              color: 'text.primary',
+              mb: 2,
+            }}
+          >
+            Onchain fiat,{' '}
+            <Box component="span" sx={{ color: 'primary.main' }}>
+              instant
+            </Box>{' '}
+            and regulated.
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{
+              fontSize: '1.05rem',
+              lineHeight: 1.6,
+              maxWidth: 420,
+              mx: 'auto',
+            }}
+          >
+            Send and receive money between your wallet and bank accounts. Fully
+            authorized, fully backed.
+          </Typography>
+        </Box>
+
+        {/* Connect card */}
         <MoneriumConnect />
       </Container>
-    );
-  }
-  return <LoadingScreen />;
+    </Box>
+  );
 }

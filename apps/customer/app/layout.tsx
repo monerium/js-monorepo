@@ -1,21 +1,10 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import { cookies } from 'next/headers';
 
 import Providers from 'components/App/Providers';
-import ThemeModeToggle from 'components/ThemeModeToggle';
 
 import '@rainbow-me/rainbowkit/styles.css';
 import './globals.scss';
-
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-});
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-});
 
 export const metadata: Metadata = {
   title: 'Monerium',
@@ -45,10 +34,7 @@ const Layout = ({
     <html lang="en" data-mui-color-scheme={themeMode}>
       <body>
         {' '}
-        <Providers>
-          <ThemeModeToggle />
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -1,16 +1,17 @@
 'use client';
 
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import { Currency, shortenAddress } from '@monerium/sdk';
 import { useBalances } from '@monerium/sdk-react-provider';
 
-// import Punk from 'components/Punk';
-import { getChainConfig } from 'config/chains';
 import ChainIcon from 'components/Chains/Icon';
+import { getChainConfig } from 'config/chains';
 import { useEns } from 'hooks/useEns';
 
 const WalletItem = ({
@@ -23,31 +24,63 @@ const WalletItem = ({
   currency: Currency;
 }) => {
   const { data } = useBalances({
-    address: address,
-    chain: chain,
+    address,
+    chain,
     currencies: [currency],
   });
 
   const { data: ensName } = useEns(address);
+  const balance = data?.balances?.[0]?.amount ?? null;
+  const chainName = getChainConfig(chain)?.name ?? chain;
 
   return (
-    <ListItemButton key={address}>
-      <ListItemAvatar>
-        <Avatar alt="Currency" src={`/tokens/${currency}.png`} />
-        {/*<Punk address={address} size={32} />*/}
+    <ListItemButton sx={{ borderRadius: 2, px: 1, py: 1.25 }}>
+      <ListItemAvatar sx={{ minWidth: 44 }}>
+        <Avatar
+          alt={currency}
+          src={`/tokens/${currency}.png`}
+          sx={{ width: 36, height: 36 }}
+        />
       </ListItemAvatar>
+
       <ListItemText
-        primary={ensName || shortenAddress(address)}
+        disableTypography
+        primary={
+          <Typography variant="body2" fontWeight={600} noWrap>
+            {ensName || shortenAddress(address)}
+          </Typography>
+        }
         secondary={
-          <span
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+          <Box
+            component="span"
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 0.5,
+              mt: 0.25,
+            }}
           >
-            <ChainIcon chain={chain} size={16} />
-            {getChainConfig(chain)?.name ?? chain}
-          </span>
+            <ChainIcon chain={chain} size={14} />
+            <Typography variant="caption" color="text.secondary">
+              {chainName}
+            </Typography>
+          </Box>
         }
       />
-      <p>{data?.balances?.[0]?.amount}</p>
+
+      {/* Right-aligned balance */}
+      <Box sx={{ textAlign: 'right', flexShrink: 0, ml: 1 }}>
+        <Typography variant="body2" fontWeight={700}>
+          {balance !== null ? parseFloat(balance).toFixed(2) : '—'}
+        </Typography>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ textTransform: 'uppercase' }}
+        >
+          {currency}
+        </Typography>
+      </Box>
     </ListItemButton>
   );
 };
