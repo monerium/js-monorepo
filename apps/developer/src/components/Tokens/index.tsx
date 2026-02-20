@@ -87,7 +87,7 @@ export const TokensPage: FC = () => {
         can be found at our{' '}
         <a href="https://github.com/monerium/smart-contracts">GitHub repo.</a>{' '}
         You can also reach us for technical support on{' '}
-        <a href="https://discord.gg/bGCf7v4sXZ">our Discord channel</a>.
+        <a href="https://monerium.com/invite/discord">our Discord channel</a>.
       </p>
 
       <ContractsUpgradeNotice />

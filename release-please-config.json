@@ -28,6 +28,9 @@
         "packages/sdk-react-provider/docs",
         "packages/sdk-react-provider/README.md"
       ]
+    },
+    "packages/openapi": {
+      "package-name": "@monerium/openapi"
     }
   },
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/v16.10.2/schemas/config.json"

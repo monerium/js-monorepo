@@ -13,6 +13,7 @@ jobs:
     outputs:
       release_created_sdk: ${{ steps.release.outputs['packages/sdk--release_created'] }}
       release_created_sdk_react_provider: ${{ steps.release.outputs['packages/sdk-react-provider--release_created'] }}
+      release_created_openapi: ${{ steps.release.outputs['packages/openapi--release_created'] }}
       release_created_developer: ${{ steps.release.outputs['apps/developer--release_created'] }}
       release_created: ${{ steps.release.outputs.release_created }}
       releases_created: ${{ steps.release.outputs.releases_created }}
@@ -55,7 +56,7 @@ jobs:
         uses: ./.github/actions/cache-setup
 
       - name: Build
-        run: pnpm build
+        run: BASE_URL=/js-monorepo/ pnpm build
 
       - name: Upload static files as artifact
         continue-on-error: true
@@ -136,6 +137,12 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         if: needs.release-please.outputs.releases_created == 'false'
 
+      - name: Pre-Publish OpenAPI
+        run: pnpm --filter @monerium/openapi pub:pre
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        if: needs.release-please.outputs.releases_created == 'false'
+
       - name: Publish SDK
         run: pnpm --filter @monerium/sdk publish --access public
         env:
@@ -147,6 +154,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         if: ${{ needs.release-please.outputs.release_created_sdk_react_provider }}
+
+      - name: Publish OpenAPI
+        run: pnpm --filter @monerium/openapi publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        if: ${{ needs.release-please.outputs.release_created_openapi }}
+
   deploy:
     environment:
       name: github-pages

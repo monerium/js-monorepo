@@ -37,7 +37,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'link',
       label: 'API Documentation',
-      href: '/docs/api',
+      href: '/api',
     },
     {
       type: 'category',

@@ -105,11 +105,11 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://monerium.app',
+  url: 'https://monerium.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   // Can be overridden with BASE_URL environment variable
-  baseUrl: process.env.BASE_URL || '/js-monorepo/',
+  baseUrl: process.env.BASE_URL || '/',
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'monerium', // Usually your GitHub org/user name.
@@ -174,9 +174,8 @@ const config: Config = {
         specs: [
           {
             id: 'api',
-            spec: path.resolve(__dirname, '../../packages/openapi/openapi.yml'),
-            // require.resolve('@monerium/openapi'),
-            route: '/docs/api/',
+            spec: require.resolve('@monerium/openapi'),
+            route: '/api/',
           },
         ],
       },
@@ -194,7 +193,7 @@ const config: Config = {
       },
       items: [
         { to: '/', label: 'Docs', position: 'left' },
-        { to: '/docs/api', label: 'API', position: 'left' },
+        { to: '/api', label: 'API', position: 'left' },
         { to: '/packages/sdk', label: 'SDK', position: 'left' },
         {
           to: '/packages/sdk-react-provider',

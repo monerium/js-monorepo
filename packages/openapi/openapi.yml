@@ -9,18 +9,18 @@ info:
         Endpoints or responses that have not been implemented are marked with <b>WIP</b> (Work In Progress).
     </p>
 
-  termsOfService: 'https://monerium.com/policies/business-terms-of-service/'
+  termsOfService: "https://monerium.com/policies/business-terms-of-service/"
   contact:
     name: Monerium
-    url: 'https://monerium.com'
+    url: "https://monerium.com"
   license:
     name: Apache 2.0
-    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
 servers:
-  - url: 'https://api.monerium.app'
-    description: 'Production API - real money. Stable environment, publicly available. May be lagging behind other environments.'
-  - url: 'https://api.monerium.dev'
-    description: 'Sandbox API - fake money. Stable environment, publicly available. Parity with production server while simulating periphery services.'
+  - url: "https://api.monerium.app"
+    description: "Production API - real money. Stable environment, publicly available. May be lagging behind other environments."
+  - url: "https://api.monerium.dev"
+    description: "Sandbox API - fake money. Stable environment, publicly available. Parity with production server while simulating periphery services."
 paths:
   /:
     get:
@@ -29,7 +29,7 @@ paths:
       description: Returns a welcome message with a link to documentation and socials.
       parameters: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -41,11 +41,11 @@ paths:
                     example: Welcome to the Monerium API
                   docs:
                     type: string
-                    example: 'https://monerium.dev'
+                    example: "https://monerium.dev"
                   twitter:
                     type: string
-                    example: 'https://twitter.com/monerium'
-        '400':
+                    example: "https://twitter.com/monerium"
+        "400":
           description: Bad Request
       security: []
       tags:
@@ -57,7 +57,7 @@ paths:
       description: |
         Users must grant your application authorization to access their data.
 
-        This endpoint issues a Temporary Redirect (HTTP 307) to the [Authorization Code Flow](/docs/getting-started/auth-flow) where users can sign up, onboard, connect their wallets and authorize your app to access to their data.
+        This endpoint issues a Temporary Redirect (HTTP 307) to the [Authorization Code Flow](/getting-started#auth-flow) where users can sign up, onboard, connect their wallets and authorize your app to access to their data.
 
         Use the `Authorization Code Flow client_id` and the other parameters below to redirect users to the Monerium onboarding screen.
 
@@ -66,11 +66,11 @@ paths:
         Alternatively a "Sign in with Ethereum" (SIWE) flow can be used for existing Monerium customers. In this case the payload must include a valid
         [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361) message and signature. On successful authorization the authorization code is returned at once.
 
-        This authorization code is then used to request an access token via the [token endpoint](/api-docs#operation/auth-token).
+        This authorization code is then used to request an access token via the [token endpoint](/api#operation/auth-token).
 
         **Additional material**:
-        - [Getting started: Authorization Code Flow](/docs/getting-started/auth-flow)
-        - [Using the Monerium API: Authentication & Authorization](/docs/api#authorization)
+        - [Getting started: Authorization Code Flow](/getting-started#auth-flow)
+        - [Using the Monerium API: Authentication & Authorization](/api#authorization)
       requestBody:
         required: true
         content:
@@ -81,13 +81,13 @@ paths:
                     - title: Authorization code flow
                       properties:
                         client_id:
-                          $ref: '#/components/schemas/AuthClientID'
+                          $ref: "#/components/schemas/AuthClientID"
                         code_challenge:
                           description: |
                             Generated challenge from the `code_verifier`.
-                            You must use the same `code_verifier` when [requesting an access token](/api-docs#operation/auth-token).
+                            You must use the same `code_verifier` when [requesting an access token](/api#operation/auth-token).
 
-                            Read more about [code challenges for PKCE](/docs/api#authorization)
+                            Read more about [code challenges for PKCE](/api#authorization)
                           type: string
                           example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
                         code_challenge_method:
@@ -116,22 +116,22 @@ paths:
                           type: string
                         address:
                           description: You can force what address is to be linked in the Authorization Flow.
-                          $ref: '#/components/schemas/Address'
+                          $ref: "#/components/schemas/Address"
                         signature:
                           description: |
                             In redirect to Monerium flow the address in the connect wallet step can be automatically linked by including same the signature used for [Link Address](#operation/link-address). The address will be automatically linked and the user continues to the next step. You must then also include the `address` property. Must include the `0x` prefix.
                           type: string
                         email:
-                          description: 'You can prefill the email field for login and sign up steps to ensure the user uses the correct email.'
+                          description: "You can prefill the email field for login and sign up steps to ensure the user uses the correct email."
                           type: boolean
                           example: true
                         skip_kyc:
-                          description: 'You can skip the KYC onboarding steps in the Authorization Flow during testing.'
+                          description: "You can skip the KYC onboarding steps in the Authorization Flow during testing."
                           type: boolean
                           example: true
                         chain:
                           description: You can force what chain the address is linked to in the Authorization Flow.
-                          $ref: '#/components/schemas/Chain'
+                          $ref: "#/components/schemas/Chain"
                       required:
                         - client_id
                         - code_challenge
@@ -139,13 +139,13 @@ paths:
                     - title: SIWE
                       properties:
                         client_id:
-                          $ref: '#/components/schemas/AuthClientID'
+                          $ref: "#/components/schemas/AuthClientID"
                         code_challenge:
                           description: |
                             Generated challenge from the `code_verifier`.
-                            You must use the same `code_verifier` when [requesting an access token](/api-docs#operation/auth-token).
+                            You must use the same `code_verifier` when [requesting an access token](/api#operation/auth-token).
 
-                            Read more about [code challenges for PKCE](/docs/api#authorization)
+                            Read more about [code challenges for PKCE](/api#authorization)
                           type: string
                           example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
                         code_challenge_method:
@@ -232,7 +232,7 @@ paths:
                         - message
                         - signature
       responses:
-        '302':
+        "302":
           description: FOUND
           headers:
             Location:
@@ -242,15 +242,15 @@ paths:
                   - error as: `http://localhost:3000/monerium?error=invalid_request&error_description=No+such+client+ID`
               schema:
                 type: string
-        '307':
+        "307":
           description: TEMPORARY REDIRECT
           headers:
             Location:
               description: Uri to authorization flow. Customer has to go through the Monerium onboarding screen and will eventually give the application permission to read their data.
               schema:
                 type: string
-              example: 'https://sandbox.monerium.dev/partners/a15806ac-e6d6-11ed-891c-2ea11c960b3f/auth?client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f&code_challenge=9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code'
-        '400':
+              example: "https://sandbox.monerium.dev/partners/a15806ac-e6d6-11ed-891c-2ea11c960b3f/auth?client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f&code_challenge=9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code"
+        "400":
           description: Bad Request
       security: []
       tags:
@@ -302,7 +302,7 @@ paths:
       x-codeSamples:
         - lang: bash
           label: CLI
-          source: 'curl https://api.monerium.dev/auth?code_challenge=9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0&client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f&redirect_uri=http://localhost:3000&code_challenge_method=S256'
+          source: "curl https://api.monerium.dev/auth?code_challenge=9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0&client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f&redirect_uri=http://localhost:3000&code_challenge_method=S256"
   /auth/context:
     get:
       security:
@@ -324,18 +324,18 @@ paths:
       operationId: auth-context
       parameters: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                '$ref': '#/components/schemas/UserContext'
-        '401':
+                "$ref": "#/components/schemas/UserContext"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                '$ref': '#/components/schemas/UnauthorizedError'
+                "$ref": "#/components/schemas/UnauthorizedError"
       tags:
         - auth
   /auth/signup:
@@ -355,7 +355,7 @@ paths:
 
         Your app will be automatically authorized to access the user data.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
       requestBody:
         content:
           application/json:
@@ -370,7 +370,7 @@ paths:
               required:
                 - email
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
@@ -385,18 +385,18 @@ paths:
                   profile:
                     description: The UUID for the new profile.
                     example: 4f079ef8-6d26-11eb-9bc8-acde48001122
-                    $ref: '#/components/schemas/UUID'
-        '304':
+                    $ref: "#/components/schemas/UUID"
+        "304":
           description: |-
             Not modified (user already exists).
             <br /> Use [the authorization flow](#operation/auth) if the user is already a Monerium user. The user is then redirected back to your application, and you can continue with the other operations.
-        '403':
+        "403":
           description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+            $ref: "#/components/schemas/ForbiddenPartnerError/description"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenPartnerError'
+                $ref: "#/components/schemas/ForbiddenPartnerError"
       security:
         - BearerAuth: []
       tags:
@@ -437,7 +437,7 @@ paths:
 
         For mobile and web apps that cannot securely store a client secret without exposing it to the users.
 
-        Your application acquires an authorization `code` through the [PKCE authorization flow](/docs/api#auth-code).
+        Your application acquires an authorization `code` through the [PKCE authorization flow](/api#auth-code).
         you can use this authorization code to obtain an `access_token` and a `refresh_token` using `grant_type=authorization_code`.
 
         The access token can then be used to authenticate all requests for the following hour, after which the token must be refreshed using the `refresh_token` with `grant_type=refresh_token`.
@@ -460,7 +460,7 @@ paths:
                       title: Authorization code flow
                       properties:
                         client_id:
-                          $ref: '#/components/schemas/AuthClientID'
+                          $ref: "#/components/schemas/AuthClientID"
                         grant_type:
                           type: string
                           enum:
@@ -473,14 +473,14 @@ paths:
                         code_verifier:
                           description: |
                             The randomized string that was used to create the `code_challenge` when a customer/user enters the partner authorization flow.
-                            Read more about [code challenges for PKCE](/docs/api#authorization)
+                            Read more about [code challenges for PKCE](/api#authorization)
                           type: string
                           example: KO2yF8CUSxU8KJepixDmXdiCOFTMMZFLDmVjNd4J2VhbFUSSgU1lXl0aYyWYK8hIZIEH9bEBDeJ78CIuNoeOIcZOybzzqFlIGedtclJ7ZTKF6GmRBZ4fdMvg6OXnf2dl
                         redirect_uri:
                           description: |
                             The same `redirect_uri` that was used to acquire the `authorization_code`.
                           type: string
-                          example: 'http://localhost:3000/monerium'
+                          example: "http://localhost:3000/monerium"
                       required:
                         - code
                         - grant_type
@@ -492,7 +492,7 @@ paths:
                       title: Refresh token
                       properties:
                         client_id:
-                          $ref: '#/components/schemas/AuthClientID'
+                          $ref: "#/components/schemas/AuthClientID"
                         grant_type:
                           type: string
                           enum:
@@ -510,7 +510,7 @@ paths:
                       title: Client credentials
                       properties:
                         client_id:
-                          $ref: '#/components/schemas/CredentialsClientID'
+                          $ref: "#/components/schemas/CredentialsClientID"
                         grant_type:
                           type: string
                           enum:
@@ -518,20 +518,20 @@ paths:
                         client_secret:
                           description: |
                             Secret that was created when the app was registered.
-                            Read more: [Client Credentials.](docs/api#auth-client-credentials)
+                            Read more: [Client Credentials.](api#auth-client-credentials)
                           type: string
                       required:
                         - client_id
                         - grant_type
                         - client_secret
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccessToken'
-        '400':
+                $ref: "#/components/schemas/AccessToken"
+        "400":
           description: |
             BAD REQUEST
 
@@ -568,7 +568,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               examples:
                 wrongClientId:
                   summary: Wrong client ID
@@ -620,9 +620,9 @@ paths:
         List all webhook subscriptions for the authenticated user.
         The response includes the details of each subscription, such as the URL, secret, and event types.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -632,10 +632,10 @@ paths:
                   subscriptions:
                     type: array
                     items:
-                      $ref: '#/components/schemas/WebhookSubscription'
-        '401':
+                      $ref: "#/components/schemas/WebhookSubscription"
+        "401":
           description: Unauthorized
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - BearerAuth: []
@@ -660,7 +660,7 @@ paths:
                 url:
                   description: The URL where the notification will be sent.
                   type: string
-                  example: 'https://yourdomain.com/webhook'
+                  example: "https://yourdomain.com/webhook"
                 secret:
                   description: |
                     A secret key used to verify the authenticity of webhook notifications.
@@ -687,17 +687,17 @@ paths:
                     - iban.updated
                     - profile.updated
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WebhookSubscription'
-        '400':
+                $ref: "#/components/schemas/WebhookSubscription"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - BearerAuth: []
@@ -722,7 +722,7 @@ paths:
         Update an existing webhook subscription to change the URL, secret, or event types.
         The updated subscription will be validated by sending a [subscription created](#operation/webhook-subscription-created) notification to the new URL.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: subscription
           in: path
           description: The ID of the webhook subscription
@@ -764,26 +764,26 @@ paths:
                     - iban.updated
                     - profile.updated
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WebhookSubscription'
-        '400':
+                $ref: "#/components/schemas/WebhookSubscription"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '404':
+        "404":
           description: Not Found (subscription does not exist)
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - BearerAuth: []
       tags:
         - webhooks
 
-  '/profiles/{profile}/details':
+  "/profiles/{profile}/details":
     put:
       operationId: submit-profile-details
       summary: Submit profile details
@@ -805,13 +805,13 @@ paths:
         - Once a profile is approved, you cannot change the profile kind.
         - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: profile
           in: path
           description: The ID of the profile
           required: true
           schema:
-            $ref: '#/components/schemas/UUID'
+            $ref: "#/components/schemas/UUID"
       requestBody:
         content:
           application/json:
@@ -824,11 +824,11 @@ paths:
                       description: Details for an individual
                       type: object
                       allOf:
-                        - $ref: '#/components/schemas/PersonalDetails'
+                        - $ref: "#/components/schemas/PersonalDetails"
                         - type: object
                           properties:
                             idDocument:
-                              $ref: '#/components/schemas/IdDocument'
+                              $ref: "#/components/schemas/IdDocument"
                       required:
                         - idDocument
                 - title: Corporate
@@ -836,9 +836,9 @@ paths:
                     corporate:
                       description: Details for a company
                       type: object
-                      $ref: '#/components/schemas/CorporateDetails'
+                      $ref: "#/components/schemas/CorporateDetails"
       responses:
-        '202':
+        "202":
           description: |
             Accepted
 
@@ -848,32 +848,32 @@ paths:
             application/json:
               schema:
                 type: object
-        '400':
+        "400":
           description: BAD REQUEST
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
                 code: 400
                 status: Bad Request
                 message: Validation errors
                 errors:
                   firstName: First name is missing
-        '401':
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+            $ref: "#/components/schemas/ForbiddenPartnerError/description"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenPartnerError'
-        '409':
+                $ref: "#/components/schemas/ForbiddenPartnerError"
+        "409":
           description: |
             Conflict
 
@@ -927,7 +927,7 @@ paths:
                 "birthday": "1990-05-15"
               }
             }'
-  '/profiles/{profile}/form':
+  "/profiles/{profile}/form":
     put:
       operationId: submit-profile-form
       summary: Submit profile form
@@ -949,13 +949,13 @@ paths:
         - Once a profile is approved, you cannot change the profile kind.
         - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: profile
           in: path
           description: The ID of the profile
           required: true
           schema:
-            $ref: '#/components/schemas/UUID'
+            $ref: "#/components/schemas/UUID"
       requestBody:
         content:
           application/json:
@@ -966,14 +966,14 @@ paths:
                   properties:
                     personal:
                       description: Form for an individual
-                      $ref: '#/components/schemas/PersonalForm'
+                      $ref: "#/components/schemas/PersonalForm"
                 - title: Corporate
                   properties:
                     corporate:
                       description: Form for a company
-                      $ref: '#/components/schemas/CorporateForm'
+                      $ref: "#/components/schemas/CorporateForm"
       responses:
-        '202':
+        "202":
           description: |
             Accepted
 
@@ -983,32 +983,32 @@ paths:
             application/json:
               schema:
                 type: object
-        '400':
+        "400":
           description: BAD REQUEST
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
                 code: 400
                 status: Bad Request
                 message: Validation errors
                 errors:
                   firstName: First name is missing
-        '401':
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+            $ref: "#/components/schemas/ForbiddenPartnerError/description"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenPartnerError'
-        '409':
+                $ref: "#/components/schemas/ForbiddenPartnerError"
+        "409":
           description: |
             Conflict
 
@@ -1062,7 +1062,7 @@ paths:
                 "birthday": "1990-05-15"
               }
             }'
-  '/profiles/{profile}/verifications':
+  "/profiles/{profile}/verifications":
     put:
       operationId: submit-profile-verifications
       summary: Submit profile verifications
@@ -1084,13 +1084,13 @@ paths:
         - Once a profile is approved, you cannot change the profile kind.
         - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: profile
           in: path
           description: The ID of the profile
           required: true
           schema:
-            $ref: '#/components/schemas/UUID'
+            $ref: "#/components/schemas/UUID"
       requestBody:
         content:
           application/json:
@@ -1101,14 +1101,14 @@ paths:
                   properties:
                     personal:
                       description: Verifications for an individual
-                      $ref: '#/components/schemas/PersonalVerifications'
+                      $ref: "#/components/schemas/PersonalVerifications"
                 - title: Corporate
                   properties:
                     corporate:
                       description: Verifications for a company
-                      $ref: '#/components/schemas/CorporateVerifications'
+                      $ref: "#/components/schemas/CorporateVerifications"
       responses:
-        '202':
+        "202":
           description: |
             Accepted
 
@@ -1118,32 +1118,32 @@ paths:
             application/json:
               schema:
                 type: object
-        '400':
+        "400":
           description: BAD REQUEST
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
                 code: 400
                 status: Bad Request
                 message: Validation errors
                 errors:
                   firstName: First name is missing
-        '401':
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+            $ref: "#/components/schemas/ForbiddenPartnerError/description"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenPartnerError'
-        '409':
+                $ref: "#/components/schemas/ForbiddenPartnerError"
+        "409":
           description: |
             Conflict
 
@@ -1203,21 +1203,21 @@ paths:
       summary: Profiles
       description: Retrieves a list of all profiles that your application has access to.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: state
           in: query
           description: Filter the list on the state of profiles
           required: false
           schema:
-            $ref: '#/components/schemas/ProfileState'
+            $ref: "#/components/schemas/ProfileState"
         - name: kind
           in: query
           description: Filter the list on the kind of profiles
           required: false
           schema:
-            $ref: '#/components/schemas/ProfileKind'
+            $ref: "#/components/schemas/ProfileKind"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1225,19 +1225,19 @@ paths:
                 type: object
                 properties:
                   profiles:
-                    $ref: '#/components/schemas/Profiles'
-        '401':
+                    $ref: "#/components/schemas/Profiles"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -1249,38 +1249,38 @@ paths:
             curl https://api.monerium.dev/profiles?state=approved&kind=personal \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
             -H "Accept: application/vnd.monerium.api-v2+json"
-  '/profiles/{profile}':
+  "/profiles/{profile}":
     get:
       operationId: profile
       summary: Profile
       description: Retrieves details about a single profile.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: profile
           in: path
           description: The ID of the profile
           required: true
           schema:
-            $ref: '#/components/schemas/UUID'
+            $ref: "#/components/schemas/UUID"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Profile'
-        '401':
+                $ref: "#/components/schemas/Profile"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -1312,7 +1312,7 @@ paths:
         1. **Offchain**: The signatures are collected offchain and set in the "signature" field of the request. For multisig wallets, the signatures are concatenated in a 65 byte array.
         2. **Onchain**: The signatures are collected and validated onchain by the smart contract. The "signature" field in the request is set to "0x" and the Monerium infrastructure will verify the onchain with the connected SCA. The SCA emits an event `SignMsg(bytes32 indexed msgHash)` after signing that the Monerium infrastructure validates the signature and completes connecting the wallet.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
       requestBody:
         content:
           application/json:
@@ -1321,12 +1321,12 @@ paths:
               properties:
                 profile:
                   description: Profile ID that owns the address.
-                  $ref: '#/components/schemas/UUID'
+                  $ref: "#/components/schemas/UUID"
                 address:
-                  $ref: '#/components/schemas/Address'
+                  $ref: "#/components/schemas/Address"
                 chain:
                   description: The blockchain network where the address is located. Note that allowed values differ between sandbox and production environments.
-                  $ref: '#/components/schemas/Chain'
+                  $ref: "#/components/schemas/Chain"
                 message:
                   description: Fixed message to be signed with the private key corresponding to the given address. </br></br><strong><code>I hereby declare that I am the address owner.</code></strong>
                   type: string
@@ -1334,18 +1334,18 @@ paths:
                 signature:
                   oneOf:
                     - title: EOA address
-                      $ref: '#/components/schemas/SignatureEOA'
+                      $ref: "#/components/schemas/SignatureEOA"
                     - title: Safe onchain
-                      $ref: '#/components/schemas/SignatureSafeOnchain'
+                      $ref: "#/components/schemas/SignatureSafeOnchain"
                     - title: Safe offchain
-                      $ref: '#/components/schemas/SignatureSafeOffchain'
+                      $ref: "#/components/schemas/SignatureSafeOffchain"
               required:
                 - address
                 - message
                 - chain
                 - signature
       responses:
-        '201':
+        "201":
           description: |
             **CREATED**
 
@@ -1354,7 +1354,7 @@ paths:
             application/json:
               schema:
                 type: object
-        '202':
+        "202":
           description: |
             **ACCEPTED**
 
@@ -1370,30 +1370,30 @@ paths:
                   status:
                     type: string
                     example: Accepted
-        '400':
+        "400":
           description: BAD REQUEST
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
                 code: 400
                 status: Bad Request
                 message: Validation errors
                 errors:
                   address: Address missing
-        '401':
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -1699,21 +1699,21 @@ paths:
       summary: Addresses
       description: List of addresses that have been connected. You can filter the addresses by the chain they are connected to.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: profile
           in: query
           description: Return addresses for a given profile ID. By default the caller profile ID is used.
           required: false
           schema:
-            $ref: '#/components/schemas/UUID'
+            $ref: "#/components/schemas/UUID"
         - name: chain
           in: query
           description: Filter the list on the chain
           required: false
           schema:
-            $ref: '#/components/schemas/Chain'
+            $ref: "#/components/schemas/Chain"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1723,19 +1723,19 @@ paths:
                   addresses:
                     type: array
                     items:
-                      $ref: '#/components/schemas/AddressObject'
-        '401':
+                      $ref: "#/components/schemas/AddressObject"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -1747,37 +1747,37 @@ paths:
             curl https://api.monerium.dev/addresses?profile=a78d8ff2-e51f-11ed-9e13-cacb9390199c&chain=ethereum \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
             -H "Accept: application/vnd.monerium.api-v2+json"
-  '/addresses/{address}':
+  "/addresses/{address}":
     get:
       operationId: address
       summary: Address
       description: Get details for a single address by using the address public key after the address has been successfully linked to Monerium.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: address
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/Address'
+            $ref: "#/components/schemas/Address"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AddressObject'
-        '401':
+                $ref: "#/components/schemas/AddressObject"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -1789,7 +1789,7 @@ paths:
             curl https://api.monerium.dev/addresses/0x59cFC408d310697f9D3598e1BE75B0157a072407 \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
             -H "Accept: application/vnd.monerium.api-v2+json"
-  '/balances/{chain}/{address}':
+  "/balances/{chain}/{address}":
     get:
       operationId: balances
       summary: Balances
@@ -1800,38 +1800,38 @@ paths:
           description: Address
           required: true
           schema:
-            $ref: '#/components/schemas/Address'
+            $ref: "#/components/schemas/Address"
         - name: chain
           in: path
           description: Chain name
           required: true
           schema:
-            $ref: '#/components/schemas/Chain'
+            $ref: "#/components/schemas/Chain"
         - name: currency
           in: query
           description: Currency to return the balance for. If not provided `eur` is used. Can be used multiple times to get multiple currencies.
           required: false
           schema:
-            $ref: '#/components/schemas/Currency'
+            $ref: "#/components/schemas/Currency"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Balances'
-        '401':
+                $ref: "#/components/schemas/Balances"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -1853,7 +1853,7 @@ paths:
 
         Create an IBAN for a specified address and chain. All incoming EUR payments will automatically be routed to the linked address on that chain. Any linked address can use this IBAN for outgoing payments.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
       requestBody:
         content:
           application/json:
@@ -1861,14 +1861,14 @@ paths:
               type: object
               properties:
                 address:
-                  $ref: '#/components/schemas/Address'
+                  $ref: "#/components/schemas/Address"
                 chain:
-                  $ref: '#/components/schemas/Chain'
+                  $ref: "#/components/schemas/Chain"
               required:
                 - address
                 - chain
       responses:
-        '202':
+        "202":
           description: |
             **ACCEPTED**
 
@@ -1877,7 +1877,7 @@ paths:
             application/json:
               schema:
                 type: object
-        '304':
+        "304":
           description: |
             **Not modified**
 
@@ -1886,30 +1886,30 @@ paths:
             application/json:
               schema:
                 type: object
-        '400':
+        "400":
           description: BAD REQUEST
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
                 code: 400
                 status: Bad Request
                 message: Validation errors
                 errors:
                   iban: Address missing
-        '401':
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -1928,23 +1928,23 @@ paths:
     get:
       operationId: ibans
       summary: IBANs
-      description: 'List of IBANs that have been created. You can filter by the address, or the chain they are connected to.'
+      description: "List of IBANs that have been created. You can filter by the address, or the chain they are connected to."
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: profile
           in: query
           description: Return the list for the profile ID. By default the caller profile is used.
           required: false
           schema:
-            $ref: '#/components/schemas/UUID'
+            $ref: "#/components/schemas/UUID"
         - name: chain
           in: query
           description: Filter the list on the chain
           required: false
           schema:
-            $ref: '#/components/schemas/Chain'
+            $ref: "#/components/schemas/Chain"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1954,19 +1954,19 @@ paths:
                   ibans:
                     type: array
                     items:
-                      $ref: '#/components/schemas/IBANObject'
-        '401':
+                      $ref: "#/components/schemas/IBANObject"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -1978,37 +1978,37 @@ paths:
             curl https://api.monerium.dev/ibans?profile=a78d8ff2-e51f-11ed-9e13-cacb9390199 \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
             -H "Accept: application/vnd.monerium.api-v2+json"
-  '/ibans/{iban}':
+  "/ibans/{iban}":
     get:
       operationId: iban
       summary: IBAN
       description: Get details for a single IBAN.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: iban
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/IBAN'
+            $ref: "#/components/schemas/IBAN"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IBANObject'
-        '401':
+                $ref: "#/components/schemas/IBANObject"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -2030,12 +2030,12 @@ paths:
 
         Move an existing IBAN to a specified address an chain. All incoming EUR payments will automatically be routed to the address on that chain.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: iban
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/IBAN'
+            $ref: "#/components/schemas/IBAN"
       requestBody:
         content:
           application/json:
@@ -2043,43 +2043,43 @@ paths:
               type: object
               properties:
                 address:
-                  $ref: '#/components/schemas/Address'
+                  $ref: "#/components/schemas/Address"
                 chain:
-                  $ref: '#/components/schemas/Chain'
+                  $ref: "#/components/schemas/Chain"
               required:
                 - address
                 - chain
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
-        '400':
+        "400":
           description: BAD REQUEST
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
                 code: 400
                 status: Bad Request
                 message: Validation errors
                 errors:
                   iban: Address missing
-        '401':
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -2108,20 +2108,20 @@ paths:
 
         Attaching a supporting document for amounts above 15,000 EUR is required. Supporting document can be an invoice or an agreement.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewOrder'
+              $ref: "#/components/schemas/NewOrder"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
-        '202':
+                $ref: "#/components/schemas/Order"
+        "202":
           description: |
             **ACCEPTED**
 
@@ -2138,21 +2138,21 @@ paths:
                   status:
                     type: string
                     example: Accepted
-        '401':
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       externalDocs:
         description: Read more about how to upload a file.
-        url: /api-docs/v2#tag/files/operation/upload-file
+        url: /api#tag/files/operation/upload-file
       security:
         - BearerAuth: []
       tags:
@@ -2476,29 +2476,29 @@ paths:
         Retrieves all orders for the caller profile.
         Query parameters can be used to filter and sort the result.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: address
           in: query
           description: Get all orders belonging to a specific blockchain address.
           schema:
-            example: '0x798728D5410aB4FB49d2C277A49baC5048aB43ca'
-            $ref: '#/components/schemas/Address'
+            example: "0x798728D5410aB4FB49d2C277A49baC5048aB43ca"
+            $ref: "#/components/schemas/Address"
         - name: txHash
           in: query
           description: The blockchains transaction hash.
           schema:
             type: string
-            example: '0x692ff12125b71c167b3ea90bddb3b28edd60941851cb0cdd852cc3b6d79311cd'
+            example: "0x692ff12125b71c167b3ea90bddb3b28edd60941851cb0cdd852cc3b6d79311cd"
         - name: profile
           in: query
           description: The profile ID which the order belongs to. By default the caller profile ID is used.
           schema:
             example: 123e4567-e89b-12d3-a456-426614174000
-            $ref: '#/components/schemas/UUID'
+            $ref: "#/components/schemas/UUID"
         - name: memo
           in: query
           schema:
-            $ref: '#/components/schemas/Memo'
+            $ref: "#/components/schemas/Memo"
         - name: state
           in: query
           description: |
@@ -2514,7 +2514,7 @@ paths:
               - processed
               - rejected
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2524,19 +2524,19 @@ paths:
                   orders:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Order'
-        '401':
+                      $ref: "#/components/schemas/Order"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -2548,14 +2548,14 @@ paths:
             curl https://api.monerium.dev/orders \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
             -H "Accept: application/vnd.monerium.api-v2+json"
-  '/orders/{orderId}':
+  "/orders/{orderId}":
     get:
       operationId: order
       summary: Order
       description: |
         Retrieve the details of an existing order. Supply the unique order ID from either an order creation or the order list, and Monerium will return the corresponding order information
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: orderId
           in: path
           description: The ID of the order
@@ -2563,24 +2563,24 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
-        '401':
+                $ref: "#/components/schemas/Order"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -2618,7 +2618,7 @@ paths:
               required:
                 - file
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2654,23 +2654,23 @@ paths:
                       createdAt:
                         type: string
                         format: date
-                        example: '2024-07-15T15:03:11.990387Z'
+                        example: "2024-07-15T15:03:11.990387Z"
                       updatedAt:
                         type: string
                         format: date
-                        example: '2024-07-15T15:03:11.990387Z'
-        '401':
+                        example: "2024-07-15T15:03:11.990387Z"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -2683,26 +2683,26 @@ paths:
     get:
       operationId: tokens
       summary: Tokens
-      description: 'Information about the emoney tokens with tickers, symbols, decimals, token contract address and the chain information, we currently support Ethereum, Polygon and Gnosis.</br></br> Token addresses and details here: [/docs/tokens/](/docs/tokens)'
+      description: "Information about the emoney tokens with tickers, symbols, decimals, token contract address and the chain information, we currently support Ethereum, Polygon and Gnosis.</br></br> Token addresses and details here: [/tokens/](/tokens)"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tokens'
-        '401':
+                $ref: "#/components/schemas/Tokens"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
+                $ref: "#/components/schemas/ForbiddenError"
       security:
         - BearerAuth: []
       tags:
@@ -2723,19 +2723,19 @@ paths:
 
         Note: This endpoint is not optimal for users with many addresses as it may have performance implications.
       parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: address
           in: query
           required: false
           description: Filter by blockchain address
           schema:
-            $ref: '#/components/schemas/Address'
+            $ref: "#/components/schemas/Address"
         - name: chain
           in: query
           required: false
           description: Filter by blockchain network
           schema:
-            $ref: '#/components/schemas/Chain'
+            $ref: "#/components/schemas/Chain"
         - name: kind
           in: query
           required: false
@@ -2750,9 +2750,9 @@ paths:
           required: false
           description: UUID of the profile (defaults to authenticated user's default profile)
           schema:
-            $ref: '#/components/schemas/UUID'
+            $ref: "#/components/schemas/UUID"
       responses:
-        '200':
+        "200":
           description: Successful response with pending signatures
           headers:
             X-Total-Count:
@@ -2767,7 +2767,7 @@ paths:
                   pending:
                     type: array
                     items:
-                      $ref: '#/components/schemas/PendingSignature'
+                      $ref: "#/components/schemas/PendingSignature"
                   total:
                     type: integer
                     description: Total number of pending signatures
@@ -2776,64 +2776,64 @@ paths:
                   summary: Order signature example
                   value:
                     pending:
-                      - id: '550e8400-e29b-41d4-a716-446655440000'
-                        kind: 'order'
-                        chain: 'ethereum'
-                        address: '0x1234567890123456789012345678901234567890'
-                        amount: '100.50'
+                      - id: "550e8400-e29b-41d4-a716-446655440000"
+                        kind: "order"
+                        chain: "ethereum"
+                        address: "0x1234567890123456789012345678901234567890"
+                        amount: "100.50"
                         counterpart:
                           identifier:
-                            standard: 'iban'
-                            iban: 'GB33BUKB20201555555555'
+                            standard: "iban"
+                            iban: "GB33BUKB20201555555555"
                           details:
-                            name: 'John Doe'
-                        currency: 'eur'
-                        createdAt: '2024-01-15T10:30:00Z'
+                            name: "John Doe"
+                        currency: "eur"
+                        createdAt: "2024-01-15T10:30:00Z"
                     total: 1
                 linkAddressSignature:
                   summary: Link address signature example
                   value:
                     pending:
-                      - kind: 'linkAddress'
-                        chain: 'polygon'
-                        address: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd'
-                        createdAt: '2024-01-15T09:15:00Z'
+                      - kind: "linkAddress"
+                        chain: "polygon"
+                        address: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
+                        createdAt: "2024-01-15T09:15:00Z"
                     total: 1
                 emptyResult:
                   summary: No pending signatures
                   value:
                     pending: []
                     total: 0
-        '400':
+        "400":
           description: Bad request - invalid parameters
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '401':
+                $ref: "#/components/schemas/Error"
+        "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
+                $ref: "#/components/schemas/UnauthorizedError"
+        "403":
           description: FORBIDDEN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForbiddenError'
-        '404':
+                $ref: "#/components/schemas/ForbiddenError"
+        "404":
           description: Not found - profile or signatures not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       security:
         - BearerAuth: []
       tags:
@@ -2859,10 +2859,10 @@ components:
     Address:
       description: The public key of the blockchain account.
       type: string
-      example: '0x59cFC408d310697f9D3598e1BE75B0157a072407'
-      pattern: '^0x[0-9a-fA-F]{40}$'
+      example: "0x59cFC408d310697f9D3598e1BE75B0157a072407"
+      pattern: "^0x[0-9a-fA-F]{40}$"
     Currency:
-      description: 'Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.'
+      description: "Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase."
       type: string
       enum:
         - eur
@@ -2870,7 +2870,7 @@ components:
         - gbp
         - isk
     BankAccount:
-      description: 'Used for generic bank account details, when IBAN is not available.'
+      description: "Used for generic bank account details, when IBAN is not available."
       type: object
       required:
         - standard
@@ -2878,7 +2878,7 @@ components:
         - address
       properties:
         standard:
-          description: 'The standard of the bank account. This is used to identify generic bank account.'
+          description: "The standard of the bank account. This is used to identify generic bank account."
           type: string
           example: account
           enum:
@@ -2886,22 +2886,22 @@ components:
         accountNumber:
           description: The account number of the bank account.
           type: string
-          example: '1234567890'
+          example: "1234567890"
         address:
           description: Address of the bank account holder.
           type: string
-          example: '1725 Slough Avenue in Scranton, PA'
+          example: "1725 Slough Avenue in Scranton, PA"
         bic:
           description: The BIC (Bank Identifier Code) of the bank.
           type: string
-          example: 'DEUTDEDBFRA'
+          example: "DEUTDEDBFRA"
     Balances:
       type: object
       properties:
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: "#/components/schemas/Address"
         chain:
-          $ref: '#/components/schemas/Chain'
+          $ref: "#/components/schemas/Chain"
         balances:
           description: The amount owned of currency
           type: array
@@ -2909,11 +2909,11 @@ components:
             type: object
             properties:
               currency:
-                $ref: '#/components/schemas/Currency'
+                $ref: "#/components/schemas/Currency"
               amount:
                 description: The amount of currency.
                 type: string
-                example: '123.45'
+                example: "123.45"
     Chain:
       example: ethereum
       oneOf:
@@ -2989,15 +2989,15 @@ components:
           description: Noble Grand testnet
     ChainMultiSig:
       allOf:
-        - $ref: '#/components/schemas/Chain'
+        - $ref: "#/components/schemas/Chain"
     CountryCode:
-      description: 'Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)'
+      description: "Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)"
       type: string
       example: FR
       maxLength: 2
       minLength: 2
     IBAN:
-      description: 'The IBAN is a unique identifier for a bank account across different countries and includes a two-letter country code, two check digits, and a number of alphanumeric characters. It may include spaces for readability but should be stored without spaces.'
+      description: "The IBAN is a unique identifier for a bank account across different countries and includes a two-letter country code, two check digits, and a number of alphanumeric characters. It may include spaces for readability but should be stored without spaces."
       type: string
       example: EE127310138155512606682602
       pattern: '^(?:[A-Z]{2}[0-9]{2}(?:\s?[0-9A-Z]{4}){1,7}\s?[0-9A-Z]{1,4})$'
@@ -3013,14 +3013,14 @@ components:
       description: |
         UTF-8 Payment reference. Structured identifier for a transaction or order, typically used for automatic payment reconciliation
       type: string
-      example: 'RF123456789'
+      example: "RF123456789"
       maxLength: 35
       minLength: 0
     SignatureEOA:
       description: The signature hash of signing the `message` with the private key associated with the given address.
       type: string
       example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
-      pattern: '^0x[0-9a-fA-F]{130}$'
+      pattern: "^0x[0-9a-fA-F]{130}$"
     SignatureSafeOnchain:
       description: |
         For Safe onchain signatures, your app needs to ensure that [the signature transaction is created](https://docs.safe.global/sdk/protocol-kit/guides/signatures/messages#on-chain-messages).
@@ -3050,19 +3050,19 @@ components:
       properties:
         profile:
           description: The profile id that owns the address
-          $ref: '#/components/schemas/UUID'
+          $ref: "#/components/schemas/UUID"
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: "#/components/schemas/Address"
         chains:
           description: list of chains that this address has been connected to
           type: array
           items:
-            $ref: '#/components/schemas/Chain'
+            $ref: "#/components/schemas/Chain"
     IBANObject:
       type: object
       properties:
         iban:
-          $ref: '#/components/schemas/IBAN'
+          $ref: "#/components/schemas/IBAN"
         name:
           description: The name of the IBAN owner. This can be a corporate or an individual.
           type: string
@@ -3075,39 +3075,39 @@ components:
           example: EAPFESM2XXX
         profile:
           description: The profile id that owns the IBAN
-          $ref: '#/components/schemas/UUID'
+          $ref: "#/components/schemas/UUID"
         address:
           description: The address that this IBAN is connected to
-          $ref: '#/components/schemas/Address'
+          $ref: "#/components/schemas/Address"
         chain:
           description: The chain that this IBAN is connected to
-          $ref: '#/components/schemas/Chain'
+          $ref: "#/components/schemas/Chain"
     NewOrder:
       type: object
       properties:
         id:
           description: The unique identifier of the order.
-          $ref: '#/components/schemas/UUID'
+          $ref: "#/components/schemas/UUID"
         address:
           description: The address to redeem from. Can be any Monerium linked address.
-          $ref: '#/components/schemas/Address'
+          $ref: "#/components/schemas/Address"
         currency:
-          $ref: '#/components/schemas/Currency'
+          $ref: "#/components/schemas/Currency"
         chain:
-          $ref: '#/components/schemas/Chain'
+          $ref: "#/components/schemas/Chain"
         kind:
           description: Identifier specifying the nature of the order. </br></br> Redeem order is when tokens are burned on blockchain and sent to bank.
           type: string
           enum:
             - redeem
         amount:
-          description: 'The quantity of money sent, represented as a series of digits, possibly followed by a decimal point and up to two additional digits. The amount must be a non-negative value.'
+          description: "The quantity of money sent, represented as a series of digits, possibly followed by a decimal point and up to two additional digits. The amount must be a non-negative value."
           type: string
-          example: '1000'
+          example: "1000"
         counterpart:
-          $ref: '#/components/schemas/Counterpart'
+          $ref: "#/components/schemas/Counterpart"
         message:
-          description: 'A string message that the wallet owner must sign to authorize the processing of the order. This signed message verifies the consent of the wallet owner, ensuring that the transaction can proceed securely and legitimately.'
+          description: "A string message that the wallet owner must sign to authorize the processing of the order. This signed message verifies the consent of the wallet owner, ensuring that the transaction can proceed securely and legitimately."
           oneOf:
             - title: IBAN
               description: |
@@ -3133,7 +3133,7 @@ components:
 
                 <code>Send EUR 1.23 to EE12...2602 at 2024-07-12T12:02:49Z</code>
               type: string
-              example: 'Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z'
+              example: "Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z"
             - title: Cross-chain transaction
               description: |
                 For Cross-chain transaction, the message is composed as such:
@@ -3154,23 +3154,23 @@ components:
                 <code>Send EUR 1.23 to 0x4B4c34f35b0Bb9Af56418FAdD4677ce45ADF7760 on ethereum at 2024-07-12T12:02:49Z</code>
               type: string
               pattern: '^Send\s([A-Z]{3})\s(\d+(\.\d{1,2})?)\sto\s([A-Z]{2}\d{2}\s?([A-Z0-9]{4}\s?){1,7}[A-Z0-9]{1,4})\sat\s(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z)$'
-              example: 'Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z'
+              example: "Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z"
         signature:
           oneOf:
             - title: EOA address
-              $ref: '#/components/schemas/SignatureEOA'
+              $ref: "#/components/schemas/SignatureEOA"
             - title: Safe onchain
-              $ref: '#/components/schemas/SignatureSafeOnchain'
+              $ref: "#/components/schemas/SignatureSafeOnchain"
             - title: Safe offchain
-              $ref: '#/components/schemas/SignatureSafeOffchain'
+              $ref: "#/components/schemas/SignatureSafeOffchain"
         memo:
-          $ref: '#/components/schemas/Memo'
+          $ref: "#/components/schemas/Memo"
         referenceNumber:
-          $ref: '#/components/schemas/ReferenceNumber'
+          $ref: "#/components/schemas/ReferenceNumber"
         supportingDocumentId:
-          description: 'File ID, required for orders with amount greater or equal to €15,000.'
+          description: "File ID, required for orders with amount greater or equal to €15,000."
           example: 3ebc51a8-044f-11ed-8b1f-4a76448b7b21
-          $ref: '#/components/schemas/UUID'
+          $ref: "#/components/schemas/UUID"
       required:
         - address
         - currency
@@ -3185,7 +3185,7 @@ components:
       properties:
         id:
           allOf:
-            - $ref: '#/components/schemas/UUID'
+            - $ref: "#/components/schemas/UUID"
             - description: The ID of the order.
               example: 8c0fd7b1-01da-11ed-89c1-52c47a86c354
         kind:
@@ -3200,24 +3200,24 @@ components:
         profile:
           description: Unique identifier of the profile involved in the order.
           example: 312c5cc4-4b06-11ed-a6cf-bac9bf26c37c
-          $ref: '#/components/schemas/UUID'
+          $ref: "#/components/schemas/UUID"
         address:
-          example: '0x798728D5410aB4FB49d2C277A49baC5048aB43ca'
-          $ref: '#/components/schemas/Address'
+          example: "0x798728D5410aB4FB49d2C277A49baC5048aB43ca"
+          $ref: "#/components/schemas/Address"
         chain:
-          $ref: '#/components/schemas/Chain'
+          $ref: "#/components/schemas/Chain"
         currency:
-          $ref: '#/components/schemas/Currency'
+          $ref: "#/components/schemas/Currency"
         amount:
           description: The order amount.
           type: string
-          example: '999'
+          example: "999"
         counterpart:
-          $ref: '#/components/schemas/CounterpartResponse'
+          $ref: "#/components/schemas/CounterpartResponse"
         memo:
-          $ref: '#/components/schemas/Memo'
+          $ref: "#/components/schemas/Memo"
         referenceNumber:
-          $ref: '#/components/schemas/ReferenceNumber'
+          $ref: "#/components/schemas/ReferenceNumber"
         state:
           description: |
             The state of the order:
@@ -3238,14 +3238,14 @@ components:
           properties:
             placedAt:
               description: "When was the order placed. The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
-              $ref: '#/components/schemas/TimeStamp'
+              $ref: "#/components/schemas/TimeStamp"
             processedAt:
               description: "When was the order processed. Only visible when the order has been processed. The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
-              $ref: '#/components/schemas/TimeStamp'
+              $ref: "#/components/schemas/TimeStamp"
             rejectedReason:
               description: Message stating why the order was rejected.  Only visible when the order has been rejected.
               type: string
-              example: 'Declined due to insufficient funds.'
+              example: "Declined due to insufficient funds."
             supportingDocumentId:
               description: The UUID of an File ID.
               type: string
@@ -3296,7 +3296,7 @@ components:
     Profiles:
       type: array
       items:
-        $ref: '#/components/schemas/Profile'
+        $ref: "#/components/schemas/Profile"
     Profile:
       type: object
       properties:
@@ -3305,20 +3305,20 @@ components:
           type: string
           example: 4f079ef8-6d26-11eb-9bc8-acde48001122
         kind:
-          $ref: '#/components/schemas/ProfileKind'
+          $ref: "#/components/schemas/ProfileKind"
         name:
           description: The Profile name. This can be a corporate or an individual.
           type: string
           example: Jane Doe
         state:
-          $ref: '#/components/schemas/ProfileState'
+          $ref: "#/components/schemas/ProfileState"
     Tokens:
       type: array
       items:
         type: object
         properties:
           currency:
-            $ref: '#/components/schemas/Currency'
+            $ref: "#/components/schemas/Currency"
           ticker:
             description: The traditional currency abbreviation.
             enum:
@@ -3334,11 +3334,11 @@ components:
               - USDe
               - ISKe
           chain:
-            $ref: '#/components/schemas/Chain'
+            $ref: "#/components/schemas/Chain"
           address:
             description: The address of the token.
             type: string
-            example: '0x905419e7a1f96a973ab8988ba19c84135c6f7122'
+            example: "0x905419e7a1f96a973ab8988ba19c84135c6f7122"
           decimals:
             description: Number of decimals used in the asset.
             type: string
@@ -3347,52 +3347,52 @@ components:
           ticker: EUR
           symbol: EURe
           chain: ethereum
-          address: '0x3231cb76718cdef2155fc47b5286d82e6eda273f'
+          address: "0x3231cb76718cdef2155fc47b5286d82e6eda273f"
           decimals: 18
         - currency: gbp
           ticker: GBP
           symbol: GBPe
           chain: ethereum
-          address: '0x7ba92741bf2a568abc6f1d3413c58c6e0244f8fd'
+          address: "0x7ba92741bf2a568abc6f1d3413c58c6e0244f8fd"
           decimals: 18
         - currency: isk
           ticker: ISK
           symbol: ISKe
           chain: ethereum
-          address: '0xc642549743a93674cf38d6431f75d6443f88e3e2'
+          address: "0xc642549743a93674cf38d6431f75d6443f88e3e2"
           decimals: 18
         - currency: usd
           ticker: USD
           symbol: USDe
           chain: ethereum
-          address: '0xbc5142e0cc5eb16b47c63b0f033d4c2480853a52'
+          address: "0xbc5142e0cc5eb16b47c63b0f033d4c2480853a52"
           decimals: 18
         - currency: eur
           ticker: EUR
           symbol: EURe
           chain: polygon
-          address: '0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6'
+          address: "0x18ec0A6E18E5bc3784fDd3a3634b31245ab704F6"
           decimals: 18
         - currency: gbp
           ticker: GBP
           symbol: GBPe
           chain: polygon
-          address: '0x75792CBDb361d80ba89271a079EfeE62c29FA324'
+          address: "0x75792CBDb361d80ba89271a079EfeE62c29FA324"
           decimals: 18
         - currency: isk
           ticker: ISK
           symbol: ISKe
           chain: polygon
-          address: '0xf1bBf27A9D659D326efBfa5D284EBaeFB803983D'
+          address: "0xf1bBf27A9D659D326efBfa5D284EBaeFB803983D"
           decimals: 18
         - currency: usd
           ticker: USD
           symbol: USDe
           chain: polygon
-          address: '0x64E97c1a6535afD4a313eF46F88A64a34250B719'
+          address: "0x64E97c1a6535afD4a313eF46F88A64a34250B719"
           decimals: 18
     Counterpart:
-      description: 'The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country.'
+      description: "The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country."
       type: object
       properties:
         identifier:
@@ -3411,7 +3411,7 @@ components:
                   enum:
                     - iban
                 iban:
-                  $ref: '#/components/schemas/IBAN'
+                  $ref: "#/components/schemas/IBAN"
             - title: Cross-chain
               type: object
               required:
@@ -3426,9 +3426,9 @@ components:
                   enum:
                     - chain
                 address:
-                  $ref: '#/components/schemas/Address'
+                  $ref: "#/components/schemas/Address"
                 chain:
-                  $ref: '#/components/schemas/Chain'
+                  $ref: "#/components/schemas/Chain"
         details:
           description: Details about the counterpart that can be either a corporate or an individual.
           oneOf:
@@ -3451,8 +3451,8 @@ components:
                   example: Nakamoto
                   minLength: 2
                 country:
-                  description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart lives. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
-                  $ref: '#/components/schemas/CountryCode'
+                  description: "The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart lives. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)."
+                  $ref: "#/components/schemas/CountryCode"
             - title: Corporation
               type: object
               description: Only one naming method is required. Either companyName or firstName and lastName
@@ -3465,13 +3465,13 @@ components:
                   type: string
                   example: Monerium
                 country:
-                  description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
-                  $ref: '#/components/schemas/CountryCode'
+                  description: "The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)."
+                  $ref: "#/components/schemas/CountryCode"
       required:
         - identifier
         - details
     CounterpartResponse:
-      description: 'The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country.'
+      description: "The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country."
       type: object
       properties:
         identifier:
@@ -3490,7 +3490,7 @@ components:
                   enum:
                     - iban
                 iban:
-                  $ref: '#/components/schemas/IBAN'
+                  $ref: "#/components/schemas/IBAN"
             - title: Cross-chain
               type: object
               required:
@@ -3505,11 +3505,11 @@ components:
                   enum:
                     - chain
                 address:
-                  $ref: '#/components/schemas/Address'
+                  $ref: "#/components/schemas/Address"
                 chain:
-                  $ref: '#/components/schemas/Chain'
+                  $ref: "#/components/schemas/Chain"
             - title: Bank Account
-              $ref: '#/components/schemas/BankAccount'
+              $ref: "#/components/schemas/BankAccount"
         details:
           description: Details about the counterpart. Empty for cross-chain orders.
           oneOf:
@@ -3532,8 +3532,8 @@ components:
                   example: Nakamoto
                   minLength: 2
                 country:
-                  description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart lives. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
-                  $ref: '#/components/schemas/CountryCode'
+                  description: "The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart lives. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)."
+                  $ref: "#/components/schemas/CountryCode"
             - title: Redeem orders for corporations
               type: object
               required:
@@ -3545,8 +3545,8 @@ components:
                   type: string
                   example: Monerium
                 country:
-                  description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
-                  $ref: '#/components/schemas/CountryCode'
+                  description: "The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)."
+                  $ref: "#/components/schemas/CountryCode"
             - title: Issue orders
               type: object
               required:
@@ -3593,7 +3593,7 @@ components:
         ```
       type: object
       allOf:
-        - $ref: '#/components/schemas/Error'
+        - $ref: "#/components/schemas/Error"
         - type: object
           properties:
             code:
@@ -3667,19 +3667,19 @@ components:
       type: string
       format: UUID
       example: a78d8ff2-e51f-11ed-9e13-cacb9390199c
-      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+      pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
     AuthClientID:
       description: |
-        The [Authorization Code Flow](/docs/getting-started/auth-flow) client ID of your application.
+        The [Authorization Code Flow](/getting-started#auth-flow) client ID of your application.
       type: string
-      $ref: '#/components/schemas/UUID'
+      $ref: "#/components/schemas/UUID"
     CredentialsClientID:
       description: |
-        The [Client Credentials Authorization](docs/api#auth-client-credentials) client ID of your application.
+        The [Client Credentials Authorization](api#auth-client-credentials) client ID of your application.
       type: string
-      $ref: '#/components/schemas/UUID'
+      $ref: "#/components/schemas/UUID"
     PersonalDetails:
-      description: 'Personal information such as name, address, nationality, and date of birth.'
+      description: "Personal information such as name, address, nationality, and date of birth."
       type: object
       properties:
         firstName:
@@ -3697,15 +3697,15 @@ components:
         postalCode:
           description: Postal code where the person lives.
           type: string
-          example: '7890'
+          example: "7890"
         city:
           description: City where the person lives.
           type: string
           example: Liverpool
         country:
-          description: 'Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the person lives'
+          description: "Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the person lives"
           example: GB
-          $ref: '#/components/schemas/CountryCode'
+          $ref: "#/components/schemas/CountryCode"
         countryState:
           description: State/County where the person lives.
           type: string
@@ -3713,7 +3713,7 @@ components:
         nationality:
           description: "Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) for the person's nationality."
           example: GB
-          $ref: '#/components/schemas/CountryCode'
+          $ref: "#/components/schemas/CountryCode"
         birthday:
           description: |
             The person's birthday in the format "YYYY-MM-DD" where:
@@ -3723,7 +3723,7 @@ components:
             * DD = date-mday = 2DIGIT; 01-28, 01-29, 01-30, 01-31 based on month/year.
           type: string
           format: date
-          example: '1990-05-15'
+          example: "1990-05-15"
           pattern: '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$'
       required:
         - firstName
@@ -3978,7 +3978,7 @@ components:
                     - back
                     - front
                 fileId:
-                  $ref: '#/components/schemas/UUID'
+                  $ref: "#/components/schemas/UUID"
         required:
           - kind
           - documents
@@ -3999,7 +3999,7 @@ components:
           description: The company's registration date.
           type: string
           format: date
-          example: '2022-02-01'
+          example: "2022-02-01"
           pattern: '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$'
         vatNumber:
           description: The company's VAT number.
@@ -4008,7 +4008,7 @@ components:
         website:
           description: The company's website.
           type: string
-          example: 'https://janedoe.com/'
+          example: "https://janedoe.com/"
         address:
           description: Street and building number where the corporate is located.
           type: string
@@ -4016,15 +4016,15 @@ components:
         postalCode:
           description: Postal code where the corporate is located.
           type: string
-          example: '7890'
+          example: "7890"
         city:
           description: City where the corporate is located.
           type: string
           example: Liverpool
         country:
-          description: 'Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the corporate is located'
+          description: "Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the corporate is located"
           example: GB
-          $ref: '#/components/schemas/CountryCode'
+          $ref: "#/components/schemas/CountryCode"
         countryState:
           description: State/County where the corporate is located.
           type: string
@@ -4038,9 +4038,9 @@ components:
               - idDocument
             properties:
               idDocument:
-                $ref: '#/components/schemas/IdDocument'
+                $ref: "#/components/schemas/IdDocument"
             allOf:
-              - $ref: '#/components/schemas/PersonalDetails'
+              - $ref: "#/components/schemas/PersonalDetails"
         finalBeneficiaries:
           description: List of beneficial owner that owns 25% or more in a company.
           type: array
@@ -4058,14 +4058,14 @@ components:
                 minimum: 25
                 pattern: '^(?:25(?:\.0{1,2})?|2[6-9](?:\.\d{1,2})?|[3-9]\d(?:\.\d{1,2})?|100(?:\.0{1,2})?)$'
             allOf:
-              - $ref: '#/components/schemas/PersonalDetails'
+              - $ref: "#/components/schemas/PersonalDetails"
         directors:
           description: List of Individual who has powers to legally bind the company (power of procuration).
           type: array
           items:
             type: object
             allOf:
-              - $ref: '#/components/schemas/PersonalDetails'
+              - $ref: "#/components/schemas/PersonalDetails"
       required:
         - name
         - registrationNumber
@@ -4290,7 +4290,7 @@ components:
                     - back
                     - front
                 fileId:
-                  $ref: '#/components/schemas/UUID'
+                  $ref: "#/components/schemas/UUID"
               required:
                 - name
                 - kind
@@ -4349,7 +4349,7 @@ components:
         id:
           description: Unique identifier of the profile. The Profile ID is the
             main identifier used to represent ownership of other API resources.
-          '$ref': '#/components/schemas/UUID'
+          "$ref": "#/components/schemas/UUID"
           example: 4f079ef8-6d26-11eb-9bc8-acde48001122
         kind:
           description: String identifier specifying the type of the profile.
@@ -4375,14 +4375,14 @@ components:
       description: "The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
       type: string
       format: date-time
-      example: '2024-07-29T12:21:58.777884Z'
+      example: "2024-07-29T12:21:58.777884Z"
       pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$'
     UserContext:
       type: object
       properties:
         userId:
           description: Unique identifier of the User.
-          '$ref': '#/components/schemas/UUID'
+          "$ref": "#/components/schemas/UUID"
         email:
           description: An email address associated with the account.
           type: string
@@ -4432,25 +4432,25 @@ components:
             allows the API consumer to use the simpler API endpoints omitting the
             profile ID from the structure.
           example: 4f079ef8-6d26-11eb-9bc8-acde48001122
-          '$ref': '#/components/schemas/UUID'
+          "$ref": "#/components/schemas/UUID"
         profiles:
           type: array
           description:
             List containing information about every profiles accessible
             to the User.
           items:
-            '$ref': '#/components/schemas/ProfileSummary'
+            "$ref": "#/components/schemas/ProfileSummary"
     WebhookSubscription:
       type: object
       properties:
         id:
           description: Unique identifier of the webhook subscription.
-          '$ref': '#/components/schemas/UUID'
+          "$ref": "#/components/schemas/UUID"
         url:
           description: The URL to which the webhook events will be sent.
           type: string
           format: uri
-          example: 'https://example.com/webhook'
+          example: "https://example.com/webhook"
         types:
           description: List of event types that trigger the webhook.
           type: array
@@ -4481,33 +4481,33 @@ components:
           type: string
           format: uuid
           description: Order ID (only present for order kind signatures)
-          example: '550e8400-e29b-41d4-a716-446655440000'
+          example: "550e8400-e29b-41d4-a716-446655440000"
         kind:
           type: string
           enum:
             - linkAddress
             - order
           description: The type of signature request
-          example: 'order'
+          example: "order"
         chain:
           description: The blockchain network name
-          $ref: '#/components/schemas/Chain'
+          $ref: "#/components/schemas/Chain"
         address:
           description: The blockchain address requiring signature
-          $ref: '#/components/schemas/Address'
+          $ref: "#/components/schemas/Address"
         amount:
           type: string
           description: Monetary amount as a decimal string (only present for order kind signatures)
-          example: '100.50'
+          example: "100.50"
         counterpart:
           description: Payment counterpart information (only present for order kind signatures)
-          $ref: '#/components/schemas/CounterpartResponse'
+          $ref: "#/components/schemas/CounterpartResponse"
         currency:
           description: Currency code (only present for order kind signatures)
-          $ref: '#/components/schemas/Currency'
+          $ref: "#/components/schemas/Currency"
         createdAt:
           description: Timestamp when the signature request was created
-          $ref: '#/components/schemas/TimeStamp'
+          $ref: "#/components/schemas/TimeStamp"
   securitySchemes:
     BearerAuth:
       type: http
@@ -4528,7 +4528,7 @@ tags:
         - **Sandbox API URL:** `https://api.monerium.dev`
         - **Sandbox web app:** `https://sandbox.monerium.dev`
 
-        Before onboarding users via your application, you must [register your application](/docs/getting-started/create-app) with Monerium.
+        Before onboarding users via your application, you must [register your application](/getting-started#setup) with Monerium.
 
         When you are ready to go live, then you can register your application in our production environment:
 
@@ -4577,20 +4577,20 @@ tags:
 
       Monerium can offer applicable partners a KYC reliance or sharing agreement that can streamline the onboarding process for its customers.
       It is worth noting that Monerium is always ultimately responsible for conducting due diligence and monitoring the business relationship.
-      If you are interested in such capabilities, please contact us in our [discord channel](https://discord.com/channels/1286150637452660798/1293171908082274427).
+      If you are interested in such capabilities, please contact us in our [discord channel](https://monerium.com/invite/discord).
 
   - name: auth
     x-displayName: Authentication
-    description: 'Endpoints that handle user creation, authorization, and authentication.'
+    description: "Endpoints that handle user creation, authorization, and authentication."
   - name: profiles
     x-displayName: Profiles
-    description: 'Customers are represented by profiles whose identifier is the profile ID created at [sign up](#operation/auth-signup). The profile can be either personal or corporate. A profile owns most resources, such as IBANs and addresses.'
+    description: "Customers are represented by profiles whose identifier is the profile ID created at [sign up](#operation/auth-signup). The profile can be either personal or corporate. A profile owns most resources, such as IBANs and addresses."
   - name: addresses
     x-displayName: Addresses
-    description: 'A blockchain address, often called a public key or wallet address, is a unique identifier within a blockchain that serves as a destination for sending, receiving, or storing digital assets, such as the EURe onchain fiat token.'
+    description: "A blockchain address, often called a public key or wallet address, is a unique identifier within a blockchain that serves as a destination for sending, receiving, or storing digital assets, such as the EURe onchain fiat token."
   - name: ibans
     x-displayName: IBANs
-    description: 'Monerium connects any web3 wallet to any euro bank account with a personal IBAN. All incoming euro payments are automatically minted as EURe tokens to the linked address. Sending EURe to traditional bank accounts is just as easy. With a signature from the wallet, the EURe is burned and sent as a euro to any bank account from the IBAN that is linked to the address.'
+    description: "Monerium connects any web3 wallet to any euro bank account with a personal IBAN. All incoming euro payments are automatically minted as EURe tokens to the linked address. Sending EURe to traditional bank accounts is just as easy. With a signature from the wallet, the EURe is burned and sent as a euro to any bank account from the IBAN that is linked to the address."
   - name: orders
     x-displayName: Orders
     description: |
@@ -4634,6 +4634,10 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-02-20:
+      * Fix links for new UI
+      * Linting
+
       ### 2026-02-17:
       * Removed `skip_create_account` from Athorization endpoint query parameters as it is no longer used in the flow. Use the Link Address and Request IBAN endpoints instead.
       * Enabled KYC testing in the Authorization flow. By default the `skip_kyc` parameter is `false`.
@@ -4724,9 +4728,9 @@ webhooks:
                   enum:
                     - subscription.created
                 timestamp:
-                  $ref: '#/components/schemas/TimeStamp'
+                  $ref: "#/components/schemas/TimeStamp"
       responses:
-        '200':
+        "200":
           description: Webhook received successfully
       security: []
       tags:
@@ -4768,11 +4772,11 @@ webhooks:
                   enum:
                     - order.created
                 timestamp:
-                  $ref: '#/components/schemas/TimeStamp'
+                  $ref: "#/components/schemas/TimeStamp"
                 data:
-                  $ref: '#/components/schemas/Order'
+                  $ref: "#/components/schemas/Order"
       responses:
-        '200':
+        "200":
           description: Webhook received successfully
       security: []
       tags:
@@ -4801,11 +4805,11 @@ webhooks:
                   enum:
                     - order.updated
                 timestamp:
-                  $ref: '#/components/schemas/TimeStamp'
+                  $ref: "#/components/schemas/TimeStamp"
                 data:
-                  $ref: '#/components/schemas/Order'
+                  $ref: "#/components/schemas/Order"
       responses:
-        '200':
+        "200":
           description: Webhook received successfully
       security: []
       tags:
@@ -4842,15 +4846,15 @@ webhooks:
                   enum:
                     - profile.updated
                 timestamp:
-                  $ref: '#/components/schemas/TimeStamp'
+                  $ref: "#/components/schemas/TimeStamp"
                 data:
-                  $ref: '#/components/schemas/Profile'
+                  $ref: "#/components/schemas/Profile"
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: Bad Request
-        '500':
+        "500":
           description: Internal Server Error
       security: []
       tags:
@@ -4906,15 +4910,15 @@ webhooks:
                   enum:
                     - iban.updated
                 timestamp:
-                  $ref: '#/components/schemas/TimeStamp'
+                  $ref: "#/components/schemas/TimeStamp"
                 data:
-                  $ref: '#/components/schemas/IBANObject'
+                  $ref: "#/components/schemas/IBANObject"
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: Bad Request
-        '500':
+        "500":
           description: Internal Server Error
       security: []
       tags:

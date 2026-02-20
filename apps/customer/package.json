@@ -36,7 +36,6 @@
     "@repo/typescript-config": "workspace:*",
     "@tanstack/react-query-devtools": "^5.66.0",
     "@types/js-cookie": "^3.0.6",
-    "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
@@ -46,8 +45,7 @@
     "postcss": ">=8.4.31",
     "react-transition-state": "^2.1.1",
     "sass": "^1.77.4",
-    "stylelint": "^16.6.1",
-    "typescript": "5.7.3"
+    "stylelint": "^16.6.1"
   },
   "packageManager": "pnpm@9.4.0"
 }

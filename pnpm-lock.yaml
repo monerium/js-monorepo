@@ -66,6 +66,9 @@ importers:
       typedoc-plugin-markdown:
         specifier: 4.4.0
         version: 4.4.0(typedoc@0.27.6(typescript@5.7.3))
+      typescript:
+        specifier: 5.7.3
+        version: 5.7.3
 
   apps/customer:
     dependencies:
@@ -139,9 +142,6 @@ importers:
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
-      '@types/node':
-        specifier: ^20
-        version: 20.19.33
       '@types/react':
         specifier: ^18
         version: 18.3.28
@@ -172,9 +172,6 @@ importers:
       stylelint:
         specifier: ^16.6.1
         version: 16.26.1(typescript@5.7.3)
-      typescript:
-        specifier: 5.7.3
-        version: 5.7.3
 
   apps/developer:
     dependencies:
@@ -218,9 +215,6 @@ importers:
       redocusaurus:
         specifier: 2.2.1
         version: 2.2.1(@docusaurus/theme-common@3.7.0(@docusaurus/plugin-content-docs@3.7.0(@mdx-js/react@3.1.1(@types/react@18.3.28)(react@18.3.1))(bufferutil@4.1.0)(esbuild@0.27.3)(eslint@9.39.2(jiti@2.6.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10))(esbuild@0.27.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@docusaurus/utils@3.7.0(esbuild@0.27.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(core-js@3.48.0)(enzyme@3.11.0)(mobx@6.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.3.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(webpack@5.105.2(esbuild@0.27.3))
-      typescript:
-        specifier: 5.7.3
-        version: 5.7.3
 
   packages/eslint-config:
     devDependencies:
@@ -248,9 +242,6 @@ importers:
       eslint-plugin-simple-import-sort:
         specifier: ^12.1.0
         version: 12.1.1(eslint@9.39.2(jiti@2.6.1))
-      typescript:
-        specifier: 5.7.3
-        version: 5.7.3
       typescript-eslint:
         specifier: ^8.56.0
         version: 8.56.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.7.3)
@@ -288,9 +279,6 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
     devDependencies:
-      '@eslint/js':
-        specifier: ^9.39.2
-        version: 9.39.2
       '@types/crypto-js':
         specifier: ^4.2.2
         version: 4.2.2
@@ -303,12 +291,6 @@ importers:
       timezone-mock:
         specifier: ^1.3.6
         version: 1.4.2
-      typescript:
-        specifier: 5.7.3
-        version: 5.7.3
-      typescript-eslint:
-        specifier: ^8.56.0
-        version: 8.56.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.7.3)
 
   packages/sdk-react-provider:
     dependencies:
@@ -328,9 +310,6 @@ importers:
         specifier: '>=18.2.0'
         version: 18.3.1(react@18.3.1)
     devDependencies:
-      '@eslint/js':
-        specifier: ^9.39.2
-        version: 9.39.2
       '@testing-library/dom':
         specifier: ^10.1.0
         version: 10.4.1
@@ -340,9 +319,6 @@ importers:
       '@testing-library/react':
         specifier: ^16.0.0
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      typescript-eslint:
-        specifier: ^8.56.0
-        version: 8.56.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.7.3)
       undici:
         specifier: '>=6.21.1'
         version: 7.22.0
@@ -375,24 +351,15 @@ importers:
       '@types/eslint':
         specifier: ^9
         version: 9.6.1
-      '@types/node':
-        specifier: ^20.11.24
-        version: 20.19.33
       '@types/react':
         specifier: ^18.2.61
         version: 18.3.28
       '@types/react-dom':
         specifier: ^18.2.19
         version: 18.3.7(@types/react@18.3.28)
-      eslint:
-        specifier: ^9
-        version: 9.39.2(jiti@2.6.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
-      typescript:
-        specifier: 5.7.3
-        version: 5.7.3
 
 packages:
 

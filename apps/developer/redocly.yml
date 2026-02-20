@@ -4,7 +4,7 @@ rules:
   no-unused-components: error
 theme:
   openapi:
-    expandResponses: 200,201,202
+    expandResponses: 200,201,202,302,307
     theme:
       colors:
         primary:
@@ -23,13 +23,13 @@ theme:
         rightPanel:
           backgroundColor: "#303846"
       typography:
-        fontSize: 14px
+        fontSize: 1rem
         fontFamily: Roboto, sans-serif
         optimizeSpeed: true
         smoothing: antialiased
         headings:
           fontWeight: bold
-          lineHeight: 1em
+          lineHeight: 1.75em
         links:
           color: "#2c6ca7"
           visited: "#2c6ca7"
