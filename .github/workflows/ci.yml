@@ -56,7 +56,9 @@ jobs:
         uses: ./.github/actions/cache-setup
 
       - name: Build
-        run: BASE_URL=/js-monorepo/ pnpm build
+        run: pnpm build
+        env:
+          BASE_URL: /js-monorepo/
 
       - name: Upload static files as artifact
         continue-on-error: true

@@ -10,7 +10,7 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": ["STANDALONE", "false"]
+      "env": ["STANDALONE", "BASE_URL"]
     },
     "developer#build": {
       "cache": false,
