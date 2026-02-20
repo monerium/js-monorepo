@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.1](https://github.com/monerium/js-monorepo/compare/developer-v1.1.0...developer-v1.1.1) (2026-02-20)
+
+
+### Bug Fixes
+
+* lint ([481b805](https://github.com/monerium/js-monorepo/commit/481b805582cc59642a598af597e3830443e67d84))
+
+
+### Miscellaneous
+
+* adjust doc base_url, fix links and add publishable openapi ([6316135](https://github.com/monerium/js-monorepo/commit/63161357a18682c4463f3da0e1eb7df6190283da))
+
 ## [1.1.0](https://github.com/monerium/js-monorepo/compare/developer-v1.0.0...developer-v1.1.0) (2026-02-19)
 
 
