@@ -144,19 +144,19 @@ jobs:
         if: needs.release-please.outputs.releases_created == 'false'
 
       - name: Publish SDK
-        run: pnpm --filter @monerium/sdk publish --access public
+        run: pnpm --filter @monerium/sdk publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         if: ${{ needs.release-please.outputs.release_created_sdk }}
 
       - name: Publish React Provider
-        run: pnpm --filter @monerium/sdk-react-provider publish --access public
+        run: pnpm --filter @monerium/sdk-react-provider publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         if: ${{ needs.release-please.outputs.release_created_sdk_react_provider }}
 
       - name: Publish OpenAPI
-        run: pnpm --filter @monerium/openapi publish --access public
+        run: pnpm --filter @monerium/openapi publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         if: ${{ needs.release-please.outputs.release_created_openapi }}
