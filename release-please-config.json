@@ -20,10 +20,12 @@
     },
     "packages/sdk": {
       "package-name": "@monerium/sdk",
+      "include-paths": ["packages/sdk"],
       "exclude-paths": ["packages/sdk/docs", "packages/sdk/README.md"]
     },
     "packages/sdk-react-provider": {
       "package-name": "@monerium/sdk-react-provider",
+      "include-paths": ["packages/sdk-react-provider"],
       "exclude-paths": [
         "packages/sdk-react-provider/docs",
         "packages/sdk-react-provider/README.md"
