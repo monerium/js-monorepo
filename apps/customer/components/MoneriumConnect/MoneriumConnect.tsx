@@ -74,7 +74,7 @@ export const MoneriumConnect = () => {
           fullWidth
           size="large"
           variant="contained"
-          onClick={() => authorize()}
+          onClick={() => authorize({ skipKyc: true })}
           sx={{
             py: 1.75,
             fontSize: '1rem',

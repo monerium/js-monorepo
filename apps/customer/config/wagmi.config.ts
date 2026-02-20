@@ -1,5 +1,11 @@
 import { createConfig, http } from 'wagmi';
-import { sepolia } from 'wagmi/chains';
+import {
+  sepolia,
+  arbitrumSepolia,
+  polygonAmoy,
+  lineaSepolia,
+  baseSepolia,
+} from 'wagmi/chains';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
   metaMaskWallet,
@@ -37,11 +43,15 @@ const getConnectors = () => {
 };
 
 export const config = createConfig({
-  chains: [sepolia],
+  chains: [sepolia, arbitrumSepolia, polygonAmoy, lineaSepolia, baseSepolia],
   connectors: getConnectors(),
   ssr: true,
   transports: {
     [sepolia.id]: http(),
+    [arbitrumSepolia.id]: http(),
+    [polygonAmoy.id]: http(),
+    [lineaSepolia.id]: http(),
+    [baseSepolia.id]: http(),
   },
 });
 

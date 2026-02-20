@@ -7,12 +7,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import { ThemeModeToggle } from 'components/ThemeModeToggle/ThemeModeToggle';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export const TopBar = () => {
   const router = useRouter();
   return (
     <AppBar position="fixed" elevation={0}>
-      <Toolbar>
+      <Toolbar sx={{ gap: '16px' }}>
         <Typography
           variant="subtitle1"
           component="div"
@@ -25,7 +26,10 @@ export const TopBar = () => {
         >
           Monerium
         </Typography>
-        <ThemeModeToggle />
+        <ConnectButton chainStatus="icon" />
+        <IconButton>
+          <ThemeModeToggle />
+        </IconButton>
         <IconButton
           onClick={() => router.push('/profile')}
           aria-label="Profile"
