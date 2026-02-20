@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.4.9](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.8...sdk-v3.4.9) (2026-02-20)
+
+
+### Bug Fixes
+
+* lint ([481b805](https://github.com/monerium/js-monorepo/commit/481b805582cc59642a598af597e3830443e67d84))
+* test ([5e22ef1](https://github.com/monerium/js-monorepo/commit/5e22ef12e5df5cfb448995ee4bd66ad8ae76bcc7))
+
+
+### Miscellaneous
+
+* adjust doc base_url, fix links and add publishable openapi ([6316135](https://github.com/monerium/js-monorepo/commit/63161357a18682c4463f3da0e1eb7df6190283da))
+* fix build order, lint and upgrade next ([60bd827](https://github.com/monerium/js-monorepo/commit/60bd827ebd635a8107403db0216e7671fa73f91b))
+* ignore eslintcache ([510d7e6](https://github.com/monerium/js-monorepo/commit/510d7e663d2d2725c8f5f6bdcc8cca24bf8368c2))
+
+
+### Refactors
+
+* upgrade ESLint to v9, migrate to flat config, and fix SSR IndexedDB errors ([5a5733c](https://github.com/monerium/js-monorepo/commit/5a5733cdfb85508f2b509d79c1f365e682b87bde))
+
 ## [3.4.8](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.7...sdk-v3.4.8) (2026-02-13)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@monerium/openapi",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Monerium OpenAPI specification",
   "repository": {
     "type": "git",
