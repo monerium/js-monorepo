@@ -4,7 +4,7 @@
 
 const MoneriumClient = require('../dist/index.js').MoneriumClient;
 
-const constants = require('./constants');
+import * as constants from './constants';
 
 const {
   APP_ONE_CREDENTIALS_SECRET,

@@ -410,10 +410,9 @@ if (process.env.CI !== 'true') {
         await expect(
           client.submitProfileDetails(DEFAULT_PROFILE, body)
         ).rejects.toEqual({
-          code: 409,
-          status: 'Conflict',
-          message:
-            'The profile details have already been approved and need not be submitted again',
+          code: 400,
+          status: 'Bad Request',
+          message: 'Profile already exists',
         });
       });
     });

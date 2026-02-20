@@ -3,7 +3,7 @@ import {
   APP_ONE_CREDENTIALS_CLIENT_ID,
   APP_ONE_CREDENTIALS_SECRET,
   DEFAULT_PROFILE,
-} from './constants.js';
+} from './constants.ts';
 
 test('should import without throwing', () => {
   expect(MoneriumClient).toBeDefined();
