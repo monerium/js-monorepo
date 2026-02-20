@@ -1,7 +1,7 @@
 {
   "apps/customer": "0.8.0",
   "apps/developer": "1.1.0",
-  "packages/sdk": "3.4.8",
-  "packages/sdk-react-provider": "1.3.3",
+  "packages/sdk": "3.4.9",
+  "packages/sdk-react-provider": "1.3.4",
   "packages/openapi": "2.0.0"
 }
