@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:docs": "docusaurus start --port 3333 --poll 5000",
-    "build": "docusaurus build",
+    "build": "BASE_URL=${BASE_URL:-${CI:+/js-monorepo/}} docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

@@ -12,6 +12,8 @@ import type * as Redocusaurus from 'redocusaurus';
 // so we set it here before any plugin is loaded.
 (global as any).React = React;
 
+console.info('BASE URL', process.env.BASE_URL);
+
 // https://typedoc-plugin-markdown.org/schema.json
 const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
   // not working properly when cross-referencing between packages
