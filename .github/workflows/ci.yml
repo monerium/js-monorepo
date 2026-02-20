@@ -57,8 +57,6 @@ jobs:
 
       - name: Build
         run: pnpm build
-        env:
-          BASE_URL: /js-monorepo/
 
       - name: Upload static files as artifact
         continue-on-error: true
