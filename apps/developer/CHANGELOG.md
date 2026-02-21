@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.2](https://github.com/monerium/js-monorepo/compare/developer-v1.1.1...developer-v1.1.2) (2026-02-20)
+
+
+### Bug Fixes
+
+* improve comment ([de1f888](https://github.com/monerium/js-monorepo/commit/de1f8885c01205de2f138350163139a9f7ecda11))
+
+
+### Documentation
+
+* fix base url ([4f1271d](https://github.com/monerium/js-monorepo/commit/4f1271dc4706b4954e9bd425a29671226eb325cd))
+
 ## [1.1.1](https://github.com/monerium/js-monorepo/compare/developer-v1.1.0...developer-v1.1.1) (2026-02-20)
 
 
