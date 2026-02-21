@@ -58,6 +58,22 @@ export const MoneriumProvider = ({
   const [loadingAuth, setLoadingAuth] = useState(true);
 
   useEffect(() => {
+    // Handle error parameters from auth flow redirect
+    const urlParams = new URLSearchParams(window?.location?.search);
+    const error = urlParams?.get('error');
+    const errorDescription = urlParams?.get('error_description');
+
+    if (error) {
+      const errorMessage = errorDescription
+        ? `${error}: ${decodeURIComponent(errorDescription)}`
+        : error;
+      setError(new Error(errorMessage));
+      setLoadingAuth(false);
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
     const connect = async () => {
       if (sdk) {
         try {
