@@ -3,7 +3,6 @@
   "version": "1.3.4",
   "private": false,
   "description": "React provider for the Monerium SDK.",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/monerium/js-monorepo.git",
