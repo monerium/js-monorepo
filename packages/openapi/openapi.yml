@@ -41,7 +41,7 @@ paths:
                     example: Welcome to the Monerium API
                   docs:
                     type: string
-                    example: "https://monerium.dev"
+                    example: "https://docs.monerium.com"
                   twitter:
                     type: string
                     example: "https://twitter.com/monerium"
@@ -87,7 +87,7 @@ paths:
                             Generated challenge from the `code_verifier`.
                             You must use the same `code_verifier` when [requesting an access token](/api#operation/auth-token).
 
-                            Read more about [code challenges for PKCE](/api#authorization)
+                            Read more about [code challenges for PKCE](/authorization/#pkce)
                           type: string
                           example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
                         code_challenge_method:
@@ -145,7 +145,7 @@ paths:
                             Generated challenge from the `code_verifier`.
                             You must use the same `code_verifier` when [requesting an access token](/api#operation/auth-token).
 
-                            Read more about [code challenges for PKCE](/api#authorization)
+                            Read more about [code challenges for PKCE](/authorization/#pkce)
                           type: string
                           example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
                         code_challenge_method:
@@ -473,7 +473,7 @@ paths:
                         code_verifier:
                           description: |
                             The randomized string that was used to create the `code_challenge` when a customer/user enters the partner authorization flow.
-                            Read more about [code challenges for PKCE](/api#authorization)
+                            Read more about [code challenges for PKCE](/authorization/#pkce)
                           type: string
                           example: KO2yF8CUSxU8KJepixDmXdiCOFTMMZFLDmVjNd4J2VhbFUSSgU1lXl0aYyWYK8hIZIEH9bEBDeJ78CIuNoeOIcZOybzzqFlIGedtclJ7ZTKF6GmRBZ4fdMvg6OXnf2dl
                         redirect_uri:

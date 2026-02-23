@@ -1,15 +1,15 @@
-| [Monerium.com](https://monerium.com/) | [Monerium.app](https://monerium.app/) | [Monerium.dev](https://monerium.dev/) |
+| [Monerium.com](https://monerium.com/) | [Monerium.app](https://monerium.app/) | [Monerium Dev Docs](https://docs.monerium.com/) |
 | ------------------------------------- | ------------------------------------- | ------------------------------------- |
 
 # Monerium SDK Documentation
 
-  <a href="https://monerium.dev/">
+  <a href="https://docs.monerium.com">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7"></source>
       <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge"></img>
     </picture>
   </a>
-  <a href="https://monerium.dev/api-docs">
+  <a href="https://docs.monerium.com/api">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7"></source>
       <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge"></img>
@@ -69,7 +69,7 @@ yarn add @monerium/sdk
 
 | Environment | Web                  | API                      |
 | ----------- | -------------------- | ------------------------ |
-| sandbox     | https://monerium.dev | https://api.monerium.dev |
+| sandbox     | https://sandbox.monerium.app | https://api.monerium.dev |
 | production  | https://monerium.app | https://api.monerium.app |
 
 ### Environments - Networks
@@ -91,7 +91,7 @@ yarn add @monerium/sdk
 
 ## Usage Examples
 
-We recommend starting in the [Developer Portal](https://monerium.dev/docs/welcome). There, you will learn more about `client_id`'s and ways of authenticating.
+We recommend starting in the [Developer Portal](https://docs.monerium.com). There, you will learn more about `client_id`'s and ways of authenticating.
 
 #### Initialize and authenticate using Client Credentials
 
@@ -120,7 +120,7 @@ await monerium.getAccess(refresh_token);
 
 API documentation:
 
-- [/auth/token](https://monerium.dev/api-docs#operation/auth-token)
+- [/auth/token](https://docs.monerium.com/api#operation/auth-token)
 
 #### Initialize and authenticate using Authorization Code Flow with PKCE
 
@@ -187,8 +187,8 @@ export function App() {
 
 API documentation:
 
-- [/auth](https://monerium.dev/api-docs#operation/auth)
-- [/auth/token](https://monerium.dev/api-docs#operation/auth-token)
+- [/auth](https://docs.monerium.com/api#operation/auth)
+- [/auth/token](https://docs.monerium.com/api#operation/auth-token)
 
 #### Get account information
 
@@ -207,8 +207,8 @@ const balances: Balances = await monerium.getBalances();
 
 API documentation:
 
-- [/profile](https://monerium.dev/api-docs#operation/profile)
-- [/profile/&#123;profileId&#123;/balances](https://monerium.dev/api-docs#operation/profile-balances)
+- [/profile](https://docs.monerium.com/api#operation/profile)
+- [/profile/&#123;profileId&#123;/balances](https://docs.monerium.com/api#operation/profile-balances)
 
 #### Get token information
 
@@ -220,7 +220,7 @@ const tokens: Token[] = await monerium.getTokens();
 
 API documentation:
 
-- [/tokens](https://monerium.dev/api-docs#operation/tokens)
+- [/tokens](https://docs.monerium.com/api#operation/tokens)
 
 #### Link a new address to Monerium
 
@@ -253,7 +253,7 @@ await monerium.linkAddress({
 
 API documentation:
 
-- [/profile/&#123;profileId&#123;/addresses](https://monerium.dev/api-docs#operation/profile-addresses)
+- [/profile/&#123;profileId&#123;/addresses](https://docs.monerium.com/api#operation/profile-addresses)
 
 #### Get and place orders
 
@@ -308,8 +308,8 @@ const order = await monerium.placeOrder({
 
 API documentation:
 
-- [GET /orders](https://monerium.dev/api-docs#operation/orders)
-- [POST /orders](https://monerium.dev/api-docs#operation/post-orders)
+- [GET /orders](https://docs.monerium.com/api#operation/orders)
+- [POST /orders](https://docs.monerium.com/api#operation/post-orders)
 
 #### Add supporting documents
 
@@ -323,7 +323,7 @@ const supportingDocumentId: SupportingDoc =
 
 API documentation:
 
-- [/files](https://monerium.dev/api-docs#operation/supporting-document)
+- [/files](https://docs.monerium.com/api#operation/supporting-document)
 
 #### Subscribe to order events
 
@@ -357,7 +357,7 @@ monerium.unsubscribeOrderNotifications();
 
 ## API Reference
 
-[API Documentation](https://monerium.dev/docs/api)
+[API Documentation](https://docs.monerium.com//api)
 
 ## Contributing
 

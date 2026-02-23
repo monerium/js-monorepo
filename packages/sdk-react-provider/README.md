@@ -1,15 +1,15 @@
-| [Monerium.com](https://monerium.com/) | [Monerium.app](https://monerium.app/) | [Monerium.dev](https://monerium.dev/) |
-| ------------------------------------- | ------------------------------------- | ------------------------------------- |
+| [Monerium.com](https://monerium.com/) | [Monerium.app](https://monerium.app/) | [Monerium Dev Docs](https://docs.monerium.com/) |
+| ------------------------------------- | ------------------------------------- | ----------------------------------------------- |
 
 # Monerium SDK React Provider
 
-  <a href="https://monerium.dev/">
+  <a href="https://docs.monerium.com/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7"></source>
       <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge"></img>
     </picture>
   </a>
-  <a href="https://monerium.dev/api-docs">
+  <a href="https://docs.monerium.com/api/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7"></source>
       <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge"></img>

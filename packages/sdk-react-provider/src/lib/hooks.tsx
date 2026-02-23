@@ -163,7 +163,7 @@ export function useAuth(): UseAuthReturn {
  * } = useAuthContext();
  * ```
 
- * @see {@link https://monerium.dev/api-docs/v2#tag/auth/operation/auth-context | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/auth/operation/auth-context | API Documentation}
  */
 export function useAuthContext({
   query,
@@ -208,7 +208,7 @@ export function useAuthContext({
  * } = useProfile();
  * ```
 
- * @see {@link https://monerium.dev/api-docs#operation/profile | API Documentation}
+ * @see {@link https://docs.monerium.com/api#operation/profile | API Documentation}
  */
 export function useProfile({
   profile,
@@ -265,7 +265,7 @@ export function useProfile({
  *    ...moreUseQueryResults
  * } = useProfiles();
  * ```
- * @see {@link https://monerium.dev/api-docs#operation/profiles | API Documentation}
+ * @see {@link https://docs.monerium.com/api#operation/profiles | API Documentation}
  */
 export function useProfiles({
   query,
@@ -307,7 +307,7 @@ export function useProfiles({
  * } = useTokens();
  * ```
 
- * @see {@link https://monerium.dev/api-docs#operation/tokens | API Documentation}
+ * @see {@link https://docs.monerium.com/api#operation/tokens | API Documentation}
  */
 export function useTokens({
   query,
@@ -349,7 +349,7 @@ export function useTokens({
  *    ...moreUseQueryResults
  * } = useAddress();
  * ```
- * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/address | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/addresses/operation/address | API Documentation}
  */
 export function useAddress({
   address,
@@ -402,7 +402,7 @@ export function useAddress({
  *    ...moreUseQueryResults
  * } = useAddresses();
  * ```
- * @see {@link https://monerium.dev/api-docs-v2#tag/addresses/operation/addresses | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/addresses/operation/addresses | API Documentation}
  */
 export function useAddresses({
   profile,
@@ -455,7 +455,7 @@ export function useAddresses({
  *    ...moreUseQueryResults
  * } = useBalances();
  * ```
- * @see {@link https://monerium.dev/api-docs/v2#tag/addresses/operation/balances | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/addresses/operation/balances | API Documentation}
  *
  */
 export function useBalances({
@@ -505,7 +505,7 @@ export function useBalances({
  *    ...moreUseQueryResults
  * } = useIBAN();
  * ```
- * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/iban | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/ibans/operation/iban | API Documentation}
  */
 export function useIBAN({
   iban,
@@ -550,7 +550,7 @@ export function useIBAN({
  *    ...moreUseQueryResults
  * } = useIBANs();
  * ```
- * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/ibans | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/ibans/operation/ibans | API Documentation}
  */
 export function useIBANs({
   profile,
@@ -599,7 +599,7 @@ export function useIBANs({
  *    ...moreUseQueryResults
  * } = useOrder();
  * ```
- * @see {@link https://monerium.dev/api-docs#operation/order| API Documentation}
+ * @see {@link https://docs.monerium.com/api#operation/order| API Documentation}
  */
 export function useOrder({
   orderId,
@@ -653,7 +653,7 @@ export function useOrder({
  *    ...moreUseQueryResults
  * } = useOrders();
  * ```
- * @see {@link https://monerium.dev/api-docs#operation/orders | API Documentation}
+ * @see {@link https://docs.monerium.com/api#operation/orders | API Documentation}
  */
 export function useOrders({
   query = {},
@@ -706,7 +706,7 @@ export function useOrders({
  *    ...moreUseMutationResults
  * } = useSubmitProfileDetails();
  * ```
- * @see {@link https://monerium.dev/api-docs-v2#tag/profiles/operation/profile-details | API Documentation}}
+ * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile-details | API Documentation}}
  */
 
 export function useSubmitProfileDetails({
@@ -781,7 +781,7 @@ export function useSubmitProfileDetails({
  *    ...moreUseMutationResults
  * } = useRequestIban();
  * ```
- * @see {@link https://monerium.dev/api-docs-v2#tag/ibans/operation/request-iban | API Documentation}}
+ * @see {@link https://docs.monerium.com/api#tag/ibans/operation/request-iban | API Documentation}}
  */
 
 export function useRequestIban({
@@ -848,7 +848,7 @@ export function useRequestIban({
  *    ...moreUseMutationResults
  * } = useMoveIban();
  * ```
- * @see {@link https://monerium.dev/api-docs/v2#tag/ibans/operation/move-iban | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/ibans/operation/move-iban | API Documentation}
  */
 
 export function useMoveIban({
@@ -936,7 +936,7 @@ export function useMoveIban({
  *    ...moreUseMutationResults
  * } = usePlaceOrder();
  * ```
- * @see {@link https://monerium.dev/api-docs#operation/post-orders| API Documentation}
+ * @see {@link https://docs.monerium.com/api#operation/post-orders| API Documentation}
  */
 
 export function usePlaceOrder({
@@ -1046,7 +1046,7 @@ export function usePlaceOrder({
  *   }
  * });
  * ```
- * @see {@link https://monerium.dev/api-docs-v2#tag/signatures/operation/get-signatures | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/signatures/operation/get-signatures | API Documentation}
  */
 export function useSignatures({
   query,
@@ -1090,7 +1090,7 @@ export function useSignatures({
  *    ...moreUseMutationResults
  * } = useLinkAddress();
  * ```
- * @see {@link https://monerium.dev/api-docs#operation/profile-addresses | API Documentation}
+ * @see {@link https://docs.monerium.com/api#operation/profile-addresses | API Documentation}
  */
 
 export function useLinkAddress({
@@ -1169,7 +1169,7 @@ export function useLinkAddress({
  *    onError
  * } = useSubscribeOrderNotification();
  * ```
- * @see {@link https://monerium.dev/api-docs/v1#operation/orders-notifications| API Documentation}
+ * @see {@link https://docs.monerium.com/api#operation/orders-notifications| API Documentation}
  * @returns {Function} Unsubscribe from order notifications.
  */
 

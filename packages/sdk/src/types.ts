@@ -71,7 +71,7 @@ export type AuthArgs =
 
 /** One of the options for the {@link AuthArgs}.
  *
- * [Auth endpoint in API documentation:](https://monerium.dev/api-docs#operation/auth).
+ * [Auth endpoint in API documentation:](https://docs.monerium.com/api#operation/auth).
  * */
 export interface AuthCodePayload {
   grant_type: 'authorization_code';
@@ -83,7 +83,7 @@ export interface AuthCodePayload {
 
 /** One of the options for the {@link AuthArgs}.
  *
- * [Auth endpoint in API documentation:](https://monerium.dev/api-docs#operation/auth).
+ * [Auth endpoint in API documentation:](https://docs.monerium.com/api#operation/auth).
  * */
 export interface RefreshTokenPayload {
   grant_type: 'refresh_token';
@@ -93,7 +93,7 @@ export interface RefreshTokenPayload {
 
 /** One of the options for the {@link AuthArgs}.
  *
- * [Auth endpoint in API documentation:](https://monerium.dev/api-docs#operation/auth).
+ * [Auth endpoint in API documentation:](https://docs.monerium.com/api#operation/auth).
  * */
 export interface ClientCredentialsPayload {
   grant_type: 'client_credentials';
@@ -572,7 +572,7 @@ export interface LinkAddress {
   /**
    * The signature hash of signing the `message` with the private key associated with the given address.
    * For signing on-chain with ERC1271 contracts, use `0x`, visit the documentation for further details.
-   * https://monerium.dev/api-docs-v2#tag/addresses/operation/link-address
+   * https://docs.monerium.com/api#tag/addresses/operation/link-address
    */
   signature: string;
   chain: Chain | ChainId;

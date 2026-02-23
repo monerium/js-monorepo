@@ -3,9 +3,9 @@ import React from 'react';
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import { TypeDocOptions } from 'typedoc';
-import { PluginOptions } from 'typedoc-plugin-markdown';
+
 import type * as Redocusaurus from 'redocusaurus';
+import typedocConfig from './typedoc.config';
 
 // redoc.lib.js is a UMD bundle that assumes React is available as a global.
 // jiti (used by Docusaurus to load plugins server-side) doesn't provide one,
@@ -13,108 +13,16 @@ import type * as Redocusaurus from 'redocusaurus';
 (global as any).React = React;
 
 // https://typedoc-plugin-markdown.org/schema.json
-const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
-  // not working properly when cross-referencing between packages
-  disableSources: true,
 
-  cleanOutputDir: true,
-  entryPointStrategy: 'Expand',
-  gitRevision: 'main',
-
-  readme: 'none',
-
-  // skipErrorChecking: true,
-  expandObjects: true,
-  expandParameters: true,
-
-  hidePageHeader: true,
-  hideGenerator: true,
-
-  categorizeByGroup: true,
-
-  navigationModel: {
-    excludeFolders: true,
-    excludeGroups: false,
-    excludeCategories: false,
-  },
-
-  parametersFormat: 'table',
-  interfacePropertiesFormat: 'table',
-  enumMembersFormat: 'table',
-  classPropertiesFormat: 'table',
-  typeDeclarationFormat: 'table',
-  propertyMembersFormat: 'table',
-
-  kindSortOrder: [
-    'Class',
-    'Property',
-    'Function',
-    'Variable',
-    'Interface',
-    'TypeAlias',
-    'Enum',
-    'EnumMember',
-  ],
-  groupOrder: [
-    'Provider',
-    'Hooks',
-    'Constructors',
-    'Properties',
-    'Authentication',
-    'Addresses',
-    'Profiles',
-    'IBANs',
-    'Orders',
-    'Tokens',
-    'Classes',
-    'Constants',
-    'Functions',
-    'Variables',
-    'Methods',
-    'Utils',
-    'Interfaces',
-    'Type Aliases',
-    'Documents',
-    '*',
-  ],
-
-  categoryOrder: [
-    'Provider',
-    'Constructors',
-    'Properties',
-    'Classes',
-    'Functions',
-    'Variables',
-    'Methods',
-    'Interfaces',
-    'Type Aliases',
-    'Hooks',
-    'Documents',
-    '*',
-    'Authorize',
-    'Accounts',
-    'Profiles',
-    'Orders',
-    'Tokens',
-    'Other',
-  ],
-};
 const config: Config = {
   title: 'Monerium',
   tagline: 'Onchain fiat',
   favicon: 'img/favicon.ico',
 
-  // Set the production url of your site here
-  url: 'https://docs.monerium.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is '/<js-monorepo>/'
-  // Can be overridden with BASE_URL environment variable for external usage like monerium.com/developers
-  // No BaseUrl for developer, see package.json build script
   baseUrl: '/',
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'monerium', // Usually your GitHub org/user name.
-  projectName: 'js-monerium', // Usually your repo name.
+  url: 'https://docs.monerium.com',
+  organizationName: 'monerium',
+  projectName: 'js-monerium',
   plugins: [
     [
       'docusaurus-plugin-typedoc',
@@ -139,9 +47,9 @@ const config: Config = {
       },
     ],
   ],
-
-  // Allow broken links when building for embedding (BASE_URL is set)
-  // The TypeDoc publicPath is hardcoded and creates broken links when baseUrl changes
+  // The TypeDoc (sdk and sdk-react-provider) publicPath is hardcoded and creates broken links when baseUrl changes.
+  // Docusaurus leaves pathname protocol links as is, so for example when linking to API docs,
+  // you can silence the warnings by doing: `[Authorization](pathname:///api#tag/auth/operation/auth)`
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
@@ -221,10 +129,6 @@ const config: Config = {
         {
           title: 'Development',
           items: [
-            {
-              label: 'Developer Portal',
-              href: 'https://monerium.dev/',
-            },
             {
               label: 'Discord',
               href: 'https://monerium.com/invite/discord',

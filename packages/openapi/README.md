@@ -1,6 +1,6 @@
 # @monerium/openapi
 
-The OpenAPI specification for the [Monerium API](https://monerium.dev).
+The OpenAPI specification for the [Monerium API](https://docs.monerium.com/api).
 
 ## Usage
 
