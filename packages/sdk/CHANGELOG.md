@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.4.10](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.9...sdk-v3.4.10) (2026-02-23)
+
+
+### Bug Fixes
+
+* build ([d1ccdd2](https://github.com/monerium/js-monorepo/commit/d1ccdd2ba7a644b98b38c57eb4a6751d8c037017))
+* links ([714c0b2](https://github.com/monerium/js-monorepo/commit/714c0b223789ddd6e8e410090684118dde1b80b5))
+
+
+### Miscellaneous
+
+* lint-staged and editor settings for yaml ([407a721](https://github.com/monerium/js-monorepo/commit/407a721699db2324f287de0a1e9bad5a4bfe2795))
+* pnpm format ([a41e3cd](https://github.com/monerium/js-monorepo/commit/a41e3cd0bbcbf6f825aaedb1b3768210931c8756))
+
 ## [3.4.9](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.8...sdk-v3.4.9) (2026-02-20)
 
 

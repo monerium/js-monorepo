@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/monerium/js-monorepo/compare/customer-v0.9.0...customer-v0.9.1) (2026-02-23)
+
+
+### Miscellaneous
+
+* pnpm format ([a41e3cd](https://github.com/monerium/js-monorepo/commit/a41e3cd0bbcbf6f825aaedb1b3768210931c8756))
+
 ## [0.9.0](https://github.com/monerium/js-monorepo/compare/customer-v0.8.0...customer-v0.9.0) (2026-02-20)
 
 

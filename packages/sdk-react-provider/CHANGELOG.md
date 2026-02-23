@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.5](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.4...sdk-react-provider-v1.3.5) (2026-02-23)
+
+
+### Bug Fixes
+
+* build ([d1ccdd2](https://github.com/monerium/js-monorepo/commit/d1ccdd2ba7a644b98b38c57eb4a6751d8c037017))
+* links ([714c0b2](https://github.com/monerium/js-monorepo/commit/714c0b223789ddd6e8e410090684118dde1b80b5))
+
+
+### Miscellaneous
+
+* lint-staged and editor settings for yaml ([407a721](https://github.com/monerium/js-monorepo/commit/407a721699db2324f287de0a1e9bad5a4bfe2795))
+
 ## [1.3.4](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.3...sdk-react-provider-v1.3.4) (2026-02-20)
 
 
