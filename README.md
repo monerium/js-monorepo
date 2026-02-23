@@ -1,19 +1,55 @@
 # Monerium monorepo
 
+### Install
+
+Install PNPM: https://pnpm.io/installation
+
+PNPM is a fast, disk space efficient package manager that uses hard links and symlinks to save space. **It is also optimized for monorepos.**
+
+```
+pnpm install
+```
+
+### Develop
+
+To develop apps and packages, run the following command:
+
+```bash
+pnpm dev
+# or just developer portal
+pnpm dev --filter=developer
+```
+
+Note: use `pnpm dev --log-order stream` for a more traditional log output. Or set `"ui": "stream"` in the `turbo.json` file to make it the default.
+
+- Developer portal: http://localhost:3333/
+- OpenAPI standalone: http://localhost:8080/
+- Demo app: http://localhost:5000
+
+### Build
+
+To build all apps and packages, run the following command:
+
+```bash
+pnpm build
+```
+
 ## What's inside?
 
 This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- [`customer`](apps/customer): a [Next.js](https://nextjs.org/) app, an open source Monerium client
+- [`customer`](apps/developer): a [Docusaurus](https://docusaurus.io/) developer portal, served on https://docs.monerium.com.
 - [`@monerium/sdk`](packages/sdk): an SDK for interacting with the Monerium API
 - [`@monerium/sdk-react-provider`](packages/sdk-react-provider): a React provider for the Monerium SDK
-- `@repo/ui`: a sharable stub React component library
+- [`@monerium/openapi`](packages/openapi): OpenAPI specification using Redocly.
+- [`customer`](apps/customer): a [Next.js](https://nextjs.org/) app, an open source Monerium client demo
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/postcss-config`: `postcss` configurations
 - `@repo/stylelint-config`: `stylelint` configurations
 - `@repo/typescript-config`: `tsconfig.json`'s used throughout the monorepo
+- `@repo/ui`: a sharable stub React component library - not used currently
 
 ### Migration Guide
 
@@ -22,7 +58,7 @@ This Turborepo includes the following packages/apps:
 
 ### Utilities
 
-- [TurboRepo](https://turbo.build/repo) for monorepo management
+- [TurboRepo](https://turbo.build/repo) for monorepo management, [Turbo.md](docs/Turbo.md) for more details
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
@@ -34,39 +70,6 @@ This Turborepo includes the following packages/apps:
 - [Lint-Staged](https://github.com/lint-staged/lint-staged) for running linters on staged files
 - [Release Please](https://github.com/googleapis/release-please) for automated releases
 
-### Install
-
-Install PNPM: https://pnpm.io/installation
-
-PNPM is a fast, disk space efficient package manager that uses hard links and symlinks to save space. **It is also optimized for monorepos.**
-
-```
-pnpm install
-```
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```bash
-pnpm build
-```
-
-### Develop
-
-To develop apps and packages, run the following command:
-
-```bash
-pnpm dev
-```
-
-Note: use `pnpm dev --log-order stream` for a more traditional log output.
-
-The developer app is excluded because of how noisy the logs are. To include the developer app, run the following command:
-
-```bash
-pnpm dev:docs
-```
 
 ### Pipeline
 
@@ -80,6 +83,7 @@ The pipeline will automatically publish the following packages if there are chan
 
 - `@monerium/sdk` at 'packages/sdk'
 - `@monerium/sdk-react-provider` at 'packages/sdk-react-provider'
+- `@monerium/openapi` at 'packages/openapi'
 - TBD: `@repo/ui` at 'packages/ui'
 
 #### Useful links
@@ -88,35 +92,6 @@ The pipeline will automatically publish the following packages if there are chan
 
 [Release please - Config file options](https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md#configfile)
 
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
 
 # FAQ
 
