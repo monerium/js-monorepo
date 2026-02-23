@@ -2,7 +2,7 @@
 
 ### Install
 
-Install PNPM: https://pnpm.io/installation
+Install PNPM: https://pnpm.io/installation, see which version in package.json.
 
 PNPM is a fast, disk space efficient package manager that uses hard links and symlinks to save space. **It is also optimized for monorepos.**
 
