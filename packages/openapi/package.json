@@ -23,7 +23,6 @@
     "lint": "redocly lint --extends recommended openapi.yml && pnpm run sort && pnpm run format",
     "format": "prettier --write \"**/*.{yml,yaml}\"",
     "sort": "openapi-format openapi.yml -o openapi.yml",
-    "validate": "redocly lint ./openapi.yml",
     "pub:pre": "pnpm publish --no-git-checks --dry-run",
     "clean": "rm -rf dist node_modules .turbo"
   },

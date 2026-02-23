@@ -28,9 +28,9 @@ Spin up a local [Redoc](https://redocly.com/redoc) preview of the spec:
 pnpm dev
 ```
 
-### Validate
+### Lint
 
-Lint and validate the spec against OpenAPI 3.1 rules:
+Lint, format and validate the spec against OpenAPI 3.1 rules:
 
 ```sh
 pnpm validate

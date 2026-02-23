@@ -1,0 +1,99 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to publish'
+        required: true
+        type: choice
+        options:
+          - all
+          - sdk
+          - sdk-react-provider
+          - openapi
+      dry_run:
+        description: 'Dry-run only (no actual publish)'
+        required: false
+        type: boolean
+        default: false
+      skip_checks:
+        description: 'Skip build and test steps'
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      package:
+        description: 'Package to publish (all, sdk, sdk-react-provider, openapi)'
+        type: string
+        required: true
+      dry_run:
+        description: 'Dry-run only (no actual publish)'
+        type: boolean
+        default: false
+      skip_checks:
+        description: 'Skip build and test (set to true when called from ci.yml which already ran them)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write # Required for OIDC / NPM Trusted Publisher
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    environment: npm-production
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Cache PNPM install and Turbo
+        uses: ./.github/actions/cache-setup
+
+      - name: Setup Node for NPM registry
+        uses: actions/setup-node@v4
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Build
+        if: inputs.skip_checks == false
+        run: pnpm build
+
+      - name: Test
+        if: inputs.skip_checks == false
+        run: pnpm test
+
+      # ── Dry-run checks (verifies packages are publishable, no real publish) ─
+
+      - name: Dry-run SDK
+        if: inputs.dry_run == true && (inputs.package == 'all' || inputs.package == 'sdk')
+        run: pnpm --filter @monerium/sdk pub:pre
+
+      - name: Dry-run React Provider
+        if: inputs.dry_run == true && (inputs.package == 'all' || inputs.package == 'sdk-react-provider')
+        run: pnpm --filter @monerium/sdk-react-provider pub:pre
+
+      - name: Dry-run OpenAPI
+        if: inputs.dry_run == true && (inputs.package == 'all' || inputs.package == 'openapi')
+        run: pnpm --filter @monerium/openapi pub:pre
+
+      # ── Stable publish (uses OIDC provenance — no NPM token needed) ─────────
+
+      - name: Publish SDK
+        if: inputs.dry_run == false && (inputs.package == 'all' || inputs.package == 'sdk')
+        run: pnpm --filter @monerium/sdk publish --access public --provenance --no-git-checks
+
+      - name: Publish React Provider
+        if: inputs.dry_run == false && (inputs.package == 'all' || inputs.package == 'sdk-react-provider')
+        run: pnpm --filter @monerium/sdk-react-provider publish --access public --provenance --no-git-checks
+
+      - name: Publish OpenAPI
+        if: inputs.dry_run == false && (inputs.package == 'all' || inputs.package == 'openapi')
+        run: pnpm --filter @monerium/openapi publish --access public --provenance --no-git-checks

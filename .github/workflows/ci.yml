@@ -38,12 +38,13 @@ jobs:
           echo "Release tag_name: ${{ steps.release.outputs.tag_name }}"
           echo "Release tag_name Developer: ${{ steps.release.outputs['apps/developer--tag_name'] }}"
           echo "Release sha: ${{ steps.release.outputs.sha }}"
+
   build:
     env:
       CI: 'true'
 
     needs: [release-please]
-    name: Build, Test, Lint and Publish
+    name: Build, Test and Lint
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
@@ -69,53 +70,53 @@ jobs:
         continue-on-error: true
         run: rm -rf apps/developer/docs/packages apps/developer/.docusaurus
 
-      # - name: Deploy to GitHub Pages
-      #   uses: peaceiris/actions-gh-pages@v4
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./apps/developer/build
-
       - name: Test
         run: pnpm test
 
       - name: Lint
         run: pnpm lint
 
-      - name: Pre-Publish SDK
-        run: pnpm --filter @monerium/sdk pub:pre
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: needs.release-please.outputs.releases_created == 'false'
+  # ── Dry-run publish checks (every non-release push) ──────────────────────────
 
-      - name: Pre-Publish React Provider
-        run: pnpm --filter @monerium/sdk-react-provider pub:pre
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: needs.release-please.outputs.releases_created == 'false'
+  check-publish:
+    needs: [release-please, build]
+    if: needs.release-please.outputs.releases_created == 'false'
+    uses: ./.github/workflows/publish.yml
+    with:
+      package: all
+      dry_run: true
+      skip_checks: true
 
-      - name: Pre-Publish OpenAPI
-        run: pnpm --filter @monerium/openapi pub:pre
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: needs.release-please.outputs.releases_created == 'false'
+  # ── Stable publish (only when release-please creates a release) ──────────────
 
-      - name: Publish SDK
-        run: pnpm --filter @monerium/sdk publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: ${{ needs.release-please.outputs.release_created_sdk }}
+  publish-sdk:
+    needs: [release-please, build]
+    if: needs.release-please.outputs.release_created_sdk == 'true'
+    uses: ./.github/workflows/publish.yml
+    with:
+      package: sdk
+      dry_run: false
+      skip_checks: true
 
-      - name: Publish React Provider
-        run: pnpm --filter @monerium/sdk-react-provider publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: ${{ needs.release-please.outputs.release_created_sdk_react_provider }}
+  publish-sdk-react-provider:
+    needs: [release-please, build]
+    if: needs.release-please.outputs.release_created_sdk_react_provider == 'true'
+    uses: ./.github/workflows/publish.yml
+    with:
+      package: sdk-react-provider
+      dry_run: false
+      skip_checks: true
 
-      - name: Publish OpenAPI
-        run: pnpm --filter @monerium/openapi publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: ${{ needs.release-please.outputs.release_created_openapi }}
+  publish-openapi:
+    needs: [release-please, build]
+    if: needs.release-please.outputs.release_created_openapi == 'true'
+    uses: ./.github/workflows/publish.yml
+    with:
+      package: openapi
+      dry_run: false
+      skip_checks: true
+
+  # ── Deploy docs to GitHub Pages ───────────────────────────────────────────────
 
   deploy:
     environment:
