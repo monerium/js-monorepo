@@ -82,6 +82,7 @@ jobs:
     needs: [release-please, build]
     if: needs.release-please.outputs.releases_created == 'false'
     uses: ./.github/workflows/publish.yml
+    secrets: inherit
     with:
       package: all
       dry_run: true
@@ -93,6 +94,7 @@ jobs:
     needs: [release-please, build]
     if: needs.release-please.outputs.release_created_sdk == 'true'
     uses: ./.github/workflows/publish.yml
+    secrets: inherit
     with:
       package: sdk
       dry_run: false
@@ -102,6 +104,7 @@ jobs:
     needs: [release-please, build]
     if: needs.release-please.outputs.release_created_sdk_react_provider == 'true'
     uses: ./.github/workflows/publish.yml
+    secrets: inherit
     with:
       package: sdk-react-provider
       dry_run: false
@@ -111,6 +114,7 @@ jobs:
     needs: [release-please, build]
     if: needs.release-please.outputs.release_created_openapi == 'true'
     uses: ./.github/workflows/publish.yml
+    secrets: inherit
     with:
       package: openapi
       dry_run: false

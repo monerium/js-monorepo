@@ -28,7 +28,8 @@
       "include-paths": ["packages/sdk-react-provider"],
       "exclude-paths": [
         "packages/sdk-react-provider/docs",
-        "packages/sdk-react-provider/README.md"
+        "packages/sdk-react-provider/README.md",
+        "packages/sdk-react-provider/.yarnrc.yml"
       ]
     },
     "packages/openapi": {

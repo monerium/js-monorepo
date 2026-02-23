@@ -57,18 +57,25 @@ jobs:
       - name: Cache PNPM install and Turbo
         uses: ./.github/actions/cache-setup
 
-      - name: Configure npm registry for OIDC auth
+      - name: Configure npm registry
         uses: actions/setup-node@v4
         with:
+          node-version: 24
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Authenticate with npm
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> "${NPM_CONFIG_USERCONFIG}"
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # setup-node always sets NODE_AUTH_TOKEN to the GitHub token, which breaks
+      # both OIDC and classic token auth. We override it here so that:
+      # - Classic token: NODE_AUTH_TOKEN secret from npm-production env is used
+      # - OIDC Trusted Publisher: delete NODE_AUTH_TOKEN from the npm-production
+      #   environment — this then writes empty string, clearing the GitHub token
+      #   so npm can pick up the OIDC token automatically via --provenance
+      # See: https://github.com/actions/setup-node/issues/1440
+      - name: Configure npm auth token
+        run: echo "NODE_AUTH_TOKEN=${{ secrets.NODE_AUTH_TOKEN }}" >> $GITHUB_ENV
 
-      - name: Verify npm auth
-        run: npm whoami --registry=https://registry.npmjs.org/ --no-warnings
+      - name: Verify npm auth (classic token only — skipped in OIDC mode)
+        if: env.NODE_AUTH_TOKEN != ''
+        run: npm whoami --registry=https://registry.npmjs.org/
 
       - name: Build
         if: inputs.skip_checks == false
@@ -96,12 +103,18 @@ jobs:
 
       - name: Publish SDK
         if: inputs.dry_run == false && (inputs.package == 'all' || inputs.package == 'sdk')
-        run: pnpm --filter @monerium/sdk publish --access public --provenance --no-git-checks
+        run: pnpm --filter @monerium/sdk publish --access public --no-git-checks
+        env:
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Publish React Provider
         if: inputs.dry_run == false && (inputs.package == 'all' || inputs.package == 'sdk-react-provider')
-        run: pnpm --filter @monerium/sdk-react-provider publish --access public --provenance --no-git-checks
+        run: pnpm --filter @monerium/sdk-react-provider publish --access public --no-git-checks
+        env:
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Publish OpenAPI
         if: inputs.dry_run == false && (inputs.package == 'all' || inputs.package == 'openapi')
-        run: pnpm --filter @monerium/openapi publish --access public --provenance --no-git-checks
+        run: pnpm --filter @monerium/openapi publish --access public --no-git-checks
+        env:
+          NPM_CONFIG_PROVENANCE: true
