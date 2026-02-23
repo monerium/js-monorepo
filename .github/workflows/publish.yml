@@ -57,6 +57,14 @@ jobs:
       - name: Cache PNPM install and Turbo
         uses: ./.github/actions/cache-setup
 
+      - name: Configure npm registry for OIDC auth
+        uses: actions/setup-node@v4
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Verify npm auth
+        run: npm whoami --registry=https://registry.npmjs.org/
+
       - name: Build
         if: inputs.skip_checks == false
         run: pnpm build
