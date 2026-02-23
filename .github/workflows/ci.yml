@@ -76,18 +76,6 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-  # ── Dry-run publish checks (every non-release push) ──────────────────────────
-
-  check-publish:
-    needs: [release-please, build]
-    if: needs.release-please.outputs.releases_created == 'false'
-    uses: ./.github/workflows/publish.yml
-    secrets: inherit
-    with:
-      package: all
-      dry_run: true
-      skip_checks: true
-
   # ── Stable publish (only when release-please creates a release) ──────────────
 
   publish-sdk:
