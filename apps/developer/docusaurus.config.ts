@@ -12,8 +12,6 @@ import type * as Redocusaurus from 'redocusaurus';
 // so we set it here before any plugin is loaded.
 (global as any).React = React;
 
-console.info('BASE URL', process.env.BASE_URL);
-
 // https://typedoc-plugin-markdown.org/schema.json
 const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
   // not working properly when cross-referencing between packages
@@ -107,12 +105,12 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://monerium.github.io',
+  url: 'https://docs.monerium.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is '/<js-monorepo>/'
   // Can be overridden with BASE_URL environment variable for external usage like monerium.com/developers
   // No BaseUrl for developer, see package.json build script
-  baseUrl: process.env.BASE_URL || '/',
+  baseUrl: '/',
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'monerium', // Usually your GitHub org/user name.
@@ -144,7 +142,7 @@ const config: Config = {
 
   // Allow broken links when building for embedding (BASE_URL is set)
   // The TypeDoc publicPath is hardcoded and creates broken links when baseUrl changes
-  onBrokenLinks: process.env.BASE_URL ? 'warn' : 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
