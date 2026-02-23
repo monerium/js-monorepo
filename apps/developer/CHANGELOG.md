@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.1.2](https://github.com/monerium/js-monorepo/compare/developer-v1.1.1...developer-v1.1.2) (2026-02-23)
+
+
+### Bug Fixes
+
+* improve comment ([de1f888](https://github.com/monerium/js-monorepo/commit/de1f8885c01205de2f138350163139a9f7ecda11))
+* links ([714c0b2](https://github.com/monerium/js-monorepo/commit/714c0b223789ddd6e8e410090684118dde1b80b5))
+
+
+### Documentation
+
+* fix base url ([4f1271d](https://github.com/monerium/js-monorepo/commit/4f1271dc4706b4954e9bd425a29671226eb325cd))
+
+
+### Miscellaneous
+
+* fix discord link ([46b0a47](https://github.com/monerium/js-monorepo/commit/46b0a4712f69f9967afc8557c089d19fa008899c))
+* **openapi:** styling and lint ([50b7160](https://github.com/monerium/js-monorepo/commit/50b7160d57beae8a92eeebfbe55cbfdfa13f2757))
+* pnpm format ([a41e3cd](https://github.com/monerium/js-monorepo/commit/a41e3cd0bbcbf6f825aaedb1b3768210931c8756))
+* remove base url settings ([227832a](https://github.com/monerium/js-monorepo/commit/227832adcba969b82b7378057f9474859c16682e))
+* remove dev:docs, everything runs together now, update docs ([b23ad11](https://github.com/monerium/js-monorepo/commit/b23ad115a9c35694c2b361a7765f97d0b7e194f8))
+
 ## [1.1.1](https://github.com/monerium/js-monorepo/compare/developer-v1.1.0...developer-v1.1.1) (2026-02-20)
 
 

@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.0.2](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.1...openapi-v2.0.2) (2026-02-23)
+
+
+### Bug Fixes
+
+* build ([d1ccdd2](https://github.com/monerium/js-monorepo/commit/d1ccdd2ba7a644b98b38c57eb4a6751d8c037017))
+* links ([714c0b2](https://github.com/monerium/js-monorepo/commit/714c0b223789ddd6e8e410090684118dde1b80b5))
+
+
+### Documentation
+
+* openapi readme ([d0a4197](https://github.com/monerium/js-monorepo/commit/d0a419752bdea41ca4e7a264b2a2a2de4bd31c18))
+
+
+### Miscellaneous
+
+* lint-staged and editor settings for yaml ([407a721](https://github.com/monerium/js-monorepo/commit/407a721699db2324f287de0a1e9bad5a4bfe2795))
+* **openapi:** lint ([5698d2e](https://github.com/monerium/js-monorepo/commit/5698d2ec7b013785a6bbfff7af3d54cc346bcfca))
+* **openapi:** styling and lint ([50b7160](https://github.com/monerium/js-monorepo/commit/50b7160d57beae8a92eeebfbe55cbfdfa13f2757))
+* pnpm format ([a41e3cd](https://github.com/monerium/js-monorepo/commit/a41e3cd0bbcbf6f825aaedb1b3768210931c8756))
+
 ## [2.0.1](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.0...openapi-v2.0.1) (2026-02-20)
 
 
