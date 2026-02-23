@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.2...openapi-v2.0.3) (2026-02-23)
+
+
+### Bug Fixes
+
+* add trusted published npm and update pipeline ([f9da585](https://github.com/monerium/js-monorepo/commit/f9da5855c47384d3182ee6d15b7f04d29dcf555d))
+
 ## [2.0.2](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.1...openapi-v2.0.2) (2026-02-23)
 
 
