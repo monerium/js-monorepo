@@ -8,7 +8,6 @@ info:
     <p style="background: rgba(255, 165, 0, 0.1); padding: 30px;">
         Endpoints or responses that have not been implemented are marked with <b>WIP</b> (Work In Progress).
     </p>
-
   termsOfService: "https://monerium.com/policies/business-terms-of-service/"
   contact:
     name: Monerium
@@ -122,11 +121,11 @@ paths:
                             In redirect to Monerium flow the address in the connect wallet step can be automatically linked by including same the signature used for [Link Address](#operation/link-address). The address will be automatically linked and the user continues to the next step. You must then also include the `address` property. Must include the `0x` prefix.
                           type: string
                         email:
-                          description: "You can prefill the email field for login and sign up steps to ensure the user uses the correct email."
+                          description: You can prefill the email field for login and sign up steps to ensure the user uses the correct email.
                           type: boolean
                           example: true
                         skip_kyc:
-                          description: "You can skip the KYC onboarding steps in the Authorization Flow during testing."
+                          description: You can skip the KYC onboarding steps in the Authorization Flow during testing.
                           type: boolean
                           example: true
                         chain:
@@ -305,14 +304,8 @@ paths:
           source: "curl https://api.monerium.dev/auth?code_challenge=9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0&client_id=a08bfa22-e6d6-11ed-891c-2ea11c960b3f&redirect_uri=http://localhost:3000&code_challenge_method=S256"
   /auth/context:
     get:
-      security:
-        - BearerAuth: []
-      x-codeSamples:
-        - lang: bash
-          label: curl
-          source: |-
-            curl https://api.monerium.dev/auth/context \
-            -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+      operationId: auth-context
+      summary: Context
       description: |
         The authentication context provides details about the currently authenticated user,
         including the method of authentication, their roles, and information on the profiles they are authorized to access.
@@ -320,8 +313,6 @@ paths:
         Note that the context is used for every authenticated request. By default results are returned by the caller profile.
         Meaning that applications using client credentials must specify the profile ID in the query parameters to get the
         correct results.
-      summary: Context
-      operationId: auth-context
       parameters: []
       responses:
         "200":
@@ -329,15 +320,23 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/UserContext"
+                $ref: "#/components/schemas/UserContext"
         "401":
           description: UNAUTHORIZED
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/UnauthorizedError"
+                $ref: "#/components/schemas/UnauthorizedError"
+      security:
+        - BearerAuth: []
       tags:
         - auth
+      x-codeSamples:
+        - lang: bash
+          label: curl
+          source: |-
+            curl https://api.monerium.dev/auth/context \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
   /auth/signup:
     post:
       operationId: auth-signup
@@ -653,9 +652,6 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - url
-                - secret
               properties:
                 url:
                   description: The URL where the notification will be sent.
@@ -686,6 +682,9 @@ paths:
                   example:
                     - iban.updated
                     - profile.updated
+              required:
+                - url
+                - secret
       responses:
         "201":
           description: Created
@@ -714,7 +713,7 @@ paths:
               "url": "https://yourdomain.com/webhook",
               "secret": "YOUR_SECRET",
             }'
-  /webhooks/{subscription}:
+  "/webhooks/{subscription}":
     patch:
       operationId: update-subscription
       summary: Update subscription
@@ -741,10 +740,10 @@ paths:
                     The state of the webhook subscription. If set to `inactive`, the webhook will not send notifications.
                     If set to `active`, the webhook will send notifications as usual.
                   type: string
+                  example: active
                   enum:
                     - active
                     - inactive
-                  example: active
                 types:
                   description: |
                     An array of event types that the webhook will subscribe to. If not specified, default events types are subscribed to.
@@ -782,7 +781,6 @@ paths:
         - BearerAuth: []
       tags:
         - webhooks
-
   "/profiles/{profile}/details":
     put:
       operationId: submit-profile-details
@@ -1333,12 +1331,12 @@ paths:
                   example: I hereby declare that I am the address owner.
                 signature:
                   oneOf:
-                    - title: EOA address
-                      $ref: "#/components/schemas/SignatureEOA"
-                    - title: Safe onchain
-                      $ref: "#/components/schemas/SignatureSafeOnchain"
-                    - title: Safe offchain
-                      $ref: "#/components/schemas/SignatureSafeOffchain"
+                    - $ref: "#/components/schemas/SignatureEOA"
+                      title: EOA address
+                    - $ref: "#/components/schemas/SignatureSafeOnchain"
+                      title: Safe onchain
+                    - $ref: "#/components/schemas/SignatureSafeOffchain"
+                      title: Safe offchain
               required:
                 - address
                 - message
@@ -2726,20 +2724,20 @@ paths:
         - $ref: "#/components/parameters/AcceptHeaderV2"
         - name: address
           in: query
-          required: false
           description: Filter by blockchain address
+          required: false
           schema:
             $ref: "#/components/schemas/Address"
         - name: chain
           in: query
-          required: false
           description: Filter by blockchain network
+          required: false
           schema:
             $ref: "#/components/schemas/Chain"
         - name: kind
           in: query
-          required: false
           description: Filter by signature request kind
+          required: false
           schema:
             type: string
             enum:
@@ -2747,8 +2745,8 @@ paths:
               - order
         - name: profile
           in: query
-          required: false
           description: UUID of the profile (defaults to authenticated user's default profile)
+          required: false
           schema:
             $ref: "#/components/schemas/UUID"
       responses:
@@ -2769,33 +2767,33 @@ paths:
                     items:
                       $ref: "#/components/schemas/PendingSignature"
                   total:
-                    type: integer
                     description: Total number of pending signatures
+                    type: integer
               examples:
                 orderSignature:
                   summary: Order signature example
                   value:
                     pending:
-                      - id: "550e8400-e29b-41d4-a716-446655440000"
-                        kind: "order"
-                        chain: "ethereum"
+                      - id: 550e8400-e29b-41d4-a716-446655440000
+                        kind: order
+                        chain: ethereum
                         address: "0x1234567890123456789012345678901234567890"
                         amount: "100.50"
                         counterpart:
                           identifier:
-                            standard: "iban"
-                            iban: "GB33BUKB20201555555555"
+                            standard: iban
+                            iban: GB33BUKB20201555555555
                           details:
-                            name: "John Doe"
-                        currency: "eur"
+                            name: John Doe
+                        currency: eur
                         createdAt: "2024-01-15T10:30:00Z"
                     total: 1
                 linkAddressSignature:
                   summary: Link address signature example
                   value:
                     pending:
-                      - kind: "linkAddress"
-                        chain: "polygon"
+                      - kind: linkAddress
+                        chain: polygon
                         address: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
                         createdAt: "2024-01-15T09:15:00Z"
                     total: 1
@@ -2872,13 +2870,9 @@ components:
     BankAccount:
       description: "Used for generic bank account details, when IBAN is not available."
       type: object
-      required:
-        - standard
-        - accountNumber
-        - address
       properties:
         standard:
-          description: "The standard of the bank account. This is used to identify generic bank account."
+          description: The standard of the bank account. This is used to identify generic bank account.
           type: string
           example: account
           enum:
@@ -2894,7 +2888,11 @@ components:
         bic:
           description: The BIC (Bank Identifier Code) of the bank.
           type: string
-          example: "DEUTDEDBFRA"
+          example: DEUTDEDBFRA
+      required:
+        - standard
+        - accountNumber
+        - address
     Balances:
       type: object
       properties:
@@ -3013,7 +3011,7 @@ components:
       description: |
         UTF-8 Payment reference. Structured identifier for a transaction or order, typically used for automatic payment reconciliation
       type: string
-      example: "RF123456789"
+      example: RF123456789
       maxLength: 35
       minLength: 0
     SignatureEOA:
@@ -3157,12 +3155,12 @@ components:
               example: "Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z"
         signature:
           oneOf:
-            - title: EOA address
-              $ref: "#/components/schemas/SignatureEOA"
-            - title: Safe onchain
-              $ref: "#/components/schemas/SignatureSafeOnchain"
-            - title: Safe offchain
-              $ref: "#/components/schemas/SignatureSafeOffchain"
+            - $ref: "#/components/schemas/SignatureEOA"
+              title: EOA address
+            - $ref: "#/components/schemas/SignatureSafeOnchain"
+              title: Safe onchain
+            - $ref: "#/components/schemas/SignatureSafeOffchain"
+              title: Safe offchain
         memo:
           $ref: "#/components/schemas/Memo"
         referenceNumber:
@@ -3245,7 +3243,7 @@ components:
             rejectedReason:
               description: Message stating why the order was rejected.  Only visible when the order has been rejected.
               type: string
-              example: "Declined due to insufficient funds."
+              example: Declined due to insufficient funds.
             supportingDocumentId:
               description: The UUID of an File ID.
               type: string
@@ -3508,8 +3506,8 @@ components:
                   $ref: "#/components/schemas/Address"
                 chain:
                   $ref: "#/components/schemas/Chain"
-            - title: Bank Account
-              $ref: "#/components/schemas/BankAccount"
+            - $ref: "#/components/schemas/BankAccount"
+              title: Bank Account
         details:
           description: Details about the counterpart. Empty for cross-chain orders.
           oneOf:
@@ -4347,24 +4345,22 @@ components:
       type: object
       properties:
         id:
-          description: Unique identifier of the profile. The Profile ID is the
-            main identifier used to represent ownership of other API resources.
-          "$ref": "#/components/schemas/UUID"
+          description: Unique identifier of the profile. The Profile ID is the main identifier used to represent ownership of other API resources.
           example: 4f079ef8-6d26-11eb-9bc8-acde48001122
+          $ref: "#/components/schemas/UUID"
         kind:
           description: String identifier specifying the type of the profile.
           type: string
+          example: corporate
           enum:
             - corporate
             - personal
-          example: corporate
         name:
           description: The Profile name. This can be a corporate or an individual.
           type: string
           example: user@example.com
         perms:
-          description: List containing the different identifiers specifying
-            the permission the user has on the profile.
+          description: List containing the different identifiers specifying the permission the user has on the profile.
           type: array
           items:
             type: string
@@ -4382,7 +4378,7 @@ components:
       properties:
         userId:
           description: Unique identifier of the User.
-          "$ref": "#/components/schemas/UUID"
+          $ref: "#/components/schemas/UUID"
         email:
           description: An email address associated with the account.
           type: string
@@ -4406,20 +4402,16 @@ components:
           properties:
             method:
               description: The authentication method.
+              type: string
+              example: password
               enum:
                 - password
                 - resource
                 - jwt
                 - apikey
                 - bearer
-              type: string
-              example: password
             subject:
-              description:
-                Identifier used during the authentication. The identifier
-                used changes with the authentication method. When authenticated as
-                a partner, the partnerID will be used. When using oauth, the client_id
-                will be used.
+              description: "Identifier used during the authentication. The identifier used changes with the authentication method. When authenticated as a partner, the partnerID will be used. When using oauth, the client_id will be used."
               type: string
               example: user@example.com
             verified:
@@ -4427,25 +4419,20 @@ components:
               type: boolean
               example: true
         defaultProfile:
-          description:
-            Unique identifier of the default profile. The default profile
-            allows the API consumer to use the simpler API endpoints omitting the
-            profile ID from the structure.
+          description: Unique identifier of the default profile. The default profile allows the API consumer to use the simpler API endpoints omitting the profile ID from the structure.
           example: 4f079ef8-6d26-11eb-9bc8-acde48001122
-          "$ref": "#/components/schemas/UUID"
+          $ref: "#/components/schemas/UUID"
         profiles:
+          description: List containing information about every profiles accessible to the User.
           type: array
-          description:
-            List containing information about every profiles accessible
-            to the User.
           items:
-            "$ref": "#/components/schemas/ProfileSummary"
+            $ref: "#/components/schemas/ProfileSummary"
     WebhookSubscription:
       type: object
       properties:
         id:
           description: Unique identifier of the webhook subscription.
-          "$ref": "#/components/schemas/UUID"
+          $ref: "#/components/schemas/UUID"
         url:
           description: The URL to which the webhook events will be sent.
           type: string
@@ -4460,10 +4447,10 @@ components:
         state:
           description: The state of the webhook subscription.
           type: string
+          example: active
           enum:
             - active
             - inactive
-          example: active
       required:
         - id
         - url
@@ -4471,24 +4458,19 @@ components:
         - state
     PendingSignature:
       type: object
-      required:
-        - kind
-        - chain
-        - address
-        - createdAt
       properties:
         id:
+          description: Order ID (only present for order kind signatures)
           type: string
           format: uuid
-          description: Order ID (only present for order kind signatures)
-          example: "550e8400-e29b-41d4-a716-446655440000"
+          example: 550e8400-e29b-41d4-a716-446655440000
         kind:
+          description: The type of signature request
           type: string
+          example: order
           enum:
             - linkAddress
             - order
-          description: The type of signature request
-          example: "order"
         chain:
           description: The blockchain network name
           $ref: "#/components/schemas/Chain"
@@ -4496,8 +4478,8 @@ components:
           description: The blockchain address requiring signature
           $ref: "#/components/schemas/Address"
         amount:
-          type: string
           description: Monetary amount as a decimal string (only present for order kind signatures)
+          type: string
           example: "100.50"
         counterpart:
           description: Payment counterpart information (only present for order kind signatures)
@@ -4508,6 +4490,11 @@ components:
         createdAt:
           description: Timestamp when the signature request was created
           $ref: "#/components/schemas/TimeStamp"
+      required:
+        - kind
+        - chain
+        - address
+        - createdAt
   securitySchemes:
     BearerAuth:
       type: http
@@ -4578,7 +4565,6 @@ tags:
       Monerium can offer applicable partners a KYC reliance or sharing agreement that can streamline the onboarding process for its customers.
       It is worth noting that Monerium is always ultimately responsible for conducting due diligence and monitoring the business relationship.
       If you are interested in such capabilities, please contact us in our [discord channel](https://monerium.com/invite/discord).
-
   - name: auth
     x-displayName: Authentication
     description: "Endpoints that handle user creation, authorization, and authentication."
@@ -4630,13 +4616,11 @@ tags:
       then the signature sent in the `webhook-signature` header for a secret `whsec_mUt3nH+3wx/djdHf8RHn9yJMMiAhq10b` is: `v1,4gOAiajJT7ah++XpDFdRyK/TJ75whRjUcKOWnvsHNlk=`
 
       Please note that the payload  must be used exactly as it was received, without any modifications or formatting changes as any changes will result in a different signature.
-
   - name: changes
     x-displayName: Changelog
     description: |
-      ### 2026-02-20:
-      * Fix links for new UI
-      * Linting
+      ### 2026-02-23
+      * Update links for docs.monerium.com
 
       ### 2026-02-17:
       * Removed `skip_create_account` from Athorization endpoint query parameters as it is no longer used in the flow. Use the Link Address and Request IBAN endpoints instead.
@@ -4713,7 +4697,6 @@ webhooks:
         This notification is used to validate if receiver is able to handle webhook notifications.
         Your webhook endpoint must respond with a `200 OK` status code to indicate successful receipt.
         If the delivery fails, the subscription won't be created.
-
       requestBody:
         required: true
         content:
@@ -4748,7 +4731,6 @@ webhooks:
               "type": "subscription.created",
               "timestamp": "2024-08-09T12:44:04.777884Z"
             }'
-
   order.created:
     post:
       operationId: webhook-order-created
@@ -4757,7 +4739,6 @@ webhooks:
         This notification represents an order creation.
 
         It's send as a POST request to the endpoint specified during [subscription creation](#operation/create-subscription).
-
       requestBody:
         required: true
         content:
@@ -4781,7 +4762,6 @@ webhooks:
       security: []
       tags:
         - webhooks
-
   order.updated:
     post:
       operationId: webhook-order-updated
@@ -4790,7 +4770,6 @@ webhooks:
         This notification represents an order update event. It's sent when an order is processed or rejected.
 
         It's send as a POST request to the endpoint specified during [subscription creation](#operation/create-subscription).
-
       requestBody:
         required: true
         content:
@@ -4814,7 +4793,6 @@ webhooks:
       security: []
       tags:
         - webhooks
-
   profile.updated:
     post:
       operationId: webhook-profile-updated
@@ -4878,7 +4856,6 @@ webhooks:
                 "state": "pending"
               }
             }'
-
   iban.updated:
     post:
       operationId: webhook-iban-updated
