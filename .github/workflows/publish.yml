@@ -64,18 +64,11 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       # setup-node always sets NODE_AUTH_TOKEN to the GitHub token, which breaks
-      # both OIDC and classic token auth. We override it here so that:
-      # - Classic token: NODE_AUTH_TOKEN secret from npm-production env is used
-      # - OIDC Trusted Publisher: delete NODE_AUTH_TOKEN from the npm-production
-      #   environment — this then writes empty string, clearing the GitHub token
-      #   so npm can pick up the OIDC token automatically via --provenance
+      # OIDC Trusted Publisher auth. We clear it here so npm can pick up the
+      # OIDC token automatically via NPM_CONFIG_PROVENANCE=true.
       # See: https://github.com/actions/setup-node/issues/1440
       - name: Configure npm auth token
         run: echo "NODE_AUTH_TOKEN=${{ secrets.NODE_AUTH_TOKEN }}" >> $GITHUB_ENV
-
-      - name: Verify npm auth (classic token only — skipped in OIDC mode)
-        if: env.NODE_AUTH_TOKEN != ''
-        run: npm whoami --registry=https://registry.npmjs.org/
 
       - name: Build
         if: inputs.skip_checks == false
