@@ -1,5 +1,5 @@
 | [Monerium.com](https://monerium.com/) | [Monerium.app](https://monerium.app/) | [Monerium Dev Docs](https://docs.monerium.com/) |
-| ------------------------------------- | ------------------------------------- | ------------------------------------- |
+| ------------------------------------- | ------------------------------------- | ----------------------------------------------- |
 
 # Monerium SDK Documentation
 
@@ -67,10 +67,10 @@ yarn add @monerium/sdk
 
 ### Environments - URLs
 
-| Environment | Web                  | API                      |
-| ----------- | -------------------- | ------------------------ |
+| Environment | Web                          | API                      |
+| ----------- | ---------------------------- | ------------------------ |
 | sandbox     | https://sandbox.monerium.app | https://api.monerium.dev |
-| production  | https://monerium.app | https://api.monerium.app |
+| production  | https://monerium.app         | https://api.monerium.app |
 
 ### Environments - Networks
 

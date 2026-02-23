@@ -19,7 +19,7 @@ export function flattenSortAndSumBalances(
       // If the balance is found, flatten it to the root
       if (balance) {
         const { amount } = balance;
-         
+
         const { balances: _balances, ...rest } = account; // Exclude the balances property
         acc.list.push({
           ...rest,

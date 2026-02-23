@@ -70,7 +70,6 @@ This Turborepo includes the following packages/apps:
 - [Lint-Staged](https://github.com/lint-staged/lint-staged) for running linters on staged files
 - [Release Please](https://github.com/googleapis/release-please) for automated releases
 
-
 ### Pipeline
 
 We use [release-please](https://github.com/googleapis/release-please), for automated releases. The configuration file is located at `release-please-config.json`, and the manifest file is at `.release-please-manifest.json`. In general, you don't need to manually update the manifest file because the release-please action automatically updates it.
@@ -91,7 +90,6 @@ The pipeline will automatically publish the following packages if there are chan
 [Release please - Github action](https://github.com/marketplace/actions/release-please-action)
 
 [Release please - Config file options](https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md#configfile)
-
 
 # FAQ
 

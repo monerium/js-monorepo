@@ -3,7 +3,6 @@
 import { experimental_extendTheme } from '@mui/material/styles';
 
 declare module '@mui/material/Button' {
-   
   interface ButtonPropsVariantOverrides {
     plain: true;
   }
