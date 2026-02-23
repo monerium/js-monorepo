@@ -63,12 +63,12 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Authenticate with npm
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> "${NPM_CONFIG_USERCONFIG}"
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Verify npm auth
-        run: npm whoami --registry=https://registry.npmjs.org/
+        run: npm whoami --registry=https://registry.npmjs.org/ --no-warnings
 
       - name: Build
         if: inputs.skip_checks == false
