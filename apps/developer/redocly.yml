@@ -24,13 +24,25 @@ theme:
           backgroundColor: "#303846"
       typography:
         fontSize: 1rem
-        fontFamily: Roboto, sans-serif
+        fontFamily: Roboto, Helvetica Neue, Helvetica, Arial, sans-serif,
         optimizeSpeed: true
         smoothing: antialiased
-        headings:
+        heading1:
           fontWeight: bold
           lineHeight: 1.75em
+        heading2:
+          fontWeight: bold
+          lineHeight: 1.5em
+        heading3:
+          fontWeight: bold
+          lineHeight: 1em
+        headings:
+          fontWeight: bold
+          lineHeight: 1em
         links:
           color: "#2c6ca7"
           visited: "#2c6ca7"
           hover: "#91538a"
+      rightPanel:
+        backgroundColor: "#3a4759"
+        textColor": "#ffffff"

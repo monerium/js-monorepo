@@ -20,12 +20,15 @@
   },
   "scripts": {
     "dev": "redocly preview-docs ./openapi.yml",
+    "lint": "redocly lint --extends recommended openapi.yml",
+    "sort": "openapi-format openapi.yml -o openapi.yml",
     "validate": "redocly lint ./openapi.yml",
     "pub:pre": "pnpm publish --no-git-checks --dry-run",
     "clean": "rm -rf dist node_modules .turbo"
   },
   "devDependencies": {
-    "@redocly/cli": "^1.25.0"
+    "@redocly/cli": "^1.25.0",
+    "openapi-format": "^1.18.0"
   },
   "engines": {
     "node": ">=18"
