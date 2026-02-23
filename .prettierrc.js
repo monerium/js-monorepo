@@ -23,7 +23,7 @@ module.exports = {
     {
       files: ['*.yaml', '*.yml'],
       options: {
-        singleQuote: false,
+        singleQuote: true,
       },
     },
   ],

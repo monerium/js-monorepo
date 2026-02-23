@@ -1,8 +1,8 @@
 {
   "eslint.workingDirectories": [
     {
-      "mode": "auto"
-    }
+      "mode": "auto",
+    },
   ],
   "cSpell.words": [
     "Commitlint",
@@ -10,10 +10,16 @@
     "PKCE",
     "sepolia",
     "SIWE",
-    "stylelint"
+    "stylelint",
   ],
   "editor.codeActionsOnSave": {
-    "source.fixAll.stylelint": "explicit"
+    "source.fixAll.stylelint": "explicit",
   },
-  "stylelint.validate": ["css", "scss", ".module.scss"]
+  "stylelint.validate": ["css", "scss", ".module.scss"],
+  "editor.formatOnSave": true,
+
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "prettier.requireConfig": true,
 }

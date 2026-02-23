@@ -1,6 +1,4 @@
-// @ts-nocheck
-/* eslint-disable */
-module.exports = {
+export default {
   '*.{ts,tsx}': (filenames) => [
     `prettier --write ${filenames.join(' ')}`,
     `eslint --fix --cache ${filenames.join(' ')}`,
