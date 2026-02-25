@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.3...openapi-v2.1.0) (2026-02-25)
+
+
+### Features
+
+* **api:** Orders now include txHashes in the meta field ([b65c40f](https://github.com/monerium/js-monorepo/commit/b65c40f842c65943c05cbc77d5437cc7c44d6a7c))
+
 ## [2.0.3](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.2...openapi-v2.0.3) (2026-02-23)
 
 
