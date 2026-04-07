@@ -386,8 +386,7 @@ paths:
             Not modified (user already exists).
             <br /> Use [the authorization flow](#operation/auth) if the user is already a Monerium user. The user is then redirected back to your application, and you can continue with the other operations.
         '403':
-          description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+          description: FORBIDDEN
           content:
             application/json:
               schema:
@@ -861,8 +860,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UnauthorizedError'
         '403':
-          description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+          description: FORBIDDEN
           content:
             application/json:
               schema:
@@ -996,8 +994,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UnauthorizedError'
         '403':
-          description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+          description: FORBIDDEN
           content:
             application/json:
               schema:
@@ -1131,8 +1128,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UnauthorizedError'
         '403':
-          description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+          description: FORBIDDEN
           content:
             application/json:
               schema:
