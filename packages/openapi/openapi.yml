@@ -338,6 +338,8 @@ paths:
       operationId: auth-signup
       summary: Sign up
       description: |-
+        > **Deprecated.** Use [POST /profiles](#operation/create-profile) instead.
+
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
         </span>
@@ -386,16 +388,16 @@ paths:
             Not modified (user already exists).
             <br /> Use [the authorization flow](#operation/auth) if the user is already a Monerium user. The user is then redirected back to your application, and you can continue with the other operations.
         '403':
-          description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+          description: FORBIDDEN
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ForbiddenPartnerError'
+      deprecated: true
       security:
         - BearerAuth: []
       tags:
-        - auth
+        - deprecated
       x-codeSamples:
         - lang: bash
           label: CLI
@@ -777,11 +779,426 @@ paths:
         - BearerAuth: []
       tags:
         - webhooks
+  /profiles:
+    post:
+      operationId: create-profile
+      summary: Create profile
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+        </span>
+
+        Create a new profile. The `kind` determines whether the `personal` or `corporate`
+        body structure is used in the subsequent form, verifications, and share endpoints.
+        The `kind` cannot be changed after creation.
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  description: Optional partner-supplied profile ID.
+                  $ref: '#/components/schemas/UUID'
+                kind:
+                  description: 'Determines whether the profile is personal or corporate, and which body structure to use in subsequent PATCH endpoints.'
+                  $ref: '#/components/schemas/ProfileKind'
+              required:
+                - kind
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+              example:
+                id: 4f079ef8-6d26-11eb-9bc8-acde48001122
+                kind: personal
+                name: Jane Doe
+                state: infoRequired
+                details:
+                  state: infoRequired
+                form:
+                  state: infoRequired
+                verifications:
+                  - kind: idDocument
+                    state: infoRequired
+                  - kind: proofOfResidency
+                    state: infoRequired
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenPartnerError'
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/profiles' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{"kind": "personal"}'
+    get:
+      operationId: profiles
+      summary: Profiles
+      description: Retrieves a list of all profiles that your application has access to.
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - name: state
+          in: query
+          description: Filter the list on the state of profiles
+          required: false
+          schema:
+            $ref: '#/components/schemas/ProfileState'
+        - name: kind
+          in: query
+          description: Filter the list on the kind of profiles
+          required: false
+          schema:
+            $ref: '#/components/schemas/ProfileKind'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profiles:
+                    $ref: '#/components/schemas/Profiles'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/profiles?state=approved&kind=personal \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json"
+  '/profiles/{profile}':
+    get:
+      operationId: profile
+      summary: Profile
+      description: |
+        Retrieves details about a single profile, including the state of each section.
+
+        The response shows which sections (`details`, `form`, `verifications`) are still
+        `infoRequired`. Submit missing data via the PATCH endpoints or
+        [POST /profiles/{profile}/share](#operation/share-profile-kyc) until none
+        remain `infoRequired`, at which point the profile is ready for approval.
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - name: profile
+          in: path
+          description: The ID of the profile
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+              example:
+                kind: personal
+                state: infoRequired
+                details:
+                  state: infoRequired
+                form:
+                  state: infoRequired
+                verifications:
+                  - kind: idDocument
+                    state: infoRequired
+                  - kind: proofOfResidency
+                    state: infoRequired
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl https://api.monerium.dev/profiles/4f079ef8-6d26-11eb-9bc8-acde48001122 \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json"
+  '/profiles/{profile}/share':
+    post:
+      operationId: share-profile-kyc
+      summary: Share KYC data
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+        </span>
+
+        Reuse KYC data from a third-party provider (e.g. Sumsub) to populate the profile's
+        `details` and `verifications`.
+
+        Monerium uses the supplied token to fetch data from the provider and updates the
+        relevant sections. Each section that receives sufficient data transitions to
+        `submitted`; any that remain incomplete stay `infoRequired`.
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - name: profile
+          in: path
+          description: The ID of the profile
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                provider:
+                  description: The KYC data provider.
+                  type: string
+                  example: sumsub
+                  enum:
+                    - sumsub
+                personal:
+                  description: Token for a personal profile applicant.
+                  type: object
+                  properties:
+                    token:
+                      description: Provider-issued applicant token.
+                      type: string
+                      example: husheu817472
+                  required:
+                    - token
+              required:
+                - provider
+                - personal
+            example:
+              provider: sumsub
+              personal:
+                token: husheu817472
+      responses:
+        '202':
+          description: |
+            Accepted
+
+            The KYC data import has been initiated. Subscribe to the [`profile.updated`](#operation/webhook-profile-updated) webhook to monitor progress.
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenPartnerError'
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/profiles/4f079ef8-6d26-11eb-9bc8-acde48001122/share' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "provider": "sumsub",
+              "personal": {
+                "token": "husheu817472"
+              }
+            }'
   '/profiles/{profile}/details':
+    patch:
+      operationId: patch-profile-details
+      summary: Update profile details
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+        </span>
+
+        Submit the compliance details for a profile. The complete set of required fields must be included in the request body — this endpoint updates the `details` section of the profile without affecting other sections.
+
+        > **KYC reliance model only.** This endpoint is intended for partners that hold the
+        > appropriate licences and have a KYC reliance agreement with Monerium. Most integrations
+        > should use [POST /profiles/{profile}/share](#operation/share-profile-kyc) to populate
+        > details via Sumsub instead.
+
+        **Note:**
+        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
+
+        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - name: profile
+          in: path
+          description: The ID of the profile
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                - title: Personal
+                  properties:
+                    personal:
+                      description: Details for an individual
+                      type: object
+                      allOf:
+                        - $ref: '#/components/schemas/PersonalDetails'
+                        - type: object
+                          properties:
+                            idDocument:
+                              $ref: '#/components/schemas/IdDocument'
+                - title: Corporate
+                  properties:
+                    corporate:
+                      description: Details for a company
+                      type: object
+                      $ref: '#/components/schemas/CorporateDetails'
+      responses:
+        '202':
+          description: |
+            Accepted
+
+            The applicant details have been received and will be processed by Monerium.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenPartnerError'
+        '409':
+          description: |
+            Conflict
+
+            This error occurs when the profile details have already been approved and need not be submitted again.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 409
+                  status:
+                    type: string
+                    enum:
+                      - Conflict
+                  message:
+                    type: string
+                    enum:
+                      - The profile details have already been approved and need not be submitted again
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X PATCH 'https://api.monerium.dev/profiles/30f730fd-e51f-11ed-9e13-cacb9390199c/details' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "personal": {
+                "firstName": "Jane",
+                "lastName": "Doe"
+              }
+            }'
     put:
       operationId: submit-profile-details
       summary: Submit profile details
       description: |
+        > **Deprecated.** Use [PATCH /profiles/{profile}/details](#operation/patch-profile-details) instead.
+
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
         </span>
@@ -796,7 +1213,7 @@ paths:
 
         **Note:**
         - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-        - Once a profile is approved, you cannot change the profile kind.
+
         - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
@@ -861,8 +1278,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UnauthorizedError'
         '403':
-          description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+          description: FORBIDDEN
           content:
             application/json:
               schema:
@@ -893,10 +1309,11 @@ paths:
                     type: string
                     enum:
                       - The profile details have already been approved and need not be submitted again
+      deprecated: true
       security:
         - BearerAuth: []
       tags:
-        - profiles
+        - deprecated
       x-codeSamples:
         - lang: bash
           label: CLI
@@ -922,15 +1339,127 @@ paths:
               }
             }'
   '/profiles/{profile}/form':
-    put:
-      operationId: submit-profile-form
-      summary: Submit profile form
+    patch:
+      operationId: patch-profile-form
+      summary: Update profile form
       description: |
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
         </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+        </span>
 
-        Submit the banking form for an individual or company.
+        Submit the additional data for a profile. The complete set of required fields must be included in the request body — this endpoint updates the `form` section of the profile without affecting other sections.
+
+        This data is used for risk calculations and includes information such as purpose of account and source of funds.
+
+        **Note:**
+        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
+
+        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - name: profile
+          in: path
+          description: The ID of the profile
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                - title: Personal
+                  properties:
+                    personal:
+                      description: Form for an individual
+                      $ref: '#/components/schemas/PersonalForm'
+                - title: Corporate
+                  properties:
+                    corporate:
+                      description: Form for a company
+                      $ref: '#/components/schemas/CorporateForm'
+      responses:
+        '202':
+          description: |
+            Accepted
+
+            The form data has been received and will be processed by Monerium.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenPartnerError'
+        '409':
+          description: |
+            Conflict
+
+            This error occurs when the profile details have already been approved and need not be submitted again.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 409
+                  status:
+                    type: string
+                    enum:
+                      - Conflict
+                  message:
+                    type: string
+                    enum:
+                      - The profile details have already been approved and need not be submitted again
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X PATCH 'https://api.monerium.dev/profiles/30f730fd-e51f-11ed-9e13-cacb9390199c/form' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "personal": {
+                "purposeOfAccount": "payments"
+              }
+            }'
+    put:
+      operationId: submit-profile-form
+      summary: Submit profile form
+      description: |
+        > **Deprecated.** Use [PATCH /profiles/{profile}/form](#operation/patch-profile-form) instead.
+
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+
+        Submit additional data for an individual or company.
 
         **For KYC Sharing Model:**
         Form is required.
@@ -940,7 +1469,7 @@ paths:
 
         **Note:**
         - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-        - Once a profile is approved, you cannot change the profile kind.
+
         - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
@@ -996,8 +1525,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UnauthorizedError'
         '403':
-          description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+          description: FORBIDDEN
           content:
             application/json:
               schema:
@@ -1028,10 +1556,11 @@ paths:
                     type: string
                     enum:
                       - The profile details have already been approved and need not be submitted again
+      deprecated: true
       security:
         - BearerAuth: []
       tags:
-        - profiles
+        - deprecated
       x-codeSamples:
         - lang: bash
           label: CLI
@@ -1057,10 +1586,132 @@ paths:
               }
             }'
   '/profiles/{profile}/verifications':
+    patch:
+      operationId: patch-profile-verifications
+      summary: Update profile verifications
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Requires extra privileges
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+        </span>
+
+        Submit verifications for a profile. Only the verifications provided are updated.
+
+        **`sourceOfFunds`** is submitted through this endpoint by all partners when required.
+
+        **`idDocument`**, **`facialSimilarity`**, and **`proofOfResidency`**
+        are automatically populated when you use [POST /profiles/{profile}/share](#operation/share-profile-kyc)
+        — you do not need to submit these manually.
+
+        Partners using the KYC reliance model (without Sumsub) submit the full set of verification
+        kinds manually through this endpoint.
+
+        **Note:**
+        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
+
+        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - name: profile
+          in: path
+          description: The ID of the profile
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                - title: Personal
+                  properties:
+                    personal:
+                      description: Verifications for an individual
+                      $ref: '#/components/schemas/PersonalVerifications'
+                - title: Corporate
+                  properties:
+                    corporate:
+                      description: Verifications for a company
+                      $ref: '#/components/schemas/CorporateVerifications'
+      responses:
+        '202':
+          description: |
+            Accepted
+
+            The verification data has been received and will be processed by Monerium.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenPartnerError'
+        '409':
+          description: |
+            Conflict
+
+            This error occurs when the profile details have already been approved and need not be submitted again.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 409
+                  status:
+                    type: string
+                    enum:
+                      - Conflict
+                  message:
+                    type: string
+                    enum:
+                      - The profile details have already been approved and need not be submitted again
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X PATCH 'https://api.monerium.dev/profiles/30f730fd-e51f-11ed-9e13-cacb9390199c/verifications' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "personal": [
+                {
+                  "kind": "sourceOfFunds",
+                  "fileId": "a1b2c3d4-0000-0000-0000-000000000001"
+                }
+              ]
+            }'
     put:
       operationId: submit-profile-verifications
       summary: Submit profile verifications
       description: |
+        > **Deprecated.** Use [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) instead.
+
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
         </span>
@@ -1071,11 +1722,11 @@ paths:
         Verifications are required
 
         **For KYC Reliance Model:**
-        Enhanced due diligence can be submitted as a verification (using `enhancedDueDiligence` kind).
+        Source of funds can be submitted as a verification (using `sourceOfFunds` kind).
 
         **Note:**
         - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-        - Once a profile is approved, you cannot change the profile kind.
+
         - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
@@ -1131,8 +1782,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UnauthorizedError'
         '403':
-          description:
-            $ref: '#/components/schemas/ForbiddenPartnerError/description'
+          description: FORBIDDEN
           content:
             application/json:
               schema:
@@ -1163,10 +1813,11 @@ paths:
                     type: string
                     enum:
                       - The profile details have already been approved and need not be submitted again
+      deprecated: true
       security:
         - BearerAuth: []
       tags:
-        - profiles
+        - deprecated
       x-codeSamples:
         - lang: bash
           label: CLI
@@ -1191,101 +1842,6 @@ paths:
                 "birthday": "1990-05-15"
               }
             }'
-  /profiles:
-    get:
-      operationId: profiles
-      summary: Profiles
-      description: Retrieves a list of all profiles that your application has access to.
-      parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
-        - name: state
-          in: query
-          description: Filter the list on the state of profiles
-          required: false
-          schema:
-            $ref: '#/components/schemas/ProfileState'
-        - name: kind
-          in: query
-          description: Filter the list on the kind of profiles
-          required: false
-          schema:
-            $ref: '#/components/schemas/ProfileKind'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  profiles:
-                    $ref: '#/components/schemas/Profiles'
-        '401':
-          description: UNAUTHORIZED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
-          description: FORBIDDEN
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenError'
-      security:
-        - BearerAuth: []
-      tags:
-        - profiles
-      x-codeSamples:
-        - lang: bash
-          label: CLI
-          source: |-
-            curl https://api.monerium.dev/profiles?state=approved&kind=personal \
-            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-            -H "Accept: application/vnd.monerium.api-v2+json"
-  '/profiles/{profile}':
-    get:
-      operationId: profile
-      summary: Profile
-      description: Retrieves details about a single profile.
-      parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
-        - name: profile
-          in: path
-          description: The ID of the profile
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '401':
-          description: UNAUTHORIZED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
-          description: FORBIDDEN
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenError'
-      security:
-        - BearerAuth: []
-      tags:
-        - profiles
-      x-codeSamples:
-        - lang: bash
-          label: CLI
-          source: |-
-            curl https://api.monerium.dev/profiles/4f079ef8-6d26-11eb-9bc8-acde48001122 \
-            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-            -H "Accept: application/vnd.monerium.api-v2+json"
   /addresses:
     post:
       operationId: link-address
@@ -3297,7 +3853,7 @@ components:
     Profiles:
       type: array
       items:
-        $ref: '#/components/schemas/Profile'
+        $ref: '#/components/schemas/ProfileSummary'
     Profile:
       type: object
       properties:
@@ -3313,6 +3869,17 @@ components:
           example: Jane Doe
         state:
           $ref: '#/components/schemas/ProfileState'
+        details:
+          description: KYC details section with its current state.
+          $ref: '#/components/schemas/ProfileSection'
+        form:
+          description: Additional data section used for risk calculations.
+          $ref: '#/components/schemas/ProfileSection'
+        verifications:
+          description: 'Verification items required for this profile, each with its current state.'
+          type: array
+          items:
+            $ref: '#/components/schemas/VerificationItem'
     Tokens:
       type: array
       items:
@@ -3928,6 +4495,20 @@ components:
         fundOwner:
           description: Indicates whether the individual is the owner of the funds.
           type: boolean
+        usCitizen:
+          description: Indicates whether the individual is a United States citizen.
+          type: boolean
+        usTaxPerson:
+          description: Indicates whether the individual is subject to US tax obligations (e.g. holds a US tax identification number or is a US resident for tax purposes).
+          type: boolean
+        taxId:
+          description: |
+            Tax Identification Number (TIN) assigned to the individual by their tax authority.
+            The format and name vary by country — common examples include Social Security Number (SSN) in the United States,
+            National Insurance Number in the United Kingdom, CPR number in Denmark, personal identity code in Finland and Sweden,
+            and fiscal code (*codice fiscale*) in Italy.
+          type: string
+          example: 123-45-6789
       required:
         - occupation
         - profession
@@ -3938,23 +4519,20 @@ components:
         - activities
         - publicFunction
         - fundOwner
+        - usCitizen
+        - usTaxPerson
+        - taxId
     PersonalVerifications:
       description: |
-        A list of verifications required for personal onboarding. Each type of verification in the list must be completed to ensure compliance.
-        Verification can have multiple documents (e.g. two sides of an ID document, selfie).
-        The same file ID can be referenced in multiple verifications (e.g. the same document contains facial similarity and device/location metadata).
+        A list of verifications for personal onboarding. The available kinds depend on the integration model.
 
-        The types of verifications with required documents:
-        - **idDocument**: Verification of the individual's identity document. Required documents:
-            - either `passport` or `nationalIdentityCard` (both sides)
-            - `selfie`
-        - **facialSimilarity**: Verification that the individual's face matches the provided identity document. Required documents:
-          - `checkpdf` - PDF report of facial similarity check
+        **Available to all partners:**
+        - **sourceOfFunds**: Declaration of the individual's source of funds.
+
+        **KYC reliance model only:**
+        - **idDocument**: Verification of the individual's identity document.
+        - **facialSimilarity**: Verification that the individual's face matches the provided identity document.
         - **proofOfResidency**: Verification of the individual's residential address.
-          - `checkpdf` - PDF document that proves the address (e.g. invoice)
-        - **deviceIntelligence**: Analysis of the individual's device, location, IP address to detect potential frauds. Required data (one of):
-          - `checkpdf` - PDF report of device and location metadata
-          - `report` object.
       type: array
       items:
         type: object
@@ -3966,25 +4544,12 @@ components:
               - idDocument
               - facialSimilarity
               - proofOfResidency
-              - deviceIntelligence
-              - enhancedDueDiligence
-          documents:
-            type: array
-            items:
-              type: object
-              properties:
-                name:
-                  type: string
-                side:
-                  type: string
-                  enum:
-                    - back
-                    - front
-                fileId:
-                  $ref: '#/components/schemas/UUID'
+              - sourceOfFunds
+          fileId:
+            description: ID of a previously uploaded file associated with this verification.
+            $ref: '#/components/schemas/UUID'
         required:
           - kind
-          - documents
     CorporateDetails:
       description: |
         Company information such as name, registration number, address, and details of representatives, final beneficiaries, and directors.
@@ -4251,11 +4816,10 @@ components:
         - monthlyTransactionCount
     CorporateVerifications:
       description: |
-        A list of verifications required for corporate onboarding. Each type of verification in the list must be submitted to ensure compliance.
-        Verification can have multiple documents (e.g. two sides of an ID document, selfie).
-        The same file ID can be referenced in multiple verifications (e.g. the same document contains company's name and address).
+        A list of verifications required for corporate onboarding.
 
         The types of verifications include:
+        - **sourceOfFunds**: Declaration of the company's source of funds.
         - **corporateName**: A document proving the company's legal name.
         - **corporateAddress**: A document proving the company's registered address.
         - **registrationNumber**: A document proving the company's registration number.
@@ -4269,38 +4833,18 @@ components:
           kind:
             type: string
             enum:
+              - sourceOfFunds
               - corporateName
               - corporateAddress
               - registrationNumber
               - dateOfRegistration
               - beneficialOwnership
               - powerOfAttorney
-              - enhancedDueDiligence
-          documents:
-            type: array
-            items:
-              type: object
-              properties:
-                name:
-                  type: string
-                kind:
-                  type: string
-                  enum:
-                    - companyPDF
-                side:
-                  type: string
-                  enum:
-                    - back
-                    - front
-                fileId:
-                  $ref: '#/components/schemas/UUID'
-              required:
-                - name
-                - kind
-                - fileId
+          fileId:
+            description: ID of a previously uploaded file associated with this verification.
+            $ref: '#/components/schemas/UUID'
         required:
           - kind
-          - documents
     IdDocument:
       description: Details of the ID document used to verify the person's identity.
       type: object
@@ -4322,23 +4866,62 @@ components:
       required:
         - number
         - kind
+    SectionState:
+      description: |
+        The state of a profile section:
+
+        * `infoRequired`: The partner can still submit or update this section.
+        * `submitted`: All required information has been provided; awaiting review.
+        * `approved`: The section has been approved.
+        * `rejected`: Final rejection; no resubmission possible.
+      type: string
+      example: infoRequired
+      enum:
+        - infoRequired
+        - submitted
+        - approved
+        - rejected
+    ProfileSection:
+      description: A profile section with its current state.
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/SectionState'
+    VerificationItem:
+      description: A single verification entry with its current state.
+      type: object
+      properties:
+        kind:
+          description: The type of verification.
+          type: string
+          example: idDocument
+          enum:
+            - idDocument
+            - facialSimilarity
+            - proofOfResidency
+            - sourceOfFunds
+        state:
+          $ref: '#/components/schemas/SectionState'
+      required:
+        - kind
+        - state
     ProfileState:
       description: |
         The state of the profile lifecycle:
 
-        * `created`: The profile has been created but no details have been submitted.
-        * `pending`: The details have been submitted and are being processed.
-        * `approved`: The profile is active and all Monerium services are supported.
-        * `rejected`: The applicant details did not meet the compliance requirements of Monerium. Details can be fixed and re-submitted for processing.
-        * `blocked`: Monerium is unable to offer the applicant services because of compliance reasons. Details cannot be re-submitted.
+        * `created`: The profile has been created but no data has been submitted yet.
+        * `infoRequired`: One or more sections still require information. The partner can submit or update data.
+        * `submitted`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `infoRequired`.
+        * `approved`: The profile is active and all Monerium services are available.
+        * `rejected`: Final rejection — the applicant details did not meet compliance requirements.
       type: string
-      example: pending
+      example: infoRequired
       enum:
         - created
-        - pending
+        - infoRequired
+        - submitted
         - approved
         - rejected
-        - blocked
     ProfileKind:
       description: String identifier specifying the type of the profile.
       type: string
@@ -4364,14 +4947,8 @@ components:
           description: The Profile name. This can be a corporate or an individual.
           type: string
           example: user@example.com
-        perms:
-          description: List containing the different identifiers specifying the permission the user has on the profile.
-          type: array
-          items:
-            type: string
-            enum:
-              - read
-              - write
+        state:
+          $ref: '#/components/schemas/ProfileState'
     TimeStamp:
       description: "The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
       type: string
@@ -4568,14 +5145,38 @@ tags:
       Access to these endpoints need to be granted to your app by the Monerium team.
 
       Monerium can offer applicable partners a KYC reliance or sharing agreement that can streamline the onboarding process for its customers.
-      It is worth noting that Monerium is always ultimately responsible for conducting due diligence and monitoring the business relationship.
-      If you are interested in such capabilities, please contact us in our [discord channel](https://discord.com/channels/1286150637452660798/1293171908082274427).
+
+      ### Coming soon
+
+      Some endpoints are not yet live and are marked with the following label:
+
+      <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+      </span>
+
+      These endpoints are part of an upcoming release. The interface is documented here for early integration work and feedback but is not yet available in production or sandbox.
   - name: auth
     x-displayName: Authentication
     description: 'Endpoints that handle user creation, authorization, and authentication.'
   - name: profiles
     x-displayName: Profiles
-    description: 'Customers are represented by profiles whose identifier is the profile ID created at [sign up](#operation/auth-signup). The profile can be either personal or corporate. A profile owns most resources, such as IBANs and addresses.'
+    description: |
+      A profile represents a customer undergoing KYC onboarding. It can be personal or corporate.
+      The profile owns most resources such as IBANs and addresses.
+
+      **Recommended onboarding flow (KYC sharing via Sumsub)**
+
+      1. [`POST /profiles`](#operation/create-profile) — create a new profile.
+      2. [`POST /profiles/{profile}/share`](#operation/share-profile-kyc) — reuse an existing Sumsub applicant to automatically populate `details` and `verifications`.
+      3. [`PATCH /profiles/{profile}/form`](#operation/patch-profile-form) — submit additional data (e.g. purpose of account).
+      4. Listen for [`profile.updated`](#operation/webhook-profile-updated) webhooks and check whether the overall `state` is `approved` or whether a verification (e.g. `sourceOfFunds`) is `infoRequired`.
+      5. If `sourceOfFunds` is `infoRequired`, submit it via [`PATCH /profiles/{profile}/verifications`](#operation/patch-profile-verifications).
+
+      **KYC reliance model**
+
+      If your platform holds the appropriate licences and Monerium has agreed a KYC reliance arrangement with you,
+      you may submit customer details directly via [`PATCH /profiles/{profile}/details`](#operation/patch-profile-details)
+      instead of using the Sumsub share flow.
   - name: addresses
     x-displayName: Addresses
     description: 'A blockchain address, often called a public key or wallet address, is a unique identifier within a blockchain that serves as a destination for sending, receiving, or storing digital assets, such as the EURe onchain fiat token.'
@@ -4621,9 +5222,24 @@ tags:
       then the signature sent in the `webhook-signature` header for a secret `whsec_mUt3nH+3wx/djdHf8RHn9yJMMiAhq10b` is: `v1,4gOAiajJT7ah++XpDFdRyK/TJ75whRjUcKOWnvsHNlk=`
 
       Please note that the payload  must be used exactly as it was received, without any modifications or formatting changes as any changes will result in a different signature.
+  - name: deprecated
+    x-displayName: Deprecated
+    description: Endpoints that have been superseded by newer alternatives. They remain available for backward compatibility but should not be used in new integrations.
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-04-08:
+      * [POST /profiles](#operation/create-profile) - New endpoint to create a profile. Replaces `POST /auth/signup` as the entry point for partner-led onboarding. Requires `kind` (`personal` or `corporate`), which determines the body structure used in subsequent PATCH and share endpoints.
+      * [POST /auth/signup](#operation/auth-signup) - Deprecated; use [POST /profiles](#operation/create-profile) instead.
+      * [GET /profiles/{profile}](#operation/profile) - Response now includes `details`, `form`, and `verifications` sections, each with their own `state`.
+      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - New endpoint to reuse KYC data from a third-party provider (e.g. Sumsub). Populates `details` and `verifications` automatically. `form` must still be submitted separately via `PATCH /profiles/{profile}/form`.
+      * [PATCH /profiles/{profile}/details](#operation/patch-profile-details), [PATCH /profiles/{profile}/form](#operation/patch-profile-form), [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - New partial-update endpoints. Preferred over the PUT variants.
+      * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Each verification item takes a `kind` and a `fileId` directly.
+      * [PUT /profiles/{profile}/details](#operation/submit-profile-details), [PUT /profiles/{profile}/form](#operation/submit-profile-form), [PUT /profiles/{profile}/verifications](#operation/submit-profile-verifications) - Deprecated; use the PATCH variants instead.
+      * `enhancedDueDiligence` renamed to `sourceOfFunds` in verification kinds.
+      * `ProfileState` simplified: removed `pending` and `blocked`. Active states are `created`, `infoRequired`, `submitted`, `approved`, `rejected`. The `submitted` state blocks further submissions until the profile transitions to `approved`, `rejected`, or `infoRequired`.
+
+
       ### 2026-02-25:
       * Orders now include `txHashes` in the `meta` field, containing the blockchain transaction hashes for the mint or burn. Only present once the order has been processed on-chain.
 
