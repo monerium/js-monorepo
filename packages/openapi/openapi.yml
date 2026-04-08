@@ -822,16 +822,16 @@ paths:
                 id: 4f079ef8-6d26-11eb-9bc8-acde48001122
                 kind: personal
                 name: Jane Doe
-                state: infoRequired
+                state: incomplete
                 details:
-                  state: infoRequired
+                  state: incomplete
                 form:
-                  state: infoRequired
+                  state: incomplete
                 verifications:
                   - kind: idDocument
-                    state: infoRequired
+                    state: incomplete
                   - kind: proofOfResidency
-                    state: infoRequired
+                    state: incomplete
         '400':
           description: BAD REQUEST
           content:
@@ -921,9 +921,9 @@ paths:
         Retrieves details about a single profile, including the state of each section.
 
         The response shows which sections (`details`, `form`, `verifications`) are still
-        `infoRequired`. Submit missing data via the PATCH endpoints or
+        `incomplete`. Submit missing data via the PATCH endpoints or
         [POST /profiles/{profile}/share](#operation/share-profile-kyc) until none
-        remain `infoRequired`, at which point the profile is ready for approval.
+        remain `incomplete`, at which point the profile is ready for approval.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -941,16 +941,16 @@ paths:
                 $ref: '#/components/schemas/Profile'
               example:
                 kind: personal
-                state: infoRequired
+                state: incomplete
                 details:
-                  state: infoRequired
+                  state: incomplete
                 form:
-                  state: infoRequired
+                  state: incomplete
                 verifications:
                   - kind: idDocument
-                    state: infoRequired
+                    state: incomplete
                   - kind: proofOfResidency
-                    state: infoRequired
+                    state: incomplete
         '401':
           description: UNAUTHORIZED
           content:
@@ -991,7 +991,7 @@ paths:
 
         Monerium uses the supplied token to fetch data from the provider and updates the
         relevant sections. Each section that receives sufficient data transitions to
-        `submitted`; any that remain incomplete stay `infoRequired`.
+        `submitted`; any that remain incomplete stay `incomplete`.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -4870,14 +4870,14 @@ components:
       description: |
         The state of a profile section:
 
-        * `infoRequired`: The partner can still submit or update this section.
+        * `incomplete`: The partner can still submit or update this section.
         * `submitted`: All required information has been provided; awaiting review.
         * `approved`: The section has been approved.
         * `rejected`: Final rejection; no resubmission possible.
       type: string
-      example: infoRequired
+      example: incomplete
       enum:
-        - infoRequired
+        - incomplete
         - submitted
         - approved
         - rejected
@@ -4910,15 +4910,15 @@ components:
         The state of the profile lifecycle:
 
         * `created`: The profile has been created but no data has been submitted yet.
-        * `infoRequired`: One or more sections still require information. The partner can submit or update data.
-        * `submitted`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `infoRequired`.
+        * `incomplete`: One or more sections still require information. The partner can submit or update data.
+        * `submitted`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`.
         * `approved`: The profile is active and all Monerium services are available.
         * `rejected`: Final rejection — the applicant details did not meet compliance requirements.
       type: string
-      example: infoRequired
+      example: incomplete
       enum:
         - created
-        - infoRequired
+        - incomplete
         - submitted
         - approved
         - rejected
@@ -5169,8 +5169,8 @@ tags:
       1. [`POST /profiles`](#operation/create-profile) — create a new profile.
       2. [`POST /profiles/{profile}/share`](#operation/share-profile-kyc) — reuse an existing Sumsub applicant to automatically populate `details` and `verifications`.
       3. [`PATCH /profiles/{profile}/form`](#operation/patch-profile-form) — submit additional data (e.g. purpose of account).
-      4. Listen for [`profile.updated`](#operation/webhook-profile-updated) webhooks and check whether the overall `state` is `approved` or whether a verification (e.g. `sourceOfFunds`) is `infoRequired`.
-      5. If `sourceOfFunds` is `infoRequired`, submit it via [`PATCH /profiles/{profile}/verifications`](#operation/patch-profile-verifications).
+      4. Listen for [`profile.updated`](#operation/webhook-profile-updated) webhooks and check whether the overall `state` is `approved` or whether a verification (e.g. `sourceOfFunds`) is `incomplete`.
+      5. If `sourceOfFunds` is `incomplete`, submit it via [`PATCH /profiles/{profile}/verifications`](#operation/patch-profile-verifications).
 
       **KYC reliance model**
 
@@ -5237,7 +5237,8 @@ tags:
       * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Each verification item takes a `kind` and a `fileId` directly.
       * [PUT /profiles/{profile}/details](#operation/submit-profile-details), [PUT /profiles/{profile}/form](#operation/submit-profile-form), [PUT /profiles/{profile}/verifications](#operation/submit-profile-verifications) - Deprecated; use the PATCH variants instead.
       * `enhancedDueDiligence` renamed to `sourceOfFunds` in verification kinds.
-      * `ProfileState` simplified: removed `pending` and `blocked`. Active states are `created`, `infoRequired`, `submitted`, `approved`, `rejected`. The `submitted` state blocks further submissions until the profile transitions to `approved`, `rejected`, or `infoRequired`.
+      * `ProfileState` simplified: removed `pending` and `blocked`. Active states are `created`, `incomplete`, `submitted`, `approved`, `rejected`. The `submitted` state blocks further submissions until the profile transitions to `approved`, `rejected`, or `incomplete`.
+      * `info_required` state renamed to `incomplete` across profile and section states.
 
 
       ### 2026-02-25:
