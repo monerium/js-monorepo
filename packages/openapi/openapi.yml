@@ -787,6 +787,9 @@ paths:
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
         </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+        </span>
 
         Create a new profile. The `kind` determines whether the `personal` or `corporate`
         body structure is used in the subsequent form, verifications, and share endpoints.
@@ -979,6 +982,9 @@ paths:
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
         </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+        </span>
 
         Reuse KYC data from a third-party provider (e.g. Sumsub) to populate the profile's
         `details` and `verifications`.
@@ -1072,6 +1078,9 @@ paths:
       description: |
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
         </span>
 
         Submit the compliance details for a profile. The complete set of required fields must be included in the request body — this endpoint updates the `details` section of the profile without affecting other sections.
@@ -1337,6 +1346,9 @@ paths:
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
         </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+        </span>
 
         Submit the additional data for a profile. The complete set of required fields must be included in the request body — this endpoint updates the `form` section of the profile without affecting other sections.
 
@@ -1580,6 +1592,9 @@ paths:
       description: |
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
           Requires extra privileges
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
         </span>
 
         Submit verifications for a profile. Only the verifications provided are updated.
@@ -5130,8 +5145,16 @@ tags:
       Access to these endpoints need to be granted to your app by the Monerium team.
 
       Monerium can offer applicable partners a KYC reliance or sharing agreement that can streamline the onboarding process for its customers.
-      It is worth noting that Monerium is always ultimately responsible for conducting due diligence and monitoring the business relationship.
-      If you are interested in such capabilities, please contact us in our [discord channel](https://discord.com/channels/1286150637452660798/1293171908082274427).
+
+      ### Coming soon
+
+      Some endpoints are not yet live and are marked with the following label:
+
+      <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Coming soon
+      </span>
+
+      These endpoints are part of an upcoming release. The interface is documented here for early integration work and feedback but is not yet available in production or sandbox.
   - name: auth
     x-displayName: Authentication
     description: 'Endpoints that handle user creation, authorization, and authentication.'
