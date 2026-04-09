@@ -64,6 +64,8 @@ const isValidEvmName = (chain: string) => {
   switch (chain) {
     case 'ethereum':
     case 'sepolia':
+    case 'basesepolia':
+    case 'base':
     case 'polygon':
     case 'amoy':
     case 'gnosis':
@@ -239,6 +241,10 @@ export const getChain = (chainId: number): Chain => {
       return 'polygon';
     case 80002:
       return 'amoy';
+    case 8453:
+      return 'base';
+    case 84532:
+      return 'basesepolia';
     case 42161:
       return 'arbitrum';
     case 421614:
@@ -300,6 +306,8 @@ const chainNameBackwardsCompatibility = (
     switch (chain) {
       case 'ethereum':
         return 'sepolia';
+      case 'base':
+        return 'basesepolia';
       case 'polygon':
         return 'amoy';
       case 'gnosis':

@@ -15,6 +15,7 @@ export type SandboxChain =
   | 'arbitrumsepolia'
   | 'lineasepolia'
   | 'scrollsepolia'
+  | 'basesepolia'
   | 'columbus'
   | 'grand';
 
@@ -25,6 +26,7 @@ export type ProductionChain =
   | 'arbitrum'
   | 'linea'
   | 'scroll'
+  | 'base'
   | 'camino'
   | 'noble';
 
@@ -40,6 +42,8 @@ export type EvmChainId =
   | 501 // camino columbus
   | 137 // polygon
   | 80002 // polygon amoy
+  | 8453 // base
+  | 84532 // base sepolia
   | 42161 // arbitrum
   | 421614 // arbitrum sepolia
   | 59141 // linea sepolia
