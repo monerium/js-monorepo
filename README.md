@@ -18,7 +18,12 @@ To develop apps and packages, run the following command:
 pnpm dev
 # or just developer portal
 pnpm dev --filter=developer
+
+# To install a dependency for a certain app/package
+pnpm add wagmi --filter=@monerium/sdk
 ```
+
+>
 
 Note: use `pnpm dev --log-order stream` for a more traditional log output. Or set `"ui": "stream"` in the `turbo.json` file to make it the default.
 

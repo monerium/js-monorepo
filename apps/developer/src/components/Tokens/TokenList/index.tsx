@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import styles from './TokenList.module.css';
 import { findMatchingUrlAndVersion } from './util';
+import { Icon } from '@iconify/react';
 
 interface Token {
   address: string;
@@ -74,9 +75,11 @@ export const TokenList: FC<TokenListProps> = ({ networks }) => {
                     {token.symbol}
                   </div>
                   <div className={styles.tColAddress}>
-                    {`${token.address.slice(0, 6)}...${token.address.slice(-4)}`}{' '}
+                    <span title={token.address}>
+                      {`${token.address.slice(0, 6)}...${token.address.slice(-4)}`}{' '}
+                    </span>
                     <button onClick={() => copyToClipboard(token.address)}>
-                      <i className="fa-regular fa-copy" aria-hidden="true" />
+                      <Icon icon="solar:copy-line-duotone" />
                     </button>{' '}
                     <a
                       target="_blank"

@@ -15,10 +15,11 @@
     "clean": "rm -rf build node_modules .turbo"
   },
   "dependencies": {
-    "@monerium/openapi": "workspace:*",
     "@docusaurus/core": "3.7.0",
     "@docusaurus/preset-classic": "3.7.0",
+    "@iconify/react": "^6.0.2",
     "@mdx-js/react": "^3.0.0",
+    "@monerium/openapi": "workspace:*",
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
