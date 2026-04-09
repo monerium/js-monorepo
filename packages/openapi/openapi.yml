@@ -36,7 +36,7 @@ paths:
                     example: Welcome to the Monerium API
                   docs:
                     type: string
-                    example: 'https://monerium.dev'
+                    example: 'https://docs.monerium.com'
                   twitter:
                     type: string
                     example: 'https://twitter.com/monerium'
@@ -52,7 +52,7 @@ paths:
       description: |
         Users must grant your application authorization to access their data.
 
-        This endpoint issues a Temporary Redirect (HTTP 307) to the [Authorization Code Flow](/docs/getting-started/auth-flow) where users can sign up, onboard, connect their wallets and authorize your app to access to their data.
+        This endpoint issues a Temporary Redirect (HTTP 307) to the [Authorization Code Flow](/getting-started#auth-flow) where users can sign up, onboard, connect their wallets and authorize your app to access to their data.
 
         Use the `Authorization Code Flow client_id` and the other parameters below to redirect users to the Monerium onboarding screen.
 
@@ -61,11 +61,11 @@ paths:
         Alternatively a "Sign in with Ethereum" (SIWE) flow can be used for existing Monerium customers. In this case the payload must include a valid
         [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361) message and signature. On successful authorization the authorization code is returned at once.
 
-        This authorization code is then used to request an access token via the [token endpoint](/api-docs#operation/auth-token).
+        This authorization code is then used to request an access token via the [token endpoint](/api#operation/auth-token).
 
         **Additional material**:
-        - [Getting started: Authorization Code Flow](/docs/getting-started/auth-flow)
-        - [Using the Monerium API: Authentication & Authorization](/docs/api#authorization)
+        - [Getting started: Authorization Code Flow](/getting-started#auth-flow)
+        - [Using the Monerium API: Authentication & Authorization](/api#authorization)
       requestBody:
         required: true
         content:
@@ -80,9 +80,9 @@ paths:
                         code_challenge:
                           description: |
                             Generated challenge from the `code_verifier`.
-                            You must use the same `code_verifier` when [requesting an access token](/api-docs#operation/auth-token).
+                            You must use the same `code_verifier` when [requesting an access token](/api#operation/auth-token).
 
-                            Read more about [code challenges for PKCE](/docs/api#authorization)
+                            Read more about [code challenges for PKCE](/authorization/#pkce)
                           type: string
                           example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
                         code_challenge_method:
@@ -138,9 +138,9 @@ paths:
                         code_challenge:
                           description: |
                             Generated challenge from the `code_verifier`.
-                            You must use the same `code_verifier` when [requesting an access token](/api-docs#operation/auth-token).
+                            You must use the same `code_verifier` when [requesting an access token](/api#operation/auth-token).
 
-                            Read more about [code challenges for PKCE](/docs/api#authorization)
+                            Read more about [code challenges for PKCE](/authorization/#pkce)
                           type: string
                           example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
                         code_challenge_method:
@@ -434,7 +434,7 @@ paths:
 
         For mobile and web apps that cannot securely store a client secret without exposing it to the users.
 
-        Your application acquires an authorization `code` through the [PKCE authorization flow](/docs/api#auth-code).
+        Your application acquires an authorization `code` through the [PKCE authorization flow](/api#auth-code).
         you can use this authorization code to obtain an `access_token` and a `refresh_token` using `grant_type=authorization_code`.
 
         The access token can then be used to authenticate all requests for the following hour, after which the token must be refreshed using the `refresh_token` with `grant_type=refresh_token`.
@@ -470,7 +470,7 @@ paths:
                         code_verifier:
                           description: |
                             The randomized string that was used to create the `code_challenge` when a customer/user enters the partner authorization flow.
-                            Read more about [code challenges for PKCE](/docs/api#authorization)
+                            Read more about [code challenges for PKCE](/authorization/#pkce)
                           type: string
                           example: KO2yF8CUSxU8KJepixDmXdiCOFTMMZFLDmVjNd4J2VhbFUSSgU1lXl0aYyWYK8hIZIEH9bEBDeJ78CIuNoeOIcZOybzzqFlIGedtclJ7ZTKF6GmRBZ4fdMvg6OXnf2dl
                         redirect_uri:
@@ -515,7 +515,7 @@ paths:
                         client_secret:
                           description: |
                             Secret that was created when the app was registered.
-                            Read more: [Client Credentials.](docs/api#auth-client-credentials)
+                            Read more: [Client Credentials.](api#auth-client-credentials)
                           type: string
                       required:
                         - client_id
@@ -2702,7 +2702,7 @@ paths:
                 $ref: '#/components/schemas/ForbiddenError'
       externalDocs:
         description: Read more about how to upload a file.
-        url: /api-docs/v2#tag/files/operation/upload-file
+        url: /api#tag/files/operation/upload-file
       security:
         - BearerAuth: []
       tags:
@@ -3233,7 +3233,7 @@ paths:
     get:
       operationId: tokens
       summary: Tokens
-      description: 'Information about the emoney tokens with tickers, symbols, decimals, token contract address and the chain information, we currently support Ethereum, Polygon and Gnosis.</br></br> Token addresses and details here: [/docs/tokens/](/docs/tokens)'
+      description: 'Information about the emoney tokens with tickers, symbols, decimals, token contract address and the chain information, we currently support Ethereum, Polygon and Gnosis.</br></br> Token addresses and details here: [/tokens/](/tokens)'
       responses:
         '200':
           description: OK
@@ -4240,12 +4240,12 @@ components:
       pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
     AuthClientID:
       description: |
-        The [Authorization Code Flow](/docs/getting-started/auth-flow) client ID of your application.
+        The [Authorization Code Flow](/getting-started#auth-flow) client ID of your application.
       type: string
       $ref: '#/components/schemas/UUID'
     CredentialsClientID:
       description: |
-        The [Client Credentials Authorization](docs/api#auth-client-credentials) client ID of your application.
+        The [Client Credentials Authorization](api#auth-client-credentials) client ID of your application.
       type: string
       $ref: '#/components/schemas/UUID'
     PersonalDetails:
@@ -5097,7 +5097,7 @@ tags:
         - **Sandbox API URL:** `https://api.monerium.dev`
         - **Sandbox web app:** `https://sandbox.monerium.dev`
 
-        Before onboarding users via your application, you must [register your application](/docs/getting-started/create-app) with Monerium.
+        Before onboarding users via your application, you must [register your application](/getting-started#setup) with Monerium.
 
         When you are ready to go live, then you can register your application in our production environment:
 
