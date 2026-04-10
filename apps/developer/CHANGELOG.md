@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/monerium/js-monorepo/compare/developer-v1.1.2...developer-v1.1.3) (2026-04-09)
+
+
+### Bug Fixes
+
+* copy button was invisible ([9912fa1](https://github.com/monerium/js-monorepo/commit/9912fa174fc408437e4966e325d3ba9a9104c61c))
+
 ## [1.1.2](https://github.com/monerium/js-monorepo/compare/developer-v1.1.1...developer-v1.1.2) (2026-02-23)
 
 

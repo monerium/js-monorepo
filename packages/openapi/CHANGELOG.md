@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.1.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.3...openapi-v2.1.0) (2026-04-09)
+
+
+### Features
+
+* **api:** Orders now include txHashes in the meta field ([b65c40f](https://github.com/monerium/js-monorepo/commit/b65c40f842c65943c05cbc77d5437cc7c44d6a7c))
+
+
+### Bug Fixes
+
+* links overwritten by b65c40f ([e478344](https://github.com/monerium/js-monorepo/commit/e478344a9105ce7b477aa402abf7bda7380cf402))
+
+
+### Documentation
+
+* **api:** change profile state from infoRequired to incomplete ([4101d77](https://github.com/monerium/js-monorepo/commit/4101d77fa0032843f6cf7e40c41c57c5fefd90ac))
+* **api:** new profile endpoints ([cf83489](https://github.com/monerium/js-monorepo/commit/cf83489c77b2df0cc35559af8ad635851a1509a8))
+
 ## [2.0.3](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.2...openapi-v2.0.3) (2026-02-23)
 
 

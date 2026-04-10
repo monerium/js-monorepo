@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.6](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.5...sdk-react-provider-v1.3.6) (2026-04-09)
+
+
+### Bug Fixes
+
+* npm 401 ([28669cb](https://github.com/monerium/js-monorepo/commit/28669cb308c46ee9038b596244573676369b17a6))
+
 ## [1.3.5](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.4...sdk-react-provider-v1.3.5) (2026-02-23)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.4.11](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.10...sdk-v3.4.11) (2026-04-09)
+
+
+### Miscellaneous
+
+* add base and basesepolia ([d206f28](https://github.com/monerium/js-monorepo/commit/d206f2895369224a877e888634caa6c4760d66b8))
+
 ## [3.4.10](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.9...sdk-v3.4.10) (2026-02-23)
 
 
