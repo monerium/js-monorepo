@@ -61,7 +61,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
 
       # setup-node always sets NODE_AUTH_TOKEN to the GitHub token, which breaks
       # OIDC Trusted Publisher auth. We clear it here so npm can pick up the
