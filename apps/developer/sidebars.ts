@@ -23,7 +23,7 @@ const sidebars: SidebarsConfig = {
         type: 'doc',
         id: 'getting-started',
       },
-      items: ['authorization', 'environments', 'identifiers-and-formats'],
+      items: ['whitelabel', 'oauth', 'private', 'identifiers-and-formats'],
     },
     {
       type: 'category',
