@@ -65,7 +65,7 @@ paths:
 
         **Additional material**:
         - [Getting started: Authorization Code Flow](/getting-started#auth-flow)
-        - [Using the Monerium API: Authentication & Authorization](/api#authorization)
+        - [Using the Monerium API: Authentication & Authorization](/authorization)
       requestBody:
         required: true
         content:
