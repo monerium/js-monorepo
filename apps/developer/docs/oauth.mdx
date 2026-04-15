@@ -3,104 +3,46 @@ title: OAuth
 id: oauth
 ---
 
+import Authorization from './_partials/authorization.mdx';
 import LinkWallet from './_partials/link-wallet.mdx';
-import OnchainTokens from './_partials/onchain-tokens.mdx';
+import IBAN from './_partials/iban.mdx';
+import Orders from './_partials/orders.mdx';
 
 # OAuth
 
-The OAuth flow lets you offer Monerium services without managing compliance data. Users are redirected to a co-branded Monerium portal to complete KYC/KYB and authorize your application.
+The OAuth flow lets you offer Monerium services without managing compliance infrastructure. Users are redirected to a Monerium portal to complete KYC/KYB and authorize your application — you handle the product experience, Monerium handles the regulation.
 
-#### Who is it for?
+## Create an application
 
-- **Startups and DeFi apps:** Simple setup with no compliance infrastructure required.
-- **Community-focused projects:** Tap into the existing Monerium ecosystem — users can onboard with their existing accounts.
-- **Rapid prototyping:** Prove a business case before potentially upgrading to Whitelabel.
+1. Go to [sandbox.monerium.dev](https://sandbox.monerium.dev), open the user menu, and select **Developers**.
+2. Click **Create application** and select **OAuth**.
+3. Enter your application name and confirm.
+4. Copy the **CLIENT ID** from the credentials screen — you'll need it in the authorization flow below.
 
-#### Who is it NOT for?
+When you're ready for production, repeat this at [monerium.app](https://monerium.app). See [Going live](./getting-started#going-live) for the full checklist.
 
-- **Total brand ownership:** Not for partners requiring a fully headless experience.
-- **Siloed ecosystems:** Not for entities that need to strictly isolate users from the Monerium community.
+## Integration flow
 
-## Authorization flow
+1. **[Authorize](#authorization):** Redirect the user to Monerium. They log in or sign up, complete KYC/KYB, and grant your app access. You receive an authorization code, exchange it for tokens, and store the refresh token.
+2. **[Link a wallet](#link-wallet):** Associate a blockchain address with the user's profile.
+3. **[Issue an IBAN](#eur-iban):** Provision a dedicated IBAN once the profile is approved and a wallet is linked.
+4. **[Send and receive payments](#orders):** Place redeem orders and monitor status via polling or on-chain events.
 
-Uses the **Authorization Code Flow** with **PKCE**.
-
-1. **Redirect:** Direct the user to the Monerium portal.
-2. **Authentication & onboarding:** The user logs in or signs up. New users complete KYC/KYB within the Monerium interface.
-3. **Authorization:** The user grants your app permission to access their profile, balances, and payment details.
-4. **Callback:** The user is redirected to your `redirect_uri` with an authorization code.
-
-**Alternative — SIWE:** Existing Monerium customers can authenticate using **Sign-In with Ethereum (SIWE)** via a wallet signature instead of a password.
-
-## Authentication
-
-Exchange the authorization code for tokens via `POST /auth/token` with `grant_type=authorization_code`.
-
-### Token storage best practices
-
-- Store refresh tokens server-side in encrypted storage — never in localStorage or the frontend.
-- Keep access tokens (valid 1 hour) in-memory where possible.
-- Encrypt any database containing tokens.
+<Authorization />
 
 <LinkWallet />
 
-## IBAN
+<IBAN />
 
-[API Reference →](https://docs.monerium.com/api/#tag/ibans)
-
-Once a profile is approved and a wallet is linked, provision a dedicated IBAN.
-
-**Prerequisites:** Approved profile + linked wallet.
-
-OAuth users can also link wallets and manage IBANs directly within the **Monerium app**.
-
-**Provisioning:** Call the IBAN creation endpoint with the profile and wallet address. Takes a few seconds. Notified via `iban.updated` when active.
-
-**Moving an IBAN:** Use `PATCH /ibans` to re-associate an IBAN with a different wallet.
-
-**Capabilities:**
-- 1st and 3rd party SEPA payments with no inherent amount limits.
-- Incoming funds are automatically minted as EURe to the linked wallet within ~5 seconds.
-- Monerium covers all gas costs for minting.
-
-## Orders
-
-[API Reference →](https://docs.monerium.com/api/#tag/orders)
-
-### SEPA payments
-
-**Incoming (issue orders):** Fully autonomous — Monerium creates them automatically when funds arrive.
-
-**Outgoing (redeem orders):** Triggered via API. Monerium burns EURe from the linked wallet and sends a SEPA transfer from the user's IBAN. Typically processes within 5 seconds.
-
-### Bridging / Cross-chain
-
-Triggered by the partner. Initiates a redeem on the source chain and a dependent issue on the destination chain. No fees; Monerium covers gas.
-
-### Redeem order requirements
-
-- All redeem orders require a cryptographic signature from the linked wallet.
-- Orders over **15,000 EUR** require a `supportingDocumentId`. Upload via `/files` first.
-
-### Monitoring
+<Orders />
 
 :::info Webhooks not available for OAuth
-Webhooks are not available for OAuth integrations. Use alternative strategies to track order status.
+Webhooks require a server-side whitelabel integration. For OAuth, monitor order status by polling `GET /orders/{orderId}` or by watching for on-chain `Mint` and `Burn` events on the user's wallet.
 :::
-
-- **On-chain events:** Monitor the blockchain for **Mint** and **Burn** events on the user's wallet — the most reliable confirmation method.
-- **Polling:** Poll the order endpoints to check state transitions (e.g. `placed` → `processed`).
-
-### Endpoints
-
-- `POST /orders` — Initiate a redeem order.
-- `GET /orders` — List orders, filterable by `kind`, `state`, or `chain`.
-- `GET /orders/{orderId}` — Fetch order details including `txHashes`.
-
-<OnchainTokens />
 
 ## Going live
 
-1. **Verified profile:** Complete KYC/KYB and reach **Approved** state.
-2. **Sandbox integration:** Test redirect URIs, token exchange logic, and general flows.
-3. **Request production access:** Create the application in Production and submit for manual review.
+1. **Test in sandbox:** Verify the redirect flow, token exchange, wallet linking, and order placement.
+2. **Request production access:** Create the application in Production and submit for manual review.
+
+See the [Going live](./getting-started#going-live) section in Getting Started.

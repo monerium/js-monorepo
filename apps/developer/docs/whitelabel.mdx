@@ -12,16 +12,25 @@ import Orders from './_partials/orders.mdx';
 
 # Whitelabel
 
-Build under your own brand using the Monerium API. Your users never interact with Monerium interfaces, and each customer gets a dedicated IBAN and profile exclusive to your application.
+Embed regulated euro accounts and SEPA payments in your product under your own brand. Each customer gets a dedicated IBAN and on-chain address — your users interact only with your app, never with Monerium.
+
+## Create an application
+
+1. Go to [sandbox.monerium.dev](https://sandbox.monerium.dev), open the user menu, and select **Developers**.
+2. Click **Create application** and select **Whitelabel**.
+3. Enter your application name and confirm.
+4. Copy the **CLIENT ID** and **CLIENT SECRET** from the credentials screen — you'll need both for the client credentials flow below.
+
+When you're ready for production, repeat this at [monerium.app](https://monerium.app). See [Going live](./getting-started#going-live) for the full checklist.
 
 ## Integration flow
 
 1. **[Authenticate](#authentication):** Obtain an access token using Client Credentials.
-2. **[Create a profile](#create-a-profile):** Register a new customer with `POST /profiles`.
-3. **[Onboard the customer](#onboarding):** Submit KYC/KYB data via KYC Sharing or KYC Reliance. Monitor approval via webhooks.
-4. **[Link a wallet](#link-wallet):** Associate a blockchain address with the profile.
-5. **[Issue an IBAN](#iban):** Provision a dedicated IBAN once the profile is approved and a wallet is linked.
-6. **[Send and receive payments](#orders):** Place redeem orders for outgoing SEPA payments and bridging. Incoming payments are handled automatically.
+2. **[Set up webhooks](#webhooks):** Register your endpoint to receive events for profile approvals, IBAN provisioning, and payments.
+3. **[Onboard the customer](#onboarding):** Create a profile and submit identity data via KYC Sharing or KYC Reliance. Monitor approval via `profile.updated` webhooks.
+4. **[Link a wallet](#link-wallet):** Associate a blockchain address with the profile using a cryptographic proof of ownership.
+5. **[Issue an IBAN](#eur-iban):** Provision a dedicated IBAN once the profile is approved and a wallet is linked.
+6. **[Send and receive payments](#orders):** Place redeem orders for outgoing SEPA payments and cross-chain transfers. Incoming payments are handled automatically.
 
 <ClientCredentials />
 
@@ -34,7 +43,3 @@ Build under your own brand using the Monerium API. Your users never interact wit
 <IBAN />
 
 <Orders />
-
-## Going live
-
-See the [Going live](./getting-started#going-live) section in Getting Started.

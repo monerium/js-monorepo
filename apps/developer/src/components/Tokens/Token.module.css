@@ -3,3 +3,72 @@
     margin-top: 2rem;
   }
 }
+
+.tabs {
+  display: flex;
+  border-bottom: 2px solid var(--ifm-color-emphasis-200);
+  margin-bottom: 1rem;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-600);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--ifm-color-primary);
+}
+
+.tabActive {
+  color: var(--ifm-color-primary);
+  border-bottom-color: var(--ifm-color-primary);
+}
+
+/* Icons section */
+
+.iconCards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.iconCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  background: var(--ifm-background-color);
+}
+
+:global([data-theme='dark']) .iconCard {
+  background: var(--ifm-background-surface-color);
+}
+
+.iconFormat {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-600);
+  letter-spacing: 0.05em;
+}
+
+.downloadBtn {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.downloadBtn:hover {
+  text-decoration: underline;
+}

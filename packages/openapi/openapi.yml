@@ -109,13 +109,6 @@ paths:
                             **Recommended.** The state parameter will be included when redirecting back to your application.
                             It can be used to store request-specific data and/or prevent [CSRF attacks](https://auth0.com/docs/secure/attack-protection/state-parameters).
                           type: string
-                        address:
-                          description: You can force what address is to be linked in the Authorization Flow.
-                          $ref: '#/components/schemas/Address'
-                        signature:
-                          description: |
-                            In redirect to Monerium flow the address in the connect wallet step can be automatically linked by including same the signature used for [Link Address](#operation/link-address). The address will be automatically linked and the user continues to the next step. You must then also include the `address` property. Must include the `0x` prefix.
-                          type: string
                         email:
                           description: You can prefill the email field for login and sign up steps to ensure the user uses the correct email.
                           type: boolean
@@ -124,9 +117,6 @@ paths:
                           description: You can skip the KYC onboarding steps in the Authorization Flow during testing.
                           type: boolean
                           example: true
-                        chain:
-                          description: You can force what chain the address is linked to in the Authorization Flow.
-                          $ref: '#/components/schemas/Chain'
                       required:
                         - client_id
                         - code_challenge

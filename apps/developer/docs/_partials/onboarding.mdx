@@ -19,9 +19,6 @@ All requests act on your application's own profile by default. Include the custo
 
 <Endpoint method="POST" path="/profiles" href="https://docs.monerium.com/api/#tag/profiles/operation/create-profile" />
 
-<Tabs>
-  <TabItem value="node" label="Node.js">
-
 ```js
 const response = await fetch('https://api.monerium.dev/profiles', {
   method: 'POST',
@@ -36,30 +33,6 @@ const response = await fetch('https://api.monerium.dev/profiles', {
 const { id: profileId, state } = await response.json();
 // Store profileId — required for all subsequent requests
 ```
-
-  </TabItem>
-  <TabItem value="go" label="Go">
-
-```go
-body, _ := json.Marshal(map[string]string{"kind": "personal"}) // or "corporate"
-
-req, _ := http.NewRequest("POST", "https://api.monerium.dev/profiles", bytes.NewBuffer(body))
-req.Header.Set("Authorization", "Bearer "+accessToken)
-req.Header.Set("Content-Type", "application/json")
-req.Header.Set("Accept", "application/vnd.monerium.api-v2+json")
-
-resp, _ := client.Do(req)
-
-var profile struct {
-  ID    string `json:"id"`
-  State string `json:"state"`
-}
-json.NewDecoder(resp.Body).Decode(&profile)
-// Store profile.ID — required for all subsequent requests
-```
-
-  </TabItem>
-</Tabs>
 
 ### 2. Submit customer details
 

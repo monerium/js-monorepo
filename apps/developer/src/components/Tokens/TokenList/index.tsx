@@ -25,124 +25,151 @@ export interface ApiChain {
   color: string;
 }
 
-export interface ChainWithTokens extends ApiChain {
-  tokens: ApiToken[];
+export interface ChainEntry {
+  chain: ApiChain;
+  token: ApiToken;
 }
 
-const ChainAccordion: FC<{ chain: ChainWithTokens }> = ({ chain }) => {
+function short(addr: string): string {
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+}
+
+const ChainAccordion: FC<{ entry: ChainEntry }> = ({ entry }) => {
+  const { chain, token } = entry;
   const [expanded, setExpanded] = useState(false);
-  const [copied, setCopied] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
-  const copyToClipboard = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    setCopied(text);
-    setTimeout(() => setCopied(null), 2000);
+  const explorerUrl = `${chain.explorerUrl}/token/${token.address}`;
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(token.address);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  const explorerUrl = (token: ApiToken): string | null => {
-    if (!token.address || chain.kind === 'cosmos') return null;
-    return `${chain.explorerUrl}/token/${token.address}`;
-  };
+  const copyIcon = copied ? 'solar:check-circle-linear' : 'solar:copy-line-duotone';
 
   return (
     <div className={styles.accordion}>
-      <button
+      <div
         className={styles.header}
-        style={{ backgroundColor: chain.color }}
         onClick={() => setExpanded(!expanded)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' || e.key === ' ' ? setExpanded(!expanded) : undefined}
       >
         <div className={styles.headerLeft}>
           <img
             src={chain.logo}
-            width={26}
-            height={26}
+            width={32}
+            height={32}
             alt={chain.label}
             className={styles.chainLogo}
           />
           <span className={styles.chainName}>{chain.label}</span>
-          <span className={styles.chainIdBadge}>{chain.chainId}</span>
         </div>
         <div className={styles.headerRight}>
-          <div className={styles.tokenBadges}>
-            {chain.tokens.map((t) => (
-              <span key={t.symbol} className={styles.tokenBadge}>
-                {t.symbol}
+          {!expanded && (
+            <>
+              <span
+                className={`${styles.addressPill} ${styles.addressFull}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {token.address}
               </span>
-            ))}
+              <span
+                className={`${styles.addressPill} ${styles.addressShort}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {short(token.address)}
+              </span>
+              <button
+                className={styles.iconBtn}
+                onClick={(e) => { e.stopPropagation(); copyToClipboard(); }}
+                title="Copy address"
+              >
+                <Icon icon={copyIcon} width={16} />
+              </button>
+              <a
+                href={explorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.iconBtn}
+                title={`View on ${chain.explorerName}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Icon icon="solar:arrow-right-up-linear" width={16} />
+              </a>
+            </>
+          )}
+          <div className={`${styles.iconBtn} ${expanded ? styles.iconBtnActive : ''}`}>
+            <Icon
+              icon="solar:alt-arrow-down-linear"
+              width={16}
+              className={`${styles.chevron} ${expanded ? styles.chevronExpanded : ''}`}
+            />
           </div>
-          <Icon
-            icon={
-              expanded
-                ? 'solar:alt-arrow-up-linear'
-                : 'solar:alt-arrow-down-linear'
-            }
-            className={styles.chevron}
-          />
         </div>
-      </button>
+      </div>
 
       {expanded && (
         <div className={styles.body}>
-          {chain.tokens.map((token) => {
-            const url = explorerUrl(token);
-            const isCopied = copied === token.address;
-            return (
-              <div key={token.symbol} className={styles.tokenRow}>
-                <span className={styles.tokenSymbol}>{token.symbol}</span>
-                <div className={styles.tokenAddress}>
-                  {token.address ? (
-                    <>
-                      <code className={styles.address}>{token.address}</code>
-                      <button
-                        className={styles.iconBtn}
-                        onClick={() => copyToClipboard(token.address)}
-                        title="Copy address"
-                      >
-                        <Icon
-                          icon={
-                            isCopied
-                              ? 'solar:check-circle-linear'
-                              : 'solar:copy-line-duotone'
-                          }
-                        />
-                      </button>
-                      {url && (
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={styles.iconBtn}
-                          title={`View on ${chain.explorerName}`}
-                        >
-                          <Icon icon="solar:arrow-right-up-linear" />
-                        </a>
-                      )}
-                    </>
-                  ) : (
-                    <span className={styles.noAddress}>—</span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Address</span>
+            <div className={styles.detailValue}>
+              <span className={`${styles.addressPill} ${styles.addressPillExpanded}`}>
+                {token.address}
+              </span>
+              <button className={styles.iconBtn} onClick={copyToClipboard} title="Copy address">
+                <Icon icon={copyIcon} width={16} />
+              </button>
+              <a
+                href={explorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.iconBtn}
+                title={`View on ${chain.explorerName}`}
+              >
+                <Icon icon="solar:arrow-right-up-linear" width={16} />
+              </a>
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Chain ID</span>
+            <span className={styles.detailText}>{chain.chainId}</span>
+          </div>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Token</span>
+            <span className={styles.detailText}>
+              {token.symbol} &middot; {token.decimals} decimals
+            </span>
+          </div>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Explorer</span>
+            <a
+              href={chain.explorerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.explorerLink}
+            >
+              {chain.explorerName}{' '}
+              <Icon icon="solar:arrow-right-up-linear" width={12} />
+            </a>
+          </div>
         </div>
       )}
     </div>
   );
 };
 
-interface ChainListProps {
-  chains: ChainWithTokens[];
-}
-
-export const ChainList: FC<ChainListProps> = ({ chains }) => {
-  if (!chains.length) {
+export const ChainList: FC<{ entries: ChainEntry[] }> = ({ entries }) => {
+  if (!entries.length) {
     return <div className={styles.loading}>Loading…</div>;
   }
   return (
     <div className={styles.chainList}>
-      {chains.map((chain) => (
-        <ChainAccordion key={chain.id} chain={chain} />
+      {entries.map((entry) => (
+        <ChainAccordion key={entry.chain.id} entry={entry} />
       ))}
     </div>
   );
