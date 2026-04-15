@@ -3,224 +3,104 @@ title: OAuth
 id: oauth
 ---
 
+import LinkWallet from './_partials/link-wallet.mdx';
+import OnchainTokens from './_partials/onchain-tokens.mdx';
+
 # OAuth
 
-The **OAuth** flow is designed for rapid integration, allowing you to offer Monerium services by leveraging our existing onboarding infrastructure. It is the fastest path for Web3 and DeFi projects to go live without the operational burden of managing compliance data. The OAuth flow uses a co-branded onboarding portal to handle user interactions. Instead of building your own KYC/KYB forms, you redirect users to a secure Monerium environment where they complete their setup and authorize your application to access their account.
+The OAuth flow lets you offer Monerium services without managing compliance data. Users are redirected to a co-branded Monerium portal to complete KYC/KYB and authorize your application.
 
 #### Who is it for?
 
-- **Startups and DeFi apps:** Ideal for teams looking for a simpler setup or beta testing without building compliance infrastructure.
-- **Community-focused projects:** Perfect for apps that want to tap into the existing Monerium ecosystem, allowing users to "one-click" onboard using their existing accounts.
-- **Rapid prototyping:** A great path for proving a business case before potentially upgrading to a Whitelabel solution.
+- **Startups and DeFi apps:** Simple setup with no compliance infrastructure required.
+- **Community-focused projects:** Tap into the existing Monerium ecosystem — users can onboard with their existing accounts.
+- **Rapid prototyping:** Prove a business case before potentially upgrading to Whitelabel.
 
 #### Who is it NOT for?
 
-- **Total brand ownership:** Not for partners who require a "headless" experience where the Monerium brand is completely hidden.
-- **Siloed ecosystems:** Not for entities that need to strictly isolate their users from the rest of the Monerium community.
+- **Total brand ownership:** Not for partners requiring a fully headless experience.
+- **Siloed ecosystems:** Not for entities that need to strictly isolate users from the Monerium community.
 
 ## Authorization flow
 
-The authorization process manages signup, onboarding, and permission granting in a single sequence using the **Authorization Code Flow** with **PKCE**.
+Uses the **Authorization Code Flow** with **PKCE**.
 
-1. **Redirect:** Your application directs the user to the Monerium portal.
-2. **Authentication & onboarding:** The user logs in with their credentials or signs up for a new account. If they are a new user, they complete the KYC/KYB process directly within the Monerium interface.
-3. **Authorization:** Once onboarded, the user grants your application permission to read their profile, balances, and payment details.
-4. **Callback:** The user is redirected back to your `redirect_uri` with an **authorization code** attached as a query parameter.
+1. **Redirect:** Direct the user to the Monerium portal.
+2. **Authentication & onboarding:** The user logs in or signs up. New users complete KYC/KYB within the Monerium interface.
+3. **Authorization:** The user grants your app permission to access their profile, balances, and payment details.
+4. **Callback:** The user is redirected to your `redirect_uri` with an authorization code.
 
-**Alternative: SIWE**, For existing Monerium customers, your app can optionally utilize **Sign-In with Ethereum (SIWE)**. This allows users to authenticate securely using their wallet signature instead of a username and password.
+**Alternative — SIWE:** Existing Monerium customers can authenticate using **Sign-In with Ethereum (SIWE)** via a wallet signature instead of a password.
 
 ## Authentication
 
-To interact with the API, your backend must exchange the authorization code for security tokens.
+Exchange the authorization code for tokens via `POST /auth/token` with `grant_type=authorization_code`.
 
-- **Endpoint:** `POST /auth/token`
-- **Grant type:** `authorization_code`
+### Token storage best practices
 
-### Best practices for token storage
+- Store refresh tokens server-side in encrypted storage — never in localStorage or the frontend.
+- Keep access tokens (valid 1 hour) in-memory where possible.
+- Encrypt any database containing tokens.
 
-- **Refresh tokens:** Store these exclusively in secure, server-side storage (such as an encrypted database or a dedicated secrets manager). They should never be exposed to the frontend or stored in localStorage.
-- **Access tokens:** These are short-lived (valid for one hour). Treat them as session keys and keep them in-memory where possible.
-- **Encryption at rest:** Ensure any database containing these tokens is encrypted to prevent data leaks.
-
-## Link wallet
-
-[API Reference →](https://docs.monerium.com/api/#tag/addresses)
-
-To enable financial operations, you must associate a specific wallet address with the user's Monerium profile. This connection serves as the permanent bridge between the legacy banking world and the decentralized ledger, acting as a mandatory prerequisite for issuing dedicated IBANs and orchestrating automated payments.
-
-OAuth users have the flexibility to link and verify their wallets directly within the **Monerium app**. This allows them to "bring their own wallet" to your application, removing the technical burden of developing a custom interface for cryptographic signatures.
-
-### Supported wallet types
-
-Monerium is chain-agnostic and compatible with any wallet capable of providing digital signatures. These generally fall into two categories:
-
-- **Externally Owned Accounts (EOAs):** Standard wallets (like MetaMask or Ledger) controlled directly by a private key.
-- **Smart Contract Wallets:** Advanced, programmable accounts (like Safe or Argent). Because these wallets don't have a private key, they utilize the **EIP-1271** standard to authorize actions via code logic.
-
-### On-chain vs. off-chain
-
-The choice between these two layers is about where the "proof" of an action is stored and who pays for it.
-
-| Feature          | Off-chain (Private Proof)                             | On-chain (Public Record)                                |
-| :--------------- | :---------------------------------------------------- | :------------------------------------------------------ |
-| **Data Storage** | Proof is sent to Monerium's private database via API. | Proof is written directly into the blockchain ledger.   |
-| **Cost**         | **Free.** Signing a message costs no "gas."           | **Costs Gas.** You pay the network to record the event. |
-| **Speed**        | **Instant.** No waiting for network confirmation.     | **Variable.** Dependent on block times.                 |
-| **Visibility**   | **Private**. Only you and Monerium see this link.     | **Public**. Visible to anyone on a block explorer.      |
-
-### Distinguishing between linking and transacting
-
-It is vital to distinguish when these layers are used:
-
-1. **Linking a Wallet:** This is almost always an **off-chain** proof of ownership. You are simply telling Monerium's database, "I own this address." No money moves, and the blockchain is not updated.
-2. **Signing a Transaction (Orders):** When you move funds (e.g., burning EURe to send a SEPA payment), the signature you provide is used to trigger an **on-chain** financial event. This changes the state of the blockchain and requires gas.
-
-### The Safe wallet
-
-A Safe wallet is unique because it is controlled by **Owners** rather than a single key. This leads to two specific paths for linking:
-
-#### The off-chain path (EIP-1271)
-
-This is the standard, recommended method. Instead of the Safe "signing" something, the individual Owners sign a message. Monerium then uses the **EIP-1271** standard to "call" the Safe contract and ask: _"Your owners just sent me these signatures. Based on your internal rules (like a 2-out-of-3 requirement), do you agree they are allowed to link this wallet?"_
-
-- **Why use it?** It is 100% secure, free, and provides an instant "Web2-style" experience without touching the blockchain.
-
-#### The on-chain path
-
-You can also link a Safe by sending a transaction directly to the blockchain (using the `signMessage` function). This records an "Authorized" flag inside the Safe's code on the public ledger.
-
-- **Why use it?** Use this only if your users (like large corporations) require an immutable, public audit trail of every permission granted.
-
-### The ownership verification handshake
-
-To ensure security and prevent unauthorized linking, Monerium employs a three-step cryptographic handshake:
-
-1. **The Challenge:** The Monerium API provides a unique, randomized message string.
-2. **The Signature:** The user signs this message with their wallet. This is an off-chain action that proves they possess the authority to control that address.
-3. **The Verification:** Your application submits this signature to Monerium. The API verifies the signature—either against a private key (EOA) or a contract (Smart Wallet)—and permanently links the address to the user's profile.
+<LinkWallet />
 
 ## IBAN
 
 [API Reference →](https://docs.monerium.com/api/#tag/ibans)
 
-Once a profile is approved and a wallet address has been successfully linked, you can provision a dedicated IBAN for that user. This IBAN serves as the primary gateway between the traditional Euro banking system (SEPA) and the blockchain.
+Once a profile is approved and a wallet is linked, provision a dedicated IBAN.
 
-### Prerequisites for IBAN issuance
+**Prerequisites:** Approved profile + linked wallet.
 
-- **Approved profile:** The user's KYC/KYB status must be "approved".
-- **Linked wallet:** A blockchain address must be successfully associated with the profile via a verified signature.
+OAuth users can also link wallets and manage IBANs directly within the **Monerium app**.
 
-### The provisioning process
+**Provisioning:** Call the IBAN creation endpoint with the profile and wallet address. Takes a few seconds. Notified via `iban.updated` when active.
 
-Requesting an IBAN is an asynchronous process managed through the API:
+**Moving an IBAN:** Use `PATCH /ibans` to re-associate an IBAN with a different wallet.
 
-- **Request:** Call the IBAN creation endpoint specifying the profile and the linked wallet address.
-- **Timing:** Provisioning typically takes only a few seconds.
-- **Confirmation:** Your system will be notified via the `iban.updated` webhook once the IBAN is active and ready for use.
-
-### Moving an IBAN
-
-If a user changes their preferred wallet or moves to a different blockchain, your application can programmatically move their existing IBAN.
-
-- **Mechanism:** Use the `PATCH /ibans` endpoint to re-associate an existing IBAN with a different linked wallet address.
-- **Note:** For security and compliance, moving an IBAN is a sensitive action that should be clearly communicated to the user within your interface.
-
-### Capabilities of the Monerium IBAN
-
-- **1st and 3rd party payments:** The IBAN can send and receive payments both to the user's own accounts and to third-party bank accounts.
-- **No amount limits:** There are no inherent limits on the transaction amounts these IBANs can handle.
-- **Automated logic:** Any funds received at this IBAN are automatically minted as EURe to the connected blockchain wallet within approximately 5 seconds.
-- **Gasless minting:** Monerium handles all blockchain gas costs associated with the automated minting of tokens to the user's wallet.
+**Capabilities:**
+- 1st and 3rd party SEPA payments with no inherent amount limits.
+- Incoming funds are automatically minted as EURe to the linked wallet within ~5 seconds.
+- Monerium covers all gas costs for minting.
 
 ## Orders
 
 [API Reference →](https://docs.monerium.com/api/#tag/orders)
 
-In the Monerium ecosystem, **Orders** are the primary objects used to move funds between the traditional banking system (SEPA) and the blockchain, or between different blockchain networks.
-
 ### SEPA payments
 
-SEPA payments bridge the traditional banking network with your users' blockchain wallets. These follow two distinct paths based on the direction of funds.
+**Incoming (issue orders):** Fully autonomous — Monerium creates them automatically when funds arrive.
 
-#### Incoming SEPA payments (issue orders)
-
-- **Automation:** These orders are **fully autonomous**. You do not need to place an order via the API; Monerium creates it automatically upon detecting incoming funds.
-- **Mechanism:** When a user receives a SEPA transfer to their dedicated IBAN, the system automatically mints the equivalent EURe tokens to the connected wallet.
-- **Counterpart:** Automated based on the incoming bank transfer.
-- **Monitoring:** Your backend should listen for the `order.created` webhook to detect when a new autonomous minting process begins.
-
-#### Outgoing SEPA payments (redeem orders)
-
-- **Manual action:** These payments must be **explicitly triggered** via the API.
-- **Mechanism:** Monerium "burns" the equivalent EURe tokens from the linked wallet and sends a standard SEPA credit transfer from the user's dedicated IBAN.
-- **Counterpart:** Defined using an IBAN identifier within the `counterpart` object.
-- **Execution time:** Typically processes within **5 seconds**.
+**Outgoing (redeem orders):** Triggered via API. Monerium burns EURe from the linked wallet and sends a SEPA transfer from the user's IBAN. Typically processes within 5 seconds.
 
 ### Bridging / Cross-chain
 
-Bridging allows for the seamless movement of EURe tokens between different supported blockchain networks (e.g., from Ethereum to Gnosis).
+Triggered by the partner. Initiates a redeem on the source chain and a dependent issue on the destination chain. No fees; Monerium covers gas.
 
-- **Mechanism:** A bridge transaction is **always triggered** by the partner. It initiates a **redeem order** on the source chain (to burn tokens). Subsequently, a dependent **issue order** is created on the destination chain (to mint tokens).
-- **Logic:** The source redeem order is the "master" order; it does not finalize unless the destination issue order is successfully processed, ensuring funds are never lost in transit.
-- **Counterpart:** Defined by a blockchain address and a chain identifier (e.g., `ethereum`, `gnosis`).
-- **Fees:** Monerium handles all gas costs for these transactions, and there are no service fees for bridging.
+### Redeem order requirements
 
-### General redeem order requirements
+- All redeem orders require a cryptographic signature from the linked wallet.
+- Orders over **15,000 EUR** require a `supportingDocumentId`. Upload via `/files` first.
 
-- Every redeem order requires a cryptographic signature from the linked wallet to authorize the movement of tokens.
-- For any redeem order exceeding **15,000 EUR**, you must include a `supportingDocumentId` (e.g., an invoice or contract). This document must be uploaded via the `/files` endpoint before placing the order.
-
-### Monitoring orders
+### Monitoring
 
 :::info Webhooks not available for OAuth
-Unlike Whitelabel applications, **webhooks are not available for OAuth integrations**. Your application must implement alternative strategies to track the lifecycle of an order.
+Webhooks are not available for OAuth integrations. Use alternative strategies to track order status.
 :::
 
-- **On-chain events:** The most reliable method is to monitor the blockchain for **Mint** and **Burn** events associated with the user's wallet address. These events serve as the final confirmation that a transaction has reached its on-chain destination or originated from the wallet.
-- **Account polling:** You may also poll the Order endpoints to check the state of an asynchronous order (e.g., checking if a status has moved from `placed` to `processed`).
+- **On-chain events:** Monitor the blockchain for **Mint** and **Burn** events on the user's wallet — the most reliable confirmation method.
+- **Polling:** Poll the order endpoints to check state transitions (e.g. `placed` → `processed`).
 
-### Order endpoints
+### Endpoints
 
-- **`POST /orders`**: Used to initiate a new redeem order (SEPA payout or cross-chain bridge).
-- **`GET /orders`**: Retrieves a list of all orders associated with the authorized profile. Can be filtered by `kind`, `state`, or `chain`.
-- **`GET /orders/{orderId}`**: Fetches the detailed status and metadata for a specific transaction, including on-chain `txHashes`.
+- `POST /orders` — Initiate a redeem order.
+- `GET /orders` — List orders, filterable by `kind`, `state`, or `chain`.
+- `GET /orders/{orderId}` — Fetch order details including `txHashes`.
 
-## On-chain transfers and Monerium tokens
-
-The final phase of an integration involves interacting directly with Monerium's suite of emoney tokens on-chain. Since Monerium issues regulated e-money as native blockchain tokens (such as **EURe** and **GBPe**), you can automate sophisticated financial flows — including decentralized exchanges, automated payroll, or treasury rebalancing — directly from your application's backend.
-
-### Monerium smart contracts
-
-Monerium tokens are designed as programmable, 1:1 backed emoney. The smart contract infrastructure is consistent across all issued currencies, ensuring a uniform developer experience.
-
-- **Open source & audited:** All Monerium smart contracts are public and have undergone rigorous professional security audits.
-- **Repository:** [Monerium Smart Contracts GitHub](https://github.com/monerium/smart-contracts)
-- **Third-party integration:** Monerium tokens are compatible with major DeFi protocols (e.g., CowSwap or Uniswap), allowing users to swap between different Monerium currencies or other digital assets at market prices.
-
-### Token addresses
-
-Contract addresses for all supported chains are listed on the [Tokens](./tokens) page.
-
-### Implementation standards
-
-#### ERC-20 (standard token)
-
-The core of EURe follows the standard **ERC-20** interface, ensuring out-of-the-box compatibility with almost every wallet, exchange, and DeFi protocol in the ecosystem.
-
-- [EIP-20 Specification →](https://eips.ethereum.org/EIPS/eip-20)
-
-#### ERC-2612 (Permit)
-
-This standard allows for "gasless" approvals. Instead of a user having to send a separate transaction to approve a spender, they can sign a message off-chain.
-
-- **Benefit:** Your application can take the signature and submit it with the transfer in a single transaction, significantly reducing friction for the end user.
-- [EIP-2612 Tutorial →](https://github.com/monerium/smart-contracts/blob/main/docs/permit.md)
-- [EIP-2612 Specification →](https://eips.ethereum.org/EIPS/eip-2612)
+<OnchainTokens />
 
 ## Going live
 
-OAuth applications follow a streamlined path that leverages Monerium's existing onboarding infrastructure.
-
-1. **Verified profile:** The application owner's profile must be fully verified and **Approved** via the standard KYC/KYB process.
-2. **Sandbox integration:** Your application must be created and tested within the **Sandbox** environment. This ensures your redirect URIs, token exchange logic, and general logic are functioning correctly before real users are involved.
-3. **Request production access:** After successful sandbox testing, create the application in **Production**. You then submit a request for production access, which involves a manual review of your integration to ensure it meets Monerium's standards.
+1. **Verified profile:** Complete KYC/KYB and reach **Approved** state.
+2. **Sandbox integration:** Test redirect URIs, token exchange logic, and general flows.
+3. **Request production access:** Create the application in Production and submit for manual review.

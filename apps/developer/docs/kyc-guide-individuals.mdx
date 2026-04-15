@@ -1,0 +1,98 @@
+---
+title: KYC Guide - Individuals
+id: kyc-guide-individuals
+---
+
+import CountryTiers from './_partials/country-tiers.mdx';
+import ProhibitedActivities from './_partials/prohibited-activities.mdx';
+import ComplianceDisclaimer from './_partials/compliance-disclaimer.mdx';
+
+# KYC Guide — Individuals
+
+This guide defines the validation rules your onboarding process must meet before submitting customer data for individuals to Monerium — whether via KYC Sharing (SumSub) or KYC Reliance. Align your data collection, risk classification, and document requirements with the rules below to avoid rejections.
+
+<ComplianceDisclaimer />
+
+## Pre-checks
+
+Perform these checks before submitting any data to Monerium. Customers that fail must be rejected.
+
+### Documents and verification
+
+All of the following must be complete and valid:
+
+- **Identity document** — passport, ID card, or residence permit
+- **Selfie / Advanced liveness check**
+- **Proof of address** — must contain the customer's name and current address, no older than 3 months from account creation. Accepted documents:
+  - Utility bills (electricity, water, internet, etc.)
+  - Government-issued documents (tax statement, certificate of residency, etc.)
+  - Bank statements from a traditional bank in the same country as the residential address (digital-only or neobanks are not accepted)
+  - Credit card statements from a traditional bank or card issuer in the same country as the residential address (digital-only or neobanks are not accepted)
+
+### Age
+
+Customers under 18 must be rejected.
+
+### Sanctions
+
+Customers with a confirmed hit on any applicable sanctions list must be rejected. This includes EU, UN, and OFAC lists.
+
+### Politically Exposed Persons (PEP)
+
+PEP status — whether identified through self-declaration or screening — always requires source of funds verification. Collect it before submitting.
+
+### Prohibited activities
+
+Reject any customer active in a [prohibited sector](#prohibited-activities). This includes adult entertainment, gambling, arms, anonymous crypto services, hawala, and others.
+
+## Residency
+
+The customer's country of residence determines their risk tier and whether additional verification is required. Check the customer's residency against the lists below before submitting. Prohibited residency is a hard block — the customer must be rejected.
+
+<CountryTiers />
+
+## Nationality
+
+Nationality is checked independently of residency — a customer can be allowed by residency but blocked by nationality, or vice versa. Both must pass. Prohibited nationality is a hard block regardless of where the customer lives.
+
+### Allowed
+
+**Low-risk:** Aland Islands, Albania, American Samoa, Andorra, Anguilla, Antarctica, Antigua and Barbuda, Argentina, Armenia, Aruba, Australia, Austria, Azerbaijan, Bahamas, Bahrain, Bangladesh, Barbados, Belgium, Belize, Benin, Bermuda, Bhutan, Bonaire St Eustatius and Saba, Bosnia and Herzegovina, Botswana, Bouvet Island, Brazil, British Indian Ocean Territory, Brunei Darussalam, Burundi, Cambodia, Canada, Cape Verde, Cayman Islands, Central African Republic, Chad, Chile, China, Christmas Island, Cocos Keeling Islands, Colombia, Comoros, Cook Islands, Costa Rica, Croatia, Cuba, Curaçao, Cyprus, Czech Republic, Denmark, Djibouti, Dominica, Dominican Republic, Ecuador, Egypt, El Salvador, Equatorial Guinea, Eritrea, Estonia, Eswatini, Ethiopia, Falkland Islands, Faroe Islands, Fiji, Finland, France, French Guiana, French Polynesia, French Southern Territories, Gabon, Gambia, Georgia, Germany, Ghana, Gibraltar, Greece, Greenland, Grenada, Guadeloupe, Guam, Guatemala, Guernsey, Guinea, Guinea-Bissau, Guyana, Heard Island and McDonald Islands, Holy See, Honduras, Hong Kong, Hungary, Iceland, India, Indonesia, Ireland, Isle of Man, Israel, Italy, Japan, Jersey, Jordan, Kazakhstan, Kiribati, Kyrgyzstan, Latvia, Lesotho, Liberia, Libya, Liechtenstein, Lithuania, Luxembourg, Macao, Macedonia, Madagascar, Malawi, Malaysia, Maldives, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte, Mexico, Micronesia, Moldova, Mongolia, Montenegro, Montserrat, Morocco, Nauru, Netherlands, New Caledonia, New Zealand, Nicaragua, Niger, Niue, Norfolk Island, Northern Mariana Islands, Norway, Oman, Pakistan, Palau, Palestinian Territory, Paraguay, Peru, Philippines, Pitcairn, Poland, Portugal, Qatar, Republic of the Congo, Réunion, Romania, Rwanda, Saint Barthélemy, Saint Helena, Saint Kitts and Nevis, Saint Lucia, Saint Martin, Saint Pierre and Miquelon, Saint Vincent and the Grenadines, Samoa, San Marino, Sao Tome and Principe, Saudi Arabia, Serbia, Seychelles, Sierra Leone, Singapore, Sint Maarten, Slovakia, Slovenia, Solomon Islands, South Georgia and the South Sandwich Islands, South Korea, Spain, Sri Lanka, Sudan, Suriname, Svalbard and Jan Mayen Islands, Sweden, Switzerland, Taiwan, Tajikistan, Thailand, Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Türkiye, Turkmenistan, Turks and Caicos Islands, Tuvalu, Ukraine, United Arab Emirates, United Kingdom, United States Minor Outlying Islands, Uruguay, Uzbekistan, Virgin Islands US, Zambia, Zimbabwe
+
+**Medium-risk** _(must submit a valid residency permit during onboarding)_**:** Belarus, Russia
+
+**Restricted** _(requires source of funds and first payment in own name)_**:** Afghanistan, Algeria, Angola, Bolivia, Bulgaria, Burkina Faso, Cameroon, Cote d'Ivoire, Democratic Republic of the Congo, Haiti, Jamaica, Kenya, Kuwait, Lao PDR, Lebanon, Mali, Monaco, Mozambique, Namibia, Nepal, Nigeria, Panama, Papua New Guinea, Senegal, South Africa, South Sudan, Syria, Tanzania, Trinidad and Tobago, Uganda, Vanuatu, Vietnam, Virgin Islands UK, Yemen
+
+### Prohibited
+
+Iran, Myanmar, North Korea, Puerto Rico, United States, Venezuela
+
+<ProhibitedActivities />
+
+## Source of funds
+
+Source of funds verification is required when any of the following apply:
+
+- Restricted residency
+- Restricted nationality
+- PEP status
+
+In some cases, Monerium may still request source of funds after submission based on risk evaluation. You will be notified via a `profile.updated` webhook with `sourceOfFunds` marked as `incomplete`.
+
+## First payment in own name
+
+This requirement is not part of the onboarding flow and must not be enforced during KYC submission.
+
+For customers subject to this requirement, Monerium will require that the first incoming payment comes from a bank account held in the customer's own name. The name on the sending account must match the name on the identity documents. The payment must originate from a bank account in a jurisdiction with a regulatory framework comparable to the EU. This control is applied by Monerium after onboarding as an additional verification step.
+
+## Submitting data
+
+Once your customer passes the pre-checks above, submit their data via the Whitelabel onboarding flow. See [Onboarding](./whitelabel#onboarding) for the full API walkthrough covering both KYC Sharing and KYC Reliance.
+
+---
+
+**Country reference data** — includes country names, ISO codes, and risk categories for both residency and nationality.
+
+<a href="/kyc-sharing-countries.json" download>
+  Download kyc-sharing-countries.json
+</a>

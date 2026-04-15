@@ -1,90 +1,55 @@
 import { FC, useEffect, useState } from 'react';
 import { GuidesList } from './GuideList';
-import { TokenList } from './TokenList';
-import chains from './chains';
+import { ChainList, ApiToken, ApiChain, ChainWithTokens } from './TokenList';
 import styles from './Token.module.css';
 
+const SYMBOL_ORDER = ['EURe', 'GBPe'];
+
+function buildChainList(
+  tokens: ApiToken[],
+  chains: ApiChain[]
+): ChainWithTokens[] {
+  return chains
+    .map((chain) => ({
+      ...chain,
+      tokens: tokens
+        .filter((t) => t.chain === chain.id && SYMBOL_ORDER.includes(t.symbol))
+        .sort(
+          (a, b) =>
+            SYMBOL_ORDER.indexOf(a.symbol) - SYMBOL_ORDER.indexOf(b.symbol)
+        ),
+    }))
+    .filter((chain) => chain.tokens.length > 0);
+}
+
+async function fetchChainList(baseUrl: string): Promise<ChainWithTokens[]> {
+  const [tokens, chains] = await Promise.all([
+    fetch(`${baseUrl}/api/tokens`).then((r) => r.json()),
+    fetch(`${baseUrl}/api/chains`).then((r) => r.json()),
+  ]);
+  return buildChainList(tokens, chains);
+}
+
 export const TokensPage: FC = () => {
-  const [tokenData, setTokenData] = useState(null);
-  const [sandboxTokenData, setSandboxTokenData] = useState(null);
-
-  const fetchMainnetTokens = async () => {
-    try {
-      const response = await fetch('https://monerium.app/tokens.json');
-      const data = await response.json();
-      setTokenData(data);
-    } catch (error) {
-      console.error('Error fetching mainnet tokens:', error);
-    }
-  };
-
-  const fetchSandboxTokens = async () => {
-    try {
-      const response = await fetch('https://monerium.app/tokens-sandbox.json');
-      const data = await response.json();
-      setSandboxTokenData(data);
-    } catch (error) {
-      console.error('Error fetching sandbox tokens:', error);
-    }
-  };
+  const [production, setProduction] = useState<ChainWithTokens[]>([]);
+  const [sandbox, setSandbox] = useState<ChainWithTokens[]>([]);
 
   useEffect(() => {
-    fetchMainnetTokens();
-    fetchSandboxTokens();
+    fetchChainList('https://monerium.app')
+      .then(setProduction)
+      .catch(console.error);
+
+    fetchChainList('https://sandbox.monerium.dev')
+      .then(setSandbox)
+      .catch(console.error);
   }, []);
-
-  const filterAndSort = (chainId: number) => {
-    const symbolOrder = ['EURe', 'GBPe', 'USDe', 'ISKe'];
-    // Try mainnet tokens first
-    const mainnetTokens = tokenData?.tokens.filter(
-      (i) => i.chainId === chainId
-    );
-    // If no mainnet tokens found, try sandbox tokens
-    const tokens = mainnetTokens?.length
-      ? mainnetTokens
-      : sandboxTokenData?.tokens?.filter((i) => i.chainId === chainId);
-
-    return tokens?.sort((a, b) => {
-      // First sort by symbol order
-      const symbolDiff =
-        symbolOrder.indexOf(a.symbol) - symbolOrder.indexOf(b.symbol);
-      if (symbolDiff !== 0) return symbolDiff;
-
-      // If same symbol, sort by legacy status
-      const aIsLegacy = a.tags?.includes('legacy') ?? false;
-      const bIsLegacy = b.tags?.includes('legacy') ?? false;
-      if (aIsLegacy && !bIsLegacy) return 1;
-      if (!aIsLegacy && bIsLegacy) return -1;
-      return 0;
-    });
-  };
-
-  const productionChains = chains
-    .filter((c) => !c.testnet)
-    ?.map((chain) => {
-      return {
-        ...chain,
-        tokens: filterAndSort(chain.chainId),
-        iconUrl: chain.logo,
-      };
-    });
-
-  const sandboxChains = chains
-    .filter((c) => c.testnet)
-    .map((chain) => {
-      return {
-        ...chain,
-        tokens: filterAndSort(chain.chainId),
-        iconUrl: chain.logo,
-      };
-    });
 
   return (
     <div id="docs-content" className={styles.root}>
       <p>
-        Monerium e-money tokens are live on Ethereum, Gnosis and Polygon. The
-        source code, info about the token design, and supported ERC standards
-        can be found at our{' '}
+        Monerium e-money tokens are live on Ethereum, Gnosis, Polygon,
+        Arbitrum, Linea, Scroll, Base, Noble, and Camino. The source code, info
+        about the token design, and supported ERC standards can be found at our{' '}
         <a href="https://github.com/monerium/smart-contracts">GitHub repo.</a>{' '}
         You can also reach us for technical support on{' '}
         <a href="https://monerium.com/invite/discord">our Discord channel</a>.
@@ -93,15 +58,15 @@ export const TokensPage: FC = () => {
       <ContractsUpgradeNotice />
 
       <h2 id="mainnet">Mainnets / Production</h2>
-      <TokenList networks={productionChains} />
+      <ChainList chains={production} />
 
       <h2 id="sandbox">Testnets / Sandbox</h2>
       <p>
         Our <a href="https://sandbox.monerium.dev/">sandbox</a> is connected to
-        Sepolia, Amoy, and Chiado test networks and can be used for testing
-        before releasing to mainnets.
+        Sepolia, Amoy, Chiado and other test networks and can be used for
+        testing before releasing to mainnets.
       </p>
-      <TokenList networks={sandboxChains} />
+      <ChainList chains={sandbox} />
 
       <GuidesList />
     </div>

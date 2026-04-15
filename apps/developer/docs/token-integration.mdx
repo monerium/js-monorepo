@@ -1,0 +1,190 @@
+---
+title: Token Integration
+id: token-integration
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Token Integration
+
+Monerium issues regulated e-money as programmable blockchain tokens — EURe, GBPe, ISKe, USDe. Each token is fully backed 1:1 by funds held in regulated accounts and redeemable at any time via the Monerium API.
+
+- **Token addresses:** [/tokens](/tokens)
+- **Smart contracts:** Open source and audited — [monerium/smart-contracts](https://github.com/monerium/smart-contracts)
+
+## ERC-20
+
+Monerium tokens implement the [ERC-20](https://eips.ethereum.org/EIPS/eip-20) standard, making them compatible with any wallet, exchange, or DeFi protocol that supports the standard token interface.
+
+The core functions you'll use:
+
+| Function | Description |
+| :-- | :-- |
+| `transfer(to, amount)` | Send tokens directly to an address |
+| `approve(spender, amount)` | Authorize a spender to pull tokens on your behalf |
+| `transferFrom(from, to, amount)` | Pull tokens from an approved address (called by the spender) |
+| `balanceOf(address)` | Query token balance |
+| `allowance(owner, spender)` | Query how much a spender is approved to pull |
+
+```js
+import { ethers } from 'ethers';
+
+const token = new ethers.Contract(tokenAddress, ERC20_ABI, signer);
+
+// Transfer tokens directly
+await token.transfer(recipientAddress, ethers.parseUnits('100', 18));
+
+// Approve a spender (e.g. a DeFi protocol) to pull up to 100 EURe
+await token.approve(spenderAddress, ethers.parseUnits('100', 18));
+
+// The spender then pulls the tokens (called from the spender's contract/wallet)
+await token.transferFrom(ownerAddress, recipientAddress, ethers.parseUnits('100', 18));
+```
+
+:::note Token decimals
+EURe uses 18 decimal places. Use `ethers.parseUnits('100', 18)` to represent 100 EURe as a raw token amount.
+:::
+
+## ERC-2612 Permit
+
+Monerium V2 tokens support [ERC-2612 Permit](https://eips.ethereum.org/EIPS/eip-2612), which improves on the standard ERC-20 `approve` flow.
+
+### The problem with ERC-20 approve
+
+The standard approval flow requires two separate on-chain transactions:
+
+1. `approve(spender, amount)` — the owner pays gas to authorize the spender
+2. `transferFrom(from, to, amount)` — the spender pulls the funds
+
+This means two gas payments and two wallet confirmations before anything moves.
+
+### How permit solves it
+
+`permit` replaces the on-chain `approve` with an **off-chain EIP-712 signature**. The owner signs a message in their wallet (no gas, no transaction), and anyone — the spender, a relayer, or the owner themselves — can submit that signature on-chain alongside the transfer, combining what was two steps into one.
+
+```
+Without permit:  [approve tx] → [transferFrom tx]   (2 transactions, 2x gas)
+With permit:     [sign off-chain] → [permit + transferFrom tx]   (1 signature, 1 transaction)
+```
+
+### Code example
+
+```js
+import { ethers } from 'ethers';
+
+const provider = new ethers.JsonRpcProvider(rpcUrl);
+const signer = new ethers.Wallet(privateKey, provider);
+const token = new ethers.Contract(tokenAddress, ERC20_PERMIT_ABI, signer);
+
+const ownerAddress = await signer.getAddress();
+const amount = ethers.parseUnits('100', 18);
+const deadline = Math.floor(Date.now() / 1000) + 60 * 60; // 1 hour from now
+
+// 1. Get the owner's current nonce (prevents replay attacks)
+const nonce = await token.nonces(ownerAddress);
+
+// 2. Build the EIP-712 domain — must match the token contract exactly
+const domain = {
+  name: await token.name(),
+  version: '2',
+  chainId: (await provider.getNetwork()).chainId,
+  verifyingContract: tokenAddress,
+};
+
+// 3. Define the Permit type (fixed by the ERC-2612 standard)
+const types = {
+  Permit: [
+    { name: 'owner',    type: 'address' },
+    { name: 'spender',  type: 'address' },
+    { name: 'value',    type: 'uint256' },
+    { name: 'nonce',    type: 'uint256' },
+    { name: 'deadline', type: 'uint256' },
+  ],
+};
+
+const values = {
+  owner:    ownerAddress,
+  spender:  spenderAddress,
+  value:    amount,
+  nonce,
+  deadline,
+};
+
+// 4. Sign off-chain — no gas, no transaction
+const signature = ethers.Signature.from(
+  await signer.signTypedData(domain, types, values)
+);
+
+// 5. Submit the permit on-chain, then transfer in the same transaction
+//    (or let a relayer / spender's contract call permit + transferFrom atomically)
+await token.permit(
+  ownerAddress,
+  spenderAddress,
+  amount,
+  deadline,
+  signature.v,
+  signature.r,
+  signature.s,
+);
+
+// The spender can now call transferFrom without a prior approve
+await token.transferFrom(ownerAddress, recipientAddress, amount);
+```
+
+:::note Nonces and replay protection
+Each permit signature includes a nonce tied to the owner's address. Once used, the nonce increments and the signature is invalidated — preventing replay attacks. Always fetch the current nonce immediately before signing.
+:::
+
+:::tip Permit in practice
+The real benefit comes when the spender's smart contract accepts a permit signature as a parameter and calls `permit` + `transferFrom` atomically in a single function call. The user signs once and the contract handles the rest — one transaction, one gas payment.
+:::
+
+## Orchestration
+
+Once EURe is minted to a wallet — triggered by an incoming SEPA payment or a cross-chain transfer — your application can react automatically and compose it with DeFi protocols. The pattern is always the same: listen for an `order.updated` webhook with `state === 'processed'`, then act on-chain.
+
+Because EURe supports ERC-2612 permit, the approval and the DeFi action can happen in a single transaction — no prior `approve` needed.
+
+### Supply to Aave
+
+Deposit EURe into [Aave](https://aave.com/) to earn yield immediately after a payment is received. The permit signature authorizes the Aave pool to pull the tokens, and `supply` executes atomically.
+
+```js
+// order.updated webhook handler — state === 'processed', kind === 'issue'
+const { address, amount } = event.data;
+
+// Sign permit authorizing the Aave pool
+const permitSig = await signPermit(token, signer, aavePoolAddress, amount, deadline);
+
+// Supply EURe to Aave in a single transaction
+await aavePool.supplyWithPermit(
+  tokenAddress,   // EURe
+  amount,
+  onBehalfOf,     // wallet to receive aTokens
+  referralCode,
+  deadline,
+  permitSig.v,
+  permitSig.r,
+  permitSig.s,
+);
+// aTokens (interest-bearing) are minted to onBehalfOf
+```
+
+### Swap via a DEX aggregator
+
+DEX aggregators (such as [1inch](https://1inch.io/)) route swaps across multiple liquidity sources to find the best price. The pattern is: fetch a quote and calldata from the aggregator API, sign a permit authorizing the router, then execute.
+
+```js
+// Fetch the best swap route from the 1inch API
+const { tx } = await fetch(
+  `https://api.1inch.dev/swap/v6.0/${chainId}/swap?src=${tokenAddress}&dst=${usdcAddress}&amount=${amount}&from=${address}&slippage=1`
+).then(r => r.json());
+
+// Sign permit authorizing the 1inch router
+const permitSig = await signPermit(token, signer, tx.to, amount, deadline);
+await token.permit(address, tx.to, amount, deadline, permitSig.v, permitSig.r, permitSig.s);
+
+// Execute the swap
+await signer.sendTransaction(tx);
+```

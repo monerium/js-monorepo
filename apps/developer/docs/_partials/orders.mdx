@@ -1,0 +1,218 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Endpoint } from '@site/src/components/Endpoint';
+
+## Orders
+
+Orders represent fund movements. There are two kinds:
+
+- **Issue** — created automatically by Monerium when funds arrive at a customer's IBAN or wallet. No action required from your app.
+- **Redeem** — initiated by your app. EURe is burned from the linked wallet and the funds are sent to the counterpart — either via SEPA to a bank account, or cross-chain to another wallet.
+
+Both SEPA and cross-chain redeem orders use the same `POST /orders` endpoint. The difference is in the `counterpart` field.
+
+### Incoming payments
+
+Monerium creates an `issue` order automatically when a SEPA payment arrives at the customer's IBAN or when EURe is received cross-chain. Your app does not need to do anything — just listen for `order.created`.
+
+#### Routing with memo
+
+By default, EURe is minted to the wallet and chain the IBAN is linked to. To route an incoming payment to a different linked wallet or chain, the sender includes a routing instruction in the SEPA payment memo using the format `<chain>:<address>`:
+
+```
+gnosis:0x59cFC408d310697f9D3598e1BE75B0157a072407
+```
+
+If the address is linked to the profile on that chain, Monerium mints to that destination instead of the default.
+
+### Signing an order
+
+Every redeem order requires a cryptographic signature from the wallet holding the EURe being redeemed. The message is unique per order and must be signed before submission.
+
+The message format depends on the order type:
+
+**SEPA:**
+
+```
+Send <CURRENCY> <AMOUNT> to <IBAN> at <TIMESTAMP>
+```
+
+Example: `Send EUR 100.00 to EE52...1285 at 2024-07-12T12:02Z`
+
+**Cross-chain:**
+
+```
+Send <CURRENCY> <AMOUNT> to <ADDRESS> on <CHAIN> at <TIMESTAMP>
+```
+
+Example: `Send EUR 100.00 to 0x4B4c...7760 on gnosis at 2024-07-12T12:02Z`
+
+**Timestamp rules:** RFC3339 format, accurate to the minute (no seconds). Must be within 5 minutes of the current time, or any time in the future. Set it 1–2 minutes ahead to account for latency. The IBAN may be full (no spaces) or in shortened format (`EE12...2602`).
+
+For EOA wallets, sign the message with `eth_sign` / `personal_sign` as shown in the examples below. For smart contract wallets (EIP-1271), the same off-chain and on-chain approaches apply — see the [Link wallet](#link-wallet) section for the full signing walkthrough.
+
+### SEPA payment
+
+<Endpoint
+  method="POST"
+  path="/orders"
+  href="https://docs.monerium.com/api/#tag/orders/operation/post-orders"
+/>
+
+EURe is burned from the wallet and a SEPA transfer is sent from the customer's IBAN to the specified bank account. Set `counterpart.identifier.standard` to `"iban"` and provide recipient details.
+
+`counterpart.details` can be an individual (`firstName`, `lastName`, `country`) or a company (`companyName`, `country`).
+
+**`memo` and `referenceNumber`** are both optional, independent, and can be used together:
+
+| Field | SEPA field | Format | Purpose |
+| :-- | :-- | :-- | :-- |
+| `memo` | Unstructured remittance information | Free text, max 140 chars | Human-readable note visible on the recipient's bank statement. Use for payment descriptions, invoice notes, or any context for the recipient. |
+| `referenceNumber` | RF Creditor Reference (ISO 11649) | Max 35 chars, typically `RF` + 2 check digits + reference | Machine-readable structured reference for automated payment reconciliation. Use when the recipient's system needs to match the payment to an invoice or order automatically. |
+
+Use `memo` when you want a readable label on the bank statement. Use `referenceNumber` when the recipient processes payments programmatically and needs a structured reference. Both can be set on the same order when you need both — for example, a human-readable description alongside a reconciliation reference.
+
+```js
+import { ethers } from 'ethers';
+
+const amount = '100.00';
+const iban = 'EE521273842688571285'; // recipient IBAN, no spaces
+const timestamp = new Date(Date.now() + 2 * 60_000).toISOString().slice(0, 16) + 'Z'; // 2 min buffer // "2024-07-12T12:02Z"
+const message = `Send EUR ${amount} to ${iban} at ${timestamp}`;
+
+const wallet = new ethers.Wallet(privateKey);
+const signature = await wallet.signMessage(message);
+
+const response = await fetch('https://api.monerium.dev/orders', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    address: '0x59cFC408d310697f9D3598e1BE75B0157a072407', // wallet holding EURe
+    currency: 'eur',
+    chain: 'ethereum',
+    kind: 'redeem',
+    amount,
+    counterpart: {
+      identifier: { standard: 'iban', iban },
+      details: { firstName: 'Jane', lastName: 'Doe', country: 'EE' },
+      // Corporate recipient: { companyName: 'Acme Ltd', country: 'EE' }
+    },
+    message,
+    signature,
+    memo: 'Payment for invoice #1234',   // optional — appears on recipient's bank statement
+    referenceNumber: 'RF18539007547034', // optional — structured RF reference for automated reconciliation
+  }),
+});
+// 200 — order placed and processing
+```
+
+:::note Orders above €15,000
+Orders with an amount of €15,000 or more require a supporting document (invoice or contract). Upload it first via `POST /files` to obtain a `fileId`, then include `supportingDocumentId: fileId` in the order payload.
+:::
+
+### Cross-chain transfer (bridging)
+
+<Endpoint
+  method="POST"
+  path="/orders"
+  href="https://docs.monerium.com/api/#tag/orders/operation/post-orders"
+/>
+
+Cross-chain transfers are always initiated by the partner. Set `counterpart.identifier.standard` to `"chain"` and specify the recipient address and destination chain. No `counterpart.details` are required — the recipient is identified by their blockchain address.
+
+Monerium processes the transfer by creating two orders internally: a `redeem` on the source chain (the one you submit) and a dependent `issue` on the destination chain. The redeem does not finalize unless the destination issue succeeds. **Monitor only the redeem order** — it contains all the information you need, including the final state and `meta.txHashes`.
+
+```js
+import { ethers } from 'ethers';
+
+const amount = '100.00';
+const recipientAddress = '0x4B4c34f35b0Bb9Af56418FAdD4677ce45ADF7760';
+const destinationChain = 'gnosis';
+const timestamp = new Date(Date.now() + 2 * 60_000).toISOString().slice(0, 16) + 'Z'; // 2 min buffer
+const message = `Send EUR ${amount} to ${recipientAddress} on ${destinationChain} at ${timestamp}`;
+
+const wallet = new ethers.Wallet(privateKey);
+const signature = await wallet.signMessage(message);
+
+const response = await fetch('https://api.monerium.dev/orders', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    address: '0x59cFC408d310697f9D3598e1BE75B0157a072407', // source wallet on ethereum
+    currency: 'eur',
+    chain: 'ethereum',
+    kind: 'redeem',
+    amount,
+    counterpart: {
+      identifier: {
+        standard: 'chain',
+        address: recipientAddress,
+        chain: destinationChain,
+      },
+    },
+    message,
+    signature,
+  }),
+});
+// 200 — redeem order placed; Monerium creates the destination issue order and coordinates both
+```
+
+### Monitor orders
+
+<Endpoint
+  event="order.updated"
+  href="https://docs.monerium.com/api/#tag/webhooks/operation/webhook-order-updated"
+/>
+
+The primary event to handle. Fired when an order changes state — act on `processed` and `rejected`.
+
+```js
+app.post(
+  '/webhooks/monerium',
+  express.raw({ type: 'application/json' }),
+  async (req, res) => {
+    // ... verify signature (see Webhooks section)
+    res.sendStatus(200);
+
+    const event = JSON.parse(req.body);
+    if (event.type !== 'order.updated') return;
+
+    const { id, state, meta } = event.data;
+
+    if (state === 'processed') {
+      // Order complete — meta.txHashes contains the on-chain transaction hashes
+      console.log('tx hashes:', meta.txHashes);
+    }
+
+    if (state === 'rejected') {
+      // Order rejected — meta.rejectedReason explains why
+      console.error('rejected:', meta.rejectedReason);
+    }
+  }
+);
+```
+
+If you need to react the moment an incoming payment is detected — before it is processed — also subscribe to `order.created`.
+
+<Endpoint
+  event="order.created"
+  href="https://docs.monerium.com/api/#tag/webhooks/operation/webhook-order-created"
+/>
+
+```js
+    const event = JSON.parse(req.body);
+    if (event.type !== 'order.created') return;
+
+    const { kind, amount, currency, chain, counterpart } = event.data;
+    if (kind === 'issue') {
+      // Incoming payment detected — notify the customer early
+    }
+```

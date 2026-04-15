@@ -1,89 +1,59 @@
 ---
 title: Getting Started
 id: getting-started
+slug: /
 ---
+
+import { Yes, No, Feature } from '@site/src/components/FeatureStatus';
 
 # Getting Started
 
-Monerium provides a bridge between the traditional banking system and the blockchain, enabling the issuance of e-money (EURe) directly onto supported chains. Our services allow partners to integrate programmable payments, automate treasury management, and offer specialized financial products to their users.
+Use the Monerium API to issue regulated e-money on-chain, automate SEPA payments, and connect bank accounts to blockchain wallets. Build financial products ranging from payments, lending, and treasury automation to on-chain exchange and cross-chain orchestration.
 
-## Sandbox vs Production environments
+## Environments
 
-Monerium provides two environments, [**Sandbox**](https://sandbox.monerium.dev) and [**Production**](https://monerium.app).
+Monerium has two environments: [**Sandbox**](https://sandbox.monerium.dev) and [**Production**](https://monerium.app).
 
-### Sandbox
+**Sandbox** mirrors Production but uses test blockchains and simulated funds. Build and test here before going live.
 
-The Sandbox environment is a test environment that closely mirrors Production, but uses test blockchains and simulated funds (fake money).
+- Get test EURe: simulate an incoming bank transfer at [sandbox.monerium.dev/receive](https://sandbox.monerium.dev/receive).
+- Gas faucets: [Sepolia](https://sepolia-faucet.pk910.de/) · [Chiado](https://faucet.chiadochain.net/) · [Amoy](https://faucet.polygon.technology/)
 
-It is intended for development and testing. Before creating new applications in Production, applications should be created in Sandbox and tested thoroughly.
+**Production** is for live applications with real users and real funds. Create your application here only after sandbox testing is complete.
 
-To get EURe to your account on Sandbox, you can simulate incoming bank transfers [here](https://sandbox.monerium.dev/receive) after logging in to sandbox.monerium.dev.
+## Create an application
 
-Gas for test environments can be found here:
+Go to [sandbox.monerium.dev/developers](https://sandbox.monerium.dev/developers/apps/create) and log in to create a new application. There are three plans:
 
-- [Sepolia faucet](https://sepolia-faucet.pk910.de/) to get sepETH
-- [Chiado faucet](https://faucet.chiadochain.net/) to get test xDAI
-- [Amoy faucet](https://faucet.polygon.technology/) or [Alchemy's faucet](https://www.alchemy.com/faucets/polygon-amoy) to get test Matic
+- **Whitelabel:** Manage users and their full lifecycle (KYC, IBANs, and payments) via API under your own brand. [Full guide →](./whitelabel)
+- **OAuth:** Users onboard through a co-branded Monerium portal and authorize your app. [Full guide →](./oauth)
+- **Private:** API access to your own Monerium account. No user management. [Full guide →](./private)
 
-### Production
+## Compare plans
 
-The Production environment is used for live applications with real users, real funds, and real blockchains.
-
-When the application has been fully tested in Sandbox and is ready to go live, the application is created and configured in the Production environment.
-
-## Create application in Sandbox
-
-To create an application in the Sandbox environment, you need a sandbox user account at [https://sandbox.monerium.dev](https://sandbox.monerium.dev). Once logged in, navigate to the developers section by clicking the profile icon in the top-right corner and select [**Developers**](https://sandbox.monerium.dev/developers/apps/create).
-
-## Select your application kind
-
-There are three kinds of applications you can create, each with a different use-case.
-
-### Whitelabel
-
-[Full Whitelabel guide →](./whitelabel)
-
-- **Customer ownership.** You register users with their email (or a unique identifier) and receive a profile UUID to manage their entire lifecycle.
-- **Full API integration.** Utilize the API to submit comprehensive KYC/KYB details, upload verification documents, and receive real-time status updates via webhooks.
-- **Brand sovereignty.** Deliver a completely native experience where you issue dedicated IBANs and orchestrate payments under your own brand, ensuring users never need to interact with the Monerium interface.
-
-### OAuth
-
-[Full OAuth guide →](./oauth)
-
-- **Rapid integration.** The fastest way to add Monerium functionality to any public DeFi or Web3 project.
-- **Shared ecosystem.** Users can move their existing IBANs and balances between different apps in the Monerium community with explicit confirmation.
-- **Path to growth.** Perfect for prototyping and proving a business case before upgrading to a Whitelabel solution.
-
-### Private
-
-[Full Private guide →](./private)
-
-- **Direct control.** Designed for backend automation with no redirect URIs or external user management required.
-- **Efficient treasury.** Allows companies to automate payroll or treasury movements at low latency without browser-based logins.
-- **Simplicity.** No need to design onboarding flows or KYC interfaces; simply use your production credentials to manage your funds.
-
-### Feature comparison
-
-| Feature            | Whitelabel                                                                                                                                             | OAuth                                                                                                | Private                                                                                             |
-| :----------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
-| **Best For**       | Partners who want to own the full user journey and payment orchestration.                                                                              | Startups and DeFi apps looking for a simpler setup or beta testing.                                  | Internal business automation, corporate treasury, or personal bots.                                 |
-| **Onboarding**     | A headless API integration where you own the user journey and KYC data, subject to manual team approval.                                               | Users onboard through a co-branded Monerium portal, followed by a standard manual review to go live. | KYC is completed directly in the Monerium app, with API access enabled automatically upon approval. |
-| **Authentication** | **Client Credentials:** Access and refresh tokens for the partner entity.                                                                              | **Authorization Code Flow:** Users authorize your app via redirect using PKCE.                       | **Client Credentials:** Direct API access to your own personal or business account.                 |
-| **KYC strategy**   | [**KYC Sharing**](./whitelabel#strategy-1-kyc-sharing-automated-sumsub) or [**KYC Reliance**](./whitelabel#strategy-2-kyc-reliance-manual-submission). | Managed by Monerium; zero compliance overhead for the partner.                                       | Personal or Corporate KYC completed once in Monerium app.                                           |
-| **Wallets**        | Programmatic wallet linking via API requiring a user signature for ownership verification.                                                             | Wallets are linked and verified directly within the Monerium app.                                    | Wallets are linked and verified directly within the Monerium app.                                   |
-| **IBAN**           | Programmatic issuance of dedicated IBANs for approved profiles via API.                                                                                | Request or move existing IBANs.                                                                      | Create and manage your own dedicated IBAN via the Monerium app.                                     |
-| **Payments**       | Fully automated payments triggered via API.                                                                                                            | Fully automated payments triggered via API.                                                          | Fully automated payments triggered via API.                                                         |
-| **Bridging**       | API-driven cross-chain movements of Monerium tokens between supported chains.                                                                          | API-driven cross-chain movements of Monerium tokens between supported chains.                        | API-driven cross-chain movements of Monerium tokens between supported chains.                       |
-| **Webhooks**       | **Available.** Essential for tracking "headless" user approvals and order status.                                                                      | **Not available.** Partners generally monitor on-chain events or use account polling.                | **Available.** Essential for tracking order status.                                                 |
-| **Price**          | **Contact us**                                                                                                                                         | **Free**                                                                                             | **Free**                                                                                            |
+<!-- prettier-ignore -->
+| Feature | Whitelabel | OAuth | Private |
+| :------ | :--------: | :---: | :-----: |
+| <Feature desc="Onboard and manage external users">User onboarding</Feature> | <Yes>API</Yes> | <Yes>Monerium Portal</Yes> | <No /> |
+| <Feature desc="Real-time event notifications via API">Webhooks</Feature> | <Yes /> | <No /> | <Yes /> |
+| <Feature desc="Connect/link and manage 3rd party wallets via API">Wallets</Feature> | <Yes /> | <Yes /> | <Yes /> |
+| <Feature desc="Create and manage a EUR IBAN per customer via API">EUR IBAN</Feature> | <Yes>Dedicated</Yes> | <Yes>Shared</Yes> | <Yes>Own</Yes> |
+| <Feature desc="Send and receive SEPA payments via API">SEPA Payments</Feature> | <Yes /> | <Yes /> | <Yes /> |
+| <Feature desc="Bridge tokens between supported chains via API">Bridging</Feature> | <Yes /> | <Yes /> | <Yes /> |
+| <Feature desc="Cost of services">Pricing</Feature> | Custom | Free | Free |
 
 ## Going live
 
-To ensure a smooth transition from development to a live environment, every application must follow a specific "Going live" path. While all applications require a verified profile, the review process varies depending on the complexity of the integration.
+### Whitelabel and OAuth
 
-| Requirement              | Whitelabel                                          | OAuth                                               | Private                              |
-| :----------------------- | :-------------------------------------------------- | :-------------------------------------------------- | :----------------------------------- |
-| **Profile verification** | Required (KYC/KYB)                                  | Required (KYC/KYB)                                  | Required (KYC/KYB)                   |
-| **Sandbox testing**      | **Mandatory.** Must be tested with simulated funds. | **Mandatory.** Must be tested with simulated funds. | Optional but recommended.            |
-| **Approval process**     | Manual approval process.                            | Manual approval process.                            | **Automatic** upon profile approval. |
+1. **Apply for partnership**: Submit a partnership application at [monerium.com/invite/partners](https://monerium.com/invite/partners/). Monerium will review your application and reach out to schedule a meeting if you meet the criteria.
+2. **Try the sandbox**: Explore the full developer experience at [sandbox.monerium.dev](https://sandbox.monerium.dev). Build and test your integration with simulated funds before going live.
+3. **Create a production application**: Once approved, create your application in [monerium.app](https://monerium.app) and Monerium will grant the privileges needed to go live.
+
+### Private
+
+The Private plan is self-service with no partnership review required.
+
+1. **Complete KYC/KYB**: Sign up and complete identity verification at [monerium.app/profiles](https://monerium.app/profiles).
+2. **Create the application**: In [monerium.app](https://monerium.app), create a new application and select **Private** as the kind.
+3. **Start building**: Once your profile is approved, your API credentials are active and ready to use.

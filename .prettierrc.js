@@ -26,5 +26,12 @@ module.exports = {
         singleQuote: true,
       },
     },
+    {
+      files: ['*.mdx'],
+      options: {
+        proseWrap: 'preserve',
+        embeddedLanguageFormatting: 'off',
+      },
+    },
   ],
 };

@@ -1,0 +1,79 @@
+import { Endpoint } from '@site/src/components/Endpoint';
+
+## EUR IBAN
+
+Once a profile is approved and a wallet is linked, provision a dedicated IBAN. All incoming EUR payments to that IBAN are automatically minted as EURe to the linked wallet.
+
+Payments are processed over SEPA. When the counterpart bank supports **SEPA Instant Credit Transfer (SCT Inst)**, funds typically arrive within seconds, 24/7. If the counterpart bank does not support SCT Inst, it falls back to **SEPA Credit Transfer (SCT)**, which settles within 1 business day.
+
+### Request IBAN
+
+<Endpoint method="POST" path="/ibans" href="https://docs.monerium.com/api/#tag/ibans/operation/request-iban" />
+
+Returns `202` — provisioning is asynchronous and typically completes within a few seconds. Listen for the `iban.updated` webhook to confirm activation.
+
+```js
+await fetch('https://api.monerium.dev/ibans', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    address: '0x59cFC408d310697f9D3598e1BE75B0157a072407',
+    chain: 'ethereum', // or 'gnosis', 'polygon'
+  }),
+});
+// 202 — IBAN provisioning started, monitor via iban.updated webhook
+// 304 — profile already has an IBAN, use PATCH /ibans/{iban} to move it
+```
+
+:::note Profile already has an IBAN
+If the profile already has an IBAN, the API returns `304`. Use `PATCH /ibans/{iban}` to move the existing IBAN to a different address or chain.
+:::
+
+### Monitor activation
+
+<Endpoint event="iban.updated" href="https://docs.monerium.com/api/#tag/webhooks/operation/webhook-iban-updated" />
+
+Listen for `iban.updated` webhooks. The `data` field contains the full IBAN object including the assigned IBAN number.
+
+```js
+app.post(
+  '/webhooks/monerium',
+  express.raw({ type: 'application/json' }),
+  async (req, res) => {
+    // ... verify signature (see Webhooks section)
+    res.sendStatus(200);
+
+    const event = JSON.parse(req.body);
+    if (event.type !== 'iban.updated') return;
+
+    const { iban, address, chain, profile } = event.data;
+    // Store the IBAN and display it to the customer
+  }
+);
+```
+
+### Move an IBAN
+
+<Endpoint method="PATCH" path="/ibans/{iban}" href="https://docs.monerium.com/api/#tag/ibans/operation/move-iban" />
+
+Re-associate an existing IBAN with a different address or chain. Incoming payments will be routed to the new address from that point forward.
+
+```js
+await fetch(`https://api.monerium.dev/ibans/${iban}`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    address: '0x59cFC408d310697f9D3598e1BE75B0157a072407',
+    chain: 'gnosis',
+  }),
+});
+// 200 — IBAN moved
+```

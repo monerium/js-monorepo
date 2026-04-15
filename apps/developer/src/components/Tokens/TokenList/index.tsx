@@ -1,118 +1,148 @@
-import { FC } from 'react';
-import styles from './TokenList.module.css';
-import { findMatchingUrlAndVersion } from './util';
+import { FC, useState } from 'react';
 import { Icon } from '@iconify/react';
+import styles from './TokenList.module.css';
 
-interface Token {
+export interface ApiToken {
   address: string;
-  chainId: number;
+  chain: string;
+  chainId: string;
+  currency: string;
   decimals: number;
-  logoURI: string;
-  name: string;
   symbol: string;
-  tags: string[];
+  kind: string;
+  ticker: string;
 }
 
-interface Network {
-  name: string;
-  iconUrl: string;
-  chainId: number;
-  color: string;
-  tokens: Token[];
+export interface ApiChain {
+  id: string;
+  chain: string;
+  chainId: string;
+  kind: string;
+  label: string;
   explorerUrl: string;
   explorerName: string;
+  logo: string;
+  color: string;
 }
 
-interface TokenListProps {
-  networks: Network[];
+export interface ChainWithTokens extends ApiChain {
+  tokens: ApiToken[];
 }
 
-export const TokenList: FC<TokenListProps> = ({ networks }) => {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+const ChainAccordion: FC<{ chain: ChainWithTokens }> = ({ chain }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copyToClipboard = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(text);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
+  const explorerUrl = (token: ApiToken): string | null => {
+    if (!token.address || chain.kind === 'cosmos') return null;
+    return `${chain.explorerUrl}/token/${token.address}`;
   };
 
   return (
-    <div id="token-list" className={styles.tokenList}>
-      {networks?.map((network) => (
-        <div
-          key={network.name}
-          id={`chain-${network.name}`}
-          className={styles.chainRoot}
-          style={{ backgroundColor: network.color }}
-        >
-          <h6>
-            <img
-              src={network.iconUrl}
-              width="30"
-              height="30"
-              alt={network.name}
-            />
-            {network.name}
-          </h6>
-          <ul>
-            <li>
-              <b>{network.name} chain ID</b>: {network.chainId}
-            </li>
-            <li>
-              <b>Token decimals</b>: 18
-            </li>
-          </ul>
-
-          <div className={styles.chainTokens}>
-            {network?.tokens?.map((token) => {
-              const isLegacy = token.tags?.includes('legacy') ?? false;
-              const { url, version } = findMatchingUrlAndVersion(token);
-              return (
-                <div key={token.address} className={styles.chainToken}>
-                  <div className={styles.tColCurrency}>
-                    <img
-                      src={token.logoURI}
-                      width="20"
-                      height="20"
-                      alt={token.symbol}
-                    />{' '}
-                    {token.symbol}
-                  </div>
-                  <div className={styles.tColAddress}>
-                    <span title={token.address}>
-                      {`${token.address.slice(0, 6)}...${token.address.slice(-4)}`}{' '}
-                    </span>
-                    <button onClick={() => copyToClipboard(token.address)}>
-                      <Icon icon="solar:copy-line-duotone" />
-                    </button>{' '}
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={network.explorerUrl + token.address}
-                      title={`View on ${network.explorerName}`}
-                    >
-                      <i
-                        className="fa-solid fa-arrow-up-right-from-square"
-                        aria-hidden="true"
-                      />
-                    </a>
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={url}
-                      className={styles.version}
-                    >
-                      {' '}
-                      {version}{' '}
-                      <i className="fa-brands fa-github" aria-hidden="true" />
-                    </a>
-                    {isLegacy && (
-                      <a href="./contracts-v2#legacy" className={styles.legacy}>
-                        Legacy
-                      </a>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+    <div className={styles.accordion}>
+      <button
+        className={styles.header}
+        style={{ backgroundColor: chain.color }}
+        onClick={() => setExpanded(!expanded)}
+      >
+        <div className={styles.headerLeft}>
+          <img
+            src={chain.logo}
+            width={26}
+            height={26}
+            alt={chain.label}
+            className={styles.chainLogo}
+          />
+          <span className={styles.chainName}>{chain.label}</span>
+          <span className={styles.chainIdBadge}>{chain.chainId}</span>
         </div>
+        <div className={styles.headerRight}>
+          <div className={styles.tokenBadges}>
+            {chain.tokens.map((t) => (
+              <span key={t.symbol} className={styles.tokenBadge}>
+                {t.symbol}
+              </span>
+            ))}
+          </div>
+          <Icon
+            icon={
+              expanded
+                ? 'solar:alt-arrow-up-linear'
+                : 'solar:alt-arrow-down-linear'
+            }
+            className={styles.chevron}
+          />
+        </div>
+      </button>
+
+      {expanded && (
+        <div className={styles.body}>
+          {chain.tokens.map((token) => {
+            const url = explorerUrl(token);
+            const isCopied = copied === token.address;
+            return (
+              <div key={token.symbol} className={styles.tokenRow}>
+                <span className={styles.tokenSymbol}>{token.symbol}</span>
+                <div className={styles.tokenAddress}>
+                  {token.address ? (
+                    <>
+                      <code className={styles.address}>{token.address}</code>
+                      <button
+                        className={styles.iconBtn}
+                        onClick={() => copyToClipboard(token.address)}
+                        title="Copy address"
+                      >
+                        <Icon
+                          icon={
+                            isCopied
+                              ? 'solar:check-circle-linear'
+                              : 'solar:copy-line-duotone'
+                          }
+                        />
+                      </button>
+                      {url && (
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.iconBtn}
+                          title={`View on ${chain.explorerName}`}
+                        >
+                          <Icon icon="solar:arrow-right-up-linear" />
+                        </a>
+                      )}
+                    </>
+                  ) : (
+                    <span className={styles.noAddress}>—</span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface ChainListProps {
+  chains: ChainWithTokens[];
+}
+
+export const ChainList: FC<ChainListProps> = ({ chains }) => {
+  if (!chains.length) {
+    return <div className={styles.loading}>Loading…</div>;
+  }
+  return (
+    <div className={styles.chainList}>
+      {chains.map((chain) => (
+        <ChainAccordion key={chain.id} chain={chain} />
       ))}
     </div>
   );

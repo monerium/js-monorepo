@@ -13,17 +13,23 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   typedocSidebar: [
     {
-      type: 'doc',
-      id: 'overview',
-    },
-    {
       type: 'category',
       label: 'Getting Started',
       link: {
         type: 'doc',
         id: 'getting-started',
       },
-      items: ['whitelabel', 'oauth', 'private', 'identifiers-and-formats'],
+      items: [
+        {
+          type: 'category',
+          label: 'Whitelabel',
+          link: { type: 'doc', id: 'whitelabel' },
+          items: ['kyc-guide-individuals', 'kyb-guide-corporates'],
+        },
+        'oauth',
+        'private',
+        'identifiers-and-formats',
+      ],
     },
     {
       type: 'category',
@@ -32,7 +38,7 @@ const sidebars: SidebarsConfig = {
         type: 'doc',
         id: 'tokens',
       },
-      items: ['contracts-v2'],
+      items: ['token-integration', 'contracts-v2'],
     },
     {
       type: 'link',
