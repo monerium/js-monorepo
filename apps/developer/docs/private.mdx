@@ -14,7 +14,7 @@ The Private plan gives you direct API access to your own Monerium account. There
 
 ## Create an application
 
-1. Go to [sandbox.monerium.dev](https://sandbox.monerium.dev), open the user menu, and select **Developers**.
+1. Go to [sandbox.monerium.dev](https://sandbox.monerium.dev) and select **Developers** in the sidebar.
 2. Click **Create application** and select **Private**.
 3. Enter your application name and confirm.
 4. Copy the **CLIENT ID** and **CLIENT SECRET** from the credentials screen.
@@ -37,7 +37,11 @@ Order processing is asynchronous. Register a webhook endpoint to receive `order.
 
 ### Register your endpoint
 
-<Endpoint method="POST" path="/webhooks" href="https://docs.monerium.com/api/#tag/webhooks/operation/create-subscription" />
+<Endpoint
+  method="POST"
+  path="/webhooks"
+  href="https://docs.monerium.com/api/#tag/webhooks/operation/create-subscription"
+/>
 
 Generate a secret, then register your URL:
 
@@ -107,7 +111,11 @@ The simplest way to set up your IBAN is directly in the [Monerium app](https://m
 
 ### Request IBAN
 
-<Endpoint method="POST" path="/ibans" href="https://docs.monerium.com/api/#tag/ibans/operation/request-iban" />
+<Endpoint
+  method="POST"
+  path="/ibans"
+  href="https://docs.monerium.com/api/#tag/ibans/operation/request-iban"
+/>
 
 ```js
 await fetch('https://api.monerium.dev/ibans', {
@@ -127,7 +135,11 @@ await fetch('https://api.monerium.dev/ibans', {
 
 ### Move an IBAN
 
-<Endpoint method="PATCH" path="/ibans/{iban}" href="https://docs.monerium.com/api/#tag/ibans/operation/move-iban" />
+<Endpoint
+  method="PATCH"
+  path="/ibans/{iban}"
+  href="https://docs.monerium.com/api/#tag/ibans/operation/move-iban"
+/>
 
 Re-associate your IBAN with a different address or chain. Incoming payments will be routed to the new address from that point forward.
 
