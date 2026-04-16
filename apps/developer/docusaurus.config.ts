@@ -23,6 +23,17 @@ const config: Config = {
   url: 'https://docs.monerium.com',
   organizationName: 'monerium',
   projectName: 'js-monerium',
+  themes: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        indexDocs: true,
+        indexBlog: false,
+        docsRouteBasePath: '/',
+      },
+    ],
+  ],
   plugins: [
     [
       'docusaurus-plugin-typedoc',
@@ -52,6 +63,7 @@ const config: Config = {
   // you can silence the warnings by doing: `[Authorization](pathname:///api#tag/auth/operation/auth)`
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
+  onBrokenAnchors: 'ignore',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
