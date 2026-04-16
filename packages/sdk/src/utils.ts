@@ -1,3 +1,8 @@
+import {
+  chainIdToName,
+  productionToSandbox,
+  validEvmChainNames,
+} from './chains';
 import { generateRandomString } from './helpers';
 import {
   Balances,
@@ -60,29 +65,8 @@ const isValidCosmosChainName = (chain: string) => {
   }
 };
 
-const isValidEvmName = (chain: string) => {
-  switch (chain) {
-    case 'ethereum':
-    case 'sepolia':
-    case 'basesepolia':
-    case 'base':
-    case 'polygon':
-    case 'amoy':
-    case 'gnosis':
-    case 'chiado':
-    case 'arbitrum':
-    case 'arbitrumsepolia':
-    case 'linea':
-    case 'lineasepolia':
-    case 'scroll':
-    case 'scrollsepolia':
-    case 'camino':
-    case 'columbus':
-      return true;
-    default:
-      return false;
-  }
-};
+const isValidEvmName = (chain: string): boolean =>
+  validEvmChainNames.has(chain);
 
 /**
  * This will resolve the chainId number to the corresponding chain name.
@@ -228,42 +212,9 @@ export const urlEncoded = (
  * ```
  */
 export const getChain = (chainId: number): Chain => {
-  switch (chainId) {
-    case 1:
-      return 'ethereum';
-    case 11155111:
-      return 'sepolia';
-    case 100:
-      return 'gnosis';
-    case 10200:
-      return 'chiado';
-    case 137:
-      return 'polygon';
-    case 80002:
-      return 'amoy';
-    case 8453:
-      return 'base';
-    case 84532:
-      return 'basesepolia';
-    case 42161:
-      return 'arbitrum';
-    case 421614:
-      return 'arbitrumsepolia';
-    case 59144:
-      return 'linea';
-    case 59141:
-      return 'lineasepolia';
-    case 534352:
-      return 'scroll';
-    case 534351:
-      return 'scrollsepolia';
-    case 501:
-      return 'columbus';
-    case 500:
-      return 'camino';
-    default:
-      throw new Error(`Chain not supported: ${chainId}`);
-  }
+  const name = chainIdToName.get(chainId);
+  if (!name) throw new Error(`Chain not supported: ${chainId}`);
+  return name as Chain;
 };
 
 export const shortenIban = (iban?: string) => {
@@ -302,30 +253,8 @@ const chainNameBackwardsCompatibility = (
   chain: Chain | ChainId,
   env: Environment['name']
 ) => {
-  if (env === 'sandbox') {
-    switch (chain) {
-      case 'ethereum':
-        return 'sepolia';
-      case 'base':
-        return 'basesepolia';
-      case 'polygon':
-        return 'amoy';
-      case 'gnosis':
-        return 'chiado';
-      case 'arbitrum':
-        return 'arbitrumsepolia';
-      case 'linea':
-        return 'lineasepolia';
-      case 'scroll':
-        return 'scrollsepolia';
-      case 'camino':
-        return 'columbus';
-      case 'noble':
-        // return 'grand'; // TODO: this might be fixed at some point?
-        return 'noble';
-      default:
-        return chain;
-    }
+  if (env === 'sandbox' && typeof chain === 'string') {
+    return productionToSandbox.get(chain) ?? chain;
   }
   return chain;
 };
