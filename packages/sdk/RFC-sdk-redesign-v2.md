@@ -614,6 +614,7 @@ _None at this time._
 - [MSAL Browser](https://github.com/AzureAD/microsoft-authentication-library-for-js) — `acquireTokenSilent()` and request deduplication
 - [`auth0-spa-js`](https://github.com/auth0/auth0-spa-js) — `ICache` storage interface; separation of URL building and token exchange
 - [`@supabase/gotrue-js`](https://github.com/supabase/gotrue-js) — `SupportedStorage` type for sync/async storage adapters
+- [Stripe API Errors](https://docs.stripe.com/api/errors) — reference for error object design; informed the two-class `MoneriumApiError` / `MoneriumSdkError` approach
 - RFC-storage-adapter.md — Prior Monerium RFC; superseded by this document
 - RFC-sdk-redesign.md — Extended working document with full API surface, type definitions, deprecation timeline, acceptance criteria, and decisions log
 
