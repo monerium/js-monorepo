@@ -101,7 +101,7 @@ const config: Config = {
         src: 'img/logo.png',
       },
       items: [
-        { to: '/', label: 'Docs', position: 'left' },
+        { to: '/', label: 'Docs', position: 'left', activeBaseRegex: '^/(?!api$|packages/)' },
         { to: '/api', label: 'API', position: 'left' },
         { to: '/packages/sdk', label: 'SDK', position: 'left' },
         {
