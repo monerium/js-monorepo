@@ -32,6 +32,11 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'doc',
+      id: 'sandbox',
+      label: 'Sandbox',
+    },
+    {
+      type: 'doc',
       id: 'identifiers-and-formats',
       label: 'Conventions',
     },

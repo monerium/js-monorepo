@@ -1,5 +1,4 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import { GuidesList } from './GuideList';
 import { ChainList, ChainEntry, ApiToken, ApiChain } from './TokenList';
 import styles from './Token.module.css';
 
@@ -122,7 +121,9 @@ export const TokensPage: FC = () => {
         testing before releasing to mainnet.
       </p>
       <ChainList entries={testnetEntries} />
-      <GuidesList />
+      <p>
+        Need test gas or test EURe? See the <a href="/sandbox">Sandbox guide</a>.
+      </p>
 
       <h2 id="icons">Icons</h2>
       <p>Download the {currency} token icon for use in your application.</p>

@@ -1,22 +1,22 @@
 .guides {
     margin-top: 2rem;
-    background: #f8f8f8;
+    background: var(--ifm-color-emphasis-100);
     padding: 30px;
     margin-bottom: 30px;
     border-radius: 15px;
-    color: black;
-  
+    color: var(--ifm-font-color-base);
+
     h6 {
       margin-bottom: 15px;
       font-size: 0.75rem;
     }
-  
+
     ul {
       margin: 0;
       padding-left: 10px;
       font-size: 0.75rem;
     }
-  
+
     li {
       margin: 0;
   }
