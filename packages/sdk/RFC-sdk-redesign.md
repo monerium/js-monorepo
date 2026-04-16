@@ -11,17 +11,17 @@
 
 1. [Motivation](#motivation)
 2. [Design Principles](#design-principles)
-3. [Naming Convention](#naming-convention)
-4. [Architecture Overview](#architecture-overview)
-5. [New API Surface](#new-api-surface)
-6. [Auth Flow Redesign](#auth-flow-redesign)
-7. [API Client Redesign](#api-client-redesign)
-8. [WebSocket Redesign](#websocket-redesign)
-9. [Types & Exports](#types--exports)
-10. [Deprecation Schedule](#deprecation-schedule)
-11. [Migration Guide](#migration-guide)
-12. [Prior Art](#prior-art)
-13. [Open for Discussion](#open-for-discussion)
+3. [Non-goals](#non-goals)
+4. [Naming Convention](#naming-convention)
+5. [Architecture Overview](#architecture-overview)
+6. [New API Surface](#new-api-surface)
+7. [Auth Flow Redesign](#auth-flow-redesign)
+8. [API Client Redesign](#api-client-redesign)
+9. [WebSocket Redesign](#websocket-redesign)
+10. [Types & Exports](#types--exports)
+11. [Deprecation Schedule](#deprecation-schedule)
+12. [Migration Guide](#migration-guide)
+13. [Prior Art](#prior-art)
 14. [Decisions Made](#decisions-made)
 15. [Acceptance Criteria](#acceptance-criteria)
 16. [Summary](#summary)
@@ -70,7 +70,7 @@ The SDK produces URLs. The consumer navigates to them. `window.location.assign`,
 
 ### 4. Environment Agnostic
 
-Every function must work in a browser, Node.js, React Native, a Web Worker, and a Cloudflare Worker without guards or polyfills. If a function truly requires a browser API, it is clearly isolated in an optional helper and documented as browser-only.
+The SDK is designed to avoid runtime-specific globals in its core modules and to remain compatible with standards-based runtimes (browser, Node.js, React Native, Web Workers, Cloudflare Workers). Where a function genuinely requires a browser API, it is isolated in an optional helper and documented as browser-only. The SDK makes no absolute guarantees about runtime edge cases involving `crypto`, WebSocket availability, or `fetch`/`FormData` behaviour in exotic environments.
 
 ### 5. Explicit Over Implicit
 
@@ -79,6 +79,20 @@ Auth state is not held inside the class. The consumer passes tokens into the cli
 ### 6. Tree-Shakeable and Composable
 
 The SDK is organised into focused internal modules but published as a single entry point (`@monerium/sdk`). Consumers only pay for what they import. Modern bundlers handle tree-shaking automatically given `"sideEffects": false` in `package.json`.
+
+---
+
+## Non-goals
+
+The following are explicitly out of scope for v3.0. Recording them prevents scope creep during review.
+
+- **No built-in token cache or store** — token persistence is always the consumer's responsibility
+- **No built-in refresh deduplication helper** — the consumer implements deduplication inside their `getAccessToken` callback if needed
+- **No framework adapters in v3** — no first-party React hooks, Next.js helpers, or similar; addressed in a separate RFC
+- **No auth session manager** — the SDK does not track whether the user is "logged in"
+- **No retry policy in core** — retries are the consumer's concern; the injectable `transport` provides the seam for it
+- **No automatic URL parsing beyond `parseAuthorizationResponse()`** — that one helper is explicitly opt-in; no further URL magic is introduced
+- **No built-in refresh scheduling** — the SDK does not schedule background token refreshes
 
 ---
 
@@ -93,13 +107,15 @@ Function names follow the conventions established by [`openid-client`](https://g
 | `preparePKCEChallenge()`                | `randomPKCECodeVerifier()` + `calculatePKCECodeChallenge()` | Split into two composable primitives matching panva exactly. Verifier generation and challenge derivation are separate concerns. |
 | `authorize()`                           | `buildAuthorizationUrl()`                                   | Describes what is returned (a URL), not what happens after (navigation). Matches panva's `buildAuthorizationUrl`.                |
 | `siwe()`                                | `buildSiweAuthorizationUrl()`                               | Consistent with `buildAuthorizationUrl`. SIWE is a variant, not a different concept.                                             |
-| `getAccess()` (auth code path)          | `authorizationCodeGrant()`                                  | OAuth2 spec terminology. Matches panva's `authorizationCodeGrant`.                                                               |
-| `getAccess()` (refresh token path)      | `refreshTokenGrant()`                                       | OAuth2 spec terminology. Clear and unambiguous.                                                                                  |
+| `getAccess()` (auth code path)          | `authorizationCodeGrant()` / `exchangeAuthorizationCode()`  | Canonical: OAuth2 spec terminology matching panva. Friendly alias for product engineers less familiar with grant type names.     |
+| `getAccess()` (refresh token path)      | `refreshTokenGrant()` / `refreshAccessToken()`              | Canonical: OAuth2 spec terminology. Friendly alias for readability.                                                              |
 | `getAccess()` (client credentials path) | `clientCredentialsGrant()`                                  | OAuth2 spec terminology. Matches panva's `clientCredentialsGrant`.                                                               |
 | `disconnect()`                          | _(removed)_                                                 | No replacement needed — caller manages their own state.                                                                          |
 | `revokeAccess()`                        | _(removed)_                                                 | No replacement needed — caller manages their own storage.                                                                        |
 | `subscribeOrderNotifications()`         | `createOrderSocket()`                                       | Describes what is returned. Consistent with the `create*` naming pattern.                                                        |
-| `unsubscribeOrderNotifications()`       | `socket.close()`                                            | Caller calls `.close()` on the returned `WebSocket` directly.                                                                    |
+| `unsubscribeOrderNotifications()`       | `subscription.close()`                                      | Caller calls `.close()` on the returned `OrderSubscription` directly.                                                            |
+| `new MoneriumClient()`                  | `createMoneriumClient()` / `new MoneriumClient()`           | Factory function is the primary API. Class constructor is exported as a compatibility alias. See API Client section.             |
+| _(new)_                                 | `parseAuthorizationResponse()`                              | Optional pure helper. Parses a callback URL or query string into `{ code, state, error, errorDescription }`. No side effects.    |
 
 ### Mapping: current type names → new type names
 
@@ -131,15 +147,17 @@ Everything is exported from a single entry point: `@monerium/sdk`. Sub-path impo
 │   ├── calculatePKCECodeChallenge()
 │   ├── buildAuthorizationUrl()
 │   ├── buildSiweAuthorizationUrl()
-│   ├── authorizationCodeGrant()
-│   ├── refreshTokenGrant()
-│   └── clientCredentialsGrant()
+│   ├── authorizationCodeGrant()    (alias: exchangeAuthorizationCode)
+│   ├── refreshTokenGrant()         (alias: refreshAccessToken)
+│   ├── clientCredentialsGrant()
+│   └── parseAuthorizationResponse()
 │
 ├── src/client.ts         # Stateless REST API client
-│   └── MoneriumClient
+│   ├── createMoneriumClient()      (primary API — factory function)
+│   └── MoneriumClient              (class alias, identical options and behaviour)
 │
 ├── src/socket.ts         # WebSocket subscription helpers
-│   └── createOrderSocket()
+│   └── createOrderSocket()         (returns OrderSubscription)
 │
 ├── src/utils.ts          # Pure utility functions (unchanged from today)
 │   ├── placeOrderMessage()
@@ -167,7 +185,7 @@ Everything is exported from a single entry point: `@monerium/sdk`. Sub-path impo
 - Internal socket `Map` — removed from the class; sockets are returned to the caller
 - `disconnect()` — removed; no-op once the class holds no state
 - `revokeAccess()` — removed; caller removes tokens from their own storage
-- Sub-path exports (`@monerium/sdk/auth`, `@monerium/sdk/client`, etc.) — not needed; everything comes from `@monerium/sdk`
+- Sub-path exports as a _required_ API — `@monerium/sdk` remains the documented happy path. Optional stable subpath exports (`@monerium/sdk/auth`, `@monerium/sdk/client`, `@monerium/sdk/socket`) may be added alongside it for advanced consumers who want explicit scoping or cleaner bundle inspection; they are not banned, just not the primary documented entry point.
 
 ---
 
@@ -192,19 +210,30 @@ buildAuthorizationUrl(options: BuildAuthorizationUrlOptions): string
 buildSiweAuthorizationUrl(options: BuildSiweAuthorizationUrlOptions): string
 
 // Exchange an authorization code for tokens. Caller stores the result.
+// Canonical name (OAuth2 spec / panva). Friendly alias: exchangeAuthorizationCode()
 authorizationCodeGrant(options: AuthorizationCodeGrantOptions): Promise<BearerProfile>
+exchangeAuthorizationCode(options: AuthorizationCodeGrantOptions): Promise<BearerProfile>
 
 // Get a new access token using a refresh token. Caller stores the result.
+// Canonical name (OAuth2 spec). Friendly alias: refreshAccessToken()
 refreshTokenGrant(options: RefreshTokenGrantOptions): Promise<BearerProfile>
+refreshAccessToken(options: RefreshTokenGrantOptions): Promise<BearerProfile>
 
 // Get an access token using client credentials. Server-side only.
 clientCredentialsGrant(options: ClientCredentialsGrantOptions): Promise<BearerProfile>
+
+// Optional pure helper — parse a callback URL or query string into structured fields.
+// No side effects. No window access. Input/output only.
+parseAuthorizationResponse(input: string | URL): ParsedAuthorizationResponse
 ```
 
 ### API client
 
 ```ts
-// Stateless REST API client
+// Stateless REST API client — factory function is the primary API
+createMoneriumClient(options: MoneriumClientOptions): MoneriumClientInstance
+
+// Class alias — identical options and behaviour; exported for compatibility
 new MoneriumClient(options: MoneriumClientOptions)
 
 // All existing resource methods remain, unchanged return types
@@ -231,8 +260,8 @@ client.uploadSupportingDocument(document: File): Promise<SupportingDoc>
 ### WebSocket
 
 ```ts
-// Create and return a WebSocket — caller owns the lifecycle
-createOrderSocket(options: CreateOrderSocketOptions): WebSocket
+// Create and return an OrderSubscription — caller owns the lifecycle
+createOrderSocket(options: CreateOrderSocketOptions): OrderSubscription
 ```
 
 ---
@@ -319,12 +348,13 @@ window.history.replaceState(null, '', window.location.pathname);
 ### Step 4 — Use the API client
 
 ```ts
-import { MoneriumClient, refreshTokenGrant } from '@monerium/sdk';
+import { createMoneriumClient, refreshTokenGrant } from '@monerium/sdk';
 
 // ✅ Recommended for production — getAccessToken callback
 // The client calls this before every request. The consumer controls
 // expiry checking, refresh logic, and token rotation.
-const client = new MoneriumClient({
+// createMoneriumClient() is the primary API; new MoneriumClient() is an alias.
+const client = createMoneriumClient({
   environment: 'sandbox',
   getAccessToken: async () => {
     const token = mySecureStore.get('access_token');
@@ -385,7 +415,7 @@ window.location.assign(url);
 ### Client Credentials Flow (server-side)
 
 ```ts
-import { clientCredentialsGrant, MoneriumClient } from '@monerium/sdk';
+import { clientCredentialsGrant, createMoneriumClient } from '@monerium/sdk';
 
 const bearerProfile = await clientCredentialsGrant({
   environment: 'production',
@@ -396,7 +426,7 @@ const bearerProfile = await clientCredentialsGrant({
 // Server-side: tokens are short-lived and the process controls the lifecycle.
 // A static accessToken is acceptable here since the server can re-run
 // clientCredentialsGrant() on startup or when a 401 is received.
-const client = new MoneriumClient({
+const client = createMoneriumClient({
   environment: 'production',
   accessToken: bearerProfile.access_token,
 });
@@ -427,43 +457,55 @@ mySecureStore.set(
 
 ### Constructor
 
+`getAccessToken` and `accessToken` are mutually exclusive at the type level — TypeScript prevents passing both simultaneously. If neither is provided, the client works for unauthenticated endpoints (e.g. `getTokens()`); authenticated endpoints throw a `MoneriumError` with `code: 'authentication_required'`.
+
 ```ts
-interface MoneriumClientOptions {
-  environment?: ENV; // defaults to 'sandbox'
-
-  /**
-   * Recommended for production browser usage and any long-lived client.
-   *
-   * Called by the client before every request. The consumer controls expiry
-   * checking, refresh logic, and token rotation. This matches the pattern
-   * used by Google Auth Library (refreshHandler), Azure Identity
-   * (TokenCredential.getToken), and MSAL (acquireTokenSilent).
-   *
-   * Because the callback is invoked on every request, the consumer can:
-   * - Check expiry and refresh transparently
-   * - Rotate tokens on every call
-   * - Fetch tokens from a secure backend (BFF pattern) without ever
-   *   exposing the raw token in browser-accessible storage
-   * - Deduplicate concurrent refresh requests internally
-   */
-  getAccessToken?: () => string | Promise<string>;
-
-  /**
-   * Convenience option for short-lived server-side usage and testing.
-   *
-   * A static token string. The client uses this as-is for the lifetime
-   * of the instance. If the token expires, API calls will fail with 401
-   * and the consumer must create a new instance or handle the error.
-   *
-   * Not recommended for production browser usage or long-lived clients.
-   */
-  accessToken?: string;
-}
+type MoneriumClientOptions =
+  | {
+      environment?: ENV;
+      /**
+       * Recommended for production browser usage and any long-lived client.
+       *
+       * Called by the client before every request. The consumer controls expiry
+       * checking, refresh logic, and token rotation. This matches the pattern
+       * used by Google Auth Library (refreshHandler), Azure Identity
+       * (TokenCredential.getToken), and MSAL (acquireTokenSilent).
+       *
+       * Because the callback is invoked on every request, the consumer can:
+       * - Check expiry and refresh transparently
+       * - Rotate tokens on every call
+       * - Fetch tokens from a secure backend (BFF pattern) without ever
+       *   exposing the raw token in browser-accessible storage
+       * - Deduplicate concurrent refresh requests internally
+       */
+      getAccessToken: () => string | Promise<string>;
+      accessToken?: never;
+      transport?: Transport;
+    }
+  | {
+      environment?: ENV;
+      /**
+       * Convenience option for short-lived server-side usage and testing.
+       *
+       * A static token string. The client uses this as-is for the lifetime
+       * of the instance. If the token expires, API calls will fail with 401
+       * and the consumer must create a new instance or handle the error.
+       *
+       * Not recommended for production browser usage or long-lived clients.
+       */
+      accessToken: string;
+      getAccessToken?: never;
+      transport?: Transport;
+    }
+  | {
+      environment?: ENV;
+      accessToken?: never;
+      getAccessToken?: never;
+      transport?: Transport;
+    };
 ```
 
-`getAccessToken` and `accessToken` are mutually exclusive. `getAccessToken` takes precedence if both are provided.
-
-If neither is provided, the client still works for unauthenticated endpoints (e.g. `getTokens()`), but authenticated endpoints will throw a `MoneriumError` with `code: 'authentication_required'`.
+The optional `transport` field replaces the internal `fetch` call. Pass a custom implementation to enable retries, request logging, observability, or test doubles without globally mocking `fetch`. Defaults to the platform's built-in `fetch`. See [Types & Exports](#types--exports) for the `Transport` type.
 
 ### Why `getAccessToken` is the security-preferred pattern
 
@@ -492,28 +534,40 @@ All HTTP errors are thrown as structured `MoneriumError` objects:
 
 ```ts
 class MoneriumError extends Error {
-  status: number;
-  code: string;
-  details?: unknown;
+  name: 'MoneriumError';
+  status?: number; // absent for network-level errors with no HTTP response
+  code?: string; // absent if the backend returned no structured error code
+  body?: unknown; // raw backend response payload; untyped because error shapes vary
+  cause?: unknown; // underlying error, if any (e.g. a fetch rejection)
+  requestId?: string; // from X-Request-ID response header; invaluable for support
 }
 ```
 
-This replaces the current behaviour of throwing raw API response objects or untyped `Error` strings.
+This replaces the current behaviour of throwing raw API response objects or untyped `Error` strings. `status` is optional because network failures (DNS errors, connection timeouts) produce no HTTP response. `body` is preferred over `details` to signal that this is the raw backend payload, not a processed structure.
 
 ### Chain Resolution
 
 `mapChainIdToChain` and `parseChainBackwardsCompatible` are no longer applied silently inside every API method. The client accepts chains in any supported format (name string, chain ID number, Cosmos ID) and resolves them once in a dedicated internal layer. The environment context (`sandbox` / `production`) is set at construction time and applied consistently.
 
+> **Note on implicit normalisation vs. the Explicit-Over-Implicit principle:** This is intentional, not a contradiction. The principle targets _side effects and lifecycle decisions_ (navigation, storage writes, auth state changes). Pure input-shaping — accepting `1` and deterministically resolving it to `"ethereum"` — is acceptable because it is stateless, reversible by inspection, and eliminates a class of "wrong chain ID" bugs with no surprises. The RFC draws the line at anything that mutates state or triggers IO behind the caller's back.
+
 ---
 
 ## WebSocket Redesign
 
-The internal socket `Map` is removed. `createOrderSocket` is a standalone function that creates and returns a `WebSocket`. The caller owns the connection and calls `.close()` when done.
+The internal socket `Map` is removed. `createOrderSocket` is a standalone function that creates and returns an `OrderSubscription`. The caller owns the connection and calls `.close()` when done.
+
+Returning a small `OrderSubscription` abstraction rather than a raw `WebSocket` decouples the public API from the browser `WebSocket` primitive. This means:
+
+- The underlying transport can change (SSE, long-poll, etc.) without a breaking change
+- `state` as a typed union (`'connecting' | 'open' | 'closed'`) is more useful than `WebSocket.readyState` (a raw number)
+- The type is trivially mockable in tests — implement two properties, done
+- Irrelevant `WebSocket` surface (`send`, `binaryType`, protocol fields) is not exposed to callers
 
 ```ts
 import { createOrderSocket, OrderState } from '@monerium/sdk';
 
-const socket = createOrderSocket({
+const subscription = createOrderSocket({
   environment: 'sandbox',
   accessToken: mySecureStore.get('access_token'),
   filter: {
@@ -528,11 +582,13 @@ const socket = createOrderSocket({
   },
 });
 
+console.log(subscription.state); // 'connecting' | 'open' | 'closed'
+
 // Caller closes the connection when done
-socket.close();
+subscription.close();
 ```
 
-There is no `subscribeOrderNotifications` or `unsubscribeOrderNotifications` on the client class. The caller manages the `WebSocket` reference directly.
+There is no `subscribeOrderNotifications` or `unsubscribeOrderNotifications` on the client class. The caller manages the `OrderSubscription` reference directly.
 
 ---
 
@@ -585,11 +641,26 @@ export interface ClientCredentialsGrantOptions {
   clientSecret: string;
 }
 
-export interface MoneriumClientOptions {
-  environment?: ENV;
-  accessToken?: string;
-  getAccessToken?: () => string | Promise<string>;
-}
+// Discriminated union — TypeScript prevents passing both getAccessToken and accessToken
+export type MoneriumClientOptions =
+  | {
+      environment?: ENV;
+      getAccessToken: () => string | Promise<string>;
+      accessToken?: never;
+      transport?: Transport;
+    }
+  | {
+      environment?: ENV;
+      accessToken: string;
+      getAccessToken?: never;
+      transport?: Transport;
+    }
+  | {
+      environment?: ENV;
+      accessToken?: never;
+      getAccessToken?: never;
+      transport?: Transport;
+    };
 
 export interface CreateOrderSocketOptions {
   environment: ENV;
@@ -599,10 +670,35 @@ export interface CreateOrderSocketOptions {
   onError?: (err: Event) => void;
 }
 
+// Returned by createOrderSocket — small abstraction over the raw WebSocket
+export type OrderSubscription = {
+  close(): void;
+  readonly state: 'connecting' | 'open' | 'closed';
+};
+
+// Injectable transport — replaces the internal fetch call; defaults to platform fetch
+export type Transport = <T>(req: {
+  method: string;
+  url: string;
+  headers?: Record<string, string>;
+  body?: BodyInit | string;
+}) => Promise<T>;
+
+// Pure helper — result of parseAuthorizationResponse()
+export interface ParsedAuthorizationResponse {
+  code?: string;
+  state?: string;
+  error?: string;
+  errorDescription?: string;
+}
+
 export class MoneriumError extends Error {
-  status: number;
-  code: string;
-  details?: unknown;
+  name: 'MoneriumError';
+  status?: number; // absent for network-level errors
+  code?: string; // absent if the backend returned no structured code
+  body?: unknown; // raw backend response payload
+  cause?: unknown; // underlying error (e.g. fetch rejection)
+  requestId?: string; // from X-Request-ID header; useful for support
 }
 ```
 
@@ -634,9 +730,11 @@ All resource types (`Order`, `IBAN`, `Profile`, `Address`, `Token`, `BearerProfi
 
 The migration is carried out in two phases to avoid forcing all consumers to upgrade at once.
 
-### Phase 1 — `v2.x` (deprecation release, non-breaking)
+### Phase 1 — `v2.x` (deprecation release, source-compatible)
 
-The new panva-named exports are added alongside the old ones. Old names receive a `@deprecated` JSDoc tag with a message pointing to the replacement. No old names are removed. Consumers can migrate at their own pace.
+The new exports are added alongside the old ones. Old names receive a `@deprecated` JSDoc tag with a message pointing to the replacement. No old names are removed. Consumers can migrate at their own pace.
+
+> **On "source-compatible" vs "non-breaking":** Phase 1 is source-compatible for existing consumers — existing call sites compile and run unchanged. It is not guaranteed to be _fully_ runtime-equivalent in every edge case (timing differences, storage write order, auth callback edge cases). If you relied on exact internal behaviour, review the "What changes behaviour" section below.
 
 The old names are re-exported as thin wrappers over the new implementations — not as independent code paths — so there is no risk of the two diverging.
 
@@ -690,7 +788,7 @@ subscribeOrderNotifications(...): WebSocket | undefined { ... }
 unsubscribeOrderNotifications(...): void { ... }
 ```
 
-#### What changes behaviour in Phase 1 (non-breaking but notable)
+#### What changes behaviour in Phase 1 (source-compatible, but notable)
 
 - `authorize()` and `siwe()` will **no longer redirect** — they return the URL string. The wrapper calls `window.location.assign` on behalf of consumers who haven't migrated yet, preserving the old behaviour.
 - `preparePKCEChallenge()` will **no longer write to `localStorage`** — it returns `{ codeVerifier, codeChallenge }`. The deprecated wrapper writes to `localStorage` internally as before, so old code continues to work.
@@ -765,7 +863,7 @@ import {
   buildAuthorizationUrl,
   authorizationCodeGrant,
   refreshTokenGrant,
-  MoneriumClient,
+  createMoneriumClient,
   createOrderSocket,
 } from '@monerium/sdk';
 
@@ -811,7 +909,8 @@ mySecureStore.set(
 window.history.replaceState(null, '', window.location.pathname);
 
 // --- Use the API (production pattern: getAccessToken callback) ---
-const client = new MoneriumClient({
+// createMoneriumClient is the primary factory API; new MoneriumClient() is an alias
+const client = createMoneriumClient({
   environment: 'sandbox',
   getAccessToken: async () => {
     const token = mySecureStore.get('access_token');
@@ -837,15 +936,15 @@ const client = new MoneriumClient({
 
 const profiles = await client.getProfiles();
 
-// --- Subscribe to orders — caller owns the socket ---
-const socket = createOrderSocket({
+// --- Subscribe to orders — caller owns the subscription ---
+const subscription = createOrderSocket({
   environment: 'sandbox',
   accessToken: mySecureStore.get('access_token'),
   onMessage: (order) => console.log(order),
 });
 
 // --- Disconnect — caller manages their own cleanup ---
-socket.close();
+subscription.close();
 mySecureStore.remove('access_token');
 mySecureStore.remove('refresh_token');
 ```
@@ -875,90 +974,25 @@ await monerium.authorize();
 
 ---
 
-## Open for Discussion
-
-These two items came out of a broader design review. Neither is a blocker for implementation — the current RFC is valid without them — but they are worth team input before closing v3.0.
-
----
-
-### A. Injectable Transport
-
-**The idea:** Accept an optional `transport` function in `MoneriumClientOptions` that replaces the internal `fetch` call. Consumers can provide a custom implementation for retries, logging, or test doubles.
-
-```ts
-type Transport = <T>(req: {
-  method: string;
-  url: string;
-  headers: Record<string, string>;
-  body?: BodyInit | string;
-}) => Promise<T>;
-
-new MoneriumClient({
-  environment: 'sandbox',
-  getAccessToken: () => token,
-  transport: myCustomFetch, // optional
-});
-```
-
-**Pros**
-
-- Makes the client testable without globally mocking `fetch` — inject a no-network stub in unit tests
-- Enables retry logic, request logging, and observability without wrapping the SDK
-- Aligns with the "inject everything" philosophy already applied to tokens and storage
-- Cloudflare Workers, Bun, and Deno all have `fetch` built in so this rarely needs to be used in practice — it's a zero-cost option
-
-**Cons**
-
-- Adds a surface to the constructor options that most consumers will never use
-- The `Transport` type needs to be carefully specified to remain useful — too narrow and it can't be adapted, too broad and it loses type safety
-- Every API method needs to route through the injected transport consistently — a discipline cost, not a conceptual one
-
-**Current stance:** Not in the initial implementation. Worth revisiting if testing patterns or Cloudflare Worker support become a priority.
-
----
-
-### B. `Subscription` Return Type Instead of Raw `WebSocket`
-
-**The idea:** `createOrderSocket()` currently returns a raw `WebSocket`. Instead, return a controlled abstraction:
-
-```ts
-type Subscription = {
-  close(): void;
-  readonly state: 'connecting' | 'open' | 'closed';
-};
-```
-
-**Pros**
-
-- Decouples the public API from the browser `WebSocket` primitive — the transport underneath can change (e.g. SSE, long-poll) without a breaking change
-- `state` as a typed union is more useful than `WebSocket.readyState` (a raw number)
-- Easier to mock in tests — implement the two-property interface, done
-- Prevents consumers from calling arbitrary `WebSocket` methods (`send`, `binaryType`, etc.) that have no meaning in this context
-
-**Cons**
-
-- Consumers who want direct `WebSocket` access for advanced use cases (e.g. custom `onopen` timing) lose it
-- Adds a small wrapper type to maintain; if `WebSocket` already does the job, this is indirection for its own sake
-- The `state` property requires syncing with the underlying socket's `readyState`, which is minor but not free
-
-**Current stance:** Not in the initial implementation. Recommended if the SDK starts being used in non-browser environments where `WebSocket` is not a native global.
-
----
-
 ## Decisions Made
 
-| Question                                    | Decision                                                                                                                                                  |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Sub-path exports vs single entry point      | **Single entry point** — everything from `@monerium/sdk`. Internal file structure stays modular for tree-shaking.                                         |
-| Option A vs Option B for PKCE verifier      | **Option B** — `randomPKCECodeVerifier()` and `calculatePKCECodeChallenge()` return values; caller stores and passes back to `authorizationCodeGrant()`.  |
-| `calculatePKCECodeChallenge` sync vs async  | **Sync** — keeps `crypto-js` for Metamask Snap compatibility. Return type is `string`, not `Promise<string>`.                                             |
-| `createLocalStorage()` helper               | **No** — the SDK must not encourage `localStorage`. Storage is always the consumer's responsibility.                                                      |
-| Keep storage key constants as public export | **No** — `STORAGE_CODE_VERIFIER`, `STORAGE_ACCESS_TOKEN`, `STORAGE_ACCESS_EXPIRY` removed from public API entirely.                                       |
-| `getAccessToken` vs static `accessToken`    | **Both supported.** `getAccessToken` is the recommended production pattern. `accessToken` is for server-side and testing only.                            |
-| Error class shape                           | **Single `MoneriumError`** with `status: number`, `code?: string`, and `body: unknown`. No subclasses. `body` untyped because backend error shape varies. |
-| Chain resolution                            | **Silent inside the client.** Numeric `chainId` values (`1`, `137`) accepted anywhere a chain is expected, resolved to Monerium chain names internally.   |
-| Framework adapters                          | **Pure SDK only.** No first-party React or Next.js adapters. Can be addressed in a separate RFC.                                                          |
-| Phase 1 deprecated wrapper isolation        | **Separate `src/compat.ts`.** All legacy `localStorage` and `window.location` code lives there exclusively — v3.0 cut is a single file deletion.          |
+| Question                                    | Decision                                                                                                                                                                                                                                                                          |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sub-path exports vs single entry point      | **Single entry point as the documented happy path.** `@monerium/sdk` is primary. Optional stable subpath exports (`/auth`, `/client`, `/socket`) may be added for advanced users.                                                                                                 |
+| Option A vs Option B for PKCE verifier      | **Option B** — `randomPKCECodeVerifier()` and `calculatePKCECodeChallenge()` return values; caller stores and passes back to `authorizationCodeGrant()`.                                                                                                                          |
+| `calculatePKCECodeChallenge` sync vs async  | **Sync** — keeps `crypto-js` for Metamask Snap compatibility. Return type is `string`, not `Promise<string>`.                                                                                                                                                                     |
+| `createLocalStorage()` helper               | **No** — the SDK must not encourage `localStorage`. Storage is always the consumer's responsibility.                                                                                                                                                                              |
+| Keep storage key constants as public export | **No** — `STORAGE_CODE_VERIFIER`, `STORAGE_ACCESS_TOKEN`, `STORAGE_ACCESS_EXPIRY` removed from public API entirely.                                                                                                                                                               |
+| `getAccessToken` vs static `accessToken`    | **Both supported, but mutually exclusive at the type level** (discriminated union). TypeScript prevents passing both. `getAccessToken` is recommended for production; `accessToken` is for server-side and testing.                                                               |
+| Error class shape                           | **Single `MoneriumError`** with `status?: number`, `code?: string`, `body?: unknown`, `cause?: unknown`, `requestId?: string`. `status` is optional to handle network-level failures with no HTTP response.                                                                       |
+| Chain resolution                            | **Silent inside the client.** Numeric `chainId` values (`1`, `137`) accepted anywhere a chain is expected, resolved to Monerium chain names internally. This is deterministic input-shaping, not a lifecycle side effect — see Chain Resolution section for the explicit framing. |
+| Framework adapters                          | **Pure SDK only.** No first-party React or Next.js adapters. Can be addressed in a separate RFC.                                                                                                                                                                                  |
+| Phase 1 deprecated wrapper isolation        | **Separate `src/compat.ts`.** All legacy `localStorage` and `window.location` code lives there exclusively — v3.0 cut is a single file deletion.                                                                                                                                  |
+| Class vs factory function                   | **`createMoneriumClient()` is the primary API.** `MoneriumClient` class constructor is exported as a compatibility alias with identical behaviour. Both accept `MoneriumClientOptions`.                                                                                           |
+| `createOrderSocket()` return type           | **`OrderSubscription`** — a `{ close(), state }` abstraction instead of a raw `WebSocket`. Decouples the public API from the browser primitive; trivially mockable in tests.                                                                                                      |
+| Injectable transport                        | **Included in v3.0.** An optional `transport` field on `MoneriumClientOptions` replaces the internal `fetch` call. Defaults to platform `fetch`. Enables test doubles and retry wrappers without globally mocking `fetch`.                                                        |
+| Auth function naming ergonomics             | **Canonical names are primary; friendly aliases are stable exports.** `authorizationCodeGrant` / `exchangeAuthorizationCode`, `refreshTokenGrant` / `refreshAccessToken`. Both are documented and supported.                                                                      |
+| `parseAuthorizationResponse()` helper       | **Included.** Optional pure helper that parses a callback URL or query string into `{ code, state, error, errorDescription }`. No side effects, no window access, pure input/output.                                                                                              |
 
 ---
 
@@ -971,28 +1005,37 @@ type Subscription = {
 - [ ] `buildAuthorizationUrl()` returns a URL `string` and performs no navigation
 - [ ] `buildSiweAuthorizationUrl()` returns a URL `string` and performs no navigation
 - [ ] `authorizationCodeGrant()` returns a `BearerProfile` and writes nothing to any storage
+- [ ] `exchangeAuthorizationCode()` is a stable re-export alias for `authorizationCodeGrant()`
 - [ ] `refreshTokenGrant()` returns a `BearerProfile` and writes nothing to any storage
+- [ ] `refreshAccessToken()` is a stable re-export alias for `refreshTokenGrant()`
 - [ ] `clientCredentialsGrant()` returns a `BearerProfile` and writes nothing to any storage
+- [ ] `parseAuthorizationResponse()` returns a `ParsedAuthorizationResponse` and accesses no globals
 - [ ] All auth functions work in Node.js without any `window` polyfill
 - [ ] All auth functions are named consistently with `openid-client` conventions
 
 ### API Client Module
 
-- [ ] `MoneriumClient` constructor does not accept `clientSecret`
-- [ ] `MoneriumClient` holds no internal token state after construction
-- [ ] `MoneriumClient` does not read or write `localStorage`, `sessionStorage`, or any other storage
-- [ ] `MoneriumClient` does not call `window.location.assign` or `window.history.replaceState`
-- [ ] `MoneriumClient` supports `getAccessToken` (async callback, recommended) and `accessToken` (static string, convenience)
+- [ ] `createMoneriumClient()` is exported as the primary factory function
+- [ ] `MoneriumClient` class is exported as a compatibility alias with identical behaviour
+- [ ] Neither `createMoneriumClient` nor `MoneriumClient` accept `clientSecret`
+- [ ] The client holds no internal token state after construction
+- [ ] The client does not read or write `localStorage`, `sessionStorage`, or any other storage
+- [ ] The client does not call `window.location.assign` or `window.history.replaceState`
+- [ ] TypeScript prevents passing both `getAccessToken` and `accessToken` simultaneously (discriminated union enforced at the type level)
+- [ ] `getAccessToken` (async callback, recommended) and `accessToken` (static string, convenience) are both supported
 - [ ] When `getAccessToken` is provided, it is called before every authenticated request
+- [ ] An optional `transport` function can be passed to replace the internal `fetch` call
+- [ ] When no `transport` is provided, the platform's built-in `fetch` is used
 - [ ] Numeric `chainId` values (e.g. `1`, `137`) are accepted and resolved to chain names silently inside the client
 - [ ] All API resource methods return the same types as today
-- [ ] API errors are thrown as `MoneriumError` instances with `status`, `code?`, and `body`
+- [ ] API errors are thrown as `MoneriumError` instances with `status?`, `code?`, `body?`, and `requestId?`
 - [ ] The client works in Node.js without any `window` polyfill
 
 ### WebSocket Module
 
-- [ ] `createOrderSocket()` returns a `WebSocket` instance
-- [ ] The caller is responsible for calling `.close()` on the returned socket
+- [ ] `createOrderSocket()` returns an `OrderSubscription` (not a raw `WebSocket`)
+- [ ] `OrderSubscription.state` reflects the underlying connection state as `'connecting' | 'open' | 'closed'`
+- [ ] The caller is responsible for calling `.close()` on the returned subscription
 - [ ] No sockets are stored internally anywhere in the SDK
 
 ### Deprecation (Phase 1)
@@ -1008,7 +1051,7 @@ type Subscription = {
 - [ ] No direct references to `localStorage`, `sessionStorage`, or `window.location` exist outside `src/compat.ts`
 - [ ] No `isServer` guards exist outside `src/compat.ts`
 - [ ] `"sideEffects": false` is set in `package.json`
-- [ ] Everything is importable from `@monerium/sdk` — no sub-path imports required
+- [ ] Everything is importable from `@monerium/sdk` — sub-path imports are optional, not required
 - [ ] Bundle size is reduced compared to the current version (verified in CI)
 - [ ] All existing unit tests pass against the new API (updated for new signatures)
 - [ ] New unit tests cover each auth function in a Node.js environment (no `window` global)
@@ -1029,15 +1072,16 @@ The SDK currently owns too much. It reads and writes `localStorage`, parses the 
 
 The SDK becomes a set of pure functions and a stateless API client. **It stops making decisions on your behalf.**
 
-| Concern         | Before                                          | After                                               |
-| --------------- | ----------------------------------------------- | --------------------------------------------------- |
-| PKCE generation | `preparePKCEChallenge()` writes to localStorage | `randomPKCECodeVerifier()` returns a string         |
-| Navigation      | `authorize()` calls `window.location.assign`    | `buildAuthorizationUrl()` returns a URL             |
-| Token exchange  | `getAccess()` reads from the URL and storage    | `authorizationCodeGrant()` takes explicit arguments |
-| Token storage   | Written to localStorage automatically           | Returned to the caller — stored however they choose |
-| Token refresh   | Handled inside `getAccess()`                    | `getAccessToken` callback on the client             |
-| WebSockets      | Stored in an internal Map on the class          | `createOrderSocket()` returns a WebSocket           |
-| Errors          | Raw JSON objects or plain Error strings         | `MoneriumError` with `status`, `code`, and `body`   |
+| Concern         | Before                                          | After                                                |
+| --------------- | ----------------------------------------------- | ---------------------------------------------------- |
+| PKCE generation | `preparePKCEChallenge()` writes to localStorage | `randomPKCECodeVerifier()` returns a string          |
+| Navigation      | `authorize()` calls `window.location.assign`    | `buildAuthorizationUrl()` returns a URL              |
+| Token exchange  | `getAccess()` reads from the URL and storage    | `authorizationCodeGrant()` takes explicit arguments  |
+| Token storage   | Written to localStorage automatically           | Returned to the caller — stored however they choose  |
+| Token refresh   | Handled inside `getAccess()`                    | `getAccessToken` callback on the client              |
+| Client creation | `new MoneriumClient()` (OOP-first)              | `createMoneriumClient()` (factory, primary API)      |
+| WebSockets      | Stored in an internal Map on the class          | `createOrderSocket()` returns an `OrderSubscription` |
+| Errors          | Raw JSON objects or plain Error strings         | `MoneriumError` with `status?`, `code?`, and `body?` |
 
 ### What stays the same
 
@@ -1067,15 +1111,16 @@ The SDK currently owns too much. It reads and writes `localStorage`, parses the 
 
 The SDK becomes a set of pure functions and a stateless API client. **It stops making decisions on your behalf.**
 
-| Concern         | Before                                          | After                                               |
-| --------------- | ----------------------------------------------- | --------------------------------------------------- |
-| PKCE generation | `preparePKCEChallenge()` writes to localStorage | `randomPKCECodeVerifier()` returns a string         |
-| Navigation      | `authorize()` calls `window.location.assign`    | `buildAuthorizationUrl()` returns a URL             |
-| Token exchange  | `getAccess()` reads from the URL and storage    | `authorizationCodeGrant()` takes explicit arguments |
-| Token storage   | Written to localStorage automatically           | Returned to the caller — stored however they choose |
-| Token refresh   | Handled inside `getAccess()`                    | `getAccessToken` callback on the client             |
-| WebSockets      | Stored in an internal Map on the class          | `createOrderSocket()` returns a WebSocket           |
-| Errors          | Raw JSON objects or plain Error strings         | `MoneriumError` with `status`, `code`, and `body`   |
+| Concern         | Before                                          | After                                                |
+| --------------- | ----------------------------------------------- | ---------------------------------------------------- |
+| PKCE generation | `preparePKCEChallenge()` writes to localStorage | `randomPKCECodeVerifier()` returns a string          |
+| Navigation      | `authorize()` calls `window.location.assign`    | `buildAuthorizationUrl()` returns a URL              |
+| Token exchange  | `getAccess()` reads from the URL and storage    | `authorizationCodeGrant()` takes explicit arguments  |
+| Token storage   | Written to localStorage automatically           | Returned to the caller — stored however they choose  |
+| Token refresh   | Handled inside `getAccess()`                    | `getAccessToken` callback on the client              |
+| Client creation | `new MoneriumClient()` (OOP-first)              | `createMoneriumClient()` (factory, primary API)      |
+| WebSockets      | Stored in an internal Map on the class          | `createOrderSocket()` returns an `OrderSubscription` |
+| Errors          | Raw JSON objects or plain Error strings         | `MoneriumError` with `status?`, `code?`, and `body?` |
 
 ### What stays the same
 
