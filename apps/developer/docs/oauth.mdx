@@ -10,14 +10,14 @@ import Orders from './_partials/orders.mdx';
 
 # OAuth
 
-The OAuth flow lets you offer Monerium services without managing compliance infrastructure. Users are redirected to a Monerium portal to complete KYC/KYB and authorize your application — you handle the product experience, Monerium handles the regulation.
+The OAuth flow lets you offer Monerium services without managing compliance infrastructure. Users are redirected to a Monerium portal to complete KYC/KYB and authorize your application; you handle the product experience, Monerium handles the regulation.
 
 ## Create an application
 
 1. Go to [sandbox.monerium.dev](https://sandbox.monerium.dev), open the user menu, and select **Developers**.
 2. Click **Create application** and select **OAuth**.
 3. Enter your application name and confirm.
-4. Copy the **CLIENT ID** from the credentials screen — you'll need it in the authorization flow below.
+4. Copy the **CLIENT ID** from the credentials screen; you'll need it in the authorization flow below.
 
 When you're ready for production, repeat this at [monerium.app](https://monerium.app). See [Going live](./getting-started#going-live) for the full checklist.
 
@@ -32,13 +32,9 @@ When you're ready for production, repeat this at [monerium.app](https://monerium
 
 <LinkWallet />
 
-<IBAN />
+<IBAN isOAuth />
 
-<Orders />
-
-:::info Webhooks not available for OAuth
-Webhooks require a server-side whitelabel integration. For OAuth, monitor order status by polling `GET /orders/{orderId}` or by watching for on-chain `Mint` and `Burn` events on the user's wallet.
-:::
+<Orders isOAuth />
 
 ## Going live
 

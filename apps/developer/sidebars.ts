@@ -28,8 +28,12 @@ const sidebars: SidebarsConfig = {
         },
         'oauth',
         'private',
-        'identifiers-and-formats',
       ],
+    },
+    {
+      type: 'doc',
+      id: 'identifiers-and-formats',
+      label: 'Conventions',
     },
     {
       type: 'category',

@@ -3,105 +3,156 @@ title: Private
 id: private
 ---
 
+import { Endpoint } from '@site/src/components/Endpoint';
 import LinkWallet from './_partials/link-wallet.mdx';
-import OnchainTokens from './_partials/onchain-tokens.mdx';
 import ClientCredentials from './_partials/client-credentials.mdx';
+import Orders from './_partials/orders.mdx';
 
 # Private
 
-The **Private** application is for automating your own financial operations. Unlike Whitelabel or OAuth, there is no external customer — the application acts on your own Monerium account.
+The Private plan gives you direct API access to your own Monerium account. There are no external customers; the application acts on your own wallet, IBAN, and orders.
 
-#### Who is it for?
+## Create an application
 
-- **Corporate treasuries:** Automate payroll, vendor payments, or liquidity management.
-- **Traders & developers:** Build personal trading bots, algorithms, or specialized financial tools.
-- **Backend automation:** High-frequency or low-latency fund movements between SEPA and the blockchain.
+1. Go to [sandbox.monerium.dev](https://sandbox.monerium.dev), open the user menu, and select **Developers**.
+2. Click **Create application** and select **Private**.
+3. Enter your application name and confirm.
+4. Copy the **CLIENT ID** and **CLIENT SECRET** from the credentials screen.
 
-#### Who is it NOT for?
+When you're ready for production, see [Going live](#going-live) below.
 
-- **Customer-facing platforms:** Use Whitelabel for managing external users.
-- **Public DeFi protocols:** Use OAuth for community-driven apps.
+## Integration flow
+
+1. **[Authenticate](#authentication):** Obtain an access token using Client Credentials.
+2. **[Set up webhooks](#webhooks):** Register your endpoint to receive order events.
+3. **[Link a wallet](#link-wallet):** Associate a blockchain address with your account.
+4. **[Set up an IBAN](#eur-iban):** Provision your IBAN via the dashboard or API.
+5. **[Send and receive payments](#orders):** Place redeem orders for outgoing SEPA payments and cross-chain transfers.
 
 <ClientCredentials />
 
 ## Webhooks
 
-[API Reference →](https://docs.monerium.com/api/#tag/webhooks)
+Order processing is asynchronous. Register a webhook endpoint to receive `order.created` and `order.updated` events. Profile approval is notified by email, not webhook.
 
-Webhooks let your backend react in real-time to payment events without polling.
+### Register your endpoint
 
-### Setting up webhooks
+<Endpoint method="POST" path="/webhooks" href="https://docs.monerium.com/api/#tag/webhooks/operation/create-subscription" />
 
-- **Registration:** Register your target URL via the Webhooks endpoint using your Client Credentials token.
-- **Verification:** Respond with `200 OK` to the `subscription.created` event to activate.
-- **Secret key:** Store the webhook secret securely — required to verify incoming messages.
+Generate a secret, then register your URL:
 
-### Signature verification
+```js
+import crypto from 'crypto';
 
-Every request includes a `webhook-signature` header — an HMAC-SHA256 hash of the `webhook-id`, `webhook-timestamp`, and raw request body. Verify it with your secret before processing.
+const secret = 'whsec_' + crypto.randomBytes(32).toString('base64');
 
-### Events
+const response = await fetch('https://api.monerium.dev/webhooks', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://your-app.com/webhooks/monerium',
+    secret,
+    types: ['order.created', 'order.updated'],
+  }),
+});
+// Store secret; you need it to verify incoming requests
+```
 
-- **`order.created`:** Triggered when you receive a SEPA transfer and EURe is minted to your wallet.
-- **`order.updated`:** Tracks the lifecycle of outgoing payments.
+Monerium sends a `subscription.created` event to your URL immediately after registration. Respond with `200 OK` to activate the subscription.
 
-### Best practices
+### Verify signatures
 
-- Return `200 OK` immediately; process asynchronously to avoid timeouts.
-- Monerium retries with exponential backoff up to 10 times over 12 hours.
-- Use `webhook-id` to deduplicate retried events.
+Each request includes a `webhook-signature` header containing an HMAC-SHA256 signature over the `webhook-id`, `webhook-timestamp`, and raw request body. Verify it before processing:
+
+```js
+import crypto from 'crypto';
+
+app.post(
+  '/webhooks/monerium',
+  express.raw({ type: 'application/json' }),
+  async (req, res) => {
+    const id = req.headers['webhook-id'];
+    const timestamp = req.headers['webhook-timestamp'];
+    const signature = req.headers['webhook-signature'];
+
+    const signed = `${id}.${timestamp}.${req.body}`;
+    const expected = crypto
+      .createHmac('sha256', Buffer.from(SECRET.replace('whsec_', ''), 'base64'))
+      .update(signed)
+      .digest('base64');
+
+    if (signature !== `v1,${expected}`) {
+      return res.sendStatus(401);
+    }
+
+    res.sendStatus(200);
+
+    if (await hasProcessed(id)) return; // deduplicate retried events
+
+    processEvent(JSON.parse(req.body));
+  }
+);
+```
+
+If your endpoint does not return `200 OK`, Monerium retries up to 10 times over 12 hours using exponential backoff. Store processed `webhook-id` values to avoid handling the same event twice.
 
 <LinkWallet />
 
-## IBAN
+## EUR IBAN
 
-[API Reference →](https://docs.monerium.com/api/#tag/ibans)
+The simplest way to set up your IBAN is directly in the [Monerium app](https://monerium.app) dashboard. For programmatic provisioning, use the API:
 
-Your IBAN is the gateway between SEPA and your blockchain wallet. For Private applications, this is typically a **one-time setup**.
+### Request IBAN
 
-- **Recommended:** Manage your IBAN directly in the [Monerium.app](https://monerium.app) dashboard — the simplest path for personal use.
-- **Programmatic provisioning:** Available via the API, but the UI-based setup is generally preferred when not managing multiple users.
-- Incoming funds are minted as EURe to your linked wallet within ~5 seconds. Monerium covers gas costs.
-- Supports 1st and 3rd party SEPA payments with no inherent transaction limits.
+<Endpoint method="POST" path="/ibans" href="https://docs.monerium.com/api/#tag/ibans/operation/request-iban" />
 
-## Orders
+```js
+await fetch('https://api.monerium.dev/ibans', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    address: '0x59cFC408d310697f9D3598e1BE75B0157a072407',
+    chain: 'ethereum', // or 'gnosis', 'polygon'
+  }),
+});
+// 202: IBAN provisioning started
+```
 
-[API Reference →](https://docs.monerium.com/api/#tag/orders)
+### Move an IBAN
 
-### SEPA payments
+<Endpoint method="PATCH" path="/ibans/{iban}" href="https://docs.monerium.com/api/#tag/ibans/operation/move-iban" />
 
-**Incoming (issue orders):** Fully autonomous — Monerium creates them automatically when funds arrive. Listen for `order.created`.
+Re-associate your IBAN with a different address or chain. Incoming payments will be routed to the new address from that point forward.
 
-**Outgoing (redeem orders):** Triggered via API. Monerium burns EURe from your wallet and sends a SEPA transfer from your IBAN. Typically processes within 5 seconds.
+```js
+await fetch(`https://api.monerium.dev/ibans/${iban}`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    address: '0x59cFC408d310697f9D3598e1BE75B0157a072407',
+    chain: 'gnosis',
+  }),
+});
+// 200: IBAN moved
+```
 
-### Bridging / Cross-chain
-
-Triggered by you. Initiates a redeem on the source chain and a dependent issue on the destination chain. No fees; Monerium covers gas.
-
-### Redeem order requirements
-
-- All redeem orders require a cryptographic signature from the linked wallet.
-- Orders over **15,000 EUR** require a `supportingDocumentId`. Upload via `/files` first.
-
-### Webhooks
-
-- **`order.created`:** New order initialized.
-- **`order.updated`:** Order state changed (e.g. `placed` → `processed`).
-
-All payloads include a `webhook-signature` header. Verify with your shared secret.
-
-### Endpoints
-
-- `POST /orders` — Initiate a redeem order.
-- `GET /orders` — List orders, filterable by `kind`, `state`, or `chain`.
-- `GET /orders/{orderId}` — Fetch order details including `txHashes`.
-
-<OnchainTokens />
+<Orders />
 
 ## Going live
 
-Private applications have the simplest path to production — no application review required.
+Private applications do not require a partner review.
 
-1. **Signup:** Create your personal or business account at [Monerium.app](https://monerium.app).
-2. **Onboarding:** Submit your KYC (individuals) or KYB (businesses) details.
-3. **Profile approval:** Once approved, your Production API credentials are enabled automatically.
+1. **Complete KYC/KYB** at [monerium.app/profiles](https://monerium.app/profiles). Individuals complete KYC; businesses complete KYB.
+2. **Create a production application** at [monerium.app](https://monerium.app) following the same steps as sandbox.
+3. **Start building.** Once your profile is approved, your production credentials are active.

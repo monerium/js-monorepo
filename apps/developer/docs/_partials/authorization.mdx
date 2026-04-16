@@ -2,16 +2,16 @@ import { Endpoint } from '@site/src/components/Endpoint';
 
 ## Authorization
 
-The OAuth flow uses **Authorization Code with PKCE**. Even though PKCE removes the need for a client secret in the browser, your integration still requires a backend. The Monerium API does not support browser-based CORS for authenticated requests, and bearer tokens must be kept server-side — exposing them to the browser creates real risk (XSS, token leaks, misuse).
+The OAuth flow uses **Authorization Code with PKCE**. Even though PKCE removes the need for a client secret in the browser, your integration still requires a backend. The Monerium API does not support browser-based CORS for authenticated requests, and bearer tokens must be kept server-side; exposing them to the browser creates real risk (XSS, token leaks, misuse).
 
 The intended setup:
 
-- **Frontend** — initiates the flow, redirects the user to Monerium, receives the authorization code on callback, and passes it to your backend.
-- **Backend** — exchanges the code for tokens, stores them securely, and makes all Monerium API calls. Your frontend talks to your backend, not to Monerium directly.
+- **Frontend**: initiates the flow, redirects the user to Monerium, receives the authorization code on callback, and passes it to your backend.
+- **Backend**: exchanges the code for tokens, stores them securely, and makes all Monerium API calls. Your frontend talks to your backend, not to Monerium directly.
 
 ### 1. Generate a PKCE challenge
 
-On your backend, generate a random `code_verifier` and derive a `code_challenge` from it before redirecting. Persist the verifier in your database or cache alongside the `state` — you need it when exchanging the code for tokens on the callback.
+On your backend, generate a random `code_verifier` and derive a `code_challenge` from it before redirecting. Persist the verifier in your database or cache alongside the `state`; you need it when exchanging the code for tokens on the callback.
 
 ```js
 import crypto from 'crypto';
@@ -27,7 +27,7 @@ function generateCodeChallenge(verifier) {
 const codeVerifier = generateCodeVerifier();
 const codeChallenge = generateCodeChallenge(codeVerifier);
 
-// Persist alongside the state in step 2 — needs to survive until the callback
+// Persist alongside the state in step 2; needs to survive until the callback
 ```
 
 ### 2. Redirect to Monerium
@@ -36,20 +36,20 @@ const codeChallenge = generateCodeChallenge(codeVerifier);
 
 Your backend builds the authorization URL and redirects the user to the Monerium portal. What happens there depends on whether the user has an account:
 
-1. **Login or sign up** — the user logs in with their Monerium username and password, or creates a new account.
-2. **KYC/KYB** — new users complete identity verification before they can use their account. Returning users who are already verified skip this step. See the [KYC Guide — Individuals](./kyc-guide-individuals) and [KYB Guide — Corporates](./kyb-guide-corporates) for what is required, allowed, and prohibited.
-3. **Authorization** — the user is shown a consent screen listing what your application is requesting access to (profile details and payment data) and accepts or cancels.
+1. **Login or sign up**: the user logs in with their Monerium username and password, or creates a new account.
+2. **KYC/KYB**: new users complete identity verification before they can use their account. Returning users who are already verified skip this step. See the [KYC Guide: Individuals](./kyc-guide-individuals) and [KYB Guide: Corporates](./kyb-guide-corporates) for what is required, allowed, and prohibited.
+3. **Authorization**: the user is shown a consent screen listing what your application is requesting access to (profile details and payment data) and accepts or cancels.
 
 Once the user accepts, they are redirected to your `redirect_uri` with an authorization `code` in the query string.
 
 :::tip Customize the portal
-The authorization screen displays your app name, logo, and a header color — all configured in your application settings. You can also link to your terms of service and privacy policy, which are shown on the consent screen.
+The authorization screen displays your app name, logo, and a header color, all configured in your application settings. You can also link to your terms of service and privacy policy, which are shown on the consent screen.
 :::
 
 ```js
 const state = crypto.randomBytes(16).toString('hex');
 
-// Persist state and code_verifier — keyed by session so you can retrieve them on callback
+// Persist state and code_verifier, keyed by session so you can retrieve them on callback
 await db.pkce.store({ sessionId, state, codeVerifier });
 
 const params = new URLSearchParams({
@@ -79,7 +79,7 @@ app.get('/callback', async (req, res) => {
   const { code, state } = req.query;
 
   if (state !== await db.pkce.getState(sessionId)) {
-    return res.status(400).send('State mismatch — possible CSRF attack');
+    return res.status(400).send('State mismatch, possible CSRF attack');
   }
 
   // Pass the code to the token exchange (step 4)
@@ -90,7 +90,7 @@ app.get('/callback', async (req, res) => {
 
 <Endpoint method="POST" path="/auth/token" href="https://docs.monerium.com/api/#tag/auth/operation/auth-token" />
 
-Exchange the authorization code for an `access_token` and `refresh_token`. This call happens on your backend. Use the **Authorization Code Flow `client_id`** — your app has two separate client IDs, one per flow.
+Exchange the authorization code for an `access_token` and `refresh_token`. This call happens on your backend. Use the **Authorization Code Flow `client_id`**. Your app has two separate client IDs, one per flow.
 
 ```js
 const response = await fetch('https://api.monerium.dev/auth/token', {
@@ -115,7 +115,7 @@ await db.tokens.upsert({ userId, access_token, refresh_token });
 
 ### 5. Refresh the access token
 
-Access tokens expire after 1 hour. Use the refresh token to get a new one without re-authenticating the user. Refresh tokens rotate on each use — always store the latest one.
+Access tokens expire after 1 hour. Use the refresh token to get a new one without re-authenticating the user. Refresh tokens rotate on each use; always store the latest one.
 
 ```js
 const response = await fetch('https://api.monerium.dev/auth/token', {
@@ -181,7 +181,7 @@ const response = await fetch('https://api.monerium.dev/auth', {
     redirect_uri: redirectUri,
   }),
 });
-// Redirected to redirect_uri with ?code=... — exchange for tokens as in step 4
+// Redirected to redirect_uri with ?code=..., exchange for tokens as in step 4
 ```
 
 :::note SIWE requirements

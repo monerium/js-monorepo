@@ -1,14 +1,37 @@
 ---
-title: Identifiers and formats
+title: Conventions
 id: identifiers-and-formats
 ---
 
-# Identifiers and time formats
+# Conventions
 
 ## Identifiers
 
-Identifiers are used to identify resources and actors. All identifiers used by the API are Universally Unique Identifiers (UUID) on the form `123e4567-e89b-12d3-a456-426614174000`. The UUID `00000000-0000-0000-0000-000000000000` is a special identifier reserved for the Monerium System. This essentially means that an automation was performed by the system.
+All resource IDs in the API are UUIDs in the format `123e4567-e89b-12d3-a456-426614174000`.
+
+The zero UUID (`00000000-0000-0000-0000-000000000000`) represents the Monerium system. When it appears in a field like `updatedBy`, it means the action was performed automatically by Monerium rather than by a user.
 
 ## Datetime
 
-Dates are formatted according to RFC 3339, with sub-second precision, unless otherwise specified. Example date: `2021-02-13T16:41:10:091Z`. The `Z` at the end is a suffix which denotes a UTC offset of 00:00; often spoken “Zulu”.
+Dates follow [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) with sub-second precision. Example: `2021-02-13T16:41:10.091Z`. All timestamps are in UTC (`Z`).
+
+## Versioning
+
+The Monerium API is versioned via the `Accept` header. Include it on every request:
+
+```
+Accept: application/vnd.monerium.api-v2+json
+```
+
+Requests without a version header are accepted but may default to an older behavior. Pinning the version ensures consistent responses as the API evolves.
+
+## Rate limiting
+
+The API enforces rate limits to ensure availability. When a limit is hit, the API returns `429 Too Many Requests`.
+
+**Best practices:**
+
+- Check the `Retry-After` response header for how long to wait before retrying.
+- Use exponential backoff when retrying; do not retry at a fixed high frequency.
+- Avoid repeatedly fetching the same resource to detect state changes. Prefer webhooks (Whitelabel and Private) or on-chain events (OAuth) as your trigger.
+- Cache responses that are unlikely to change frequently, such as IBAN details or token addresses.
