@@ -1,4 +1,5 @@
 import encodeBase64Url from 'crypto-js/enc-base64url.js';
+import WordArray from 'crypto-js/lib-typedarrays.js';
 import SHA256 from 'crypto-js/sha256.js';
 
 import {
@@ -9,11 +10,13 @@ import {
 } from '../types';
 
 /**
+ * @deprecated: will be removed in v3, use `randomPKCECodeVerifier` instead
  * Find a more secure way to generate a random string
  * Using crypto-js to generate a random string was causing the following error:
  * `Error: Native crypto module could not be used to get secure random number.`
  * https://github.com/brix/crypto-js/issues/256
  */
+
 export const generateRandomString = () => {
   let result = '';
   const characters =
@@ -27,7 +30,11 @@ export const generateRandomString = () => {
   return result;
 };
 
-/** Generate the PKCE code challenge */
+/**
+ * @deprecated: will be removed in v3, use `calculatePKCECodeChallenge` instead
+ * Generate the PKCE code challenge
+ *
+ */
 export const generateCodeChallenge = (codeVerifier: string) => {
   return encodeBase64Url.stringify(SHA256(codeVerifier as string));
 };
@@ -63,9 +70,11 @@ export const isClientCredentials = (
 // v3
 
 export const randomPKCECodeVerifier = (): string => {
-  return generateRandomString();
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return encodeBase64Url.stringify(WordArray.create(bytes));
 };
 
 export const calculatePKCECodeChallenge = (codeVerifier: string): string => {
-  return generateCodeChallenge(codeVerifier);
+  return encodeBase64Url.stringify(SHA256(codeVerifier as string));
 };

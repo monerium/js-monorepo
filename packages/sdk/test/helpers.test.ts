@@ -10,11 +10,29 @@ import {
   generateCodeChallenge,
   randomPKCECodeVerifier,
 } from '../src/helpers/auth.helpers';
+import { preparePKCEChallenge } from '../src/compat';
 
 const { STORAGE_CODE_VERIFIER } = constants;
 
-// Deprecated — will be removed in v3.0
-describe('code verifier localStorage', () => {
+/* @deprecated: will be removed in v3 */
+describe('preparePKCEChallenge', () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  test('should generate code challenge and store code verifier', () => {
+    const codeChallenge = preparePKCEChallenge();
+
+    const codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER);
+    const codeChallengeFromVerifier = generateCodeChallenge(
+      codeVerifier as string
+    );
+
+    expect(codeChallenge).toEqual(codeChallengeFromVerifier);
+  });
+});
+
+describe('code verifier -> code challenge', () => {
   afterEach(() => {
     localStorage.clear();
   });
@@ -23,9 +41,8 @@ describe('code verifier localStorage', () => {
     const codeVerifier = randomPKCECodeVerifier();
     const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
 
-    const codeVerifierFromStorage = localStorage.getItem(STORAGE_CODE_VERIFIER);
     const codeChallengeFromVerifier = generateCodeChallenge(
-      codeVerifierFromStorage as string
+      codeVerifier as string
     );
 
     expect(codeChallenge).toEqual(codeChallengeFromVerifier);

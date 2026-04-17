@@ -1,13 +1,12 @@
+import { preparePKCEChallenge } from './compat';
 import { MONERIUM_CONFIG } from './config';
 import constants from './constants';
 import {
-  calculatePKCECodeChallenge,
   cleanQueryString,
   isAuthCode,
   isClientCredentials,
   isRefreshToken,
   queryParams,
-  randomPKCECodeVerifier,
   rest,
 } from './helpers';
 import { createDebugger } from './helpers/debug.helpers';
@@ -154,6 +153,7 @@ export class MoneriumClient {
   }
 
   /**
+   * @deprecate will be removed in v3 - in favour of `buildAuthorizationUrl`
    * Constructs the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
@@ -167,8 +167,7 @@ export class MoneriumClient {
    *
    */
   async authorize(params?: AuthFlowOptions) {
-    const codeVerifier = randomPKCECodeVerifier();
-    const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
+    const codeChallenge = preparePKCEChallenge();
 
     const autoLink = params?.address
       ? {
@@ -200,6 +199,7 @@ export class MoneriumClient {
     window.location.assign(authFlowUrl);
   }
   /**
+   * @deprecate will be removed in v3 - in favour of `buildSiweAuthorizationUrl`
    * Constructs the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    *
@@ -218,8 +218,7 @@ export class MoneriumClient {
    *
    */
   async siwe(params: AuthFlowSIWEOptions) {
-    const codeVerifier = randomPKCECodeVerifier();
-    const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
+    const codeChallenge = preparePKCEChallenge();
 
     const queryParams = urlEncoded({
       client_id: (this.#client as AuthorizationCodeCredentials)?.clientId,
