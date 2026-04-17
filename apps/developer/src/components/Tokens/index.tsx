@@ -1,135 +1,153 @@
-import { FC, useEffect, useState } from 'react';
-import { GuidesList } from './GuideList';
-import { TokenList } from './TokenList';
-import chains from './chains';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { ChainList, ChainEntry, ApiToken, ApiChain } from './TokenList';
 import styles from './Token.module.css';
 
+const CHAIN_ORDER = [
+  'ethereum',
+  'gnosis',
+  'polygon',
+  'arbitrum',
+  'base',
+  'linea',
+  'scroll',
+  'camino',
+  'noble',
+];
+
+function toEntries(
+  chains: ApiChain[],
+  tokens: ApiToken[],
+  currency: string
+): ChainEntry[] {
+  return chains
+    .map((chain) => ({
+      chain,
+      token: tokens.find((t) => t.chain === chain.id && t.symbol === currency),
+    }))
+    .filter((e): e is ChainEntry => !!e.token?.address)
+    .sort((a, b) => {
+      const ai = CHAIN_ORDER.indexOf(a.chain.chain);
+      const bi = CHAIN_ORDER.indexOf(b.chain.chain);
+      if (ai === -1 && bi === -1)
+        return a.chain.label.localeCompare(b.chain.label);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
+}
+
+interface NetworkData {
+  chains: ApiChain[];
+  tokens: ApiToken[];
+}
+
+const CURRENCIES = ['EURe', 'GBPe'] as const;
+type Currency = (typeof CURRENCIES)[number];
+
 export const TokensPage: FC = () => {
-  const [tokenData, setTokenData] = useState(null);
-  const [sandboxTokenData, setSandboxTokenData] = useState(null);
-
-  const fetchMainnetTokens = async () => {
-    try {
-      const response = await fetch('https://monerium.app/tokens.json');
-      const data = await response.json();
-      setTokenData(data);
-    } catch (error) {
-      console.error('Error fetching mainnet tokens:', error);
-    }
-  };
-
-  const fetchSandboxTokens = async () => {
-    try {
-      const response = await fetch('https://monerium.app/tokens-sandbox.json');
-      const data = await response.json();
-      setSandboxTokenData(data);
-    } catch (error) {
-      console.error('Error fetching sandbox tokens:', error);
-    }
-  };
+  const [mainnet, setMainnet] = useState<NetworkData>({
+    chains: [],
+    tokens: [],
+  });
+  const [testnet, setTestnet] = useState<NetworkData>({
+    chains: [],
+    tokens: [],
+  });
+  const [currency, setCurrency] = useState<Currency>('EURe');
 
   useEffect(() => {
-    fetchMainnetTokens();
-    fetchSandboxTokens();
+    fetch('https://monerium.app/api/chains')
+      .then((r) => r.json())
+      .then((chains) =>
+        fetch('https://monerium.app/api/tokens')
+          .then((r) => r.json())
+          .then((tokens) => setMainnet({ chains, tokens }))
+      )
+      .catch(console.error);
+
+    fetch('https://sandbox.monerium.dev/api/chains')
+      .then((r) => r.json())
+      .then((chains) =>
+        fetch('https://sandbox.monerium.dev/api/tokens')
+          .then((r) => r.json())
+          .then((tokens) => setTestnet({ chains, tokens }))
+      )
+      .catch(console.error);
   }, []);
 
-  const filterAndSort = (chainId: number) => {
-    const symbolOrder = ['EURe', 'GBPe', 'USDe', 'ISKe'];
-    // Try mainnet tokens first
-    const mainnetTokens = tokenData?.tokens.filter(
-      (i) => i.chainId === chainId
-    );
-    // If no mainnet tokens found, try sandbox tokens
-    const tokens = mainnetTokens?.length
-      ? mainnetTokens
-      : sandboxTokenData?.tokens?.filter((i) => i.chainId === chainId);
+  const mainnetEntries = useMemo(
+    () => toEntries(mainnet.chains, mainnet.tokens, currency),
+    [mainnet, currency]
+  );
 
-    return tokens?.sort((a, b) => {
-      // First sort by symbol order
-      const symbolDiff =
-        symbolOrder.indexOf(a.symbol) - symbolOrder.indexOf(b.symbol);
-      if (symbolDiff !== 0) return symbolDiff;
-
-      // If same symbol, sort by legacy status
-      const aIsLegacy = a.tags?.includes('legacy') ?? false;
-      const bIsLegacy = b.tags?.includes('legacy') ?? false;
-      if (aIsLegacy && !bIsLegacy) return 1;
-      if (!aIsLegacy && bIsLegacy) return -1;
-      return 0;
-    });
-  };
-
-  const productionChains = chains
-    .filter((c) => !c.testnet)
-    ?.map((chain) => {
-      return {
-        ...chain,
-        tokens: filterAndSort(chain.chainId),
-        iconUrl: chain.logo,
-      };
-    });
-
-  const sandboxChains = chains
-    .filter((c) => c.testnet)
-    .map((chain) => {
-      return {
-        ...chain,
-        tokens: filterAndSort(chain.chainId),
-        iconUrl: chain.logo,
-      };
-    });
+  const testnetEntries = useMemo(
+    () => toEntries(testnet.chains, testnet.tokens, currency),
+    [testnet, currency]
+  );
 
   return (
     <div id="docs-content" className={styles.root}>
       <p>
-        Monerium e-money tokens are live on Ethereum, Gnosis and Polygon. The
-        source code, info about the token design, and supported ERC standards
-        can be found at our{' '}
-        <a href="https://github.com/monerium/smart-contracts">GitHub repo.</a>{' '}
-        You can also reach us for technical support on{' '}
-        <a href="https://monerium.com/invite/discord">our Discord channel</a>.
+        Monerium e-money tokens are live on Ethereum, Gnosis, Polygon, Arbitrum,
+        Base, Linea, Scroll, Noble, and Camino. The source code, info about the
+        token design, and supported ERC standards can be found at our{' '}
+        <a href="https://github.com/monerium/smart-contracts">GitHub repo.</a>.
       </p>
 
-      <ContractsUpgradeNotice />
+      <p>
+        Select a currency to browse its contract address on each supported
+        chain. Expand a chain to view the full address and chain details.
+      </p>
 
-      <h2 id="mainnet">Mainnets / Production</h2>
-      <TokenList networks={productionChains} />
+      <div className={styles.tabs}>
+        {CURRENCIES.map((c) => (
+          <button
+            key={c}
+            className={`${styles.tab} ${currency === c ? styles.tabActive : ''}`}
+            onClick={() => setCurrency(c)}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
 
-      <h2 id="sandbox">Testnets / Sandbox</h2>
+      <h2 id="mainnet">Mainnets</h2>
+      <ChainList entries={mainnetEntries} />
+
+      <h2 id="testnet">Testnets</h2>
       <p>
         Our <a href="https://sandbox.monerium.dev/">sandbox</a> is connected to
-        Sepolia, Amoy, and Chiado test networks and can be used for testing
-        before releasing to mainnets.
+        Sepolia, Amoy, Chiado and other test networks and can be used for
+        testing before releasing to mainnet.
       </p>
-      <TokenList networks={sandboxChains} />
+      <ChainList entries={testnetEntries} />
+      <p>
+        Need test gas or test EURe? See the <a href="/sandbox">Sandbox guide</a>.
+      </p>
 
-      <GuidesList />
+      <h2 id="icons">Icons</h2>
+      <p>Download the {currency} token icon for use in your application.</p>
+      <div className={styles.iconCards}>
+        {(['svg', 'png'] as const).map((fmt) => {
+          const url = `/img/tokens/${currency.toLowerCase()}.${fmt}`;
+          return (
+            <div key={fmt} className={styles.iconCard}>
+              <img
+                src={url}
+                alt={`${currency} ${fmt.toUpperCase()}`}
+                width={64}
+                height={64}
+              />
+              <span className={styles.iconFormat}>{fmt.toUpperCase()}</span>
+              <a href={url} download className={styles.downloadBtn}>
+                Download
+              </a>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
-
-const ContractsUpgradeNotice: FC = () => (
-  <p>
-    <a
-      href="./contracts-v2"
-      style={{
-        backgroundColor: '#2f3949',
-        color: '#fff',
-        padding: '30px',
-        borderRadius: '15px',
-        display: 'flex',
-        cursor: 'pointer',
-      }}
-    >
-      <span style={{ marginRight: '10px' }}>
-        <i className="fa fa-info-circle" aria-hidden="true" />
-      </span>
-      <b>
-        The tokens on Ethereum, Gnosis, and Polygon have been upgraded. Click
-        here to read everything you need to know.
-      </b>
-    </a>
-  </p>
-);
 
 export default TokensPage;

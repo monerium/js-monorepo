@@ -1,0 +1,169 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Endpoint } from '@site/src/components/Endpoint';
+
+## Webhooks
+
+Most steps in the Whitelabel flow are asynchronous — profile approvals, IBAN provisioning, payment processing. Webhooks let your backend react to these events without polling.
+
+1. **Generate a secret and register your endpoint.** Create a random 24–64 byte value, base64-encode it, and prefix it with `whsec_`. Then post it along with your URL to:
+
+<Endpoint method="POST" path="/webhooks" href="https://docs.monerium.com/api/#tag/webhooks/operation/create-subscription" />
+
+<Tabs>
+  <TabItem value="node" label="Node.js">
+
+```js
+import crypto from 'crypto';
+
+const secret = 'whsec_' + crypto.randomBytes(32).toString('base64');
+
+const response = await fetch('https://api.monerium.dev/webhooks', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://your-app.com/webhooks/monerium',
+    secret,
+    types: [
+      'profile.updated',
+      'iban.updated',
+      'order.created',
+      'order.updated',
+    ],
+  }),
+});
+// Store `secret` — you need it to verify incoming requests
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+import (
+  "bytes"
+  "crypto/rand"
+  "encoding/base64"
+  "encoding/json"
+  "net/http"
+)
+
+raw := make([]byte, 32)
+rand.Read(raw)
+secret := "whsec_" + base64.StdEncoding.EncodeToString(raw)
+
+body, _ := json.Marshal(map[string]any{
+  "url":    "https://your-app.com/webhooks/monerium",
+  "secret": secret,
+  "types":  []string{"profile.updated", "iban.updated", "order.created", "order.updated"},
+})
+
+req, _ := http.NewRequest("POST", "https://api.monerium.dev/webhooks", bytes.NewBuffer(body))
+req.Header.Set("Authorization", "Bearer "+accessToken)
+req.Header.Set("Content-Type", "application/json")
+
+// Store `secret` — you need it to verify incoming requests
+```
+
+  </TabItem>
+</Tabs>
+
+2. **Confirm the subscription** — Monerium sends a `subscription.created` event to your URL immediately after registration. Respond with `200 OK` to activate it.
+
+3. **Handle incoming events.** Verify the signature, return `200 OK` immediately, then process the event asynchronously. Each request includes a `webhook-signature` header with an HMAC-SHA256 signature over the `webhook-id`, `webhook-timestamp`, and raw request body:
+
+<Tabs>
+  <TabItem value="node" label="Node.js">
+
+```js
+import crypto from 'crypto';
+
+app.post(
+  '/webhooks/monerium',
+  express.raw({ type: 'application/json' }),
+  async (req, res) => {
+    const id = req.headers['webhook-id'];
+    const timestamp = req.headers['webhook-timestamp'];
+    const signature = req.headers['webhook-signature'];
+
+    const signed = `${id}.${timestamp}.${req.body}`;
+    const expected = crypto
+      .createHmac('sha256', Buffer.from(SECRET.replace('whsec_', ''), 'base64'))
+      .update(signed)
+      .digest('base64');
+
+    if (signature !== `v1,${expected}`) {
+      return res.sendStatus(401);
+    }
+
+    res.sendStatus(200);
+
+    if (await hasProcessed(id)) {
+      return; // already handled, skip
+    }
+
+    processEvent(JSON.parse(req.body)); // handle asynchronously
+  }
+);
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+import (
+  "crypto/hmac"
+  "crypto/sha256"
+  "encoding/base64"
+  "fmt"
+  "io"
+  "net/http"
+  "strings"
+)
+
+func webhookHandler(w http.ResponseWriter, r *http.Request) {
+  body, _ := io.ReadAll(r.Body)
+
+  id := r.Header.Get("webhook-id")
+  timestamp := r.Header.Get("webhook-timestamp")
+  signature := r.Header.Get("webhook-signature")
+
+  key, _ := base64.StdEncoding.DecodeString(strings.TrimPrefix(secret, "whsec_"))
+  signed := fmt.Sprintf("%s.%s.%s", id, timestamp, body)
+
+  mac := hmac.New(sha256.New, key)
+  mac.Write([]byte(signed))
+  expected := "v1," + base64.StdEncoding.EncodeToString(mac.Sum(nil))
+
+  if signature != expected {
+    http.Error(w, "unauthorized", http.StatusUnauthorized)
+    return
+  }
+
+  w.WriteHeader(http.StatusOK)
+
+  if hasProcessed(id) {
+    return // already handled, skip
+  }
+
+  go processEvent(body) // handle asynchronously
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Event types
+
+| Event             | When it fires                    |
+| :---------------- | :------------------------------- |
+| `profile.updated` | Profile details or state changed |
+| `iban.updated`    | IBAN details or state changed    |
+| `order.created`   | New order placed                 |
+| `order.updated`   | Order state changed              |
+
+### Retries
+
+If your endpoint does not return `200 OK`, Monerium retries up to 10 times over 12 hours using exponential backoff. Retried events carry the same `webhook-id` as the original — store processed IDs to avoid handling the same event twice.

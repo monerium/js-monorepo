@@ -1,152 +1,59 @@
 ---
 title: Getting Started
 id: getting-started
+slug: /
 ---
+
+import { Yes, No, Feature } from '@site/src/components/FeatureStatus';
 
 # Getting Started
 
-Welcome to Monerium! This guide will help you integrate the Monerium API to offer your users IBANs directly connected to their blockchain addresses. Enable seamless money transfers between bank accounts and blockchains over the SEPA network.
+Use the Monerium API to issue regulated e-money on-chain, automate SEPA payments, and connect bank accounts to blockchain wallets. Build financial products ranging from payments, lending, and treasury automation to on-chain exchange and cross-chain orchestration.
 
-## Overview
+## Environments
 
-Before you begin, determine which integration type fits your needs:
+Monerium has two environments: [**Sandbox**](https://sandbox.monerium.dev) and [**Production**](https://monerium.app).
 
-:::tip Choose Your Integration Type
+**Sandbox** mirrors Production but uses test blockchains and simulated funds. Build and test here before going live.
 
-**Building a user-facing app?** → [OAuth](#oauth) - Users authenticate with their Monerium accounts
+- Get test EURe: simulate an incoming bank transfer at [sandbox.monerium.dev/receive](https://sandbox.monerium.dev/receive).
+- Gas faucets: [Sepolia](https://sepolia-faucet.pk910.de/) · [Chiado](https://faucet.chiadochain.net/) · [Amoy](https://faucet.polygon.technology/)
 
-**Automating your own account?** → [Personal](#personal) - Run scripts and backend jobs on your account
+**Production** is for live applications with real users and real funds. Create your application here only after sandbox testing is complete.
 
-**Managing accounts for your users?** → [White-label](#white-label) - Full platform control, Monerium abstracted away
+## Create an application
 
-:::
+Go to [sandbox.monerium.dev/developers](https://sandbox.monerium.dev/developers/apps/create) and log in to create a new application. There are three plans:
 
----
+- **Whitelabel:** Manage users and their full lifecycle (KYC, IBANs, and payments) via API under your own brand. [Full guide →](./whitelabel)
+- **OAuth:** Users onboard through a co-branded Monerium portal and authorize your app. [Full guide →](./oauth)
+- **Private:** API access to your own Monerium account. No user management. [Full guide →](./private)
 
-## Setup
+## Compare plans
 
-### 1. Create Your Account
+<!-- prettier-ignore -->
+| Feature | Whitelabel | OAuth | Private |
+| :------ | :--------: | :---: | :-----: |
+| <Feature desc="Onboard external users">User onboarding</Feature> | <Yes>API</Yes> | <Yes>Monerium Portal</Yes> | <No /> |
+| <Feature desc="Real-time event notifications via API">Webhooks</Feature> | <Yes /> | <No /> | <Yes /> |
+| <Feature desc="Connect/link and manage 3rd party wallets via API">Wallets</Feature> | <Yes /> | <Yes /> | <Yes /> |
+| <Feature desc="Create and manage a EUR IBAN per customer via API">EUR IBAN</Feature> | <Yes>Dedicated</Yes> | <Yes>Shared</Yes> | <Yes>Own</Yes> |
+| <Feature desc="Send and receive SEPA payments via API">SEPA Payments</Feature> | <Yes /> | <Yes /> | <Yes /> |
+| <Feature desc="Bridge tokens between supported chains via API">Bridging</Feature> | <Yes /> | <Yes /> | <Yes /> |
+| <Feature desc="Cost of services">Pricing</Feature> | Custom | Free | Free |
 
-Head over to our [Sandbox](https://sandbox.monerium.dev) and sign up for a developer account.
+## Going live
 
-### 2. Create an App
+### Whitelabel and OAuth
 
-Once signed up, go to the [developer portal](https://sandbox.monerium.dev/developers) and create a new app. You'll need to select an app type based on your use case.
+1. **Apply for partnership**: Submit a partnership application at [monerium.com/invite/partners](https://monerium.com/invite/partners/). Monerium will review your application and reach out to schedule a meeting if you meet the criteria.
+2. **Try the sandbox**: Explore the full developer experience at [sandbox.monerium.dev](https://sandbox.monerium.dev). Build and test your integration with simulated funds before going live.
+3. **Create a production application**: Once approved, create your application in [monerium.app](https://monerium.app) and Monerium will grant the privileges needed to go live.
 
----
+### Private
 
-## App Types
+The Private plan is self-service with no partnership review required.
 
-Choose the authentication flow that matches your integration needs:
-
-### 🔐 OAuth (User-facing Apps) {#oauth}
-
-**Authentication:** [Authorization Code Flow with PKCE (Proof Key for Code Exchange)](#auth-flow)
-
-**How it works:** Your app acts on behalf of Monerium users with their explicit consent. Users sign in with their Monerium credentials and grant your app permission to access their accounts.
-
-**Credentials you'll receive:**
-- `client_id` - Unique identifier for OAuth flows
-
-**Best for:**
-- Web applications
-- Mobile apps
-- Any app where users authenticate and control their own data
-
-**Pricing:** Free
-
-**Next steps:** [OAuth Implementation Guide →](./authorization)
-
----
-
-### 🤖 Personal (Own Account) {#personal}
-
-**Authentication:** [Client Credentials Flow](#client-credentials)
-
-**How it works:** Your app performs automated actions directly on your own Monerium account, such as processing payments or checking balances.
-
-**Credentials you'll receive:**
-- `client_id` - Unique identifier
-- `client_secret` - Secret key for authentication (keep secure!)
-
-**Best for:**
-- Backend scripts
-- Scheduled jobs
-- Internal tooling and automation
-
-**Pricing:** Free
-
-**Next steps:** [Client Credentials Guide →](./authorization#client-credentials-authorization)
-
----
-
-### 🏢 White-label (Managed Users) {#white-label}
-
-**Authentication:** [Client Credentials Flow](#client-credentials)
-
-**How it works:** Your platform manages users and their payment accounts directly. Monerium is fully abstracted away from your end users—they never see or interact with Monerium.
-
-**Credentials you'll receive:**
-- `client_id` - Unique identifier
-- `client_secret` - Secret key for authentication (keep secure!)
-
-**Best for:**
-- Payment platforms
-- Fintech applications
-- Services requiring full control over user payment flows
-
-**Pricing:** €5,000/month
-
-:::info Enterprise Solution
-This is an enterprise solution for platforms that want to offer IBAN accounts under their own brand. Contact us to discuss your requirements.
-:::
-
-**Next steps:** [Client Credentials Guide →](./authorization#client-credentials-authorization)
-
----
-
-## Implementation Guides
-
-### OAuth - Authorization Code Flow with PKCE (Proof Key for Code Exchange) {#auth-flow}
-
-For user-facing applications using OAuth with PKCE:
-
-1. Redirect users to the Monerium authorization endpoint
-2. Handle the returned authorization code
-3. Exchange the code for an access token
-4. Use the access token to make API calls
-
-**[📖 Read the OAuth guide →](./authorization)**
-
-### Client Credentials {#client-credentials}
-
-For server-to-server authentication (Personal and White-label):
-
-1. Securely store your `client_id` and `client_secret`
-2. Request an access token from the authorization server
-3. Use the access token to make API calls
-
-**[📖 Read the Client Credentials guide →](./authorization#client-credentials-authorization)**
-
----
-
-## Additional Resources
-
-### Key OAuth Concepts
-
-- **OAuth 2.0** - The foundational framework for authorization. [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
-- **PKCE** - Security enhancement for public clients. [RFC 7636](https://www.rfc-editor.org/rfc/rfc7636)
-- **Client Credentials Grant** - Server-to-server authentication flow. [RFC 6749 §4.4](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4)
-- **Bearer Authentication** - Method for transmitting access tokens. [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750)
-
-### API Documentation
-
-Explore the complete API reference:
-
-**[📖 View API Documentation →](./api)**
-
----
-
-## Need Help?
-
-Join our [Discord server](https://monerium.com/invite/discord) to get help from the community and the Monerium team.
+1. **Complete KYC/KYB**: Sign up and complete identity verification at [monerium.app/profiles](https://monerium.app/profiles).
+2. **Create the application**: In [monerium.app](https://monerium.app), create a new application and select **Private** as the kind.
+3. **Start building**: Once your profile is approved, your API credentials are active and ready to use.

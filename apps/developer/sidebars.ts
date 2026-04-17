@@ -13,17 +13,37 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   typedocSidebar: [
     {
-      type: 'doc',
-      id: 'overview',
-    },
-    {
       type: 'category',
       label: 'Getting Started',
       link: {
         type: 'doc',
         id: 'getting-started',
       },
-      items: ['authorization', 'environments', 'identifiers-and-formats'],
+      items: [
+        {
+          type: 'category',
+          label: 'Whitelabel',
+          link: { type: 'doc', id: 'whitelabel' },
+          items: ['kyc-guide-individuals', 'kyb-guide-corporates'],
+        },
+        'oauth',
+        'private',
+      ],
+    },
+    {
+      type: 'doc',
+      id: 'sandbox',
+      label: 'Sandbox',
+    },
+    {
+      type: 'doc',
+      id: 'use-with-ai',
+      label: 'Use with AI',
+    },
+    {
+      type: 'doc',
+      id: 'identifiers-and-formats',
+      label: 'Conventions',
     },
     {
       type: 'category',
@@ -32,7 +52,7 @@ const sidebars: SidebarsConfig = {
         type: 'doc',
         id: 'tokens',
       },
-      items: ['contracts-v2'],
+      items: ['token-integration', 'contracts-v2'],
     },
     {
       type: 'link',

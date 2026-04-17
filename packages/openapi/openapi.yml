@@ -50,22 +50,12 @@ paths:
       operationId: auth
       summary: Authorization
       description: |
-        Users must grant your application authorization to access their data.
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(123, 31, 162);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          OAuth
+        </span>
 
-        This endpoint issues a Temporary Redirect (HTTP 307) to the [Authorization Code Flow](/getting-started#auth-flow) where users can sign up, onboard, connect their wallets and authorize your app to access to their data.
-
-        Use the `Authorization Code Flow client_id` and the other parameters below to redirect users to the Monerium onboarding screen.
-
-        Upon authorization, users will be redirected back to your application `redirect_uri` with an authorization `code` in the query parameters.
-
-        Alternatively a "Sign in with Ethereum" (SIWE) flow can be used for existing Monerium customers. In this case the payload must include a valid
-        [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361) message and signature. On successful authorization the authorization code is returned at once.
-
-        This authorization code is then used to request an access token via the [token endpoint](/api#operation/auth-token).
-
-        **Additional material**:
-        - [Getting started: Authorization Code Flow](/getting-started#auth-flow)
-        - [Using the Monerium API: Authentication & Authorization](/authorization)
+        Initiates user authorization. Redirects users through the [Authorization Code Flow](/oauth#authorization) (HTTP 307), or completes authorization immediately for existing customers using [Sign in with Ethereum (SIWE)](/oauth#sign-in-with-ethereum-siwe).
+        The resulting authorization code is exchanged for an access token via [POST /auth/token](#operation/auth-token).
       requestBody:
         required: true
         content:
@@ -78,43 +68,19 @@ paths:
                         client_id:
                           $ref: '#/components/schemas/AuthClientID'
                         code_challenge:
-                          description: |
-                            Generated challenge from the `code_verifier`.
-                            You must use the same `code_verifier` when [requesting an access token](/api#operation/auth-token).
-
-                            Read more about [code challenges for PKCE](/authorization/#pkce)
+                          description: PKCE challenge derived from the `code_verifier`. Use the same `code_verifier` when requesting an access token.
                           type: string
                           example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
                         code_challenge_method:
-                          description: |
-                            Method used to generate the challenge (e.g., S256).
-
-                            The PKCE spec defines two methods, S256 and plain. Monerium only supports S256.
+                          description: Method used to generate the challenge. Monerium only supports `S256`.
                           type: string
                           enum:
                             - S256
                         redirect_uri:
-                          description: |
-                            The URL to which will redirect the browser after authorization has been granted by the user.
-
-                            **Required if**  there are more then one redirect URL's registered.</br>
-                            If present, must match one of the registered redirect URLs exactly.
-
-                            The Authorization Code will be available in the `code` URL parameter, like so: `https://your-app.com/monerium?code=AUTHORIZATION_CODE`
-
-                            Only URLs with the HTTPS-scheme are supported with the exception of http://localhost.
+                          description: The URL to redirect to after authorization. Required if more than one redirect URL is registered; must match a registered URL exactly.
                           type: string
                         state:
-                          description: |
-                            **Recommended.** The state parameter will be included when redirecting back to your application.
-                            It can be used to store request-specific data and/or prevent [CSRF attacks](https://auth0.com/docs/secure/attack-protection/state-parameters).
-                          type: string
-                        address:
-                          description: You can force what address is to be linked in the Authorization Flow.
-                          $ref: '#/components/schemas/Address'
-                        signature:
-                          description: |
-                            In redirect to Monerium flow the address in the connect wallet step can be automatically linked by including same the signature used for [Link Address](#operation/link-address). The address will be automatically linked and the user continues to the next step. You must then also include the `address` property. Must include the `0x` prefix.
+                          description: Opaque value returned with the redirect. Recommended for CSRF protection.
                           type: string
                         email:
                           description: You can prefill the email field for login and sign up steps to ensure the user uses the correct email.
@@ -124,9 +90,6 @@ paths:
                           description: You can skip the KYC onboarding steps in the Authorization Flow during testing.
                           type: boolean
                           example: true
-                        chain:
-                          description: You can force what chain the address is linked to in the Authorization Flow.
-                          $ref: '#/components/schemas/Chain'
                       required:
                         - client_id
                         - code_challenge
@@ -136,89 +99,30 @@ paths:
                         client_id:
                           $ref: '#/components/schemas/AuthClientID'
                         code_challenge:
-                          description: |
-                            Generated challenge from the `code_verifier`.
-                            You must use the same `code_verifier` when [requesting an access token](/api#operation/auth-token).
-
-                            Read more about [code challenges for PKCE](/authorization/#pkce)
+                          description: PKCE challenge derived from the `code_verifier`. Use the same `code_verifier` when requesting an access token.
                           type: string
                           example: 9Y__uhKapn7GO_ElcaQpd8C3hdOyqTzAU4VXyR2iEV0
                         code_challenge_method:
-                          description: |
-                            Method used to generate the challenge (e.g., S256).
-
-                            The PKCE spec defines two methods, S256 and plain. Monerium only supports S256.
+                          description: Method used to generate the challenge. Monerium only supports `S256`.
                           type: string
                           enum:
                             - S256
                         authentication_method:
-                          description: |
-                            Authentication method used. The default is to redirect the user to Monerium login screen, where the user can either sign in, or go through the register flow.
-
-                            `siwe` is only applicable for existing Monerium customers who have already linked at least one of their addresses with Monerium.
+                          description: Set to `siwe` to use Sign in with Ethereum. Only applicable for existing Monerium customers who have already linked an address.
                           type: string
                           enum:
                             - siwe
                         redirect_uri:
-                          description: |
-                            The URL to which the redirect of the request successful request is made.
-
-                            **Required if**  there are more than one redirect URL's registered.</br>
-                            If present, must match one of the registered redirect URLs exactly.
-
-                            The Authorization Code will be available in the `code` URL parameter, like so: `https://your-app.com/monerium?code=AUTHORIZATION_CODE`
-
-                            Only URLs with the HTTPS-scheme are supported with the exception of http://localhost.
+                          description: The URL to redirect to after authorization. Required if more than one redirect URL is registered; must match a registered URL exactly.
                           type: string
                         message:
-                          description: |-
-                            An [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361) compatible message.
-
-                            Example message, placeholders must be replaced with actual values:
-
-                            ```
-                            example.com wants you to sign in with your Ethereum account:
-                            0x5DA1EFC8dB7E32614d7ffb0B8b6bd86e85Ecc743
-
-                            Allow AppName to access my data on Monerium
-
-                            URI: https://example.com/callback
-                            Version: 1
-                            Chain ID: 1
-                            Nonce: 8YOaY6qkvyf7F5lx
-                            Issued At: 2024-08-22T10:00:00Z
-                            Expiration Time: 2024-08-22T10:05:00Z
-                            Resources:
-                            - https://monerium.com/siwe
-                            - https://example.com/privacy-policy
-                            - https://example.com/terms-of-service
-                            ```
-
-                            **Placeholders:**
-                            - example.com - needs to be replaced with the actual domain of the application
-                            - AppName - needs to be replaced with the actual name of the application
-                            - 0x5DA1EFC8dB7E32614d7ffb0B8b6bd86e85Ecc743 - needs to be replaced with the actual Ethereum address
-                            - https://example.com/callback - needs to be replaced with the actual callback URL configured in the application
-                            - https://example.com/privacy-policy - needs to be replaced with the actual privacy policy URL configured for the application
-                            - https://example.com/terms-of-service - needs to be replaced with the actual terms of service URL configured for the application
-
-                            **Note:**
-                            - expiration-time is optional in the EIP-4361 message spec, but it's required by Monerium
-                            - issued-at cannot be in the future when compared to the server time
-                            - not-before is not validated against the server time, but when included must be in a valid format
-                            - nonce must be unique
-                            - chain-id should reference a chain which the end user has linked their address with Monerium
-                            - resources is optional in the EIP-4361 message spec, but it's required by Monerium. It must contain the URL to the Monerium SIWE page, and the URLs to the privacy policy and terms of service of the application.
-                            - there should be no newline in the end of the message
+                          description: An [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361) compatible SIWE message. Must include `expiration-time` and a `resources` array containing the Monerium SIWE URL and the application's privacy policy and terms of service URLs.
                           type: string
                         signature:
-                          description: |
-                            Signature for the SIWE message. Must include the `0x` prefix.
+                          description: Signature for the SIWE message. Must include the `0x` prefix.
                           type: string
                         state:
-                          description: |
-                            **Recommended.** The state parameter will be included when redirecting back to your application.
-                            It can be used to store request-specific data and/or prevent [CSRF attacks](https://auth0.com/docs/secure/attack-protection/state-parameters).
+                          description: Opaque value returned with the redirect. Recommended for CSRF protection.
                           type: string
                       required:
                         - client_id
@@ -290,6 +194,10 @@ paths:
       operationId: auth-get
       summary: Authorization
       description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(123, 31, 162);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          OAuth
+        </span>
+
         Same as [POST /auth](#operation/auth) using a GET request with the same properties as query parameters.
       security: []
       tags:
@@ -302,13 +210,7 @@ paths:
     get:
       operationId: auth-context
       summary: Context
-      description: |
-        The authentication context provides details about the currently authenticated user,
-        including the method of authentication, their roles, and information on the profiles they are authorized to access.
-
-        Note that the context is used for every authenticated request. By default results are returned by the caller profile.
-        Meaning that applications using client credentials must specify the profile ID in the query parameters to get the
-        correct results.
+      description: Returns details about the currently authenticated user, including their roles and accessible profiles.
       parameters: []
       responses:
         '200':
@@ -333,120 +235,16 @@ paths:
           source: |-
             curl https://api.monerium.dev/auth/context \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
-  /auth/signup:
-    post:
-      operationId: auth-signup
-      summary: Sign up
-      description: |-
-        > **Deprecated.** Use [POST /profiles](#operation/create-profile) instead.
-
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-
-        Create a user and profile by submitting the user's email address
-        that your platform has validated. The user can also use the email address
-        to generate a password and authenticate to the monerium app.
-        The Monerium API will return a profile UUID that you will use to submit
-        all of the customer's details.
-
-        Your app will be automatically authorized to access the user data.
-      parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  description: An email address used as username to authenticate.
-                  type: string
-                  format: email
-                  example: user@example.com
-              required:
-                - email
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  email:
-                    description: The user's email.
-                    type: string
-                    format: email
-                    example: user@example.com
-                  profile:
-                    description: The UUID for the new profile.
-                    example: 4f079ef8-6d26-11eb-9bc8-acde48001122
-                    $ref: '#/components/schemas/UUID'
-        '304':
-          description: |-
-            Not modified (user already exists).
-            <br /> Use [the authorization flow](#operation/auth) if the user is already a Monerium user. The user is then redirected back to your application, and you can continue with the other operations.
-        '403':
-          description: FORBIDDEN
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenPartnerError'
-      deprecated: true
-      security:
-        - BearerAuth: []
-      tags:
-        - deprecated
-      x-codeSamples:
-        - lang: bash
-          label: CLI
-          source: |-
-            curl -X POST 'https://api.monerium.dev/auth/signup' \
-            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-            -H "Accept: application/vnd.monerium.api-v2+json" \
-            --data-raw '{
-              "email": "user@example.com"
-            }'
   /auth/token:
     post:
       operationId: auth-token
       summary: Access token
       description: |
-        API users can authenticate themselves by providing an [OAuth 2.0](https://datatracker.ietf.org/doc/html/rfc6750) access token.
+        Obtain an OAuth 2.0 access token. Supports three grant types:
 
-        You get two types of `client_id` when you register your app:
-
-        ![client IDs](/assets/client_ids.png)
-
-        NOTE: You must use the correct `client_id` when picking the authorization flow.
-        You get the following error when you are using the wrong client_id for the grant_type:
-
-        ```json
-        {
-          "code": 400,
-          "status": "Bad Request",
-          "message": "The client is not authorized to request a token using this method."
-        }
-        ```
-
-        **Authorization Code Flow and refresh token**
-
-        For mobile and web apps that cannot securely store a client secret without exposing it to the users.
-
-        Your application acquires an authorization `code` through the [PKCE authorization flow](/api#auth-code).
-        you can use this authorization code to obtain an `access_token` and a `refresh_token` using `grant_type=authorization_code`.
-
-        The access token can then be used to authenticate all requests for the following hour, after which the token must be refreshed using the `refresh_token` with `grant_type=refresh_token`.
-
-        **Client Credentials Authorization**
-
-        Client credentials can be used when application is acting on its own behalf. When performing requests on behalf of the user, the authorization code flow should be used instead.
-        While the client credentials give the application the possibility to access user data today, this will change in the future, and not all endpoints will be available for client credentials.
-
-        Request an `access_token` by using the `client_id` and `client_secret` with `grant_type=client_credentials`.
-
-        The access token can then be used to authenticate all requests for the following hour, after which you can get a new one.
+        - `authorization_code`: Exchange the code received after the [OAuth authorization flow](/oauth#authorization) for an access token.
+        - `refresh_token`: Use a refresh token to obtain a new access token without user interaction. See [Refresh the access token](/oauth#5-refresh-the-access-token).
+        - `client_credentials`: Authenticate directly with your client ID and secret. Used by [Whitelabel](/whitelabel#authentication) and [Private](/private#authentication) applications.
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -468,9 +266,7 @@ paths:
                           type: string
                           example: BvTYQprmQzKt8YSn3xsTWQ
                         code_verifier:
-                          description: |
-                            The randomized string that was used to create the `code_challenge` when a customer/user enters the partner authorization flow.
-                            Read more about [code challenges for PKCE](/authorization/#pkce)
+                          description: The random string used to generate the `code_challenge` in the PKCE authorization flow.
                           type: string
                           example: KO2yF8CUSxU8KJepixDmXdiCOFTMMZFLDmVjNd4J2VhbFUSSgU1lXl0aYyWYK8hIZIEH9bEBDeJ78CIuNoeOIcZOybzzqFlIGedtclJ7ZTKF6GmRBZ4fdMvg6OXnf2dl
                         redirect_uri:
@@ -513,9 +309,7 @@ paths:
                           enum:
                             - client_credentials
                         client_secret:
-                          description: |
-                            Secret that was created when the app was registered.
-                            Read more: [Client Credentials.](api#auth-client-credentials)
+                          description: Client secret created when the app was registered.
                           type: string
                       required:
                         - client_id
@@ -529,39 +323,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessToken'
         '400':
-          description: |
-            BAD REQUEST
-
-            <br />
-            Note that there are two types of client_id for your app,
-            * **Client Credentials Authorization client_id** that you use for `grant_type="client_credentials"`
-            * **Authorization Code Flow client_id** that you use for `grant_type="authorization_code"` or `grant_type="refresh_token"`
-
-            <br />
-
-            ![client IDs](/assets/client_ids.png)
-
-            <br />
-            You get the following error when you are using the wrong client_id for the grant_type:
-
-            ```json
-            {
-              "code": 400,
-              "status": "Bad Request",
-              "message": "The client is not authorized to request a token using this method."
-            }
-            ```
-
-            Example response when you are using refresh token generated by client credentials:
-            ```json
-            {
-              "code": 400,
-              "status": "Bad Request",
-              "message": "Client id must be the same from previous token"
-            }
-            ```
-
-            You should not use refresh token when you can use client credentials.
+          description: BAD REQUEST
           content:
             application/json:
               schema:
@@ -614,6 +376,13 @@ paths:
       operationId: list-subscriptions
       summary: List subscriptions
       description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Whitelabel
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: rgb(46, 125, 50);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Private
+        </span>
+
         List all webhook subscriptions for the authenticated user.
         The response includes the details of each subscription, such as the URL, secret, and event types.
       parameters:
@@ -642,6 +411,13 @@ paths:
       operationId: create-subscription
       summary: Create subscription
       description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Whitelabel
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: rgb(46, 125, 50);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Private
+        </span>
+
         Create webhook subscription to receive notifications like [profile update](#operation/webhook-profile-updated) on specified endpoint.
         [Subscription created](#operation/webhook-subscription-created) notification is sent during subscription creation to validate if receiver is able to handle further notifications.
       requestBody:
@@ -716,6 +492,13 @@ paths:
       operationId: update-subscription
       summary: Update subscription
       description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Whitelabel
+        </span>
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: rgb(46, 125, 50);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Private
+        </span>
+
         Update an existing webhook subscription to change the URL, secret, or event types.
         The updated subscription will be validated by sending a [subscription created](#operation/webhook-subscription-created) notification to the new URL.
       parameters:
@@ -785,10 +568,7 @@ paths:
       summary: Create profile
       description: |
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Coming soon
+          Whitelabel
         </span>
 
         Create a new profile. The `kind` determines whether the `personal` or `corporate`
@@ -917,13 +697,7 @@ paths:
     get:
       operationId: profile
       summary: Profile
-      description: |
-        Retrieves details about a single profile, including the state of each section.
-
-        The response shows which sections (`details`, `form`, `verifications`) are still
-        `incomplete`. Submit missing data via the PATCH endpoints or
-        [POST /profiles/{profile}/share](#operation/share-profile-kyc) until none
-        remain `incomplete`, at which point the profile is ready for approval.
+      description: Retrieves details about a single profile, including the state of each section (`details`, `form`, `verifications`).
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -980,10 +754,7 @@ paths:
       summary: Share KYC data
       description: |
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Coming soon
+          Whitelabel
         </span>
 
         Reuse KYC data from a third-party provider (e.g. Sumsub) to populate the profile's
@@ -1077,23 +848,12 @@ paths:
       summary: Update profile details
       description: |
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Coming soon
+          Whitelabel
         </span>
 
-        Submit the compliance details for a profile. The complete set of required fields must be included in the request body — this endpoint updates the `details` section of the profile without affecting other sections.
+        Submit the compliance details for a profile. Updates only the `details` section without affecting other sections.
 
-        > **KYC reliance model only.** This endpoint is intended for partners that hold the
-        > appropriate licences and have a KYC reliance agreement with Monerium. Most integrations
-        > should use [POST /profiles/{profile}/share](#operation/share-profile-kyc) to populate
-        > details via Sumsub instead.
-
-        **Note:**
-        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-
-        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
+        > **KYC reliance model only.** Most integrations should use [POST /profiles/{profile}/share](#operation/share-profile-kyc) to populate details via Sumsub instead.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -1193,171 +953,16 @@ paths:
                 "lastName": "Doe"
               }
             }'
-    put:
-      operationId: submit-profile-details
-      summary: Submit profile details
-      description: |
-        > **Deprecated.** Use [PATCH /profiles/{profile}/details](#operation/patch-profile-details) instead.
-
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-
-        Submit the required compliance information to onboard a customer.
-
-        **For KYC Sharing Model:**
-        Complete KYC data including details, [form](#operation/submit-profile-form) and [verifications](#operation/submit-profile-verifications) is required.
-
-        **For KYC Reliance Model:**
-        Only the details are required. Enhanced due diligence can be added as a [verification](#operation/submit-profile-verifications) when needed.
-
-        **Note:**
-        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-
-        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
-      parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
-        - name: profile
-          in: path
-          description: The ID of the profile
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              oneOf:
-                - title: Personal
-                  properties:
-                    personal:
-                      description: Details for an individual
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/PersonalDetails'
-                        - type: object
-                          properties:
-                            idDocument:
-                              $ref: '#/components/schemas/IdDocument'
-                      required:
-                        - idDocument
-                - title: Corporate
-                  properties:
-                    corporate:
-                      description: Details for a company
-                      type: object
-                      $ref: '#/components/schemas/CorporateDetails'
-      responses:
-        '202':
-          description: |
-            Accepted
-
-            The applicant details have been received and will be processed by Monerium.
-            The profile will get an outcome of either approved or rejected once processed.
-          content:
-            application/json:
-              schema:
-                type: object
-        '400':
-          description: BAD REQUEST
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                code: 400
-                status: Bad Request
-                message: Validation errors
-                errors:
-                  firstName: First name is missing
-        '401':
-          description: UNAUTHORIZED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
-          description: FORBIDDEN
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenPartnerError'
-        '409':
-          description: |
-            Conflict
-
-            This error occurs when the profile details have already been approved and need not be submitted again.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    description: The error code for conflict.
-                    type: integer
-                    format: int32
-                    enum:
-                      - 409
-                  status:
-                    description: The status for conflict.
-                    type: string
-                    enum:
-                      - Conflict
-                  message:
-                    description: A short message about the error.
-                    type: string
-                    enum:
-                      - The profile details have already been approved and need not be submitted again
-      deprecated: true
-      security:
-        - BearerAuth: []
-      tags:
-        - deprecated
-      x-codeSamples:
-        - lang: bash
-          label: CLI
-          source: |-
-            curl -X PUT 'https://api.monerium.dev/profiles/30f730fd-e51f-11ed-9e13-cacb9390199c/details' \
-            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-            -H "Accept: application/vnd.monerium.api-v2+json" \
-            --data-raw '{
-              "personal": {
-                "idDocument": {
-                  "number": "A1234566788",
-                  "kind": "passport"
-                },
-                "firstName": "Jane",
-                "lastName": "Doe",
-                "address": "Pennylane 123",
-                "postalCode": "7890",
-                "city": "Liverpool",
-                "country": "FR",
-                "countryState": "Merseyside",
-                "nationality": "FR",
-                "birthday": "1990-05-15"
-              }
-            }'
   '/profiles/{profile}/form':
     patch:
       operationId: patch-profile-form
       summary: Update profile form
       description: |
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Coming soon
+          Whitelabel
         </span>
 
-        Submit the additional data for a profile. The complete set of required fields must be included in the request body — this endpoint updates the `form` section of the profile without affecting other sections.
-
-        This data is used for risk calculations and includes information such as purpose of account and source of funds.
-
-        **Note:**
-        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-
-        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
+        Submit additional data for a profile used for risk calculations (e.g. purpose of account, source of funds). Updates only the `form` section without affecting other sections.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -1449,169 +1054,16 @@ paths:
                 "purposeOfAccount": "payments"
               }
             }'
-    put:
-      operationId: submit-profile-form
-      summary: Submit profile form
-      description: |
-        > **Deprecated.** Use [PATCH /profiles/{profile}/form](#operation/patch-profile-form) instead.
-
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-
-        Submit additional data for an individual or company.
-
-        **For KYC Sharing Model:**
-        Form is required.
-
-        **For KYC Reliance Model:**
-        Form is not required.
-
-        **Note:**
-        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-
-        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
-      parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
-        - name: profile
-          in: path
-          description: The ID of the profile
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              oneOf:
-                - title: Personal
-                  properties:
-                    personal:
-                      description: Form for an individual
-                      $ref: '#/components/schemas/PersonalForm'
-                - title: Corporate
-                  properties:
-                    corporate:
-                      description: Form for a company
-                      $ref: '#/components/schemas/CorporateForm'
-      responses:
-        '202':
-          description: |
-            Accepted
-
-            The applicant details have been received and will be processed by Monerium.
-            The profile will get an outcome of either approved or rejected once processed.
-          content:
-            application/json:
-              schema:
-                type: object
-        '400':
-          description: BAD REQUEST
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                code: 400
-                status: Bad Request
-                message: Validation errors
-                errors:
-                  firstName: First name is missing
-        '401':
-          description: UNAUTHORIZED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
-          description: FORBIDDEN
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenPartnerError'
-        '409':
-          description: |
-            Conflict
-
-            This error occurs when the profile details have already been approved and need not be submitted again.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    description: The error code for conflict.
-                    type: integer
-                    format: int32
-                    enum:
-                      - 409
-                  status:
-                    description: The status for conflict.
-                    type: string
-                    enum:
-                      - Conflict
-                  message:
-                    description: A short message about the error.
-                    type: string
-                    enum:
-                      - The profile details have already been approved and need not be submitted again
-      deprecated: true
-      security:
-        - BearerAuth: []
-      tags:
-        - deprecated
-      x-codeSamples:
-        - lang: bash
-          label: CLI
-          source: |-
-            curl -X PUT 'https://api.monerium.dev/profiles/30f730fd-e51f-11ed-9e13-cacb9390199c/details' \
-            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-            -H "Accept: application/vnd.monerium.api-v2+json" \
-            --data-raw '{
-              "personal": {
-                "idDocument": {
-                  "number": "A1234566788",
-                  "kind": "passport"
-                },
-                "firstName": "Jane",
-                "lastName": "Doe",
-                "address": "Pennylane 123",
-                "postalCode": "7890",
-                "city": "Liverpool",
-                "country": "FR",
-                "countryState": "Merseyside",
-                "nationality": "FR",
-                "birthday": "1990-05-15"
-              }
-            }'
   '/profiles/{profile}/verifications':
     patch:
       operationId: patch-profile-verifications
       summary: Update profile verifications
       description: |
         <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px 0px 0px 4px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Coming soon
+          Whitelabel
         </span>
 
-        Submit verifications for a profile. Only the verifications provided are updated.
-
-        **`sourceOfFunds`** is submitted through this endpoint by all partners when required.
-
-        **`idDocument`**, **`facialSimilarity`**, and **`proofOfResidency`**
-        are automatically populated when you use [POST /profiles/{profile}/share](#operation/share-profile-kyc)
-        — you do not need to submit these manually.
-
-        Partners using the KYC reliance model (without Sumsub) submit the full set of verification
-        kinds manually through this endpoint.
-
-        **Note:**
-        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-
-        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
+        Submit verifications for a profile. Only the verifications provided are updated. `sourceOfFunds` is submitted here by all partners when required; other verification kinds are populated automatically when using the Sumsub share flow.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -1706,161 +1158,12 @@ paths:
                 }
               ]
             }'
-    put:
-      operationId: submit-profile-verifications
-      summary: Submit profile verifications
-      description: |
-        > **Deprecated.** Use [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) instead.
-
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-
-        Submit verifications for an individual or company.
-
-        **For KYC Sharing Model:**
-        Verifications are required
-
-        **For KYC Reliance Model:**
-        Source of funds can be submitted as a verification (using `sourceOfFunds` kind).
-
-        **Note:**
-        - Ensure all required details are included based on the profile kind ('personal' or 'corporate').
-
-        - Profile status notifications are available through [webhooks](#operation/webhook-profile-updated).
-      parameters:
-        - $ref: '#/components/parameters/AcceptHeaderV2'
-        - name: profile
-          in: path
-          description: The ID of the profile
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              oneOf:
-                - title: Personal
-                  properties:
-                    personal:
-                      description: Verifications for an individual
-                      $ref: '#/components/schemas/PersonalVerifications'
-                - title: Corporate
-                  properties:
-                    corporate:
-                      description: Verifications for a company
-                      $ref: '#/components/schemas/CorporateVerifications'
-      responses:
-        '202':
-          description: |
-            Accepted
-
-            The applicant details have been received and will be processed by Monerium.
-            The profile will get an outcome of either approved or rejected once processed.
-          content:
-            application/json:
-              schema:
-                type: object
-        '400':
-          description: BAD REQUEST
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                code: 400
-                status: Bad Request
-                message: Validation errors
-                errors:
-                  firstName: First name is missing
-        '401':
-          description: UNAUTHORIZED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
-          description: FORBIDDEN
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenPartnerError'
-        '409':
-          description: |
-            Conflict
-
-            This error occurs when the profile details have already been approved and need not be submitted again.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    description: The error code for conflict.
-                    type: integer
-                    format: int32
-                    enum:
-                      - 409
-                  status:
-                    description: The status for conflict.
-                    type: string
-                    enum:
-                      - Conflict
-                  message:
-                    description: A short message about the error.
-                    type: string
-                    enum:
-                      - The profile details have already been approved and need not be submitted again
-      deprecated: true
-      security:
-        - BearerAuth: []
-      tags:
-        - deprecated
-      x-codeSamples:
-        - lang: bash
-          label: CLI
-          source: |-
-            curl -X PUT 'https://api.monerium.dev/profiles/30f730fd-e51f-11ed-9e13-cacb9390199c/details' \
-            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-            -H "Accept: application/vnd.monerium.api-v2+json" \
-            --data-raw '{
-              "personal": {
-                "idDocument": {
-                  "number": "A1234566788",
-                  "kind": "passport"
-                },
-                "firstName": "Jane",
-                "lastName": "Doe",
-                "address": "Pennylane 123",
-                "postalCode": "7890",
-                "city": "Liverpool",
-                "country": "FR",
-                "countryState": "Merseyside",
-                "nationality": "FR",
-                "birthday": "1990-05-15"
-              }
-            }'
   /addresses:
     post:
       operationId: link-address
       summary: Link address
       description: |
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-
-        A blockchain address, often called a public key or wallet address, is a unique identifier within a blockchain that serves as a destination for sending, receiving, or storing digital assets, such as the EURe onchain fiat token.
-
-        The customer's address is linked to Monerium to request an IBAN for it and perform cross-chain transactions. Linking the address requires a signature to prove that the customer owns the address.
-
-        **Externally Owned Accounts (EOAs)** can generate offchain 65 byte signatures with the user having control of the account via a private key managed by a software wallet like MetaMask or a hardware wallet like Ledger.
-
-        **Smart Contract Accounts (SCAs) or Smart Accounts (SAs)**, are different from EOAs as they are smart contracts (code) immutably linked to the blockchain like the Safe wallet. Monerium supports [ERC-1271: Standard Signature Validation Method for Contracts](https://eips.ethereum.org/EIPS/eip-1271), which can be implemented in two ways.
-
-        1. **Offchain**: The signatures are collected offchain and set in the "signature" field of the request. For multisig wallets, the signatures are concatenated in a 65 byte array.
-        2. **Onchain**: The signatures are collected and validated onchain by the smart contract. The "signature" field in the request is set to "0x" and the Monerium infrastructure will verify the onchain with the connected SCA. The SCA emits an event `SignMsg(bytes32 indexed msgHash)` after signing that the Monerium infrastructure validates the signature and completes connecting the wallet.
+        Links a blockchain address to Monerium by verifying ownership via a signature. Supports EOA signatures as well as Smart Contract Account (SCA/Safe) signatures via [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271), both onchain and offchain.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
       requestBody:
@@ -1962,288 +1265,6 @@ paths:
               "message": "I hereby declare that I am the address owner.",
               "signature": "0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f"
             }'
-        - lang: JS
-          label: JS
-          source: |-
-            /**
-            * This script demonstrates how to add addresses to a Monerium profile
-            * and create signatures for EOA, Safe onchain transactions, and Safe offchain messages.
-            *
-            * Prerequisites:
-            * 1. Install Node.js from https://nodejs.org/ (if not already installed).
-            * 2. Create a folder for this project and navigate to it in your terminal.
-            * 3. Create a file called `reqNewAddressV2.js` and paste this script into it.
-            * 4. Install the required npm packages by running:
-            *    npm install dotenv @monerium/sdk ethers @safe-global/protocol-kit @safe-global/safe-core-sdk-types @safe-global/api-kit axios
-            * 5. Create a `.env` file in your project directory and add your environment variables:
-            *    SAFE_ADDRESS=your_safe_address
-            *    PRIVATE_KEY=your_private_key
-            *    PRIVATE_KEY_2=your_second_private_key (if using Safe)
-            *    INFURA_PROJECT_ID=your_infura_project_id
-            *    ACCESS_TOKEN=your_access_token
-            *    PROFILE_ID=profile_that_owns_the_address
-            *    CLIENT_ID=your_client_id
-            *    CLIENT_SECRET=your_client_secret
-            * 6. Run the script using:
-            *    node reqNewAddressV2.js [eoa|safe-onchain|safe-offchain]
-            *
-            * Note: Replace the placeholder values in the `.env` file with your actual values.
-            * Tips
-            *  Create a Safe on Sepolia and a Punk wallet (https://punkwallet.io/)
-            *  Make the punk wallet a owner of the safe and use that private key
-            */
-
-            require("dotenv").config();
-            const { MoneriumClient } = require("@monerium/sdk");
-            const { ethers } = require('ethers');
-            const Safe = require("@safe-global/protocol-kit");
-            const SafeApi = require("@safe-global/api-kit").default;
-            const { OperationType } = require("@safe-global/safe-core-sdk-types");
-            const axios = require("axios");
-
-            // Retrieve environment variables
-            const clientId = process.env.CLIENT_ID;
-            const clientSecret = process.env.CLIENT_SECRET;
-            const profileId = process.env.PROFILE_ID;
-            const safeAddress = process.env.SAFE_ADDRESS;
-            const privateKey = process.env.PRIVATE_KEY;
-            const privateKey2 = process.env.PRIVATE_KEY_2;
-            const infuraProjectId = process.env.INFURA_PROJECT_ID;
-            const message = "I hereby declare that I am the address owner.";
-
-            // Using the Monerium SDK to handle the requests.
-            // https://www.npmjs.com/package/@monerium/sdk
-            const monerium = new MoneriumClient({
-              environment: "sandbox",
-              clientId,
-              clientSecret,
-            });
-
-            // Get the wallet type from command line arguments
-            const walletType = process.argv[2];
-
-            /**
-            * The main function that handles the address linking process.
-            * Depending on the wallet type, it will create the appropriate signature and link the address to the profile.
-            */
-            const request = async () => {
-              let signature, address;
-
-              switch (walletType) {
-                case "eoa":
-                  address = process.env.EOA_ADDRESS;
-                  signature = await signEOA(message);
-                  break;
-                case "safe-onchain":
-                  address = process.env.SAFE_ADDRESS;
-                  signature = await signOnchain(message);
-                  break;
-                case "safe-offchain":
-                  address = process.env.SAFE_ADDRESS;
-                  signature = await signOffchain(message);
-                  break;
-                default:
-                  if (!walletType) {
-                    console.error(
-                      "Wallet type parameter missing. Please use 'eoa','safe-onchain', or 'safe-offchain'. Example: node reqNewAddressV2.js eoa"
-                    );
-                    return;
-                  }
-                  console.error(
-                    `Unsupported wallet type ${walletType}. Please use 'eoa','safe-onchain', or 'safe-offchain'.`
-                  );
-                  return;
-              }
-
-              if (!signature) {
-                console.error("Signature is missing");
-                return;
-              }
-
-              // get access to Monerium API using client credentials
-              await monerium.getAccess();
-
-              // Define the request payload
-              const data = {
-                profile: profileId,
-                message,
-                address,
-                signature,
-                chain: "ethereum",
-              };
-
-              console.log("linking wallet", data);
-
-              // Perform the POST request using axios
-              axios
-                .post('https://api.monerium.dev/addresses', data, {
-                  headers: {
-                    Authorization: `Bearer ${monerium.bearerProfile.access_token}`,
-                    "Accept": "application/vnd.monerium.api-v2+json",
-                    "Content-Type": "application/json",
-                  },
-                })
-                .then((response) => {
-                  console.log("Monerium Response:", response.data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error.response ? error.response.data : error.message);
-                });
-            };
-
-
-            // Function to sign a message using an EOA (Externally Owned Account)
-            const signEOA = async (message) => {
-              const wallet = new ethers.Wallet(privateKey);
-              return await wallet.signMessage(message);
-            };
-
-            // Function to sign a message using Safe onchain transactions for a wallet with two owners.
-            const signOnchain = async () => {
-              // Initialize Safe SDK with provider, signer, and safe address
-              let kit = await Safe.default.init({
-                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
-                signer: privateKey,
-                safeAddress,
-              });
-
-              // Generate the hash of the message to be signed
-              const hash = Safe.hashSafeMessage(message);
-
-              // Get the SignMessageLib contract for the Safe version
-              const contract = await Safe.getSignMessageLibContract({
-                safeProvider: kit.getSafeProvider(),
-                safeVersion: "1.3.0",
-              });
-
-              // Encode the transaction data to sign the message
-              const txData = contract.encode("signMessage", [hash]);
-
-              // Prepare the transaction payload
-              const payload = {
-                to: await contract.getAddress(),
-                value: "0",
-                data: txData,
-                operation: OperationType.DelegateCall,
-              };
-
-              // Create the transaction
-              let tx = await kit.createTransaction({
-                transactions: [payload],
-              });
-
-              // // Sign the transaction with OWNER_1_ADDRESS
-              // // After this, the transaction contains the signature from OWNER_1_ADDRESS
-              tx = await kit.signTransaction(tx, Safe.SigningMethod.ETH_SIGN);
-
-              // // Connect OWNER_2_ADDRESS
-              kit = await Safe.default.init({
-                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
-                signer: privateKey2,
-                safeAddress,
-              });
-
-              // // Sign the transaction with OWNER_2_ADDRESS
-              // // After this, the transaction contains the signature from OWNER_1_ADDRESS and OWNER_2_ADDRESS
-              tx = await kit.signTransaction(tx, Safe.SigningMethod.ETH_SIGN);
-
-              // Execute the transaction and log the response
-              const response = await kit.executeTransaction(tx);
-              console.log("signature response:", response);
-              return "0x";
-            };
-
-            // Function to sign a message using Safe offchain messages for a wallet with two owners.
-            const signOffchain = async (message) => {
-              // Initialize Safe SDK with provider, signer, and safe address
-              let kit = await Safe.default.init({
-                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
-                signer: privateKey,
-                safeAddress,
-              });
-
-              // Create a new message object
-              let msgSafe = kit.createMessage(message);
-
-              // Sign the message with OWNER 1
-              msgSafe = await kit.signMessage(
-                msgSafe,
-                Safe.SigningMethod.ETH_SIGN,
-                safeAddress
-              );
-
-              // Sign with OWNER 2
-              kit = await Safe.default.init({
-                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
-                signer: privateKey2,
-                safeAddress,
-              });
-
-              msgSafe = await kit.signMessage(
-                msgSafe,
-                Safe.SigningMethod.ETH_SIGN,
-                safeAddress
-              );
-
-              // get the signature for OWNER 1
-              const signature = Array.from(msgSafe.signatures.values())[0];
-
-              // Instantiate the API Kit
-              // Use the chainId where you have the Safe account deployed
-              const apiKit = new SafeApi({ chainId: 11155111 });
-
-              // Propose the message
-              try {
-                await apiKit.addMessage(safeAddress, {
-                  message,
-                  signature: Safe.buildSignatureBytes([signature]),
-                });
-              } catch (error) {
-                const regex = /already exists/;
-
-                if (!error || !regex.test(error.message)) {
-                  console.error("Error:", error.message);
-                  return;
-                } else {
-                  console.log(error.message);
-                  console.log("Signature 1 has already been added, continuing...");
-                }
-              }
-
-              // Get the signature from OWNER_2_ADDRESS
-              const signatureOwner2 = Array.from(msgSafe.signatures.values())[1];
-
-              const safeMessageHash = await kit.getSafeMessageHash(
-                Safe.hashSafeMessage(message)
-              );
-
-              // Add signature from OWNER_2_ADDRESS
-              try {
-                await apiKit.addMessageSignature(
-                  safeMessageHash,
-                  Safe.buildSignatureBytes([signatureOwner2])
-                );
-              } catch (error) {
-                const regex = /already exists/;
-
-                if (!error || !regex.test(error.message)) {
-                  console.error("Error:", error.message);
-                  return;
-                } else {
-                  console.log(error.message);
-                  console.log("Signature 2 has already been added, continuing...");
-                }
-              }
-
-              // Get the message and confirmation status
-              const status = await apiKit.getMessage(safeMessageHash);
-              if (status?.preparedSignature) {
-                return status.preparedSignature;
-              }
-              return;
-            };
-
-            request();
     get:
       operationId: addresses
       summary: Addresses
@@ -2397,10 +1418,6 @@ paths:
       operationId: request-iban
       summary: Request IBAN
       description: |
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-
         Create an IBAN for a specified address and chain. All incoming EUR payments will automatically be routed to the linked address on that chain. Any linked address can use this IBAN for outgoing payments.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
@@ -2574,10 +1591,6 @@ paths:
       operationId: move-iban
       summary: Move IBAN
       description: |
-        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-        </span>
-
         Move an existing IBAN to a specified address an chain. All incoming EUR payments will automatically be routed to the address on that chain.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
@@ -2731,294 +1744,6 @@ paths:
               "signature": "0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f",
               "memo": "Powered by Monerium"
             }'
-        - lang: JS
-          label: JS
-          source: |-
-            /**
-            * This script demonstrates how to place an order with Monerium API
-            * and create signatures for EOA, Safe onchain transactions, and Safe offchain messages.
-            *
-            * Prerequisites:
-            * 1. Install Node.js from https://nodejs.org/ (if not already installed).
-            * 2. Create a folder for this project and navigate to it in your terminal.
-            * 3. Create a file called `reqNewAddress.js` and paste this script into it.
-            * 4. Install the required npm packages by running:
-            *    npm install dotenv @monerium/sdk ethers @safe-global/protocol-kit @safe-global/safe-core-sdk-types @safe-global/api-kit
-            * 5. Create a `.env` file in your project directory and add your environment variables:
-            *    SAFE_ADDRESS=your_safe_address
-            *    PRIVATE_KEY=your_private_key
-            *    PRIVATE_KEY_2=your_second_private_key (if using Safe)
-            *    INFURA_PROJECT_ID=your_infura_project_id
-            *    ACCESS_TOKEN=your_access_token
-            *    PROFILE_ID=profile_that_owns_the_address
-            *    CLIENT_ID=your_client_id
-            *    CLIENT_SECRET=your_client_secret
-            * 6. Run the script using:
-            *    node reqNewAddress.js [eoa|safe-onchain|safe-offchain]
-            *
-            * Note: Replace the placeholder values in the `.env` file with your actual values.
-            * Tips
-            *  Create a Safe on Sepolia and a Punk wallet (https://punkwallet.io/)
-            *  Make the punk wallet a owner of the safe and use that private key
-            */
-
-            require("dotenv").config();
-            const { MoneriumClient } = require("@monerium/sdk");
-            const { ethers } = require('ethers');
-            const Safe = require("@safe-global/protocol-kit");
-            const SafeApi = require("@safe-global/api-kit").default;
-            const { OperationType } = require("@safe-global/safe-core-sdk-types");
-
-            // Retrieve environment variables
-            const safeAddress = process.env.SAFE_ADDRESS;
-            const privateKey = process.env.PRIVATE_KEY;
-            const privateKey2 = process.env.PRIVATE_KEY_2;
-            const infuraProjectId = process.env.INFURA_PROJECT_ID;
-
-            function getRFC3339Time() {
-              const now = new Date();
-              const future = new Date(now.getTime() + 10 * 60000); // Add 10 minutes
-              return future.toISOString();
-            }
-            // order data
-            const amount = "4";
-            const iban = "EE521273842688571285";
-            const message = `Send EUR ${amount} to ${iban} at ${getRFC3339Time()}`;
-
-            // Using the Monerium SDK to handle the requests.
-            // https://www.npmjs.com/package/@monerium/sdk
-            const monerium = new MoneriumClient({
-              environment: "sandbox",
-              clientId,
-              clientSecret,
-            });
-
-            // Get the wallet type from command line arguments
-            const walletType = process.argv[2];
-
-            const request = async () => {
-              let signature, address;
-
-              switch (walletType) {
-                case "eoa":
-                  address = process.env.EOA_ADDRESS;
-                  signature = await signEOA(message);
-                  break;
-                case "safe-onchain":
-                  address = process.env.SAFE_ADDRESS;
-                  signature = await signOnchain(message);
-                  break;
-                case "safe-offchain":
-                  address = process.env.SAFE_ADDRESS;
-                  signature = await signOffchain(message);
-                  break;
-                default:
-                  if (!walletType) {
-                    console.error(
-                      "Wallet type parameter missing. Please use 'eoa','safe-onchain', or 'safe-offchain'. Example: node reqNewAddress.js eoa"
-                    );
-                    return;
-                  }
-                  console.error(
-                    `Unsupported wallet type ${walletType}. Please use 'eoa','safe-onchain', or 'safe-offchain'.`
-                  );
-                  return;
-              }
-
-              if (!signature) {
-                console.error("Signature is missing");
-                return;
-              }
-
-              // get access to Monerium API using client credentials
-              await monerium.getAccess();
-
-              // Define the request payload
-              const data = {
-                address,
-                currency: "eur",
-                chain: "ethereum",
-                kind: "redeem",
-                amount,
-                counterpart: {
-                  identifier: {
-                    standard: "iban",
-                    iban,
-                  },
-                  details: {
-                    firstName: "Satoshi",
-                    lastName: "Nakamoto",
-                    country: "FR",
-                  },
-                },
-                message,
-                signature,
-                memo: "uuu jeeeeee",
-              };
-
-              console.log("creating order", data);
-
-              try {
-                const response = await monerium.placeOrder(data, profileId);
-                console.log("success", response);
-              } catch (error) {
-                console.error(error);
-                return;
-              }
-            };
-
-            // Function to sign a message using an EOA (Externally Owned Account)
-            const signEOA = async (message) => {
-              const wallet = new ethers.Wallet(privateKey);
-              return await wallet.signMessage(message);
-            };
-
-            // Function to sign a message using Safe onchain transactions for a wallet with two owners.
-            const signOnchain = async () => {
-              // Initialize Safe SDK with provider, signer, and safe address
-              let kit = await Safe.default.init({
-                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
-                signer: privateKey,
-                safeAddress,
-              });
-
-              // Generate the hash of the message to be signed
-              const hash = Safe.hashSafeMessage(message);
-
-              // Get the SignMessageLib contract for the Safe version
-              const contract = await Safe.getSignMessageLibContract({
-                safeProvider: kit.getSafeProvider(),
-                safeVersion: "1.3.0",
-              });
-
-              // Encode the transaction data to sign the message
-              const txData = contract.encode("signMessage", [hash]);
-
-              // Prepare the transaction payload
-              const payload = {
-                to: await contract.getAddress(),
-                value: "0",
-                data: txData,
-                operation: OperationType.DelegateCall,
-              };
-
-              // Create the transaction
-              let tx = await kit.createTransaction({
-                transactions: [payload],
-              });
-
-              // // Sign the transaction with OWNER_1_ADDRESS
-              // // After this, the transaction contains the signature from OWNER_1_ADDRESS
-              tx = await kit.signTransaction(tx, Safe.SigningMethod.ETH_SIGN);
-
-              // // Connect OWNER_2_ADDRESS
-              kit = await Safe.default.init({
-                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
-                signer: privateKey2,
-                safeAddress,
-              });
-
-              // // Sign the transaction with OWNER_2_ADDRESS
-              // // After this, the transaction contains the signature from OWNER_1_ADDRESS and OWNER_2_ADDRESS
-              tx = await kit.signTransaction(tx, Safe.SigningMethod.ETH_SIGN);
-
-              // Execute the transaction and log the response
-              const response = await kit.executeTransaction(tx);
-              console.log("signature response:", response);
-              return "0x";
-            };
-
-            // Function to sign a message using Safe offchain messages for a wallet with two owners.
-            const signOffchain = async (message) => {
-              // Initialize Safe SDK with provider, signer, and safe address
-              let kit = await Safe.default.init({
-                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
-                signer: privateKey,
-                safeAddress,
-              });
-
-              // Create a new message object
-              let msgSafe = kit.createMessage(message);
-
-              // Sign the message with OWNER 1
-              msgSafe = await kit.signMessage(
-                msgSafe,
-                Safe.SigningMethod.ETH_SIGN,
-                safeAddress
-              );
-
-              // Sign with OWNER 2
-              kit = await Safe.default.init({
-                provider: `https://sepolia.infura.io/v3/${infuraProjectId}`,
-                signer: privateKey2,
-                safeAddress,
-              });
-
-              msgSafe = await kit.signMessage(
-                msgSafe,
-                Safe.SigningMethod.ETH_SIGN,
-                safeAddress
-              );
-
-              // get the signature for OWNER 1
-              const signature = Array.from(msgSafe.signatures.values())[0];
-
-              // Instantiate the API Kit
-              // Use the chainId where you have the Safe account deployed
-              const apiKit = new SafeApi({ chainId: 11155111 });
-
-              // Propose the message
-              try {
-                await apiKit.addMessage(safeAddress, {
-                  message,
-                  signature: Safe.buildSignatureBytes([signature]),
-                });
-              } catch (error) {
-                const regex = /already exists/;
-
-                if (!error || !regex.test(error.message)) {
-                  console.error("Error:", error.message);
-                  return;
-                } else {
-                  console.log(error.message);
-                  console.log("Signature 1 has already been added, continuing...");
-                }
-              }
-
-              // Get the signature from OWNER_2_ADDRESS
-              const signatureOwner2 = Array.from(msgSafe.signatures.values())[1];
-
-              const safeMessageHash = await kit.getSafeMessageHash(
-                Safe.hashSafeMessage(message)
-              );
-
-              // Add signature from OWNER_2_ADDRESS
-              try {
-                await apiKit.addMessageSignature(
-                  safeMessageHash,
-                  Safe.buildSignatureBytes([signatureOwner2])
-                );
-              } catch (error) {
-                const regex = /already exists/;
-
-                if (!error || !regex.test(error.message)) {
-                  console.error("Error:", error.message);
-                  return;
-                } else {
-                  console.log(error.message);
-                  console.log("Signature 2 has already been added, continuing...");
-                }
-              }
-
-              // Get the message and confirmation status
-              const status = await apiKit.getMessage(safeMessageHash);
-              if (status?.preparedSignature) {
-                return status.preparedSignature;
-              }
-              return;
-            };
-
-            request();
     get:
       operationId: orders
       summary: Orders
@@ -3233,7 +1958,7 @@ paths:
     get:
       operationId: tokens
       summary: Tokens
-      description: 'Information about the emoney tokens with tickers, symbols, decimals, token contract address and the chain information, we currently support Ethereum, Polygon and Gnosis.</br></br> Token addresses and details here: [/tokens/](/tokens)'
+      description: 'Returns supported tokens with their tickers, decimals, and contract addresses per chain. For icons, integration examples, and supported standards, see the [Tokens](/tokens) section in the developer docs.'
       responses:
         '200':
           description: OK
@@ -3256,7 +1981,7 @@ paths:
       security:
         - BearerAuth: []
       tags:
-        - start
+        - tokens
       x-codeSamples:
         - lang: bash
           label: CLI
@@ -3267,11 +1992,7 @@ paths:
     get:
       operationId: get-signatures
       summary: Get pending signatures
-      description: |
-        Returns pending signatures for the authenticated user.
-        Accepts filtering by address, chain, and pending signature kind (order, linkAddress).
-
-        Note: This endpoint is not optimal for users with many addresses as it may have performance implications.
+      description: Returns pending signatures for the authenticated user, filterable by address, chain, and kind (`order`, `linkAddress`).
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: address
@@ -3572,27 +2293,14 @@ components:
       example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
       pattern: '^0x[0-9a-fA-F]{130}$'
     SignatureSafeOnchain:
-      description: |
-        For Safe onchain signatures, your app needs to ensure that [the signature transaction is created](https://docs.safe.global/sdk/protocol-kit/guides/signatures/messages#on-chain-messages).
-
-        Setting the signature to `0x` let's the Monerium API know that this is an onchain signature.
-
-        The Monerium API supports [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) and will verify the signature using the wallet's `isValidSignature(messageHash, '0x')` method.
-
-        The Safe wallet has a predefined threshold for the number of signatures required to authorize a transaction.
-        For example, if the Safe wallet has 5 owners and a threshold of 3, at least 3 valid signatures are required to proceed with the transaction.
-
-        The Monerium API will continue to verify if the signature has been confirmed for up to 5 days.
+      description: For Safe onchain signatures, set the value to `0x`. Monerium will verify the signature via [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) for up to 5 days.
       type: string
       example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
       enum:
         - 0x
       pattern: ^0x$
     SignatureSafeOffchain:
-      description: |-
-        The Safe wallet supports [offchain signatures](https://docs.safe.global/sdk/protocol-kit/guides/signatures/messages#off-chain-messages).
-        The Safe wallet has a predefined threshold for the number of signatures required to authorize a transaction. For example, if the Safe wallet has 5 owners and a threshold of 3, at least 3 valid signatures are required to proceed with the transaction. Your app needs to ensure that the signature is created and confirmed by enough owners before performing the request.
-        The Monerium API supports [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) and will verify the signature using the wallet's `isValidSignature(messageHash, signature)` method.
+      description: Safe [offchain signature](https://docs.safe.global/sdk/protocol-kit/guides/signatures/messages#off-chain-messages). Ensure the threshold of owner signatures is met before submitting. Verified via [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271).
       type: string
       example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
     AddressObject:
@@ -3618,9 +2326,7 @@ components:
           type: string
           example: Jane Doe
         bic:
-          description: |
-            The Bank Identifier Code (BIC) is an 8 or 11-character code used to identify banks and financial institutions worldwide.
-            It includes a bank code, country code, location code, and optional branch code.
+          description: Bank Identifier Code (BIC) of the bank associated with this IBAN.
           type: string
           example: EAPFESM2XXX
         profile:
@@ -3826,12 +2532,7 @@ components:
       type: object
       properties:
         access_token:
-          description: |
-            The token that must be used to authenticate API requests.
-            Example of using the access token in a request header:
-            ```
-            Authorization: Bearer EoWmpc2uSZar6h2bKgh
-            ```
+          description: Bearer token used to authenticate API requests.
           type: string
         expires_in:
           description: The duration in seconds for which the access token is valid.
@@ -4151,16 +2852,7 @@ components:
         - status
         - message
     UnauthorizedError:
-      description: |
-        This error occurs when the user is not authenticated.
-        Example response:
-        ```json
-        {
-          "code": 401,
-          "status": "Unauthorized",
-          "message": "Not authenticated"
-        }
-        ```
+      description: Returned when the request is not authenticated.
       type: object
       allOf:
         - $ref: '#/components/schemas/Error'
@@ -4183,16 +2875,7 @@ components:
               enum:
                 - Not authenticated
     ForbiddenError:
-      description: |
-        This error occurs when the user does not have permission to access the requested resource.
-        Example response:
-        ```json
-        {
-          "code": 403,
-          "status": "Forbidden",
-          "message": "User user@example.com is forbidden"
-        }
-        ```
+      description: Returned when the authenticated user does not have permission to access the requested resource.
       type: object
       properties:
         code:
@@ -4211,11 +2894,7 @@ components:
           type: string
           example: User user@example.com is forbidden
     ForbiddenPartnerError:
-      description: |
-        FORBIDDEN
-
-        This error occurs when your app does not have permission to access the requested endpoint.
-        You will need to contact the Monerium team to get access to this feature.
+      description: Returned when the application does not have the required partner privileges for this endpoint. Contact the Monerium team to request access.
       type: object
       properties:
         code:
@@ -4239,13 +2918,11 @@ components:
       example: a78d8ff2-e51f-11ed-9e13-cacb9390199c
       pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
     AuthClientID:
-      description: |
-        The [Authorization Code Flow](/getting-started#auth-flow) client ID of your application.
+      description: The Authorization Code Flow client ID of your application.
       type: string
       $ref: '#/components/schemas/UUID'
     CredentialsClientID:
-      description: |
-        The [Client Credentials Authorization](api#auth-client-credentials) client ID of your application.
+      description: The Client Credentials client ID of your application.
       type: string
       $ref: '#/components/schemas/UUID'
     PersonalDetails:
@@ -4285,12 +2962,7 @@ components:
           example: GB
           $ref: '#/components/schemas/CountryCode'
         birthday:
-          description: |
-            The person's birthday in the format "YYYY-MM-DD" where:
-
-            * YYYY = date-fullyear  = 4DIGIT
-            * MM = date-month = 2DIGIT; 01-12
-            * DD = date-mday = 2DIGIT; 01-28, 01-29, 01-30, 01-31 based on month/year.
+          description: The person's date of birth in `YYYY-MM-DD` format.
           type: string
           format: date
           example: '1990-05-15'
@@ -4305,86 +2977,7 @@ components:
         - nationality
         - birthday
     PersonalForm:
-      description: |
-        Personal form for capturing user details, including occupation, profession, fund origins, and financial information.
-
-        The following mappings between codes and their corresponding values are used:
-
-        **Occupation Codes:**
-        - `OCCUPATION_STUDENT`: Student
-        - `OCCUPATION_EMPLOYED`: Employed
-        - `OCCUPATION_SELF_EMPLOYED`: Self Employed
-        - `OCCUPATION_UNEMPLOYED`: Unemployed
-        - `OCCUPATION_RETIRED`: Retired
-
-        **Profession Codes:**
-        - `PROF_ACCOUNTANCY`: Accountancy
-        - `PROF_ADMINISTRATIVE`: Administrative
-        - `PROF_AGRICULTURE`: Agriculture
-        - `PROF_ARTS_ENTERTAINMENT_MEDIA`: Arts/Entertainment/Media
-        - `PROF_BROKER_DEALER`: Broker/Dealer
-        - `PROF_CATERING_HOSPITALITY_TOURISM`: Catering/Hospitality/Tourism
-        - `PROF_CHARITY`: Charity (Non-profit organization)
-        - `PROF_CONSTRUCTION_REAL_ESTATE`: Construction/Real Estate
-        - `PROF_DEALER_HIGH_VALUE_GOODS`: Dealer in high value goods
-        - `PROF_DEALER_PRECIOUS_METALS`: Dealer in precious metals
-        - `PROF_EDUCATION`: Education
-        - `PROF_EMERGENCY_SERVICES`: Emergency services
-        - `PROF_EXTRACTIVE_INDUSTRY`: Extractive industry
-        - `PROF_FINANCIAL_SERVICES_BANKING`: Financial services - Banking
-        - `PROF_FINANCIAL_SERVICES_INSURANCE`: Financial services - Insurance
-        - `PROF_FINANCIAL_SERVICES_OTHER`: Financial services - Other
-        - `PROF_FINANCIAL_SERVICES_PRIVATE_BANKING`: Financial services - Private Banking
-        - `PROF_GAMBLING`: Gambling
-        - `PROF_GOVERNMENT`: Government
-        - `PROF_HEALTH_CARE_MEDICAL`: Health care/Medical
-        - `PROF_INFORMATION_TECHNOLOGY`: Information technology
-        - `PROF_LEGAL`: Legal
-        - `PROF_MANUFACTURING`: Manufacturing
-        - `PROF_MARKETING`: Marketing
-        - `PROF_MILITARY_ARMS_DEFENSE`: Military / Arms trade / Defence
-        - `PROF_MONEY_SERVICE_BUSINESS`: Money service business
-        - `PROF_PENSIONER`: Pensioner
-        - `PROF_PUBLIC_PROCUREMENT`: Public procurement
-        - `PROF_RETAIL_SALES`: Retail sales
-
-        **Fund Origins Codes:**
-        - `FUND_ORIGIN_SALARY`: Salary
-        - `FUND_ORIGIN_DIVIDENDS`: Dividends
-        - `FUND_ORIGIN_INHERITANCE`: Inheritance
-        - `FUND_ORIGIN_SAVINGS`: Savings
-        - `FUND_ORIGIN_INVESTMENT`: Investment
-        - `FUND_ORIGIN_GIFT`: Gift
-        - `FUND_ORIGIN_MINING`: Mining
-        - `FUND_ORIGIN_REAL_ESTATE`: Real estate
-        - `FUND_ORIGIN_LOAN`: Loan
-
-        **Annual Income Codes:**
-        - `ANNUAL_INCOME_UNDER_10K`: Under €10,000
-        - `ANNUAL_INCOME_10K_TO_50K`: From €10,000 to €50,000
-        - `ANNUAL_INCOME_50K_TO_150K`: From €50,000 to €150,000
-        - `ANNUAL_INCOME_150K_TO_300K`: From €150,000 to €300,000
-        - `ANNUAL_INCOME_OVER_300K`: More than €300,000
-
-        **Monthly Turnover Codes:**
-        - `TURNOVER_UNDER_10K`: Under €10,000
-        - `TURNOVER_10K_TO_50K`: From €10,000 to €50,000
-        - `TURNOVER_50K_TO_150K`: From €50,000 to €150,000
-        - `TURNOVER_150K_TO_500K`: From €150,000 to €500,000
-        - `TURNOVER_OVER_500K`: More than €500,000
-
-        **Monthly Transaction Count Codes:**
-        - `TRANSACTION_COUNT_LESS_THAN_5`: Less than 5
-        - `TRANSACTION_COUNT_5_TO_50`: 5 to 50
-        - `TRANSACTION_COUNT_50_TO_100`: 50 to 100
-        - `TRANSACTION_COUNT_100_TO_200`: 100 to 200
-        - `TRANSACTION_COUNT_OVER_200`: More than 200
-
-        **Activity Codes:**
-        - `ACTIVITY_COMMERCE_SELLING`: Commerce Selling
-        - `ACTIVITY_COMMERCE_BUYING`: Commerce Buying
-        - `ACTIVITY_INVESTING_CRYPTO`: Investing in Crypto
-        - `ACTIVITY_OTHER`: Other
+      description: Personal form capturing occupation, profession, fund origins, and financial information for risk assessment.
       type: object
       properties:
         occupation:
@@ -4502,11 +3095,7 @@ components:
           description: Indicates whether the individual is subject to US tax obligations (e.g. holds a US tax identification number or is a US resident for tax purposes).
           type: boolean
         taxId:
-          description: |
-            Tax Identification Number (TIN) assigned to the individual by their tax authority.
-            The format and name vary by country — common examples include Social Security Number (SSN) in the United States,
-            National Insurance Number in the United Kingdom, CPR number in Denmark, personal identity code in Finland and Sweden,
-            and fiscal code (*codice fiscale*) in Italy.
+          description: Tax Identification Number (TIN) assigned by the individual's tax authority. Format varies by country (e.g. SSN in the US, NI number in the UK).
           type: string
           example: 123-45-6789
       required:
@@ -4523,16 +3112,7 @@ components:
         - usTaxPerson
         - taxId
     PersonalVerifications:
-      description: |
-        A list of verifications for personal onboarding. The available kinds depend on the integration model.
-
-        **Available to all partners:**
-        - **sourceOfFunds**: Declaration of the individual's source of funds.
-
-        **KYC reliance model only:**
-        - **idDocument**: Verification of the individual's identity document.
-        - **facialSimilarity**: Verification that the individual's face matches the provided identity document.
-        - **proofOfResidency**: Verification of the individual's residential address.
+      description: A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).
       type: array
       items:
         type: object
@@ -4646,77 +3226,7 @@ components:
         - finalBeneficiaries
         - directors
     CorporateForm:
-      description: |
-        Corporate form for capturing company details, including service, purpose, activity, fund origins, and financial information.
-
-        The following mappings between codes and their corresponding values are used:
-
-        **Legal Form Codes:**
-        - `LEGAL_FORM_PUBLIC_LIMITED`: Public limited
-        - `LEGAL_FORM_PRIVATE_LIMITED`: Private limited
-        - `LEGAL_FORM_PARTNERSHIPS`: Partnerships
-        - `LEGAL_FORM_SOLE_TRADERS_PROPRIETORSHIPS`: Sole traders/proprietorships
-        - `LEGAL_FORM_PUBLIC_AUTHORITIES`: Public authorities
-        - `LEGAL_FORM_NON_PROFIT`: Non profit
-        - `LEGAL_FORM_BRANCHES`: Branches
-        - `LEGAL_FORM_OTHER`: Other
-
-        **Purpose Codes:**
-        - `PURPOSE_COLLECTING_PAYMENTS`: Collecting payments for goods or services
-        - `PURPOSE_PAYING_FOR_GOODS_SERVICES`: Paying for goods or services
-        - `PURPOSE_BUY_SELL_CRYPTO`: Buy and/or sell cryptocurrencies
-        - `PURPOSE_ENGAGE_IN_DEFI`: Engage in DeFi (any sub-category)
-        - `PURPOSE_OTHER`: Other
-
-        **Activity Codes:**
-        - `ACTIVITY_ACCOMMODATION_FOOD_TRAVEL`: Accommodation/Food/Travel services
-        - `ACTIVITY_ACCOUNTING_LEGAL_CONSULTANCY`: Accounting/Legal/Consultancy
-        - `ACTIVITY_ADULT_ENTERTAINMENT`: Adult entertainment
-        - `ACTIVITY_ADVERTISING_MARKETING`: Advertising/Marketing
-        - `ACTIVITY_AGRICULTURE_FORESTRY_FISHING`: Agriculture/Forestry/Fishing
-        - `ACTIVITY_ARTS_ENTERTAINMENT_RECREATION`: Arts/Entertainment/Recreation
-        - `ACTIVITY_CHARITY`: Charity
-        - `ACTIVITY_CONSTRUCTION`: Construction
-        - `ACTIVITY_DEALER_HIGH_VALUE_GOODS`: Dealer in high value goods/metals/stones
-        - `ACTIVITY_ECOMMERCE`: Ecommerce
-        - `ACTIVITY_EDUCATION`: Education
-        - `ACTIVITY_EXTRACTIVE_INDUSTRY`: Extractive industry
-        - `ACTIVITY_GAMBLING`: Gambling
-        - `ACTIVITY_HEALTH_SERVICES`: Health services
-        - `ACTIVITY_MANUFACTURING`: Manufacturing
-        - `ACTIVITY_MARKETPLACE`: Marketplace
-        - `ACTIVITY_MEDIA_PUBLISHING`: Media/Publishing
-        - `ACTIVITY_MULTI_LEVEL_MARKETING`: Multi-level marketing
-        - `ACTIVITY_PERSONAL_INVESTMENT`: Personal investment
-        - `ACTIVITY_PUBLIC_SECTOR`: Public sector
-        - `ACTIVITY_REAL_ESTATE`: Real estate
-        - `ACTIVITY_RETAIL_WHOLESALE_TRADE`: Retail/Wholesale trade
-        - `ACTIVITY_SOCIAL_WORK`: Social work
-        - `ACTIVITY_SOFTWARE_TECHNOLOGY`: Software/Technology
-        - `ACTIVITY_TELECOM`: Telecom
-        - `ACTIVITY_TRANSPORTATION_STORAGE`: Transportation/Storage
-        - `ACTIVITY_UTILITIES`: Utilities
-        - `ACTIVITY_CRYPTO_SERVICES`: Crypto services (any sub-category)
-        - `ACTIVITY_FINANCIAL_INSTITUTION`: Financial institution (any sub-category)
-        - `ACTIVITY_OTHER`: Other
-
-        **Fund Origin Codes:**
-        - `FUND_ORIGIN_REVENUE_FROM_OPERATIONS`: Revenue from operations
-        - `FUND_ORIGIN_PROFIT_DIVIDENDS`: Profit or Dividends
-        - `FUND_ORIGIN_LOAN`: Loan
-        - `FUND_ORIGIN_INVESTMENTS_SHAREHOLDERS`: Investments from shareholders
-        - `FUND_ORIGIN_CUSTOMER_FUNDS`: Customer funds
-        - `FUND_ORIGIN_FUNDS_THIRD_PARTIES`: Funds owned by third parties
-
-        **Monthly Turnover Codes:**
-        - `TURNOVER_UNDER_100K`: Under €100,000
-        - `TURNOVER_100K_TO_250K`: Between €100,000 and €250,000
-        - `TURNOVER_OVER_250K`: More than €250,000
-
-        **Monthly Transaction Count Codes:**
-        - `TRANSACTION_COUNT_UNDER_100`: Under 100
-        - `TRANSACTION_COUNT_100_TO_250`: Between 100 and 250
-        - `TRANSACTION_COUNT_OVER_250`: More than 250
+      description: Corporate form capturing service description, legal form, purpose, activity, fund origins, and financial information for risk assessment.
       type: object
       properties:
         service:
@@ -4815,17 +3325,7 @@ components:
         - monthlyTurnover
         - monthlyTransactionCount
     CorporateVerifications:
-      description: |
-        A list of verifications required for corporate onboarding.
-
-        The types of verifications include:
-        - **sourceOfFunds**: Declaration of the company's source of funds.
-        - **corporateName**: A document proving the company's legal name.
-        - **corporateAddress**: A document proving the company's registered address.
-        - **registrationNumber**: A document proving the company's registration number.
-        - **dateOfRegistration**: A document proving the company's registration date.
-        - **beneficialOwnership**: A document identifying individuals with significant control over the company.
-        - **powerOfAttorney**: A document granting authority to act on behalf of the company.
+      description: A list of verifications required for corporate onboarding.
       type: array
       items:
         type: object
@@ -4854,10 +3354,7 @@ components:
           type: string
           example: A1234566788
         kind:
-          description: |
-            The type of ID document. Passports and National ID cards are supported.
-
-            The ID document must verify the person's name, birthday, and nationality.
+          description: The type of ID document. Must verify the person's name, birthday, and nationality.
           type: string
           example: passport
           enum:
@@ -5082,149 +3579,41 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: |
-        Use the access token obtained from the `/auth/token` endpoint.
-        Example:
-        ```
-        Authorization: Bearer EoWmpc2uSZar6h2bKgh
-        ```
+      description: Access token obtained from the `/auth/token` endpoint.
 tags:
   - name: start
     x-displayName: Getting started
     description: |
-      Monerium offers a sandbox test environment for developers to integrate and test their applications:
+      New to the Monerium API? See the [Getting Started](/) guide for setup instructions, environment details, and integration walkthroughs.
 
-        - **Sandbox API URL:** `https://api.monerium.dev`
-        - **Sandbox web app:** `https://sandbox.monerium.dev`
-
-        Before onboarding users via your application, you must [register your application](/getting-started#setup) with Monerium.
-
-        When you are ready to go live, then you can register your application in our production environment:
-
-        - **Production API URL:** `https://api.monerium.app`
-        - **Production web app:** `https://monerium.app`
-
-        To access the version 2 of the Monerium API, you may need to specify the Accept header in your requests.
-        This header ensures that you are using the correct version of the API. See the endpoint documentation for details where this is required.
-        The Accept header must have the value `application/vnd.monerium.api-v2+json`.
-        Below are examples using curl and JavaScript (Fetch API).
-
-        ```bash
-          curl -X GET 'https://api.monerium.dev/profiles' \
-            -H 'Accept: application/vnd.monerium.api-v2+json' \
-            -H 'Authorization: Bearer YOUR_ACCESS_TOKEN'
-        ```
-
-        ```js
-          fetch('https://api.monerium.dev/profiles', {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/vnd.monerium.api-v2+json',
-              'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
-            }
-          })
-          .then(response => response.json())
-          .then(data => console.log(data))
-          .catch(error => console.error('Error:', error));
-        ```
-
-      ### Authentication context
-
-      The difference between V1 and V2 API is how the endpoints handle the caller identity. In V2 most endpoints take the profile ID from the authentication context, meaning that when client credentials are used
-      the requests are returning data for the application user profile. In order to fetch data for other authorized profiles the caller can set the profile UUID value in the request arguments.
-      See specific endpoint documentation for details.
-
-      ### Extra privileges
-
-      Some endpoints are marked with the following label:
-
-      <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Requires extra privileges
-      </span>
-
-      Access to these endpoints need to be granted to your app by the Monerium team.
-
-      Monerium can offer applicable partners a KYC reliance or sharing agreement that can streamline the onboarding process for its customers.
-
-      ### Coming soon
-
-      Some endpoints are not yet live and are marked with the following label:
-
-      <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: #F2C24F;color: #000000;vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
-          Coming soon
-      </span>
-
-      These endpoints are part of an upcoming release. The interface is documented here for early integration work and feedback but is not yet available in production or sandbox.
+      Endpoints marked <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Whitelabel</span> or <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(46, 125, 50);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Private</span> are only available to those application types.
   - name: auth
     x-displayName: Authentication
-    description: 'Endpoints that handle user creation, authorization, and authentication.'
+    description: 'Endpoints for authorization and token management. See the [OAuth](/oauth#authorization), [Whitelabel](/whitelabel#authentication), and [Private](/private#authentication) guides for integration walkthroughs.'
   - name: profiles
     x-displayName: Profiles
-    description: |
-      A profile represents a customer undergoing KYC onboarding. It can be personal or corporate.
-      The profile owns most resources such as IBANs and addresses.
-
-      **Recommended onboarding flow (KYC sharing via Sumsub)**
-
-      1. [`POST /profiles`](#operation/create-profile) — create a new profile.
-      2. [`POST /profiles/{profile}/share`](#operation/share-profile-kyc) — reuse an existing Sumsub applicant to automatically populate `details` and `verifications`.
-      3. [`PATCH /profiles/{profile}/form`](#operation/patch-profile-form) — submit additional data (e.g. purpose of account).
-      4. Listen for [`profile.updated`](#operation/webhook-profile-updated) webhooks and check whether the overall `state` is `approved` or whether a verification (e.g. `sourceOfFunds`) is `incomplete`.
-      5. If `sourceOfFunds` is `incomplete`, submit it via [`PATCH /profiles/{profile}/verifications`](#operation/patch-profile-verifications).
-
-      **KYC reliance model**
-
-      If your platform holds the appropriate licences and Monerium has agreed a KYC reliance arrangement with you,
-      you may submit customer details directly via [`PATCH /profiles/{profile}/details`](#operation/patch-profile-details)
-      instead of using the Sumsub share flow.
+    description: 'A profile represents a customer undergoing KYC/KYB onboarding (personal or corporate) and is the owner of associated IBANs and addresses. See the [Onboarding guide](/whitelabel#onboarding) for the full flow.'
   - name: addresses
     x-displayName: Addresses
-    description: 'A blockchain address, often called a public key or wallet address, is a unique identifier within a blockchain that serves as a destination for sending, receiving, or storing digital assets, such as the EURe onchain fiat token.'
+    description: 'Link a blockchain address to a profile with a cryptographic proof of ownership. See the [Link a wallet](/whitelabel#link-wallet) guide for signing walkthroughs including EOA and smart contract wallets.'
   - name: ibans
     x-displayName: IBANs
-    description: 'Monerium connects any web3 wallet to any euro bank account with a personal IBAN. All incoming euro payments are automatically minted as EURe tokens to the linked address. Sending EURe to traditional bank accounts is just as easy. With a signature from the wallet, the EURe is burned and sent as a euro to any bank account from the IBAN that is linked to the address.'
+    description: 'Provision and manage IBANs linked to blockchain addresses. Incoming SEPA payments are automatically minted as EURe to the linked address. See the [EUR IBAN](/whitelabel#eur-iban) guide.'
   - name: orders
     x-displayName: Orders
-    description: |
-      An order represents an instruction to transfer funds to and from a wallet address.
-      The transfer can occur either within the blockchain ecosystem (cross-chain) or between the blockchain address and a traditional bank account via SEPA.
+    description: 'An order represents a fund movement: an issue (EURe minted on incoming payment) or a redeem (EURe burned for an outgoing SEPA payment or cross-chain transfer). See the [Orders](/whitelabel#orders) guide.'
   - name: signatures
     x-displayName: Signatures
-    description: |
-      Fetch pending signature requests for linking addresses and approving orders.
+    description: 'Fetch pending signature requests for linking addresses and approving orders. Used with smart contract wallets that sign on-chain. See the [Link a wallet](/whitelabel#link-wallet) guide.'
   - name: files
     x-displayName: Files
-    description: Share files with Monerium.
+    description: 'Upload files to obtain a `fileId` for use in profile verifications and orders above €15,000. See the [Onboarding guide](/whitelabel#onboarding) for verification requirements.'
   - name: webhooks
     x-displayName: Webhooks
-    description: |
-      Receive notifications with webhooks.
-
-      # Signatures
-
-      Each webhook request includes the following headers:
-      - `webhook-id`: Unique identifier of the webhook event.
-      - `webhook-timestamp`: Timestamp of the webhook event in seconds since epoch.
-      - `webhook-signature`: HMAC signature of the webhook payload.
-
-      The signature is computed using the following formula:
-
-      ```
-      envelope = webhook-id.webhook-timestamp.payload
-      signature = base64Encode(HMAC-SHA256(envelope, secret))
-      webhook-signature = v1,signature
-      ```
-
-      As an example, if the webhook ID is `3f3d820e-d01c-4c56-8be4-b20053225679`, the timestamp is `1745118540`, and the payload is:
-      ```json
-      {"type":"subscription.created","timestamp":"2024-08-09T12:44:04.777884Z"}
-      ```
-      then the signature sent in the `webhook-signature` header for a secret `whsec_mUt3nH+3wx/djdHf8RHn9yJMMiAhq10b` is: `v1,4gOAiajJT7ah++XpDFdRyK/TJ75whRjUcKOWnvsHNlk=`
-
-      Please note that the payload  must be used exactly as it was received, without any modifications or formatting changes as any changes will result in a different signature.
-  - name: deprecated
-    x-displayName: Deprecated
-    description: Endpoints that have been superseded by newer alternatives. They remain available for backward compatibility but should not be used in new integrations.
+    description: 'Receive real-time event notifications for profile approvals, IBAN provisioning, and order state changes. See the [Webhooks](/whitelabel#webhooks) guide for registration and signature verification details.'
+  - name: tokens
+    x-displayName: Tokens
+    description: 'Supported e-money tokens with contract addresses and chain details. For icons, integration examples, and supported standards, see the [Tokens](/tokens) section in the developer docs.'
   - name: changes
     x-displayName: Changelog
     description: |
@@ -5420,19 +3809,7 @@ webhooks:
     post:
       operationId: webhook-profile-updated
       summary: Profile updated
-      description: |
-        This notification represents a profile's state update.
-
-        It's send as a POST request to the endpoint specified during [subscription creation](#operation/create-subscription).
-
-        The cURL example contain the example payload and headers that are sent.
-        Headers description:
-        - `webhook-id`: unique ID of webhook notification.
-        - `webhook-timestamp`: UNIX timestamp of webhook notification.
-        - `webhook-signature`: signature is a minified JSON payload encrypted using the secret key via the HMAC-SHA256 scheme, prefixed with "v1,".
-
-        Your webhook endpoint must respond with a `200 OK` status code to indicate successful receipt.
-        If the delivery fails, Monerium will retry with exponential backoff up to 10 times over 12 hours.
+      description: Sent when a profile's state changes. Your endpoint must respond with `200 OK`; failed deliveries are retried with exponential backoff up to 10 times over 12 hours.
       requestBody:
         required: true
         content:
@@ -5483,19 +3860,7 @@ webhooks:
     post:
       operationId: webhook-iban-updated
       summary: IBAN updated
-      description: |
-        This notification represents an IBAN update.
-
-        It's send as a POST request to the endpoint specified during [subscription creation](#operation/create-subscription).
-
-        The cURL example contain the example payload and headers that are sent.
-        Headers description:
-        - `webhook-id`: unique ID of webhook notification.
-        - `webhook-timestamp`: UNIX timestamp of webhook notification.
-        - `webhook-signature`: signature is a minified JSON payload encrypted using the secret key via the HMAC-SHA256 scheme, prefixed with "v1,".
-
-        Your webhook endpoint must respond with a `200 OK` status code to indicate successful receipt.
-        If the delivery fails, Monerium will retry with exponential backoff up to 10 times over 12 hours.
+      description: Sent when an IBAN is updated. Your endpoint must respond with `200 OK`; failed deliveries are retried with exponential backoff up to 10 times over 12 hours.
       requestBody:
         required: true
         content:

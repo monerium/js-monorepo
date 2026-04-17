@@ -1,0 +1,352 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Endpoint } from '@site/src/components/Endpoint';
+
+## Onboarding
+
+Monerium supports two strategies for identity verification:
+
+- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles only.
+- **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for corporate profiles and for partners without SumSub.
+
+The steps below apply to both strategies. Where the paths diverge, tabs indicate which applies.
+
+:::info
+All requests act on your application's own profile by default. Include the customer's **profile UUID** to act on their behalf.
+:::
+
+### 1. Create a profile
+
+<Endpoint method="POST" path="/profiles" href="https://docs.monerium.com/api/#tag/profiles/operation/create-profile" />
+
+```js
+const response = await fetch('https://api.monerium.dev/profiles', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({ kind: 'personal' }), // or 'corporate'
+});
+
+const { id: profileId, state } = await response.json();
+// Store profileId — required for all subsequent requests
+```
+
+### 2. Submit customer details
+
+KYC Sharing is available for personal profiles only. Corporate profiles must always use KYC Reliance.
+
+<Tabs>
+  <TabItem value="sharing" label="KYC Sharing — Personal">
+
+Transfer the verified applicant data from your SumSub account to Monerium using the applicant token. Returns `202`; Monerium fetches the data asynchronously.
+
+:::note Pre-checks
+Before sharing, ensure your customer passes all required checks. See the [KYC Guide — Individuals](./kyc-guide-individuals).
+:::
+
+<Endpoint method="POST" path="/profiles/{profileId}/share" href="https://docs.monerium.com/api/#tag/profiles/operation/share-profile-kyc" />
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    provider: 'sumsub',
+    personal: { token: sumsubApplicantToken },
+  }),
+});
+// Returns 202 — monitor progress via profile.updated webhooks
+```
+
+  </TabItem>
+  <TabItem value="reliance-personal" label="KYC Reliance — Personal">
+
+Submit the customer's verified identity data directly. All fields are required.
+
+:::note Pre-checks
+Before submitting, ensure your customer passes all required checks. See the [KYC Guide — Individuals](./kyc-guide-individuals).
+:::
+
+<Endpoint method="PATCH" path="/profiles/{profileId}/details" href="https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-details" />
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    personal: {
+      firstName: 'Jane',
+      lastName: 'Doe',
+      address: 'Pennylane 123',
+      postalCode: '7890',
+      city: 'Liverpool',
+      country: 'GB',
+      nationality: 'GB',
+      birthday: '1990-05-15',
+    },
+  }),
+});
+```
+
+  </TabItem>
+  <TabItem value="reliance-corporate" label="KYC Reliance — Corporate">
+
+Submit the company's verified details. Include all representatives (authorised signatories), final beneficiaries (25%+ ownership), and directors.
+
+:::note Pre-checks
+Before submitting, ensure the company passes all required checks. See the [KYB Guide — Corporates](./kyb-guide-corporates).
+:::
+
+<Endpoint method="PATCH" path="/profiles/{profileId}/details" href="https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-details" />
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    corporate: {
+      name: 'Acme Ltd',
+      registrationNumber: '123456',
+      registrationDate: '2020-01-15',
+      vatNumber: 'GB123456789',
+      website: 'https://acme.com',
+      address: 'Pennylane 123',
+      postalCode: '7890',
+      city: 'London',
+      country: 'GB',
+      countryState: 'England',
+      representatives: [
+        {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          address: 'Pennylane 123',
+          postalCode: '7890',
+          city: 'London',
+          country: 'GB',
+          nationality: 'GB',
+          birthday: '1990-05-15',
+          idDocument: { number: 'A1234567', kind: 'passport' },
+        },
+      ],
+      finalBeneficiaries: [
+        {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          address: 'Pennylane 123',
+          postalCode: '7890',
+          city: 'London',
+          country: 'GB',
+          nationality: 'GB',
+          birthday: '1990-05-15',
+          ownershipPercentage: '100',
+        },
+      ],
+      directors: [
+        {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          address: 'Pennylane 123',
+          postalCode: '7890',
+          city: 'London',
+          country: 'GB',
+          nationality: 'GB',
+          birthday: '1990-05-15',
+        },
+      ],
+    },
+  }),
+});
+```
+
+  </TabItem>
+</Tabs>
+
+### 3. Submit form data
+
+Required for all integrations. Captures additional risk assessment data such as occupation, purpose of account, source of funds, and expected monthly volume.
+
+<Endpoint method="PATCH" path="/profiles/{profileId}/form" href="https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-form" />
+
+<Tabs>
+  <TabItem value="personal" label="Personal">
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/form`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    personal: {
+      occupation: 'OCCUPATION_EMPLOYED',
+      profession: 'PROF_FINANCIAL_SERVICES_OTHER',
+      fundOrigin: 'FUND_ORIGIN_SALARY',
+      annualIncome: 'INCOME_50K_100K',
+      monthlyTurnover: 'TURNOVER_1K_10K',
+      monthlyTransactionCount: 'TX_COUNT_1_10',
+      activities: ['ACTIVITY_INVESTING_CRYPTO'],
+      publicFunction: false,
+      fundOwner: true,
+      usCitizen: false,
+      usTaxPerson: false,
+      taxId: '123-45-6789',
+    },
+  }),
+});
+```
+
+  </TabItem>
+  <TabItem value="corporate" label="Corporate">
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/form`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    corporate: {
+      service: 'LEGAL_FORM_PRIVATE_LIMITED',
+      purpose: 'PURPOSE_COLLECTING_PAYMENTS',
+      activity: 'ACTIVITY_FINANCIAL_INSTITUTION',
+      fundOrigin: 'FUND_ORIGIN_REVENUE_OPERATIONS',
+      monthlyTurnover: 'TURNOVER_100K_TO_250K',
+      monthlyTransactionCount: 'TRANSACTION_COUNT_UNDER_100',
+    },
+  }),
+});
+```
+
+  </TabItem>
+</Tabs>
+
+### 4. Upload verifications
+
+Upload documents via `POST /files` first to obtain a `fileId`, then submit them here.
+
+<Endpoint method="PATCH" path="/profiles/{profileId}/verifications" href="https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-verifications" />
+
+<Tabs>
+  <TabItem value="personal-sharing" label="Personal — KYC Sharing">
+
+`idDocument`, `facialSimilarity`, and `proofOfResidency` are populated automatically from SumSub. You only need this step if source of funds is required — either identified upfront (restricted residency, restricted nationality, or PEP) or triggered by a `profile.updated` webhook with `sourceOfFunds: incomplete`.
+
+```js
+const { id: fileId } = await uploadFile(sofDocument); // POST /files
+
+await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    personal: [{ kind: 'sourceOfFunds', fileId }],
+  }),
+});
+```
+
+  </TabItem>
+  <TabItem value="personal-reliance" label="Personal — KYC Reliance">
+
+Submit the full set: `idDocument`, `facialSimilarity`, `proofOfResidency`, and `sourceOfFunds` if required.
+
+```js
+// Upload each document via POST /files to get fileIds, then:
+await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    personal: [
+      { kind: 'idDocument', fileId: idDocumentFileId },
+      { kind: 'facialSimilarity', fileId: selfieFileId },
+      { kind: 'proofOfResidency', fileId: proofOfResidencyFileId },
+      // { kind: 'sourceOfFunds', fileId: sofFileId }, // if required
+    ],
+  }),
+});
+```
+
+  </TabItem>
+  <TabItem value="corporate-reliance" label="Corporate — KYC Reliance">
+
+Submit corporate verification documents. `sourceOfFunds` is included if required.
+
+```js
+// Upload each document via POST /files to get fileIds, then:
+await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    corporate: [
+      { kind: 'corporateName', fileId: corporateNameFileId },
+      { kind: 'corporateAddress', fileId: corporateAddressFileId },
+      { kind: 'registrationNumber', fileId: registrationNumberFileId },
+      { kind: 'dateOfRegistration', fileId: dateOfRegistrationFileId },
+      { kind: 'beneficialOwnership', fileId: beneficialOwnershipFileId },
+      { kind: 'powerOfAttorney', fileId: powerOfAttorneyFileId },
+      // { kind: 'sourceOfFunds', fileId: sofFileId }, // if required
+    ],
+  }),
+});
+```
+
+  </TabItem>
+</Tabs>
+
+### 5. Monitor approval
+
+<Endpoint event="profile.updated" href="https://docs.monerium.com/api/#tag/webhooks/operation/webhook-profile-updated" />
+
+Listen for `profile.updated` webhooks. Check the top-level `state` and the `verifications` array:
+
+```js
+app.post('/webhooks/monerium', express.raw({ type: 'application/json' }), async (req, res) => {
+  // ... verify signature (see Webhooks section)
+  res.sendStatus(200);
+
+  const event = JSON.parse(req.body);
+  if (event.meta.type !== 'profile.updated') return;
+
+  const { state, verifications } = event.data;
+
+  if (state === 'approved') {
+    // Profile is approved — proceed to provision an IBAN
+  }
+
+  if (state === 'incomplete') {
+    const sofVerification = verifications?.find(v => v.kind === 'sourceOfFunds');
+    if (sofVerification?.state === 'incomplete') {
+      // Source of funds required — collect and submit via PATCH /verifications
+    }
+  }
+});
+```

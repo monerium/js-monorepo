@@ -1,4 +1,4 @@
-# Migration Guide.
+# Migration Guide
 
 ## SDK to v3.0.0
 

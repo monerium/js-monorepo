@@ -1,0 +1,170 @@
+---
+title: Private
+id: private
+---
+
+import { Endpoint } from '@site/src/components/Endpoint';
+import LinkWallet from './_partials/link-wallet.mdx';
+import ClientCredentials from './_partials/client-credentials.mdx';
+import Orders from './_partials/orders.mdx';
+
+# Private
+
+The Private plan gives you direct API access to your own Monerium account. There are no external customers; the application acts on your own wallet, IBAN, and orders.
+
+## Create an application
+
+1. Go to [sandbox.monerium.dev](https://sandbox.monerium.dev) and select **Developers** in the sidebar.
+2. Click **Create application** and select **Private**.
+3. Enter your application name and confirm.
+4. Copy the **CLIENT ID** and **CLIENT SECRET** from the credentials screen.
+
+When you're ready for production, see [Going live](#going-live) below.
+
+## Integration flow
+
+1. **[Authenticate](#authentication):** Obtain an access token using Client Credentials.
+2. **[Set up webhooks](#webhooks):** Register your endpoint to receive order events.
+3. **[Link a wallet](#link-wallet):** Associate a blockchain address with your account.
+4. **[Set up an IBAN](#eur-iban):** Provision your IBAN via the dashboard or API.
+5. **[Send and receive payments](#orders):** Place redeem orders for outgoing SEPA payments and cross-chain transfers.
+
+<ClientCredentials />
+
+## Webhooks
+
+Order processing is asynchronous. Register a webhook endpoint to receive `order.created` and `order.updated` events. Profile approval is notified by email, not webhook.
+
+### Register your endpoint
+
+<Endpoint
+  method="POST"
+  path="/webhooks"
+  href="https://docs.monerium.com/api/#tag/webhooks/operation/create-subscription"
+/>
+
+Generate a secret, then register your URL:
+
+```js
+import crypto from 'crypto';
+
+const secret = 'whsec_' + crypto.randomBytes(32).toString('base64');
+
+const response = await fetch('https://api.monerium.dev/webhooks', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://your-app.com/webhooks/monerium',
+    secret,
+    types: ['order.created', 'order.updated'],
+  }),
+});
+// Store secret; you need it to verify incoming requests
+```
+
+Monerium sends a `subscription.created` event to your URL immediately after registration. Respond with `200 OK` to activate the subscription.
+
+### Verify signatures
+
+Each request includes a `webhook-signature` header containing an HMAC-SHA256 signature over the `webhook-id`, `webhook-timestamp`, and raw request body. Verify it before processing:
+
+```js
+import crypto from 'crypto';
+
+app.post(
+  '/webhooks/monerium',
+  express.raw({ type: 'application/json' }),
+  async (req, res) => {
+    const id = req.headers['webhook-id'];
+    const timestamp = req.headers['webhook-timestamp'];
+    const signature = req.headers['webhook-signature'];
+
+    const signed = `${id}.${timestamp}.${req.body}`;
+    const expected = crypto
+      .createHmac('sha256', Buffer.from(SECRET.replace('whsec_', ''), 'base64'))
+      .update(signed)
+      .digest('base64');
+
+    if (signature !== `v1,${expected}`) {
+      return res.sendStatus(401);
+    }
+
+    res.sendStatus(200);
+
+    if (await hasProcessed(id)) return; // deduplicate retried events
+
+    processEvent(JSON.parse(req.body));
+  }
+);
+```
+
+If your endpoint does not return `200 OK`, Monerium retries up to 10 times over 12 hours using exponential backoff. Store processed `webhook-id` values to avoid handling the same event twice.
+
+<LinkWallet />
+
+## EUR IBAN
+
+The simplest way to set up your IBAN is directly in the [Monerium app](https://monerium.app) dashboard. For programmatic provisioning, use the API:
+
+### Request IBAN
+
+<Endpoint
+  method="POST"
+  path="/ibans"
+  href="https://docs.monerium.com/api/#tag/ibans/operation/request-iban"
+/>
+
+```js
+await fetch('https://api.monerium.dev/ibans', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    address: '0x59cFC408d310697f9D3598e1BE75B0157a072407',
+    chain: 'ethereum', // or 'gnosis', 'polygon'
+  }),
+});
+// 202: IBAN provisioning started
+```
+
+### Move an IBAN
+
+<Endpoint
+  method="PATCH"
+  path="/ibans/{iban}"
+  href="https://docs.monerium.com/api/#tag/ibans/operation/move-iban"
+/>
+
+Re-associate your IBAN with a different address or chain. Incoming payments will be routed to the new address from that point forward.
+
+```js
+await fetch(`https://api.monerium.dev/ibans/${iban}`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    address: '0x59cFC408d310697f9D3598e1BE75B0157a072407',
+    chain: 'gnosis',
+  }),
+});
+// 200: IBAN moved
+```
+
+<Orders />
+
+## Going live
+
+Private applications do not require a partner review.
+
+1. **Complete KYC/KYB** at [monerium.app/profiles](https://monerium.app/profiles). Individuals complete KYC; businesses complete KYB.
+2. **Create a production application** at [monerium.app](https://monerium.app) following the same steps as sandbox.
+3. **Start building.** Once your profile is approved, your production credentials are active.

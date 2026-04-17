@@ -1,0 +1,28 @@
+---
+title: Sandbox
+id: sandbox
+---
+
+# Sandbox
+
+The sandbox environment at [sandbox.monerium.dev](https://sandbox.monerium.dev) lets you build and test without real money or real blockchain transactions. Use it to simulate the full payment flow before going live.
+
+**Sandbox API:** `https://api.monerium.dev`
+
+## Get test EURe
+
+In the sandbox, incoming SEPA payments are simulated rather than real. To mint test EURe to your wallet:
+
+1. Log in at [sandbox.monerium.dev](https://sandbox.monerium.dev).
+2. Go to the **Receive** page (`/receive`).
+3. Under **Simulate bank transfer**, enter an amount and click **Add money**.
+
+EURe is minted to the wallet linked to your IBAN. This triggers the same `order.created` and `order.updated` webhook events as a real incoming payment, so you can test your full integration end-to-end.
+
+## Get test gas
+
+Your wallet needs gas to send on-chain transactions. Use the faucets below to get test tokens for each network:
+
+- [Sepolia faucet](https://sepolia-faucet.pk910.de) — sepETH for Ethereum Sepolia
+- [Chiado faucet](https://faucet.chiadochain.net/) — test xDAI for Gnosis Chiado
+- [Amoy faucet](https://faucet.polygon.technology/) or [Alchemy's faucet](https://www.alchemy.com/faucets/polygon-amoy) — test MATIC for Polygon Amoy

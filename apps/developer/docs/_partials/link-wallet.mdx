@@ -1,0 +1,172 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Endpoint } from '@site/src/components/Endpoint';
+
+## Link wallet
+
+<Endpoint method="POST" path="/addresses" href="https://docs.monerium.com/api/#tag/addresses/operation/link-address" />
+
+Link a blockchain address to a profile to enable IBAN issuance and payments. Linking requires a cryptographic proof of ownership: the customer signs a fixed message and your app submits the signature.
+
+**The fixed message to sign:**
+
+```
+I hereby declare that I am the address owner.
+```
+
+<Tabs>
+  <TabItem value="eoa" label="EOA">
+
+Sign the message with the wallet's private key using `eth_sign` / `personal_sign`. This produces a standard 65-byte ECDSA signature.
+
+```js
+import { ethers } from 'ethers';
+
+const message = 'I hereby declare that I am the address owner.';
+const wallet = new ethers.Wallet(privateKey);
+const signature = await wallet.signMessage(message);
+
+const response = await fetch('https://api.monerium.dev/addresses', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    profile: profileId,
+    address: wallet.address,
+    chain: 'ethereum', // or 'gnosis', 'polygon'
+    message,
+    signature,
+  }),
+});
+// 201 — address linked
+```
+
+  </TabItem>
+  <TabItem value="scw-offchain" label="Smart Contract Wallet — Off-chain">
+
+Each owner of the contract wallet signs the message off-chain. Once the threshold is met, assemble the combined signature and submit it. Monerium verifies via EIP-1271 by calling `isValidSignature(messageHash, signature)` on the contract.
+
+The example uses Safe's protocol kit, but any EIP-1271-compatible smart contract wallet follows the same pattern.
+
+```js
+import Safe, {
+  buildSignatureBytes,
+  SigningMethod,
+} from '@safe-global/protocol-kit';
+
+const message = 'I hereby declare that I am the address owner.';
+
+// Owner 1 signs
+let kit = await Safe.init({ provider, signer: ownerPrivateKey1, safeAddress });
+let safeMessage = kit.createMessage(message);
+safeMessage = await kit.signMessage(safeMessage, SigningMethod.ETH_SIGN);
+
+// Owner 2 signs (repeat for each owner until threshold is met)
+kit = await Safe.init({ provider, signer: ownerPrivateKey2, safeAddress });
+safeMessage = await kit.signMessage(safeMessage, SigningMethod.ETH_SIGN);
+
+// Assemble combined signature bytes
+const signature = buildSignatureBytes(
+  Array.from(safeMessage.signatures.values())
+);
+
+// Monerium calls isValidSignature(messageHash, signature) on the contract
+const response = await fetch('https://api.monerium.dev/addresses', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    profile: profileId,
+    address: safeAddress,
+    chain: 'ethereum',
+    message,
+    signature,
+  }),
+});
+// 201 — address linked
+```
+
+  </TabItem>
+  <TabItem value="scw-onchain" label="Smart Contract Wallet — On-chain">
+
+Execute a `signMessage` transaction that records the message hash on-chain in the contract. Submit `"0x"` as the signature — Monerium will poll `isValidSignature(messageHash, '0x')` until the transaction is confirmed (up to 5 days).
+
+```js
+import Safe, {
+  hashSafeMessage,
+  getSignMessageLibContract,
+  SigningMethod,
+} from '@safe-global/protocol-kit';
+import { OperationType } from '@safe-global/safe-core-sdk-types';
+
+const message = 'I hereby declare that I am the address owner.';
+const hash = hashSafeMessage(message);
+
+// Build the signMessage transaction
+let kit = await Safe.init({ provider, signer: ownerPrivateKey1, safeAddress });
+const signMessageLib = await getSignMessageLibContract({
+  safeProvider: kit.getSafeProvider(),
+  safeVersion: '1.3.0',
+});
+
+let tx = await kit.createTransaction({
+  transactions: [
+    {
+      to: await signMessageLib.getAddress(),
+      value: '0',
+      data: signMessageLib.encode('signMessage', [hash]),
+      operation: OperationType.DelegateCall,
+    },
+  ],
+});
+tx = await kit.signTransaction(tx, SigningMethod.ETH_SIGN);
+
+// Collect remaining owner signatures and execute
+kit = await Safe.init({ provider, signer: ownerPrivateKey2, safeAddress });
+tx = await kit.signTransaction(tx, SigningMethod.ETH_SIGN);
+await kit.executeTransaction(tx);
+
+// Submit '0x' — Monerium polls isValidSignature(messageHash, '0x') asynchronously
+const response = await fetch('https://api.monerium.dev/addresses', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    profile: profileId,
+    address: safeAddress,
+    chain: 'ethereum',
+    message,
+    signature: '0x',
+  }),
+});
+// 202 — Monerium will verify the on-chain signature and link the address
+```
+
+  </TabItem>
+</Tabs>
+
+### Wallet types
+
+How you produce the signature depends on your wallet type:
+
+| Wallet type                           | How ownership is proven                                              | Result                   |
+| :------------------------------------ | :------------------------------------------------------------------- | :----------------------- |
+| **EOA** (MetaMask, Ledger, etc.)      | Private key signs the message directly                               | 65-byte signature        |
+| **Smart contract wallet — off-chain** | Owners sign off-chain; Monerium verifies via EIP-1271                | Combined signature bytes |
+| **Smart contract wallet — on-chain**  | `signMessage` transaction recorded on-chain; Monerium polls EIP-1271 | `"0x"` — returns `202`   |
+
+### EIP-1271
+
+[EIP-1271](https://eips.ethereum.org/EIPS/eip-1271) is the standard for signature validation in smart contract wallets. Because smart contract wallets (Safe, Argent, and others) have no private key of their own, they implement an `isValidSignature(bytes32 messageHash, bytes signature)` method. Monerium calls this method on the contract instead of recovering a signer from the signature bytes. The contract applies its own authorization logic — for example, a multisig threshold — and returns `0x1626ba7e` if the signature is considered valid.
+
+- **Off-chain EIP-1271:** The wallet owners collect their signatures externally, assemble the combined signature bytes, and submit them. Monerium calls `isValidSignature(messageHash, signature)` immediately and links the address on success (`201`).
+- **On-chain EIP-1271:** A `signMessage` transaction is broadcast to the blockchain, recording the message hash as approved by the contract. Your app submits `"0x"` as the signature. Monerium calls `isValidSignature(messageHash, '0x')` and continues polling for up to 5 days until the on-chain transaction is confirmed (`202`).

@@ -1,118 +1,175 @@
-import { FC } from 'react';
-import styles from './TokenList.module.css';
-import { findMatchingUrlAndVersion } from './util';
+import { FC, useState } from 'react';
 import { Icon } from '@iconify/react';
+import styles from './TokenList.module.css';
 
-interface Token {
+export interface ApiToken {
   address: string;
-  chainId: number;
+  chain: string;
+  chainId: string;
+  currency: string;
   decimals: number;
-  logoURI: string;
-  name: string;
   symbol: string;
-  tags: string[];
+  kind: string;
+  ticker: string;
 }
 
-interface Network {
-  name: string;
-  iconUrl: string;
-  chainId: number;
-  color: string;
-  tokens: Token[];
+export interface ApiChain {
+  id: string;
+  chain: string;
+  chainId: string;
+  kind: string;
+  label: string;
   explorerUrl: string;
   explorerName: string;
+  logo: string;
+  color: string;
 }
 
-interface TokenListProps {
-  networks: Network[];
+export interface ChainEntry {
+  chain: ApiChain;
+  token: ApiToken;
 }
 
-export const TokenList: FC<TokenListProps> = ({ networks }) => {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+function short(addr: string): string {
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+}
+
+const ChainAccordion: FC<{ entry: ChainEntry }> = ({ entry }) => {
+  const { chain, token } = entry;
+  const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const explorerUrl = `${chain.explorerUrl}/token/${token.address}`;
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(token.address);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  return (
-    <div id="token-list" className={styles.tokenList}>
-      {networks?.map((network) => (
-        <div
-          key={network.name}
-          id={`chain-${network.name}`}
-          className={styles.chainRoot}
-          style={{ backgroundColor: network.color }}
-        >
-          <h6>
-            <img
-              src={network.iconUrl}
-              width="30"
-              height="30"
-              alt={network.name}
-            />
-            {network.name}
-          </h6>
-          <ul>
-            <li>
-              <b>{network.name} chain ID</b>: {network.chainId}
-            </li>
-            <li>
-              <b>Token decimals</b>: 18
-            </li>
-          </ul>
+  const copyIcon = copied ? 'solar:check-circle-linear' : 'solar:copy-line-duotone';
 
-          <div className={styles.chainTokens}>
-            {network?.tokens?.map((token) => {
-              const isLegacy = token.tags?.includes('legacy') ?? false;
-              const { url, version } = findMatchingUrlAndVersion(token);
-              return (
-                <div key={token.address} className={styles.chainToken}>
-                  <div className={styles.tColCurrency}>
-                    <img
-                      src={token.logoURI}
-                      width="20"
-                      height="20"
-                      alt={token.symbol}
-                    />{' '}
-                    {token.symbol}
-                  </div>
-                  <div className={styles.tColAddress}>
-                    <span title={token.address}>
-                      {`${token.address.slice(0, 6)}...${token.address.slice(-4)}`}{' '}
-                    </span>
-                    <button onClick={() => copyToClipboard(token.address)}>
-                      <Icon icon="solar:copy-line-duotone" />
-                    </button>{' '}
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={network.explorerUrl + token.address}
-                      title={`View on ${network.explorerName}`}
-                    >
-                      <i
-                        className="fa-solid fa-arrow-up-right-from-square"
-                        aria-hidden="true"
-                      />
-                    </a>
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={url}
-                      className={styles.version}
-                    >
-                      {' '}
-                      {version}{' '}
-                      <i className="fa-brands fa-github" aria-hidden="true" />
-                    </a>
-                    {isLegacy && (
-                      <a href="./contracts-v2#legacy" className={styles.legacy}>
-                        Legacy
-                      </a>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+  return (
+    <div className={styles.accordion}>
+      <div
+        className={styles.header}
+        onClick={() => setExpanded(!expanded)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' || e.key === ' ' ? setExpanded(!expanded) : undefined}
+      >
+        <div className={styles.headerLeft}>
+          <img
+            src={chain.logo}
+            width={32}
+            height={32}
+            alt={chain.label}
+            className={styles.chainLogo}
+          />
+          <span className={styles.chainName}>{chain.label}</span>
+        </div>
+        <div className={styles.headerRight}>
+          {!expanded && (
+            <>
+              <span
+                className={`${styles.addressPill} ${styles.addressFull}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {token.address}
+              </span>
+              <span
+                className={`${styles.addressPill} ${styles.addressShort}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {short(token.address)}
+              </span>
+              <button
+                className={styles.iconBtn}
+                onClick={(e) => { e.stopPropagation(); copyToClipboard(); }}
+                title="Copy address"
+              >
+                <Icon icon={copyIcon} width={16} />
+              </button>
+              <a
+                href={explorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.iconBtn}
+                title={`View on ${chain.explorerName}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Icon icon="solar:arrow-right-up-linear" width={16} />
+              </a>
+            </>
+          )}
+          <div className={`${styles.iconBtn} ${expanded ? styles.iconBtnActive : ''}`}>
+            <Icon
+              icon="solar:alt-arrow-down-linear"
+              width={16}
+              className={`${styles.chevron} ${expanded ? styles.chevronExpanded : ''}`}
+            />
           </div>
         </div>
+      </div>
+
+      {expanded && (
+        <div className={styles.body}>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Address</span>
+            <div className={styles.detailValue}>
+              <span className={`${styles.addressPill} ${styles.addressPillExpanded}`}>
+                {token.address}
+              </span>
+              <button className={styles.iconBtn} onClick={copyToClipboard} title="Copy address">
+                <Icon icon={copyIcon} width={16} />
+              </button>
+              <a
+                href={explorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.iconBtn}
+                title={`View on ${chain.explorerName}`}
+              >
+                <Icon icon="solar:arrow-right-up-linear" width={16} />
+              </a>
+            </div>
+          </div>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Chain ID</span>
+            <span className={styles.detailText}>{chain.chainId}</span>
+          </div>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Token</span>
+            <span className={styles.detailText}>
+              {token.symbol} &middot; {token.decimals} decimals
+            </span>
+          </div>
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Explorer</span>
+            <a
+              href={chain.explorerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.explorerLink}
+            >
+              {chain.explorerName}{' '}
+              <Icon icon="solar:arrow-right-up-linear" width={12} />
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ChainList: FC<{ entries: ChainEntry[] }> = ({ entries }) => {
+  if (!entries.length) {
+    return <div className={styles.loading}>Loading…</div>;
+  }
+  return (
+    <div className={styles.chainList}>
+      {entries.map((entry) => (
+        <ChainAccordion key={entry.chain.id} entry={entry} />
       ))}
     </div>
   );

@@ -1,0 +1,192 @@
+import { Endpoint } from '@site/src/components/Endpoint';
+
+## Authorization
+
+The OAuth flow uses **Authorization Code with PKCE**. Even though PKCE removes the need for a client secret in the browser, your integration still requires a backend. The Monerium API does not support browser-based CORS for authenticated requests, and bearer tokens must be kept server-side; exposing them to the browser creates real risk (XSS, token leaks, misuse).
+
+The intended setup:
+
+- **Frontend**: initiates the flow, redirects the user to Monerium, receives the authorization code on callback, and passes it to your backend.
+- **Backend**: exchanges the code for tokens, stores them securely, and makes all Monerium API calls. Your frontend talks to your backend, not to Monerium directly.
+
+### 1. Generate a PKCE challenge
+
+On your backend, generate a random `code_verifier` and derive a `code_challenge` from it before redirecting. Persist the verifier in your database or cache alongside the `state`; you need it when exchanging the code for tokens on the callback.
+
+```js
+import crypto from 'crypto';
+
+function generateCodeVerifier() {
+  return crypto.randomBytes(64).toString('base64url');
+}
+
+function generateCodeChallenge(verifier) {
+  return crypto.createHash('sha256').update(verifier).digest('base64url');
+}
+
+const codeVerifier = generateCodeVerifier();
+const codeChallenge = generateCodeChallenge(codeVerifier);
+
+// Persist alongside the state in step 2; needs to survive until the callback
+```
+
+### 2. Redirect to Monerium
+
+<Endpoint method="GET" path="/auth" href="https://docs.monerium.com/api/#tag/auth/operation/auth-get" />
+
+Your backend builds the authorization URL and redirects the user to the Monerium portal. What happens there depends on whether the user has an account:
+
+1. **Login or sign up**: the user logs in with their Monerium username and password, or creates a new account.
+2. **KYC/KYB**: new users complete identity verification before they can use their account. Returning users who are already verified skip this step. See the [KYC Guide: Individuals](./kyc-guide-individuals) and [KYB Guide: Corporates](./kyb-guide-corporates) for what is required, allowed, and prohibited.
+3. **Authorization**: the user is shown a consent screen listing what your application is requesting access to (profile details and payment data) and accepts or cancels.
+
+Once the user accepts, they are redirected to your `redirect_uri` with an authorization `code` in the query string.
+
+:::tip Customize the portal
+The authorization screen displays your app name, logo, and a header color, all configured in your application settings. You can also link to your terms of service and privacy policy, which are shown on the consent screen.
+:::
+
+```js
+const state = crypto.randomBytes(16).toString('hex');
+
+// Persist state and code_verifier, keyed by session so you can retrieve them on callback
+await db.pkce.store({ sessionId, state, codeVerifier });
+
+const params = new URLSearchParams({
+  client_id: 'YOUR_CLIENT_ID',
+  code_challenge: codeChallenge,
+  code_challenge_method: 'S256',
+  redirect_uri: 'https://your-app.com/callback',
+  state,
+});
+
+res.redirect(`https://api.monerium.dev/auth?${params}`);
+```
+
+**Optional parameters:**
+
+| Parameter | Description |
+| :-- | :-- |
+| `email` | Pre-fill the email field. |
+| `skip_kyc` | Skip KYC steps in sandbox during testing. |
+
+### 3. Handle the callback
+
+Monerium redirects to your `redirect_uri` with `?code=<authorization_code>`. Verify `state` before proceeding.
+
+```js
+app.get('/callback', async (req, res) => {
+  const { code, state } = req.query;
+
+  if (state !== await db.pkce.getState(sessionId)) {
+    return res.status(400).send('State mismatch, possible CSRF attack');
+  }
+
+  // Pass the code to the token exchange (step 4)
+});
+```
+
+### 4. Exchange the code for tokens
+
+<Endpoint method="POST" path="/auth/token" href="https://docs.monerium.com/api/#tag/auth/operation/auth-token" />
+
+Exchange the authorization code for an `access_token` and `refresh_token`. This call happens on your backend. Use the **Authorization Code Flow `client_id`**. Your app has two separate client IDs, one per flow.
+
+```js
+const response = await fetch('https://api.monerium.dev/auth/token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: new URLSearchParams({
+    grant_type: 'authorization_code',
+    client_id: 'YOUR_AUTH_CODE_CLIENT_ID',
+    code,
+    code_verifier: await db.pkce.get(state), // retrieve the verifier you stored in step 2
+    redirect_uri: 'https://your-app.com/callback',
+  }),
+});
+
+const { access_token, refresh_token, expires_in } = await response.json();
+
+// Store tokens server-side in your database or encrypted cache (e.g. Redis)
+// Never send them to the frontend
+await db.tokens.upsert({ userId, access_token, refresh_token });
+```
+
+
+### 5. Refresh the access token
+
+Access tokens expire after 1 hour. Use the refresh token to get a new one without re-authenticating the user. Refresh tokens rotate on each use; always store the latest one.
+
+```js
+const response = await fetch('https://api.monerium.dev/auth/token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: new URLSearchParams({
+    grant_type: 'refresh_token',
+    client_id: 'YOUR_AUTH_CODE_CLIENT_ID',
+    refresh_token: req.session.refreshToken,
+  }),
+});
+
+const { access_token, refresh_token: newRefreshToken } = await response.json();
+
+await db.tokens.upsert({ userId, access_token, refresh_token: newRefreshToken });
+```
+
+---
+
+### Sign-In with Ethereum (SIWE)
+
+Existing Monerium customers with a linked wallet can skip the Monerium portal and authenticate via a wallet signature. The signature is produced client-side, but the `/auth` request and all subsequent token handling happen on your backend.
+
+```js
+// 1. Frontend: build and sign the EIP-4361 message with the user's wallet
+const message = [
+  `${domain} wants you to sign in with your Ethereum account:`,
+  address,
+  '',
+  `Allow ${appName} to access my data on Monerium`,
+  '',
+  `URI: ${redirectUri}`,
+  'Version: 1',
+  `Chain ID: 1`,
+  `Nonce: ${nonce}`,
+  `Issued At: ${issuedAt}`,
+  `Expiration Time: ${expirationTime}`,
+  'Resources:',
+  '- https://monerium.com/siwe',
+  `- ${privacyPolicyUrl}`,
+  `- ${termsOfServiceUrl}`,
+].join('\n');
+
+const signature = await signer.signMessage(message);
+
+// 2. Frontend: send message + signature to your backend
+await fetch('/api/siwe-auth', {
+  method: 'POST',
+  body: JSON.stringify({ message, signature }),
+});
+
+// 3. Backend: POST to /auth and handle the token exchange
+const response = await fetch('https://api.monerium.dev/auth', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: new URLSearchParams({
+    client_id: 'YOUR_CLIENT_ID',
+    code_challenge: codeChallenge,
+    code_challenge_method: 'S256',
+    authentication_method: 'siwe',
+    message,
+    signature,
+    redirect_uri: redirectUri,
+  }),
+});
+// Redirected to redirect_uri with ?code=..., exchange for tokens as in step 4
+```
+
+:::note SIWE requirements
+- `expiration_time` is required (optional in the EIP-4361 spec but required by Monerium)
+- `resources` must include `https://monerium.com/siwe` and your app's privacy policy and terms URLs
+- `nonce` must be unique per request
+- `chain_id` should match a chain the user has linked with Monerium
+:::

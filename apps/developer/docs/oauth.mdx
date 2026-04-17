@@ -1,0 +1,44 @@
+---
+title: OAuth
+id: oauth
+---
+
+import Authorization from './_partials/authorization.mdx';
+import LinkWallet from './_partials/link-wallet.mdx';
+import IBAN from './_partials/iban.mdx';
+import Orders from './_partials/orders.mdx';
+
+# OAuth
+
+The OAuth flow lets you offer Monerium services without managing compliance infrastructure. Users are redirected to a Monerium portal to complete KYC/KYB and authorize your application; you handle the product experience, Monerium handles the regulation.
+
+## Create an application
+
+1. Go to [sandbox.monerium.dev](https://sandbox.monerium.dev) and select **Developers** in the sidebar.
+2. Click **Create application** and select **OAuth**.
+3. Enter your application name and confirm.
+4. Copy the **CLIENT ID** from the credentials screen; you'll need it in the authorization flow below.
+
+When you're ready for production, repeat this at [monerium.app](https://monerium.app). See [Going live](./#going-live) for the full checklist.
+
+## Integration flow
+
+1. **[Authorize](#authorization):** Redirect the user to Monerium. They log in or sign up, complete KYC/KYB, and grant your app access. You receive an authorization code, exchange it for tokens, and store the refresh token.
+2. **[Link a wallet](#link-wallet):** Associate a blockchain address with the user's profile.
+3. **[Issue an IBAN](#eur-iban):** Provision a dedicated IBAN once the profile is approved and a wallet is linked.
+4. **[Send and receive payments](#orders):** Place redeem orders and monitor status via polling or on-chain events.
+
+<Authorization />
+
+<LinkWallet />
+
+<IBAN isOAuth />
+
+<Orders isOAuth />
+
+## Going live
+
+1. **Test in sandbox:** Verify the redirect flow, token exchange, wallet linking, and order placement.
+2. **Request production access:** Create the application in Production and submit for manual review.
+
+See the [Going live](./#going-live) section in Getting Started.

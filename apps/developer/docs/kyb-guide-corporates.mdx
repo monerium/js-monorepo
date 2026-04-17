@@ -1,0 +1,164 @@
+---
+title: KYB Guide - Corporates
+id: kyb-guide-corporates
+---
+
+import CountryTiers from './_partials/country-tiers.mdx';
+import ProhibitedActivities from './_partials/prohibited-activities.mdx';
+import ComplianceDisclaimer from './_partials/compliance-disclaimer.mdx';
+
+# KYB Guide — Corporates
+
+This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles must use KYC Reliance — KYC Sharing via SumSub is not supported for companies.
+
+<ComplianceDisclaimer />
+
+## Pre-checks
+
+Perform these checks before submitting any data to Monerium. Companies that fail must be rejected.
+
+- **Country of incorporation:** Must not be prohibited. See [Country of incorporation](#country-of-incorporation) below.
+- **Sanctions:** Screen the company itself and all directors, representatives, and beneficial owners against applicable sanctions lists (EU, UN, OFAC).
+- **PEP:** Check all directors and beneficial owners for PEP status. PEP status requires source of funds verification.
+- **Prohibited activities:** Reject any company active in a [prohibited sector](#prohibited-activities). See the full list below.
+
+### Entity restrictions
+
+The following types of legal entities are not permitted:
+
+- Legal entities with no legal personality
+- Legal entities acting on behalf of clients that are not regulated in the EEA or an equivalent third country, and cannot demonstrate why they are exempt from authorisation
+- Entities with nominee shareholders or shares in bearer form
+- Entities whose primary activity is providing financial services subject to governmental authorisation or registration (e.g. banks, crypto asset service providers) — unless a specific agreement is in place with Monerium
+- Offshore and shell banks
+- Shell companies
+- Pyramid schemes and multi-level marketing (MLM)
+- Get-rich-quick schemes
+- Political or religious organisations engaged in hate speech
+- Businesses that exclusively service high-net-worth individuals
+- Entities whose remittances are funded entirely in cash
+
+## Country of incorporation
+
+The company's country of incorporation determines its risk tier. Prohibited incorporation country is a hard block.
+
+<CountryTiers />
+
+:::info Restricted incorporation country
+Companies incorporated in a restricted country (Bulgaria, Monaco) require [source of funds](#source-of-funds) verification.
+:::
+
+<ProhibitedActivities />
+
+## Company details
+
+The following company information is required:
+
+| Field                | Required | Description                            |
+| :------------------- | :------- | :------------------------------------- |
+| `name`               | Yes      | Legal company name                     |
+| `registrationNumber` | Yes      | Company registration number            |
+| `address`            | Yes      | Registered street address              |
+| `postalCode`         | Yes      | Postal code                            |
+| `city`               | Yes      | City                                   |
+| `country`            | Yes      | ISO 3166-1 alpha-2 country code        |
+| `countryState`       | Yes      | State or county                        |
+| `registrationDate`   | No       | Company registration date (YYYY-MM-DD) |
+| `vatNumber`          | No       | VAT number                             |
+| `website`            | No       | Company website                        |
+
+## Representatives
+
+Representatives are individuals authorised to act on behalf of the company (authorised signatories). At least one representative is required.
+
+Each representative requires full personal details plus an identity document:
+
+| Field               | Required | Description                                |
+| :------------------ | :------- | :----------------------------------------- |
+| `firstName`         | Yes      | First name                                 |
+| `lastName`          | Yes      | Last name                                  |
+| `address`           | Yes      | Residential street address                 |
+| `postalCode`        | Yes      | Postal code                                |
+| `city`              | Yes      | City                                       |
+| `country`           | Yes      | ISO 3166-1 alpha-2 country code            |
+| `nationality`       | Yes      | ISO 3166-1 alpha-2 nationality code        |
+| `birthday`          | Yes      | Date of birth (YYYY-MM-DD)                 |
+| `idDocument.kind`   | Yes      | `passport`, `idCard`, or `residencePermit` |
+| `idDocument.number` | Yes      | Document number                            |
+
+## Beneficial owners
+
+Beneficial owners are individuals who directly or indirectly own 25% or more of the company. All must be declared.
+
+Each beneficial owner requires the same personal details as representatives, plus:
+
+| Field                 | Required | Description                   |
+| :-------------------- | :------- | :---------------------------- |
+| `ownershipPercentage` | Yes      | Ownership percentage (25–100) |
+
+No identity document is required for beneficial owners.
+
+## Directors
+
+Directors are individuals with the power to legally bind the company (power of procuration). Each director requires the same personal details as representatives but no identity document.
+
+## Form data
+
+The following risk assessment data is required for all corporate profiles:
+
+| Field                     | Description                                 |
+| :------------------------ | :------------------------------------------ |
+| `service`                 | Brief description of the company's services |
+| `legalForm`               | Legal structure of the company              |
+| `purpose`                 | Primary purpose of using Monerium           |
+| `activity`                | Main business activity                      |
+| `fundOrigin`              | Origin of the company's funds               |
+| `monthlyTurnover`         | Expected monthly turnover range             |
+| `monthlyTransactionCount` | Expected monthly transaction count          |
+
+**Legal form:** `LEGAL_FORM_PUBLIC_LIMITED`, `LEGAL_FORM_PRIVATE_LIMITED`, `LEGAL_FORM_PARTNERSHIPS`, `LEGAL_FORM_SOLE_TRADERS_PROPRIETORSHIPS`, `LEGAL_FORM_PUBLIC_AUTHORITIES`, `LEGAL_FORM_NON_PROFIT`, `LEGAL_FORM_BRANCHES`, `LEGAL_FORM_OTHER`
+
+**Purpose:** `PURPOSE_COLLECT_PAYMENTS`, `PURPOSE_PAY_FOR_SERVICES`, `PURPOSE_BUY_SELL_CRYPTO`, `PURPOSE_ENGAGE_IN_DEFI`, `PURPOSE_OTHER`
+
+**Activity:** `ACTIVITY_ACCOMMODATION_FOOD_TRAVEL`, `ACTIVITY_ACCOUNTING_LEGAL_CONSULTANCY`, `ACTIVITY_ADULT_ENTERTAINMENT`, `ACTIVITY_ADVERTISING_MARKETING`, `ACTIVITY_AGRICULTURE_FORESTRY_FISHING`, `ACTIVITY_ARTS_ENTERTAINMENT_RECREATION`, `ACTIVITY_CHARITY`, `ACTIVITY_CONSTRUCTION`, `ACTIVITY_DEALER_HIGH_VALUE_GOODS`, `ACTIVITY_ECOMMERCE`, `ACTIVITY_EDUCATION`, `ACTIVITY_EXTRACTIVE_INDUSTRY`, `ACTIVITY_GAMBLING`, `ACTIVITY_HEALTH_SERVICES`, `ACTIVITY_MANUFACTURING`, `ACTIVITY_MARKETPLACE`, `ACTIVITY_MEDIA_PUBLISHING`, `ACTIVITY_MULTI_LEVEL_MARKETING`, `ACTIVITY_PERSONAL_INVESTMENT`, `ACTIVITY_PUBLIC_SECTOR`, `ACTIVITY_REAL_ESTATE`, `ACTIVITY_RETAIL_WHOLESALE`, `ACTIVITY_SOCIAL_WORK`, `ACTIVITY_SOFTWARE_TECHNOLOGY`, `ACTIVITY_TELECOM`, `ACTIVITY_TRANSPORT_STORAGE`, `ACTIVITY_UTILITIES`, `ACTIVITY_CRYPTO_SERVICES`, `ACTIVITY_FINANCIAL_INSTITUTION`, `ACTIVITY_OTHER`
+
+**Fund origin:** `FUND_ORIGIN_REVENUE_OPERATIONS`, `FUND_ORIGIN_PROFIT_DIVIDENDS`, `FUND_ORIGIN_LOAN`, `FUND_ORIGIN_INVESTMENTS_SHAREHOLDERS`, `FUND_ORIGIN_CUSTOMER_FUNDS`, `FUND_ORIGIN_THIRD_PARTY_FUNDS`
+
+**Monthly turnover:** `TURNOVER_UNDER_100K` (under €100k), `TURNOVER_100K_TO_250K` (€100k–€250k), `TURNOVER_OVER_250K` (over €250k)
+
+**Monthly transaction count:** `TRANSACTION_COUNT_UNDER_100`, `TRANSACTION_COUNT_100_TO_250`, `TRANSACTION_COUNT_OVER_250`
+
+## Verifications
+
+All verification documents are uploaded via `POST /files` to obtain a `fileId`, then submitted via `PATCH /profiles/{profileId}/verifications`.
+
+| Kind                  | Description                                                 |
+| :-------------------- | :---------------------------------------------------------- |
+| `corporateName`       | Document proving the company's legal name                   |
+| `corporateAddress`    | Document proving the registered address                     |
+| `registrationNumber`  | Document proving the registration number                    |
+| `dateOfRegistration`  | Document proving the registration date                      |
+| `beneficialOwnership` | Document identifying individuals with 25%+ ownership        |
+| `powerOfAttorney`     | Document granting authority to act on behalf of the company |
+| `sourceOfFunds`       | Declaration of the company's source of funds (if required)  |
+
+## Source of funds
+
+Source of funds verification is required when any of the following apply:
+
+- Restricted incorporation country
+- PEP status of any director or beneficial owner
+
+Monerium may also request source of funds after submission based on risk evaluation. You will be notified via a `profile.updated` webhook with `sourceOfFunds` marked as `incomplete`.
+
+## Submitting data
+
+Once your company passes the pre-checks above, submit their data via the Whitelabel onboarding flow. See [Onboarding](./whitelabel#onboarding) for the full API walkthrough.
+
+---
+
+**Country reference data** — includes country names, ISO codes, and risk categories.
+
+<a href="/kyc-sharing-countries.json" download>
+  Download kyc-sharing-countries.json
+</a>

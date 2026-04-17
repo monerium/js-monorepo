@@ -1,0 +1,89 @@
+---
+title: Use with AI
+id: use-with-ai
+---
+
+# Use with AI
+
+The context files below are designed to be pasted directly into an AI assistant (Claude, ChatGPT, Cursor, Copilot, etc.) alongside your question. Each file contains everything needed for a complete integration — auth, webhooks, wallet linking, IBANs, and orders — for a specific application type.
+
+## Context files
+
+### OAuth
+
+For apps where users authorize your application through the Monerium portal.
+
+**Download:** [/llms/oauth.txt](/llms/oauth.txt)
+
+```text
+I'm building a Monerium OAuth integration in [your language/framework]. 
+
+Using the attached context, implement:
+1. Authorization Code + PKCE flow (backend-only, no browser CORS)
+2. Wallet linking for an EOA address
+3. Fetching IBANs
+4. Placing a redeem order (outgoing SEPA payment)
+5. Monitoring orders via on-chain Transfer events
+
+Use [your language] idioms and include error handling.
+```
+
+### Whitelabel
+
+For apps that manage the full user lifecycle — KYC, IBANs, and payments — under your own brand.
+
+**Download:** [/llms/whitelabel.txt](/llms/whitelabel.txt)
+
+```text
+I'm building a Monerium Whitelabel integration in [your language/framework].
+
+Using the attached context, implement:
+1. Client credentials authentication
+2. Webhook registration and signature verification
+3. Customer onboarding: create profile, submit details, submit form
+4. Wallet linking
+5. IBAN provisioning
+6. Placing a redeem order (outgoing SEPA payment)
+
+Use [your language] idioms and include error handling.
+```
+
+### Private
+
+For apps that interact with your own Monerium account without managing other users.
+
+**Download:** [/llms/private.txt](/llms/private.txt)
+
+```text
+I'm building a Monerium Private integration in [your language/framework].
+
+Using the attached context, implement:
+1. Client credentials authentication  
+2. Webhook registration and signature verification for order events
+3. Wallet linking
+4. Requesting an IBAN
+5. Placing a redeem order (outgoing SEPA payment)
+
+Use [your language] idioms and include error handling.
+```
+
+## Cursor / Windsurf / Copilot
+
+If you use an AI coding assistant in your editor, add the relevant context file to your project rules so your assistant has Monerium context for every conversation in that project.
+
+**Cursor**: Add to `.cursor/rules/monerium.mdc`
+
+**Windsurf**: Add to `.windsurf/rules/monerium.md`
+
+**GitHub Copilot**: Add to `.github/copilot-instructions.md`
+
+At the top of the file add: `@/llms/whitelabel.txt` (or whichever plan applies) and your AI assistant will automatically have Monerium context for every conversation in that project.
+
+A ready-made Cursor rules file is also available at [/llms/cursor-rules.txt](/llms/cursor-rules.txt) — copy it to `.cursor/rules/monerium.mdc` in your project.
+
+## Tips
+
+- Use the sandbox environment (`sandbox.monerium.dev`) for all testing. It mirrors production but uses simulated funds and test blockchains, so nothing real is at stake.
+- The context files include JavaScript examples. Ask your AI to translate them to your language and framework.
+- If the AI gets stuck on a specific endpoint, paste the relevant section from the API reference at [/api](/api) directly into the chat.
+- For sandbox testing, use the **Simulate bank transfer** feature on the Receive page to mint test EURe without real money.
