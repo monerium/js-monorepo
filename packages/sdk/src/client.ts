@@ -1,5 +1,8 @@
 import { MONERIUM_CONFIG } from './config';
+import { MoneriumApiError, MoneriumSdkError } from './errors';
 import { queryParams } from './helpers';
+import type { Transport } from './transport';
+import { defaultTransport } from './transport';
 import type {
   Address,
   AddressesQueryParams,
@@ -31,89 +34,6 @@ import type {
   SupportingDoc,
   Token,
 } from './types';
-
-// ─── Errors ───────────────────────────────────────────────────────────────────
-
-/**
- * Thrown when the Monerium API returns a non-2xx response.
- * Fields map directly to the API response body — nothing is translated or normalised.
- */
-export class MoneriumApiError extends Error {
-  code: number;
-  status: string;
-  errors?: Record<string, string>;
-  details?: unknown;
-
-  constructor(body: {
-    code: number;
-    status: string;
-    message: string;
-    errors?: Record<string, string>;
-    details?: unknown;
-  }) {
-    super(body.message);
-    this.code = body.code;
-    this.status = body.status;
-    this.errors = body.errors;
-    this.details = body.details;
-  }
-}
-
-export type MoneriumSdkErrorType =
-  | 'network_error' // fetch failed (DNS, timeout, connection refused)
-  | 'authentication_required' // authenticated endpoint called with no token
-  | 'invalid_configuration'; // bad options passed to createMoneriumClient
-
-/**
- * Thrown for SDK-level failures — no HTTP response involved.
- */
-export class MoneriumSdkError extends Error {
-  type: MoneriumSdkErrorType;
-  cause?: unknown;
-
-  constructor(type: MoneriumSdkErrorType, message: string, cause?: unknown) {
-    super(message);
-    this.type = type;
-    this.cause = cause;
-  }
-}
-
-// ─── Transport ────────────────────────────────────────────────────────────────
-
-export type TransportRequest = {
-  method: string;
-  url: string;
-  headers: Record<string, string>; // always pre-populated by the SDK
-  body?: BodyInit | string;
-  signal?: AbortSignal; // for request cancellation
-};
-
-export type TransportResponse = {
-  status: number;
-  headers?: Record<string, string>;
-  bodyText: string; // raw response body — SDK handles JSON parsing
-};
-
-export type Transport = (
-  request: TransportRequest
-) => Promise<TransportResponse>;
-
-const defaultTransport: Transport = async ({
-  method,
-  url,
-  headers,
-  body,
-  signal,
-}) => {
-  let response: Response;
-  try {
-    response = await fetch(url, { method, headers, body, signal });
-  } catch (err) {
-    throw new MoneriumSdkError('network_error', 'Network request failed', err);
-  }
-  const bodyText = await response.text();
-  return { status: response.status, bodyText };
-};
 
 // ─── Client options ───────────────────────────────────────────────────────────
 

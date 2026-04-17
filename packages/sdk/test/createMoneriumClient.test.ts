@@ -1,11 +1,12 @@
+import { createMoneriumClient } from '../src/client';
+
+import { MoneriumApiError, MoneriumSdkError } from '../src/errors';
+
 import {
-  createMoneriumClient,
-  MoneriumApiError,
-  MoneriumSdkError,
   Transport,
   TransportRequest,
   TransportResponse,
-} from '../src/client';
+} from '../src/transport';
 
 // ─── Test helpers ─────────────────────────────────────────────────────────────
 

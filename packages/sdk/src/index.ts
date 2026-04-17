@@ -33,6 +33,7 @@
  * ```
  */
 
+import { createMoneriumClient } from './client';
 import { MoneriumClient } from './compat';
 export { default as constants } from './constants';
 export * from './types';
@@ -46,5 +47,18 @@ export {
   siweMessage,
 } from './utils';
 
+export { createMoneriumClient };
+
+export { MoneriumApiError, MoneriumSdkError } from './errors';
+export type { MoneriumSdkErrorType } from './errors';
+
+export type {
+  Transport,
+  TransportRequest,
+  TransportResponse,
+} from './transport';
+
+/** @deprecated will be remvoed in v3. Use `createMoneriumClient` instead. */
 export { MoneriumClient };
+/** @deprecated will be remvoed in v3. Use `createMoneriumClient` instead. */
 export default MoneriumClient;
