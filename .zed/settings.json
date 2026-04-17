@@ -1,16 +1,89 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#settings-files
 {
   "prettier": {
     "allowed": true,
   },
+  "project_panel": {
+    "hide_hidden": false,
+    "indent_size": 16,
+    "show_diagnostics": "all",
+  },
+  "agent": {
+    "default_profile": "write",
+    "always_allow_tool_actions": false,
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5-latest",
+    },
+    "inline_assistant_model": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5-latest",
+    },
+    "button": true,
+    "model_parameters": [],
+  },
+  "disable_ai": false,
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "dark",
+    "light": "Ayu Mirage",
+    "dark": "One Dark",
+  },
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+    },
+  },
+  "diagnostics_max_severity": "all",
   "format_on_save": "on",
   "languages": {
-    "YAML": {
-      "formatter": {
-        "external": {
-          "command": "pnpm",
-          "arguments": ["prettier", "--stdin-filepath", "{buffer_path}"],
-        },
+    "LESS": {
+      "code_actions_on_format": {
+        "source.fixAll.stylelint": true,
+      },
+    },
+    "CSS": {
+      "code_actions_on_format": {
+        "source.fixAll.stylelint": true,
+      },
+    },
+    "JavaScript": {
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true,
+      },
+    },
+    "TypeScript": {
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true,
+      },
+    },
+    "TSX": {
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true,
       },
     },
   },
+  "lsp": {
+    "stylelint-lsp": {
+      "settings": {
+        "stylelint": {
+          "validate": ["css", "less"],
+        },
+      },
+    },
+    "eslint": {
+      "settings": {
+        "trace": { "server": "verbose" },
+        "nodePath": ".yarn/sdks",
+      },
+    },
+  },
+  "file_scan_exclusions": ["**/.DS_Store"],
 }
