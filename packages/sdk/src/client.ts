@@ -69,6 +69,7 @@ const { STORAGE_CODE_VERIFIER, STORAGE_ACCESS_TOKEN, STORAGE_ACCESS_EXPIRY } =
 const isServer = typeof window === 'undefined';
 
 /**
+ * @deprecated Class will be removed in v3 in favour of 'createMoneriumClient' function.
  * In the [Monerium UI](https://monerium.app/), create an application to get the `clientId` and register your `redirectUri`.
  * ```ts
  * import { MoneriumClient } from '@monerium/sdk';
@@ -153,7 +154,7 @@ export class MoneriumClient {
   }
 
   /**
-   * @deprecate will be removed in v3 - in favour of `buildAuthorizationUrl`
+   * @deprecated will be removed in v3 - in favour of `buildAuthorizationUrl`
    * Constructs the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
@@ -199,7 +200,7 @@ export class MoneriumClient {
     window.location.assign(authFlowUrl);
   }
   /**
-   * @deprecate will be removed in v3 - in favour of `buildSiweAuthorizationUrl`
+   * @deprecated will be removed in v3 - in favour of `buildSiweAuthorizationUrl`
    * Constructs the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    *
@@ -735,11 +736,12 @@ export class MoneriumClient {
     );
   }
 
-  /*
+  /**
    * Triggered when the client has claimed an authorization code
    * 1. Code Verifier is picked up from the localStorage
    * 2. auth service is called to claim the tokens
    * 3. Access token is stored in the localStorage
+   *
    */
   #authCodeAuthorization = async (
     clientId: string,
@@ -788,6 +790,7 @@ export class MoneriumClient {
   };
 
   /**
+   * @deprecated Web sockets will be removed in v3 - use webhooks instead.
    * Connects to the order notifications socket
    *
    * @group Orders
@@ -847,6 +850,8 @@ export class MoneriumClient {
   }
 
   /**
+   * @deprecated Web sockets will be removed in v3 - use webhooks instead.
+   *
    * Closes the order notifications sockets
    *
    * @group Orders
@@ -875,6 +880,8 @@ export class MoneriumClient {
   }
 
   /**
+   * @deprecated will be removed in v3, caller will manage state
+   *
    * Cleanups the localstorage and websocket connections
    *
    * @group Authentication
@@ -888,6 +895,7 @@ export class MoneriumClient {
     this.bearerProfile = undefined;
   }
   /**
+   * @deprecated will be removed in v3, caller will manage state
    * Revokes access
    *
    * @group Authentication

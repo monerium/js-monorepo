@@ -597,6 +597,9 @@ export interface OrderNotificationQueryParams {
   profile?: string;
 }
 
+/**
+ * @deprecated Will be removed in v3 in favour of 'MoneriumClientOptions'
+ */
 export type ClassOptions = {
   environment?: ENV;
   debug?: boolean;
@@ -606,6 +609,10 @@ export interface AuthFlowOptionsShared {
   /** the state oauth parameter */
   state?: string;
 }
+
+/**
+ * @deprecated Will be removed in v3 in favour of 'BuildAuthorizationUrlOptions'
+ */
 export interface AuthFlowOptions extends AuthFlowOptionsShared {
   /** the email of the user to prefill the login form */
   email?: string;
@@ -621,6 +628,9 @@ export interface AuthFlowOptions extends AuthFlowOptionsShared {
   chain?: Chain | ChainId;
 }
 
+/**
+ * @deprecated Will be removed in v3 in favour of 'BuildSiweAuthorizationUrlOptions'
+ */
 export interface AuthFlowSIWEOptions extends AuthFlowOptionsShared {
   /** Signature for the SIWE message. Must include the 0x prefix. */
   signature: string;
@@ -631,12 +641,16 @@ export interface AuthFlowSIWEOptions extends AuthFlowOptionsShared {
    * */
   message: string;
 }
-
+/*
+ * @deprecated Will be removed in v3 in favour of 'ClientCredentialsGrantOptions'
+ */
 export interface ClientCredentials {
   clientId: string;
   clientSecret: string;
 }
-
+/*
+ * @deprecated Will be removed in v3 in favour of 'AuthorizationCodeGrantOptions'
+ */
 export interface AuthorizationCodeCredentials {
   clientId: string;
   redirectUri: string;
