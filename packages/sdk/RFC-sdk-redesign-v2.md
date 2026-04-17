@@ -37,7 +37,6 @@ The current `MoneriumClient` class conflates too many concerns. It manages the O
 | Token expiry is checked and managed inside `getAccess()`                                     | Auth state lifecycle is invisible to the consumer                              |
 | `MoneriumClient` is stateful (holds `bearerProfile`, `isAuthorized`, sockets internally)     | Hard to use in React, server environments, or with state management libraries  |
 | `isServer` guards are sprinkled throughout the client                                        | SSR support is bolted on, not designed in                                      |
-| WebSockets are stored in an internal `Map` inside the class instance                         | No way to manage lifecycle externally; memory leak risk                        |
 | `clientSecret` is accepted in `MoneriumClient` — the same class used for browser OAuth flows | Leaks server-only credentials into browser bundles if misconfigured            |
 | `getAccess()` has four different code paths controlled by implicit state                     | Unpredictable; difficult to reason about                                       |
 
@@ -72,11 +71,7 @@ The auth flow becomes an explicit sequence of function calls that the consumer o
 | Client creation  | `new MoneriumClient()` (OOP-first)                             | `createMoneriumClient()` (factory, primary API)                         |
 | HTTP transport   | Internal `fetch` calls; no way to intercept or replace         | Optional `transport` callback on the client replaces the internal fetch |
 | WebSockets       | `subscribeOrderNotifications()` stored internally on the class | Removed in v3 — use webhooks instead                                    |
-| Errors           | Raw JSON objects or plain Error strings                        | `MoneriumError` with `status?`, `code?`, and `body?`                    |
-
-### What stays the same
-
-Every API method (`getProfiles`, `placeOrder`, `getIbans`, etc.) and every resource type (`Order`, `IBAN`, `Profile`, `Token`, `BearerProfile`, etc.) is unchanged. All enums (`Currency`, `OrderState`, `OrderKind`, `ProfileState`) are unchanged. All utility functions (`placeOrderMessage`, `siweMessage`, `parseChain`, `getChain`, `rfc3339`, `shortenIban`, `shortenAddress`) are unchanged. Numeric `chainId` values are still accepted and resolved to Monerium chain names inside the client.
+| Errors           | Raw JSON objects or plain Error strings                        | Typed Errors                                                            |
 
 ---
 
@@ -84,7 +79,7 @@ Every API method (`getProfiles`, `placeOrder`, `getIbans`, etc.) and every resou
 
 ### Module structure
 
-Everything is exported from a single entry point: `@monerium/sdk`. Optional stable subpath exports (`@monerium/sdk/auth`, `@monerium/sdk/client`, `@monerium/sdk/socket`) may be added for advanced consumers who want explicit scoping or cleaner bundle inspection, but they are not the primary documented path.
+Everything is exported from a single entry point: `@monerium/sdk`. Optional stable subpath exports (`@monerium/sdk/auth`, `@monerium/sdk/client`) may be added for advanced consumers who want explicit scoping or cleaner bundle inspection, but they are not the primary documented path.
 
 ```
 @monerium/sdk  (single public entry point)
@@ -111,7 +106,7 @@ Everything is exported from a single entry point: `@monerium/sdk`. Optional stab
 
 ### The API client
 
-`createMoneriumClient()` is the documented API. `MoneriumClient` exists in v2.x for source compatibility only — it is deprecated from day one, carries a `@deprecated` JSDoc tag, and is removed in v3.0. It is not the preferred style. The client is auth-stateless — it holds no bearer profile, no refresh token, and no socket registry.
+`createMoneriumClient()` is the documented API. `MoneriumClient` exists in v2.x for source compatibility only — it is deprecated from day one, carries a `@deprecated` JSDoc tag, and is removed in v3.0. It is not the preferred style. The client holds no bearer profile, no refresh token, and no socket registry.
 
 The client accepts one of two token supply strategies, which are mutually exclusive at the type level (TypeScript prevents passing both):
 
@@ -198,7 +193,7 @@ type TransportResponse = {
 type Transport = (request: TransportRequest) => Promise<TransportResponse>;
 ```
 
-If neither token option is provided, the client works for unauthenticated endpoints (e.g. `getTokens()`); authenticated endpoints throw a `MoneriumError` with `code: 'authentication_required'`.
+If neither token option is provided, the client works for unauthenticated endpoints (e.g. `getTokens()`); authenticated endpoints throw a `MoneriumSdkError` with `type: 'authentication_required'`.
 
 ### PKCE auth flow
 
@@ -332,29 +327,9 @@ window.location.assign(url);
 // Token exchange on the callback is identical to Step 2
 ```
 
-### Key types
+### Optional helpers
 
 ```ts
-// Thrown when the Monerium API returns a non-2xx response
-class MoneriumApiError extends Error {
-  code: number;                     // e.g. 400, 401
-  status: string;                   // e.g. "Bad Request", "Unauthorized"
-  // message — set to the API's message field
-  errors?: Record<string, string>;  // field-level validation errors
-  details?: unknown;
-}
-
-// Thrown for SDK-level failures — no HTTP response involved
-type MoneriumSdkErrorType =
-  | 'network_error'           // fetch failed (DNS, timeout, connection refused)
-  | 'authentication_required' // authenticated endpoint called with no token
-  | 'invalid_configuration';  // bad options passed to createMoneriumClient
-
-class MoneriumSdkError extends Error {
-  type: MoneriumSdkErrorType;
-  cause?: unknown;
-}
-
 // parseAuthorizationResponse — optional pure helper
 // Parses a callback URL or query string. No globals. No side effects. Never throws.
 // Returns an empty object if none of the expected parameters are present.
@@ -375,12 +350,27 @@ The SDK throws two distinct error types.
 
 `MoneriumSdkError` is thrown for failures that originate inside the SDK with no HTTP response involved.
 
-| Scenario                                        | Error type         | Key fields                                         |
-| ----------------------------------------------- | ------------------ | -------------------------------------------------- |
-| Non-2xx response from the API                   | `MoneriumApiError` | `code`, `status`, `message`, `errors?`, `details?` |
-| fetch failed (DNS, timeout, connection refused) | `MoneriumSdkError` | `type: 'network_error'`, `cause`                   |
-| Authenticated endpoint called with no token     | `MoneriumSdkError` | `type: 'authentication_required'`                  |
-| Bad options passed to `createMoneriumClient`    | `MoneriumSdkError` | `type: 'invalid_configuration'`                    |
+```ts
+// Thrown when the Monerium API returns a non-2xx response
+class MoneriumApiError extends Error {
+  code: number; // e.g. 400, 401
+  status: string; // e.g. "Bad Request", "Unauthorized"
+  // message — set to the API's message field
+  errors?: Record<string, string>; // field-level validation errors
+  details?: unknown;
+}
+
+// Thrown for SDK-level failures — no HTTP response involved
+type MoneriumSdkErrorType =
+  | 'network_error' // fetch failed (DNS, timeout, connection refused)
+  | 'authentication_required' // authenticated endpoint called with no token
+  | 'invalid_configuration'; // bad options passed to createMoneriumClient
+
+class MoneriumSdkError extends Error {
+  type: MoneriumSdkErrorType;
+  cause?: unknown;
+}
+```
 
 ```ts
 try {
