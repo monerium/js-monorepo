@@ -9,7 +9,11 @@ Payments are processed over SEPA. When the counterpart bank supports **SEPA Inst
 
 ### Request IBAN
 
-<Endpoint method="POST" path="/ibans" href="https://docs.monerium.com/api/#tag/ibans/operation/request-iban" />
+<Endpoint
+  method="POST"
+  path="/ibans"
+  href="https://docs.monerium.com/api/#tag/ibans/operation/request-iban"
+/>
 
 Returns `202`. Provisioning is asynchronous and typically completes within a few seconds.
 
@@ -37,11 +41,22 @@ If the profile already has an IBAN, the API returns `304`. Use `PATCH /ibans/{ib
 ### Retrieve the IBAN
 
 {props.isOAuth ? (
+
 <>
 
-<p>Before requesting an IBAN, verify the profile is approved via <code>GET /profiles/:profileId</code>; the <code>state</code> must be <code>"approved"</code>. Once you call <code>POST /ibans</code>, provisioning typically completes within seconds. Fetch the result on demand with <code>GET /ibans</code>:</p>
+<p>
+  Before requesting an IBAN, verify the profile is approved via{' '}
+  <code>GET /profiles/:profileId</code>; the <code>state</code> must be{' '}
+  <code>"approved"</code>. Once you call <code>POST /ibans</code>, provisioning
+  typically completes within seconds. Fetch the result on demand with{' '}
+  <code>GET /ibans</code>:
+</p>
 
-<Endpoint method="GET" path="/ibans" href="https://docs.monerium.com/api/#tag/ibans/operation/get-ibans" />
+<Endpoint
+  method="GET"
+  path="/ibans"
+  href="https://docs.monerium.com/api/#tag/ibans/operation/ibans"
+/>
 
 <CodeBlock language="js">{`const response = await fetch('https://api.monerium.dev/ibans', {
   headers: {
@@ -54,15 +69,26 @@ const ibans = await response.json();
 const iban = ibans.find(i => i.state === 'active');
 // Display iban.iban to the customer once active`}</CodeBlock>
 
-<p>If the IBAN is not yet active, wait for the user to trigger a refresh rather than repeatedly fetching; the API enforces rate limits. For real-time activation events, the <a href="./whitelabel">Whitelabel</a> plan provides <code>iban.updated</code> webhooks.</p>
+<p>
+  If the IBAN is not yet active, wait for the user to trigger a refresh rather
+  than repeatedly fetching; the API enforces rate limits. For real-time
+  activation events, the <a href="./whitelabel">Whitelabel</a> plan provides{' '}
+  <code>iban.updated</code> webhooks.
+</p>
 
 </>
 ) : (
 <>
 
-<Endpoint event="iban.updated" href="https://docs.monerium.com/api/#tag/webhooks/operation/webhook-iban-updated" />
+<Endpoint
+  event="iban.updated"
+  href="https://docs.monerium.com/api/#tag/webhooks/operation/webhook-iban-updated"
+/>
 
-<p>Listen for <code>iban.updated</code> webhooks. The <code>data</code> field contains the full IBAN object including the assigned IBAN number.</p>
+<p>
+  Listen for <code>iban.updated</code> webhooks. The <code>data</code> field
+  contains the full IBAN object including the assigned IBAN number.
+</p>
 
 <CodeBlock language="js">{`app.post(
   '/webhooks/monerium',
@@ -76,7 +102,8 @@ const iban = ibans.find(i => i.state === 'active');
 
     const { iban, address, chain, profile } = event.data;
     // Store the IBAN and display it to the customer
-  }
+
+}
 );`}</CodeBlock>
 
 </>
@@ -84,7 +111,11 @@ const iban = ibans.find(i => i.state === 'active');
 
 ### Move an IBAN
 
-<Endpoint method="PATCH" path="/ibans/{iban}" href="https://docs.monerium.com/api/#tag/ibans/operation/move-iban" />
+<Endpoint
+  method="PATCH"
+  path="/ibans/{iban}"
+  href="https://docs.monerium.com/api/#tag/ibans/operation/move-iban"
+/>
 
 Re-associate an existing IBAN with a different address or chain. Incoming payments will be routed to the new address from that point forward.
 
