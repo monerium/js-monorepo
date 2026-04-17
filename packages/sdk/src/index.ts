@@ -2,7 +2,6 @@
  * @packageDocumentation
  * A library to interact with Monerium API.
  *
- *
  * ## Installation
  *
  * ```bash
@@ -10,55 +9,76 @@
  * ```
  *
  * @example
- * ```tsx
- * import { MoneriumClient } from '@monerium/sdk';
+ * ```ts
+ * // v3 API — factory function, Node.js-first
+ * import { createMoneriumClient, authorizationCodeGrant } from '@monerium/sdk';
  *
- * const monerium = new MoneriumClient({
- *  clientId: '...',
- *  redirectUri: '...',
- *  environment: 'sandbox',
- * })
+ * const client = createMoneriumClient({
+ *   environment: 'sandbox',
+ *   getAccessToken: () => myStore.get('access_token'),
+ * });
  *
- * // Will redirect the user to Monerium's authentication code flow.
- * await monerium.authorize();
- *
- * // Will use the authorization code flow code to get access token
- * await monerium.getAccess();
- *
- * // or use refresh token to get access token if provided.
- * await monerium.getAccess(refreshToken);
- *
- * // Retrieve profiles the client has access to.
- * await monerium.getProfiles();
+ * const profiles = await client.getProfiles();
  * ```
  */
 
-import { createMoneriumClient } from './client';
-import { MoneriumClient } from './compat';
-export { default as constants } from './constants';
-export * from './types';
+// ─── New v3 API ───────────────────────────────────────────────────────────────
+
+// Client
+export { createMoneriumClient } from './client';
+export type { MoneriumClientOptions } from './client';
+
+// Auth helpers
 export {
-  placeOrderMessage,
-  rfc3339,
-  getChain,
-  parseChain,
-  shortenIban,
-  shortenAddress,
-  siweMessage,
-} from './utils';
+  authorizationCodeGrant,
+  buildAuthorizationUrl,
+  buildSiweAuthorizationUrl,
+  calculatePKCECodeChallenge,
+  clientCredentialsGrant,
+  exchangeAuthorizationCode, // alias for authorizationCodeGrant
+  parseAuthorizationResponse,
+  randomPKCECodeVerifier,
+  refreshAccessToken, // alias for refreshTokenGrant
+  refreshTokenGrant,
+} from './auth';
 
-export { createMoneriumClient };
+export type {
+  AuthorizationCodeGrantOptions,
+  BuildAuthorizationUrlOptions,
+  BuildSiweAuthorizationUrlOptions,
+  ClientCredentialsGrantOptions,
+  ParsedAuthorizationResponse,
+  RefreshTokenGrantOptions,
+} from './auth';
 
+// Errors
 export { MoneriumApiError, MoneriumSdkError } from './errors';
 export type { MoneriumSdkErrorType } from './errors';
 
+// Transport
 export type {
   Transport,
   TransportRequest,
   TransportResponse,
 } from './transport';
 
-/** @deprecated will be remvoed in v3. Use `createMoneriumClient` instead. */
-export { MoneriumClient };
-/** @deprecated will be remvoed in v3. Use `createMoneriumClient` instead. */
-export default MoneriumClient;
+// ─── Deprecated — will be removed in v3.0 ────────────────────────────────────
+
+/**
+ * @deprecated Use `createMoneriumClient()` instead. Will be removed in v3.0.
+ */
+export { MoneriumClient } from './compat';
+
+// ─── Unchanged public API ─────────────────────────────────────────────────────
+
+export { default as constants } from './constants';
+export * from './types';
+export {
+  getChain,
+  parseChain,
+  placeOrderMessage,
+  rfc3339,
+  shortenAddress,
+  shortenIban,
+  siweMessage,
+} from './utils';

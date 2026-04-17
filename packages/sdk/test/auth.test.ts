@@ -10,8 +10,8 @@ import {
   refreshAccessToken,
   refreshTokenGrant,
 } from '../src/auth';
-import { Transport, TransportRequest } from '../src/client';
-import { MoneriumApiError, MoneriumSdkError } from '../src/errors';
+import { MoneriumApiError } from '../src/errors';
+import { Transport, TransportRequest } from '../src/transport';
 
 // ─── Transport helpers ────────────────────────────────────────────────────────
 
