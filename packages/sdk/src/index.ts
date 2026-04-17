@@ -33,7 +33,7 @@
  * ```
  */
 
-import { MoneriumClient } from './client';
+import { MoneriumClient } from './compat';
 export { default as constants } from './constants';
 export * from './types';
 export {
