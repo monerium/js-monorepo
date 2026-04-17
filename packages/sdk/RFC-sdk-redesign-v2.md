@@ -444,7 +444,7 @@ The getAccessToken callback already provides a clean inversion of control and is
 
 ## Trade-offs and Risks
 
-The primary trade-off is deliberate: the SDK no longer manages PKCE state, token storage, URL parsing, or navigation. Consumers who previously called `authorize()` and `getAccess() and had it "just work" now need to wire up a few more explicit steps. This is the point. The SDK cannot make those decisions correctly for all environments, so it returns the primitives and lets the caller decide.
+The primary trade-off is deliberate: the SDK no longer manages PKCE state, token storage, URL parsing, or navigation. Consumers who previously called `authorize()` and `getAccess()` and had it "just work" now need to wire up a few more explicit steps. This is the point. The SDK cannot make those decisions correctly for all environments, so it returns the primitives and lets the caller decide.
 
 ---
 
