@@ -1,12 +1,13 @@
 import { MONERIUM_CONFIG } from './config';
 import constants from './constants';
 import {
+  calculatePKCECodeChallenge,
   cleanQueryString,
   isAuthCode,
   isClientCredentials,
   isRefreshToken,
-  preparePKCEChallenge,
   queryParams,
+  randomPKCECodeVerifier,
   rest,
 } from './helpers';
 import { createDebugger } from './helpers/debug.helpers';
@@ -166,7 +167,8 @@ export class MoneriumClient {
    *
    */
   async authorize(params?: AuthFlowOptions) {
-    const codeChallenge = preparePKCEChallenge();
+    const codeVerifier = randomPKCECodeVerifier();
+    const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
 
     const autoLink = params?.address
       ? {
@@ -216,7 +218,8 @@ export class MoneriumClient {
    *
    */
   async siwe(params: AuthFlowSIWEOptions) {
-    const codeChallenge = preparePKCEChallenge();
+    const codeVerifier = randomPKCECodeVerifier();
+    const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
 
     const queryParams = urlEncoded({
       client_id: (this.#client as AuthorizationCodeCredentials)?.clientId,

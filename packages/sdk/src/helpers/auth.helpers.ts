@@ -1,7 +1,6 @@
 import encodeBase64Url from 'crypto-js/enc-base64url.js';
 import SHA256 from 'crypto-js/sha256.js';
 
-import constants from '../constants';
 import {
   AuthArgs,
   AuthCodePayload,
@@ -33,15 +32,6 @@ export const generateCodeChallenge = (codeVerifier: string) => {
   return encodeBase64Url.stringify(SHA256(codeVerifier as string));
 };
 
-export const preparePKCEChallenge = (): string => {
-  const codeVerifier = generateRandomString();
-  const codeChallenge = generateCodeChallenge(codeVerifier);
-
-  localStorage.setItem(constants.STORAGE_CODE_VERIFIER, codeVerifier || '');
-
-  return codeChallenge;
-};
-
 /**
  * Clean the query string from the URL
  */
@@ -68,4 +58,14 @@ export const isClientCredentials = (
   args: AuthArgs
 ): args is ClientCredentialsPayload => {
   return (args as ClientCredentialsPayload).client_secret != undefined;
+};
+
+// v3
+
+export const randomPKCECodeVerifier = (): string => {
+  return generateRandomString();
+};
+
+export const calculatePKCECodeChallenge = (codeVerifier: string): string => {
+  return generateCodeChallenge(codeVerifier);
 };
