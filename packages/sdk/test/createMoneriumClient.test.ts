@@ -446,7 +446,11 @@ describe('createMoneriumClient — orders', () => {
 
     expect(requests[0].method).toBe('POST');
     expect(requests[0].url).toBe(`${SANDBOX_API}/orders`);
-    expect(JSON.parse(requests[0].body as string)).toEqual(order);
+    // client injects kind: 'redeem' as a default
+    expect(JSON.parse(requests[0].body as string)).toEqual({
+      kind: 'redeem',
+      ...order,
+    });
   });
 });
 

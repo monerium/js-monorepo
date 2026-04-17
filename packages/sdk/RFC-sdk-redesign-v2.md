@@ -19,6 +19,8 @@ The redesign eliminates all hidden writes to `localStorage`, all internal naviga
 
 The driving principle is simple: **the SDK stops making decisions on your behalf.**
 
+All Monerium API endpoints are CORS-locked and cannot be called directly from a browser. The SDK is designed for Node.js and server-side runtimes. Browser-based direct API access is not supported.
+
 ---
 
 ## Problem Statement
@@ -55,7 +57,7 @@ The auth flow becomes an explicit sequence of function calls that the consumer o
 1. **No side effects by default.** Every function returns a value. Nothing is stored, redirected, or mutated unless the consumer explicitly calls a function that does so.
 2. **You own your storage.** Tokens, verifiers, and expiry values are returned as plain objects. The consumer stores and retrieves them.
 3. **You own your navigation.** The SDK produces URLs. The consumer navigates to them.
-4. **Environment-compatible by design.** The SDK avoids environment-specific globals and targets standard browser, Node.js, and worker runtimes. Exotic edge-case behavior is not guaranteed.
+4. **Node.js and server runtimes first.** All Monerium API endpoints are CORS-locked. The SDK targets Node.js, Cloudflare Workers, and other server runtimes. No browser globals (`window`, `localStorage`, `document`) are used or required anywhere in the SDK.
 5. **Explicit over implicit.** Auth state is not held inside the client. The consumer passes tokens in. The flow of data is visible and traceable.
 
 ### What changes
@@ -197,9 +199,9 @@ If neither token option is provided, the client works for unauthenticated endpoi
 
 ### PKCE auth flow
 
-The complete authorization code flow as a sequence of explicit calls. Each step returns a value — the caller stores it, navigates with it, or passes it to the next step.
+The complete authorization code flow for a Node.js backend. All tokens are stored server-side — they never touch the browser.
 
-**Step 1 — Build the authorization URL and navigate**
+**Step 1 — Initiate login (server route)**
 
 ```ts
 import {
@@ -208,82 +210,103 @@ import {
   buildAuthorizationUrl,
 } from '@monerium/sdk';
 
-const codeVerifier = randomPKCECodeVerifier();
-const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
+// Express route: GET /login
+app.get('/login', (req, res) => {
+  const codeVerifier = randomPKCECodeVerifier();
+  const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
 
-// Caller stores the verifier — the SDK does not touch any storage
-mySecureStore.setItem('pkce_verifier', codeVerifier);
+  // Store verifier server-side until the callback
+  req.session.pkceVerifier = codeVerifier;
 
-const url = buildAuthorizationUrl({
-  environment: 'sandbox',
-  clientId: 'your-client-id',
-  redirectUri: 'https://your-app.com/callback',
-  codeChallenge,
-  state: 'optional-state-value',
-  email: 'user@example.com', // optional: prefill
-  address: '0x...', // optional: auto-link wallet
-  chain: 'ethereum',
+  const url = buildAuthorizationUrl({
+    environment: 'sandbox',
+    clientId: process.env.MONERIUM_CLIENT_ID,
+    redirectUri: 'https://your-app.com/callback',
+    codeChallenge,
+  });
+
+  res.redirect(url);
 });
-
-// Caller decides how to navigate — the SDK does not redirect
-window.location.assign(url); // or: router.push(url)
 ```
 
-**Step 2 — Exchange the code for tokens**
+**Step 2 — Handle the callback (server route)**
 
 ```ts
 import {
   authorizationCodeGrant,
   parseAuthorizationResponse,
+  MoneriumApiError,
 } from '@monerium/sdk';
 
-// parseAuthorizationResponse is an optional pure helper — no globals, no side effects
-const { code, error } = parseAuthorizationResponse(window.location.href);
+// Express route: GET /callback
+app.get('/callback', async (req, res) => {
+  // TODO: not sure we need parseAuthorizationReponse anymore.
+  const { code, error, errorDescription } = parseAuthorizationResponse(
+    new URL(req.url, 'https://your-app.com')
+  );
 
-const bearerProfile = await authorizationCodeGrant({
-  environment: 'sandbox',
-  clientId: 'your-client-id',
-  redirectUri: 'https://your-app.com/callback',
-  code,
-  codeVerifier: mySecureStore.getItem('pkce_verifier'),
+  if (error) {
+    return res.status(400).json({ error, errorDescription });
+  }
+
+  const codeVerifier = req.session.pkceVerifier;
+  delete req.session.pkceVerifier;
+
+  try {
+    const bearerProfile = await authorizationCodeGrant({
+      environment: 'sandbox',
+      clientId: process.env.MONERIUM_CLIENT_ID,
+      redirectUri: 'https://your-app.com/callback',
+      code,
+      codeVerifier,
+    });
+
+    // Store tokens server-side — never sent to the browser
+    req.session.accessToken = bearerProfile.access_token;
+    req.session.refreshToken = bearerProfile.refresh_token;
+    req.session.accessExpiry = Date.now() + bearerProfile.expires_in * 1000;
+
+    res.redirect('/dashboard');
+  } catch (err) {
+    if (err instanceof MoneriumApiError) {
+      res.status(err.code).json({ error: err.message });
+    } else {
+      res.status(500).json({ error: 'Authentication failed' });
+    }
+  }
 });
-
-// Caller stores the result — the SDK does not write to any storage
-mySecureStore.set('access_token', bearerProfile.access_token);
-mySecureStore.set('refresh_token', bearerProfile.refresh_token);
-mySecureStore.set(
-  'access_expiry',
-  String(Date.now() + bearerProfile.expires_in * 1000)
-);
 ```
 
-**Step 3 — Create the API client with `getAccessToken`**
+**Step 3 — Create the API client per request**
 
 ```ts
 import { createMoneriumClient, refreshTokenGrant } from '@monerium/sdk';
 
-const client = createMoneriumClient({
-  environment: 'sandbox',
-  getAccessToken: async () => {
-    const expiry = Number(mySecureStore.get('access_expiry'));
-    if (Date.now() > expiry) {
-      const refreshed = await refreshTokenGrant({
-        environment: 'sandbox',
-        clientId: 'your-client-id',
-        refreshToken: mySecureStore.get('refresh_token'),
-      });
-      mySecureStore.set('access_token', refreshed.access_token);
-      mySecureStore.set(
-        'access_expiry',
-        String(Date.now() + refreshed.expires_in * 1000)
-      );
-      return refreshed.access_token;
-    }
-    return mySecureStore.get('access_token');
-  },
-});
+function buildClient(session: typeof req.session) {
+  return createMoneriumClient({
+    environment: 'sandbox',
+    getAccessToken: async () => {
+      if (Date.now() > session.accessExpiry) {
+        const refreshed = await refreshTokenGrant({
+          environment: 'sandbox',
+          clientId: process.env.MONERIUM_CLIENT_ID,
+          refreshToken: session.refreshToken,
+        });
+        session.accessToken = refreshed.access_token;
+        session.accessExpiry = Date.now() + refreshed.expires_in * 1000;
+        return refreshed.access_token;
+      }
+      return session.accessToken;
+    },
+  });
+}
 
-const profiles = await client.getProfiles();
+// Use in any route
+app.get('/ibans', async (req, res) => {
+  const client = buildClient(req.session);
+  const ibans = await client.getIbans();
+  res.json(ibans);
+});
 ```
 
 ### Client credentials flow (server-side)
@@ -291,7 +314,7 @@ const profiles = await client.getProfiles();
 ```ts
 import { clientCredentialsGrant, createMoneriumClient } from '@monerium/sdk';
 
-const { access_token } = await clientCredentialsGrant({
+const { access_token, expires_in } = await clientCredentialsGrant({
   environment: 'production',
   clientId: process.env.MONERIUM_CLIENT_ID,
   clientSecret: process.env.MONERIUM_CLIENT_SECRET,
@@ -306,25 +329,38 @@ const client = createMoneriumClient({
 
 ### SIWE flow
 
-SIWE is a variant of Step 1. Replace `buildAuthorizationUrl` with `buildSiweAuthorizationUrl`, passing the signed message and signature. Everything else — PKCE generation, token exchange, client construction — is identical.
+SIWE is a variant of Step 1. The authorization URL is built with `buildSiweAuthorizationUrl`, passing a signed EIP-4361 message. Token exchange on the callback is identical to Step 2.
 
 ```ts
 import { buildSiweAuthorizationUrl, siweMessage } from '@monerium/sdk';
 
-const message = siweMessage({ domain, address, appName, redirectUri, chainId });
-// Caller signs the message with their wallet
+// Express route: POST /login/siwe
+app.post('/login/siwe', async (req, res) => {
+  const { address, signature, chainId } = req.body;
 
-const url = buildSiweAuthorizationUrl({
-  environment: 'sandbox',
-  clientId: 'your-client-id',
-  redirectUri: 'https://your-app.com/callback',
-  codeChallenge,
-  message,
-  signature: '0x...',
+  const codeVerifier = randomPKCECodeVerifier();
+  const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
+  req.session.pkceVerifier = codeVerifier;
+
+  const message = siweMessage({
+    domain: 'your-app.com',
+    address,
+    uri: 'https://your-app.com',
+    chainId,
+  });
+
+  const url = buildSiweAuthorizationUrl({
+    environment: 'sandbox',
+    clientId: process.env.MONERIUM_CLIENT_ID,
+    redirectUri: 'https://your-app.com/callback',
+    codeChallenge,
+    message,
+    signature,
+  });
+
+  res.redirect(url);
+  // Token exchange on /callback is identical to Step 2
 });
-
-window.location.assign(url);
-// Token exchange on the callback is identical to Step 2
 ```
 
 ### Optional helpers
@@ -418,6 +454,292 @@ Function names follow [`openid-client`](https://github.com/panva/openid-client) 
 
 ---
 
+## Integration Examples
+
+Three complete Node.js integration patterns covering the main use cases.
+
+### OAuth — Authorization Code + PKCE (Node.js backend)
+
+For apps where an end user authorises access to their Monerium account.
+
+```ts
+import express from 'express';
+import {
+  randomPKCECodeVerifier,
+  calculatePKCECodeChallenge,
+  buildAuthorizationUrl,
+  authorizationCodeGrant,
+  refreshTokenGrant,
+  parseAuthorizationResponse,
+  createMoneriumClient,
+  MoneriumApiError,
+} from '@monerium/sdk';
+import { ethers } from 'ethers';
+
+const app = express();
+
+// 1. Initiate login
+app.get('/login', (req, res) => {
+  const codeVerifier = randomPKCECodeVerifier();
+  req.session.pkceVerifier = codeVerifier;
+
+  const url = buildAuthorizationUrl({
+    environment: 'sandbox',
+    clientId: process.env.MONERIUM_CLIENT_ID,
+    redirectUri: 'https://your-app.com/callback',
+    codeChallenge: calculatePKCECodeChallenge(codeVerifier),
+  });
+
+  res.redirect(url);
+});
+
+// 2. Handle callback and exchange code for tokens
+app.get('/callback', async (req, res) => {
+  const { code, error } = parseAuthorizationResponse(
+    new URL(req.url, 'https://your-app.com')
+  );
+
+  if (error || !code) return res.status(400).json({ error });
+
+  try {
+    const profile = await authorizationCodeGrant({
+      environment: 'sandbox',
+      clientId: process.env.MONERIUM_CLIENT_ID,
+      redirectUri: 'https://your-app.com/callback',
+      code,
+      codeVerifier: req.session.pkceVerifier,
+    });
+
+    delete req.session.pkceVerifier;
+    req.session.accessToken = profile.access_token;
+    req.session.refreshToken = profile.refresh_token;
+    req.session.accessExpiry = Date.now() + profile.expires_in * 1000;
+
+    res.redirect('/dashboard');
+  } catch (err) {
+    if (err instanceof MoneriumApiError) {
+      res.status(err.code).json({ error: err.message });
+    } else {
+      throw err;
+    }
+  }
+});
+
+// 3. Build a per-request client with automatic token refresh
+function buildClient(session) {
+  return createMoneriumClient({
+    environment: 'sandbox',
+    getAccessToken: async () => {
+      if (Date.now() > session.accessExpiry) {
+        const refreshed = await refreshTokenGrant({
+          environment: 'sandbox',
+          clientId: process.env.MONERIUM_CLIENT_ID,
+          refreshToken: session.refreshToken,
+        });
+        session.accessToken = refreshed.access_token;
+        session.accessExpiry = Date.now() + refreshed.expires_in * 1000;
+        return refreshed.access_token;
+      }
+      return session.accessToken;
+    },
+  });
+}
+
+// 4. Link an EOA wallet address
+app.post('/link-wallet', async (req, res) => {
+  const client = buildClient(req.session);
+  const { address, privateKey } = req.body; // privateKey from your secure storage
+
+  const wallet = new ethers.Wallet(privateKey);
+  const message = `Link ${address} to Monerium`;
+  const signature = await wallet.signMessage(message);
+
+  await client.linkAddress({
+    address,
+    message,
+    signature,
+    chain: 'ethereum',
+    accounts: [{ address, chain: 'ethereum', currency: 'EUR' }],
+  });
+
+  res.json({ linked: true });
+});
+
+// 5. Fetch IBANs
+app.get('/ibans', async (req, res) => {
+  const client = buildClient(req.session);
+  const ibans = await client.getIbans();
+  res.json(ibans);
+});
+
+// 6. Place a redeem order (outgoing SEPA payment)
+app.post('/redeem', async (req, res) => {
+  const client = buildClient(req.session);
+  const { amount, iban, firstName, lastName } = req.body;
+
+  const order = await client.placeOrder({
+    kind: 'redeem',
+    amount,
+    currency: 'EUR',
+    counterpart: {
+      identifier: { standard: 'iban', iban },
+      details: { firstName, lastName },
+    },
+    memo: 'SEPA payment',
+  });
+
+  res.json(order);
+});
+```
+
+---
+
+### Whitelabel — Customer Onboarding (Node.js, Client Credentials)
+
+For platforms managing customer accounts on behalf of end users.
+
+```ts
+import {
+  clientCredentialsGrant,
+  createMoneriumClient,
+  MoneriumApiError,
+} from '@monerium/sdk';
+
+// 1. Authenticate with client credentials
+const { access_token } = await clientCredentialsGrant({
+  environment: 'production',
+  clientId: process.env.MONERIUM_CLIENT_ID,
+  clientSecret: process.env.MONERIUM_CLIENT_SECRET,
+});
+
+const client = createMoneriumClient({
+  environment: 'production',
+  accessToken: access_token,
+});
+
+// 2. Customer onboarding: submit profile details
+const context = await client.getAuthContext();
+const profileId = context.profiles[0].id;
+
+await client.submitProfileDetails(profileId, {
+  personal: {
+    firstName: 'Jane',
+    lastName: 'Doe',
+    birthday: '1990-01-01',
+    nationality: 'IS',
+    address: 'Borgartún 1',
+    city: 'Reykjavík',
+    postalCode: '105',
+    country: 'IS',
+    idDocument: { kind: 'passport', number: 'A1234567' },
+  },
+});
+
+// 3. Link a wallet address
+await client.linkAddress({
+  address,
+  message: 'I hereby declare that I am the address owner.',
+  signature,
+  chain: 'ethereum',
+  accounts: [{ address, chain: 'ethereum', currency: 'EUR' }],
+});
+
+// 4. Request an IBAN
+await client.requestIban({
+  address: wallet.address,
+  chain: 'ethereum',
+  currency: 'EUR',
+});
+
+// 5. Place a redeem order
+const order = await client.placeOrder({
+  kind: 'redeem',
+  amount: '100',
+  currency: 'EUR',
+  address,
+  chain: 'ethereum',
+  counterpart: {
+    identifier: { standard: 'iban', iban: 'GB29NWBK60161331926819' },
+    details: { firstName: 'John', lastName: 'Smith' },
+  },
+  memo: 'Invoice #1234',
+});
+
+console.log('Order placed:', order.id, order.state);
+```
+
+---
+
+### Private — Direct Integration (Node.js, Client Credentials)
+
+For direct server-to-server integrations with full control over accounts.
+
+```ts
+import {
+  clientCredentialsGrant,
+  createMoneriumClient,
+  MoneriumApiError,
+  MoneriumSdkError,
+} from '@monerium/sdk';
+
+// 1. Authenticate
+const { access_token } = await clientCredentialsGrant({
+  environment: 'production',
+  clientId: process.env.MONERIUM_CLIENT_ID,
+  clientSecret: process.env.MONERIUM_CLIENT_SECRET,
+});
+
+const client = createMoneriumClient({
+  environment: 'production',
+  accessToken: access_token,
+});
+
+// 2. Link a wallet address
+
+await client.linkAddress({
+  address,
+  message: 'I hereby declare that I am the address owner.',
+  signature,
+  chain: 'polygon',
+  accounts: [{ address, chain: 'ethereum', currency: 'EUR' }],
+});
+
+// 3. Request an IBAN
+await client.requestIban({
+  address,
+  chain: 'ethereum',
+  currency: 'EUR',
+});
+
+// 4. Place a redeem order with error handling
+try {
+  const order = await client.placeOrder({
+    kind: 'redeem',
+    amount: '250',
+    currency: 'EUR',
+    address,
+    chain: 'ethereum',
+    counterpart: {
+      identifier: { standard: 'iban', iban: 'DE89370400440532013000' },
+      details: { firstName: 'Max', lastName: 'Mustermann' },
+    },
+    memo: 'Settlement',
+  });
+
+  console.log('Order placed:', order.id);
+} catch (err) {
+  if (err instanceof MoneriumApiError) {
+    console.error(`API error ${err.code}: ${err.message}`, err.errors);
+  } else if (err instanceof MoneriumSdkError) {
+    console.error(`SDK error (${err.type}):`, err.cause ?? err.message);
+  } else {
+    throw err;
+  }
+}
+```
+
+---
+
 ## Alternatives Considered
 
 ### Storage adapter pattern (rejected)
@@ -507,7 +829,7 @@ import {
 // --- Initiate login ---
 const codeVerifier = randomPKCECodeVerifier();
 const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
-sessionStorage.setItem('pkce_verifier', codeVerifier);
+session.set('pkce_verifier', codeVerifier); // server-side session
 
 const url = buildAuthorizationUrl({
   environment: 'sandbox',
@@ -515,12 +837,14 @@ const url = buildAuthorizationUrl({
   redirectUri: 'https://your-app.com/callback',
   codeChallenge,
 });
-window.location.assign(url);
+res.redirect(url);
 
 // --- On the callback page ---
-const { code } = parseAuthorizationResponse(window.location.href);
-const codeVerifier = sessionStorage.getItem('pkce_verifier');
-sessionStorage.removeItem('pkce_verifier');
+const { code } = parseAuthorizationResponse(
+  new URL(req.url, 'https://your-app.com')
+);
+const codeVerifier = session.get('pkce_verifier');
+session.delete('pkce_verifier');
 
 const bearerProfile = await authorizationCodeGrant({
   environment: 'sandbox',
@@ -536,28 +860,22 @@ mySecureStore.set(
   'access_expiry',
   String(Date.now() + bearerProfile.expires_in * 1000)
 );
-window.history.replaceState(null, '', window.location.pathname);
 
 // --- Use the API ---
 const client = createMoneriumClient({
   environment: 'sandbox',
   getAccessToken: async () => {
-    const token = mySecureStore.get('access_token');
-    const expiry = Number(mySecureStore.get('access_expiry'));
-    if (Date.now() > expiry) {
+    if (Date.now() > session.accessExpiry) {
       const newProfile = await refreshTokenGrant({
         environment: 'sandbox',
         clientId: 'your-client-id',
-        refreshToken: mySecureStore.get('refresh_token'),
+        refreshToken: session.refreshToken,
       });
-      mySecureStore.set('access_token', newProfile.access_token);
-      mySecureStore.set(
-        'access_expiry',
-        String(Date.now() + newProfile.expires_in * 1000)
-      );
+      session.accessToken = newProfile.access_token;
+      session.accessExpiry = Date.now() + newProfile.expires_in * 1000;
       return newProfile.access_token;
     }
-    return token;
+    return session.accessToken;
   },
 });
 
