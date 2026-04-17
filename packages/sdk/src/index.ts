@@ -64,10 +64,13 @@ export type {
 
 // ─── Deprecated — will be removed in v3.0 ────────────────────────────────────
 
+import { MoneriumClient } from './compat';
+
 /**
  * @deprecated Use `createMoneriumClient()` instead. Will be removed in v3.0.
  */
-export { MoneriumClient } from './compat';
+export { MoneriumClient };
+export default MoneriumClient;
 
 // ─── Unchanged public API ─────────────────────────────────────────────────────
 
