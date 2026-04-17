@@ -82,19 +82,55 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
     return null;
   }
 
+  async function requestFormData<T>(
+    method: string,
+    path: string,
+    form: FormData
+  ): Promise<T> {
+    const token = await getToken();
+    const headers: Record<string, string> = {
+      Accept: 'application/vnd.monerium.api-v2+json',
+      // Content-Type intentionally omitted — fetch sets multipart/form-data + boundary
+    };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const { status, bodyText } = await transport({
+      method: method.toUpperCase(),
+      url: `${env.api}/${path}`,
+      headers,
+      body: form as unknown as BodyInit,
+    });
+
+    if (!bodyText) return { status } as unknown as T;
+
+    let json: unknown;
+    try {
+      json = JSON.parse(bodyText);
+    } catch {
+      throw new MoneriumApiError({
+        code: status,
+        status: 'Parse Error',
+        message: bodyText,
+      });
+    }
+    if (status < 200 || status >= 300) {
+      throw new MoneriumApiError(
+        json as { code: number; status: string; message: string }
+      );
+    }
+    return json as T;
+  }
+
   async function request<T>(
     method: string,
     path: string,
-    body?: unknown,
-    isFormEncoded = false
+    body?: unknown
   ): Promise<T> {
     const token = await getToken();
 
     const headers: Record<string, string> = {
       Accept: 'application/vnd.monerium.api-v2+json',
-      'Content-Type': isFormEncoded
-        ? 'application/x-www-form-urlencoded'
-        : 'application/json',
+      'Content-Type': 'application/json',
     };
 
     if (token) {
@@ -111,11 +147,7 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
       method: method.toUpperCase(),
       url: `${env.api}/${path}`,
       headers,
-      body: body
-        ? isFormEncoded
-          ? (body as string)
-          : JSON.stringify(body)
-        : undefined,
+      body: body ? JSON.stringify(body) : undefined,
     });
 
     // Empty body — return a minimal status response (e.g. 201, 202)
@@ -373,34 +405,12 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
 
     /**
      * @group Orders
-     * @see {@link https://docs.monerium.com/api#tag/orders/operation/supporting-document | API Documentation}
+     * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
      */
-    uploadSupportingDocument: async (
-      document: Blob
-    ): Promise<SupportingDoc> => {
+    uploadSupportingDocument: (document: Blob): Promise<SupportingDoc> => {
       const formData = new FormData();
       formData.append('file', document);
-
-      // Bypass request() — FormData must not be JSON.stringified and
-      // Content-Type must not be set manually (fetch sets the multipart boundary).
-      const token = await getToken();
-      const headers: Record<string, string> = {
-        Accept: 'application/vnd.monerium.api-v2+json',
-      };
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-
-      const { status, bodyText } = await transport({
-        method: 'POST',
-        url: `${env.api}/files`,
-        headers,
-        body: formData as unknown as BodyInit,
-      });
-
-      const json = JSON.parse(bodyText);
-      if (status < 200 || status >= 300) throw new MoneriumApiError(json);
-      return json as SupportingDoc;
+      return requestFormData<SupportingDoc>('POST', 'files', formData);
     },
   };
 }
