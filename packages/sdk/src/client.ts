@@ -241,6 +241,7 @@ export class MoneriumClient {
   }
 
   /**
+   * @deprecated Will be removed in v3 in favour of 'authorizationCodeGrant', 'refreshTokenGrant' and 'clientCredentialsGrant'
    * Will use the authorization code flow code to get access token
    *
    * @group Authentication
