@@ -15,6 +15,8 @@ import { urlEncoded } from './utils';
  * Generate a cryptographically random PKCE code verifier (RFC 7636).
  * Returns a base64url-encoded string of 32 random bytes (256 bits of entropy).
  * The caller is responsible for storing this until the callback.
+ * @group v4
+ * @category v4 - PKCE
  */
 export const randomPKCECodeVerifier = (): string => {
   const bytes = new Uint8Array(32);
@@ -25,6 +27,8 @@ export const randomPKCECodeVerifier = (): string => {
 /**
  * Derive the S256 code challenge from a code verifier.
  * Synchronous. Returns a base64url-encoded SHA-256 hash.
+ * @group v4
+ * @category v4 - PKCE
  */
 export const calculatePKCECodeChallenge = (codeVerifier: string): string => {
   return encodeBase64Url.stringify(SHA256(codeVerifier));
@@ -32,6 +36,11 @@ export const calculatePKCECodeChallenge = (codeVerifier: string): string => {
 
 // ─── URL builders ─────────────────────────────────────────────────────────────
 
+/**
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
+ */
 export interface BuildAuthorizationUrlOptions {
   environment?: ENV;
   clientId: string;
@@ -50,6 +59,9 @@ export interface BuildAuthorizationUrlOptions {
  * Build the authorization redirect URL.
  * Returns a URL string — the caller navigates to it.
  * The SDK does not redirect.
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
  */
 export const buildAuthorizationUrl = (
   options: BuildAuthorizationUrlOptions
@@ -74,6 +86,11 @@ export const buildAuthorizationUrl = (
   return `${env.api}/auth?${params}`;
 };
 
+/**
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
+ */
 export interface BuildSiweAuthorizationUrlOptions {
   environment?: ENV;
   clientId: string;
@@ -88,6 +105,10 @@ export interface BuildSiweAuthorizationUrlOptions {
  * Build the SIWE authorization redirect URL.
  * Returns a URL string — the caller navigates to it.
  * The SDK does not redirect.
+ *
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
  */
 export const buildSiweAuthorizationUrl = (
   options: BuildSiweAuthorizationUrlOptions
@@ -110,6 +131,12 @@ export const buildSiweAuthorizationUrl = (
 
 // ─── Token requests ───────────────────────────────────────────────────────────
 
+/**
+ *
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
+ */
 async function tokenRequest(
   url: string,
   body: Record<string, string | undefined>,
@@ -153,6 +180,11 @@ async function tokenRequest(
 
 // ─── Grant types ──────────────────────────────────────────────────────────────
 
+/**
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
+ */
 export interface AuthorizationCodeGrantOptions {
   environment?: ENV;
   clientId: string;
@@ -165,6 +197,10 @@ export interface AuthorizationCodeGrantOptions {
 /**
  * Exchange an authorization code for tokens.
  * The caller stores the returned BearerProfile — the SDK does not write to any storage.
+ *
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
  */
 export const authorizationCodeGrant = (
   options: AuthorizationCodeGrantOptions
@@ -197,6 +233,7 @@ export interface RefreshTokenGrantOptions {
 /**
  * Get a new access token using a refresh token.
  * The caller stores the returned BearerProfile — the SDK does not write to any storage.
+ * @beta
  */
 export const refreshTokenGrant = (
   options: RefreshTokenGrantOptions
@@ -227,6 +264,10 @@ export interface ClientCredentialsGrantOptions {
 /**
  * Get an access token using client credentials. Server-side only.
  * clientSecret must never be used in a browser context.
+ *
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
  */
 export const clientCredentialsGrant = (
   options: ClientCredentialsGrantOptions
@@ -246,6 +287,11 @@ export const clientCredentialsGrant = (
 
 // ─── Callback parsing ─────────────────────────────────────────────────────────
 
+/**
+ * @group v4
+ * @category v4 - Authorization
+ * @beta
+ */
 export interface ParsedAuthorizationResponse {
   code?: string;
   state?: string;
@@ -264,6 +310,9 @@ export interface ParsedAuthorizationResponse {
  * @example
  * const { code, error } = parseAuthorizationResponse(window.location.href);
  * const { code, error } = parseAuthorizationResponse('?code=abc&state=xyz');
+ * @experimental  may not be included in v4
+ * @group v4
+ * @category v4 - Helpers
  */
 export const parseAuthorizationResponse = (
   input: string | URL

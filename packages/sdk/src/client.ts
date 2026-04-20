@@ -68,6 +68,12 @@ export type MoneriumClientOptions =
 
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
+/**
+ * Creates a Monerium client instance.
+ * @beta
+ * @group v4
+ * @category v4 - Client instance.
+ */
 export function createMoneriumClient(options: MoneriumClientOptions) {
   const env = MONERIUM_CONFIG.environments[options.environment ?? 'sandbox'];
   const transport = options.transport ?? defaultTransport;

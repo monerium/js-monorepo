@@ -9,7 +9,7 @@ export type Config = {
 export type ENV = 'sandbox' | 'production';
 
 import type { EvmChainId, ProductionChain, SandboxChain } from './chains';
-export type { ProductionChain, SandboxChain, EvmChainId };
+export type { EvmChainId, ProductionChain, SandboxChain };
 
 export type Chain = string | ProductionChain | SandboxChain;
 
@@ -598,7 +598,7 @@ export interface OrderNotificationQueryParams {
 }
 
 /**
- * @deprecated Will be removed in v3 in favour of 'MoneriumClientOptions'
+ * @deprecated Will be removed in v4 in favour of 'MoneriumClientOptions'
  */
 export type ClassOptions = {
   environment?: ENV;
@@ -611,7 +611,7 @@ export interface AuthFlowOptionsShared {
 }
 
 /**
- * @deprecated Will be removed in v3 in favour of 'BuildAuthorizationUrlOptions'
+ * @deprecated Will be removed in v4 in favour of 'BuildAuthorizationUrlOptions'
  */
 export interface AuthFlowOptions extends AuthFlowOptionsShared {
   /** the email of the user to prefill the login form */
@@ -629,7 +629,7 @@ export interface AuthFlowOptions extends AuthFlowOptionsShared {
 }
 
 /**
- * @deprecated Will be removed in v3 in favour of 'BuildSiweAuthorizationUrlOptions'
+ * @deprecated Will be removed in v4 in favour of 'BuildSiweAuthorizationUrlOptions'
  */
 export interface AuthFlowSIWEOptions extends AuthFlowOptionsShared {
   /** Signature for the SIWE message. Must include the 0x prefix. */
@@ -642,14 +642,14 @@ export interface AuthFlowSIWEOptions extends AuthFlowOptionsShared {
   message: string;
 }
 /*
- * @deprecated Will be removed in v3 in favour of 'ClientCredentialsGrantOptions'
+ * @deprecated Will be removed in v4 in favour of 'ClientCredentialsGrantOptions'
  */
 export interface ClientCredentials {
   clientId: string;
   clientSecret: string;
 }
 /*
- * @deprecated Will be removed in v3 in favour of 'AuthorizationCodeGrantOptions'
+ * @deprecated Will be removed in v4 in favour of 'AuthorizationCodeGrantOptions'
  */
 export interface AuthorizationCodeCredentials {
   clientId: string;

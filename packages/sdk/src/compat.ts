@@ -1,12 +1,13 @@
 import { MONERIUM_CONFIG } from './config';
 import constants from './constants';
-import { calculatePKCECodeChallenge, randomPKCECodeVerifier } from './helpers';
 import {
+  calculatePKCECodeChallenge,
   cleanQueryString,
   isAuthCode,
   isClientCredentials,
   isRefreshToken,
   queryParams,
+  randomPKCECodeVerifier,
   rest,
 } from './helpers';
 import { createDebugger } from './helpers/debug.helpers';
@@ -69,7 +70,8 @@ const { STORAGE_CODE_VERIFIER, STORAGE_ACCESS_TOKEN, STORAGE_ACCESS_EXPIRY } =
 const isServer = typeof window === 'undefined';
 
 /**
- * @deprecated Class will be removed in v3 in favour of 'createMoneriumClient' function.
+ * @deprecated Class will be removed in v4 in favour of 'createMoneriumClient' function.
+ *
  * In the [Monerium UI](https://monerium.app/), create an application to get the `clientId` and register your `redirectUri`.
  * ```ts
  * import { MoneriumClient } from '@monerium/sdk';
@@ -114,6 +116,8 @@ export class MoneriumClient {
   state: string | undefined;
 
   /**
+   * @deprecated  Class will be removed in v4 in favour of 'createMoneriumClient' function.
+   *
    * @defaultValue `sandbox`
    * */
   constructor(envOrOptions?: ENV | ClassOptions) {
@@ -154,7 +158,7 @@ export class MoneriumClient {
   }
 
   /**
-   * @deprecated will be removed in v3 - in favour of `buildAuthorizationUrl`
+   * @deprecated will be removed in v4 - in favour of `buildAuthorizationUrl`
    * Constructs the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    * For automatic wallet link, add the following properties: `address`, `signature` & `chain`
@@ -200,7 +204,7 @@ export class MoneriumClient {
     window.location.assign(authFlowUrl);
   }
   /**
-   * @deprecated will be removed in v3 - in favour of `buildSiweAuthorizationUrl`
+   * @deprecated will be removed in v4 - in favour of `buildSiweAuthorizationUrl`
    * Constructs the url to the authorization code flow and redirects,
    * Code Verifier needed for the code challenge is stored in local storage
    *
@@ -241,7 +245,7 @@ export class MoneriumClient {
   }
 
   /**
-   * @deprecated Will be removed in v3 in favour of 'authorizationCodeGrant', 'refreshTokenGrant' and 'clientCredentialsGrant'
+   * @deprecated Will be removed in v4 in favour of 'authorizationCodeGrant', 'refreshTokenGrant' and 'clientCredentialsGrant'
    * Will use the authorization code flow code to get access token
    *
    * @group Authentication
@@ -791,7 +795,7 @@ export class MoneriumClient {
   };
 
   /**
-   * @deprecated Web sockets will be removed in v3 - use webhooks instead.
+   * @deprecated Web sockets will be removed in v4 - use webhooks instead.
    * Connects to the order notifications socket
    *
    * @group Orders
@@ -851,7 +855,7 @@ export class MoneriumClient {
   }
 
   /**
-   * @deprecated Web sockets will be removed in v3 - use webhooks instead.
+   * @deprecated Web sockets will be removed in v4 - use webhooks instead.
    *
    * Closes the order notifications sockets
    *
@@ -881,7 +885,7 @@ export class MoneriumClient {
   }
 
   /**
-   * @deprecated will be removed in v3, caller will manage state
+   * @deprecated will be removed in v4, caller will manage state
    *
    * Cleanups the localstorage and websocket connections
    *
@@ -896,7 +900,7 @@ export class MoneriumClient {
     this.bearerProfile = undefined;
   }
   /**
-   * @deprecated will be removed in v3, caller will manage state
+   * @deprecated will be removed in v4, caller will manage state
    * Revokes access
    *
    * @group Authentication
@@ -918,7 +922,7 @@ export class MoneriumClient {
 
 /**
  * @deprecated Use `randomPKCECodeVerifier()` and `calculatePKCECodeChallenge()` instead.
- * Will be removed in v3.0.
+ * Will be removed in v4.0.
  *
  * Before:
  *   const codeChallenge = preparePKCEChallenge();

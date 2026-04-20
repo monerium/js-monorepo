@@ -3,6 +3,7 @@
  */
 import 'jest-localstorage-mock';
 
+import { preparePKCEChallenge } from '../src/compat';
 import constants from '../src/constants';
 import { queryParams } from '../src/helpers';
 import {
@@ -10,11 +11,10 @@ import {
   generateCodeChallenge,
   randomPKCECodeVerifier,
 } from '../src/helpers/auth.helpers';
-import { preparePKCEChallenge } from '../src/compat';
 
 const { STORAGE_CODE_VERIFIER } = constants;
 
-/* @deprecated: will be removed in v3 */
+/* @deprecated: will be removed in v4 */
 describe('preparePKCEChallenge', () => {
   afterEach(() => {
     localStorage.clear();

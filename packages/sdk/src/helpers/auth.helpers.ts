@@ -10,7 +10,7 @@ import {
 } from '../types';
 
 /**
- * @deprecated: will be removed in v3, use `randomPKCECodeVerifier` instead
+ * @deprecated: will be removed in v4, use `randomPKCECodeVerifier` instead
  * Find a more secure way to generate a random string
  * Using crypto-js to generate a random string was causing the following error:
  * `Error: Native crypto module could not be used to get secure random number.`
@@ -31,7 +31,7 @@ export const generateRandomString = () => {
 };
 
 /**
- * @deprecated: will be removed in v3, use `calculatePKCECodeChallenge` instead
+ * @deprecated: will be removed in v4, use `calculatePKCECodeChallenge` instead
  * Generate the PKCE code challenge
  *
  */
@@ -67,7 +67,7 @@ export const isClientCredentials = (
   return (args as ClientCredentialsPayload).client_secret != undefined;
 };
 
-// v3
+// v4
 
 export const randomPKCECodeVerifier = (): string => {
   const bytes = new Uint8Array(32);
