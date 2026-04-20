@@ -13,6 +13,8 @@
  *     console.log(err.errors);  // field-level validation errors, if present
  *   }
  * }
+ * @group v4
+ * @category v4 - Errors
  */
 export class MoneriumApiError extends Error {
   code: number;
@@ -53,6 +55,8 @@ export type MoneriumSdkErrorType =
  *     console.log(err.cause); // underlying fetch error, if type === 'network_error'
  *   }
  * }
+ * @group v4
+ * @category v4 - Errors
  */
 export class MoneriumSdkError extends Error {
   type: MoneriumSdkErrorType;

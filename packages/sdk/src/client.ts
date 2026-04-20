@@ -210,13 +210,13 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
 
     /**
      * @group Profiles
-     * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile-details | API Documentation}
+     * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
      */
     submitProfileDetails: (
       profileId: string,
       body: SubmitProfileDetailsPayload
     ): Promise<ResponseStatus> =>
-      request<ResponseStatus>('PUT', `profiles/${profileId}/details`, body),
+      request<ResponseStatus>('PATCH', `profiles/${profileId}/details`, body),
 
     // ─── Addresses ─────────────────────────────────────────────────────────
 
@@ -337,14 +337,14 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
 
     /**
      * @group Orders
-     * @see {@link https://docs.monerium.com/api#tag/order | API Documentation}
+     * @see {@link https://docs.monerium.com/api/#tag/orders/operation/order | API Documentation}
      */
     getOrder: (orderId: string): Promise<Order> =>
       request<Order>('GET', `orders/${orderId}`),
 
     /**
      * @group Orders
-     * @see {@link https://docs.monerium.com/api#tag/orders | API Documentation}
+     * @see {@link https://docs.monerium.com/api/#tag/orders/operation/orders | API Documentation}
      */
     getOrders: (filter?: OrderFilter): Promise<OrdersResponse> =>
       request<OrdersResponse>('GET', `orders${queryParams(filter)}`),
@@ -410,7 +410,7 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
     // ─── KYC ───────────────────────────────────────────────────────────────
 
     /**
-     * @group Orders
+     * @group Files
      * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
      */
     uploadSupportingDocument: (document: Blob): Promise<SupportingDoc> => {

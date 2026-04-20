@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 
-import 'jest-localstorage-mock';
 import fetchMock from 'jest-fetch-mock';
+import 'jest-localstorage-mock';
 
 import constants from '../src/constants';
 import { generateCodeChallenge } from '../src/helpers';
@@ -159,7 +159,6 @@ describe('MoneriumClient - sandbox', () => {
     test('authorize - should include various params', async () => {
       const args = {
         skipKyc: true,
-        skipCreateAccount: true,
         signature: undefined,
         email: 'test@email.is',
       };
@@ -167,9 +166,6 @@ describe('MoneriumClient - sandbox', () => {
 
       expect(assignedURL).toContain(`email=${encodeURIComponent(args.email)}`);
       expect(assignedURL).toContain(`skip_kyc=${args.skipKyc}`);
-      expect(assignedURL).toContain(
-        `skip_create_account=${args.skipCreateAccount}`
-      );
       expect(assignedURL).not.toContain('signature=');
     });
     test('siwe', async () => {

@@ -145,11 +145,6 @@ describe('buildAuthorizationUrl', () => {
     expect(url).toContain('skip_kyc=true');
   });
 
-  test('includes optional skipCreateAccount parameter', () => {
-    const url = buildAuthorizationUrl({ ...base, skipCreateAccount: true });
-    expect(url).toContain('skip_create_account=true');
-  });
-
   test('includes optional address, signature and chain for wallet auto-linking', () => {
     const url = buildAuthorizationUrl({
       ...base,

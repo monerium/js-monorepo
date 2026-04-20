@@ -191,7 +191,6 @@ export class MoneriumClient {
       code_challenge_method: 'S256' as PKCERequest['code_challenge_method'],
       response_type: 'code' as PKCERequest['response_type'],
       state: params?.state,
-      skip_create_account: params?.skipCreateAccount,
       skip_kyc: params?.skipKyc,
       email: params?.email,
       ...autoLink,
@@ -543,14 +542,14 @@ export class MoneriumClient {
 
   /**
    * @group Orders
-   * @see {@link https://docs.monerium.com/api#tag/orders | API Documentation}
+   * @see {@link https://docs.monerium.com/api/#tag/orders/operation/orders | API Documentation}
    */
   getOrders(filter?: OrderFilter): Promise<OrdersResponse> {
     return this.#api<OrdersResponse>('get', `orders${queryParams(filter)}`);
   }
   /**
    * @group Orders
-   * @see {@link https://docs.monerium.com/api#tag/order | API Documentation}
+   * @see {@link https://docs.monerium.com/api/#tag/orders/operation/order | API Documentation}
    */
   getOrder(orderId: string): Promise<Order> {
     return this.#api<Order>('get', `orders/${orderId}`);
@@ -706,8 +705,8 @@ export class MoneriumClient {
   }
 
   /**
-   * @group Orders
-   * @see {@link https://docs.monerium.com/api#tag/orders/operation/supporting-document | API Documentation}
+   * @group Files
+   * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
    */
   uploadSupportingDocument(document: File): Promise<SupportingDoc> {
     const formData = new FormData();

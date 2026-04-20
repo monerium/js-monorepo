@@ -111,7 +111,10 @@ export interface PKCERequest extends PKCERequestShared {
   signature?: string;
   /** The network of the wallet to automatically link  */
   chain?: Chain | ChainId;
-  /** You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization */
+  /**
+   * You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization
+   * @deprecated Account creation is no longer offered in the auth flow
+   *  */
   skip_create_account?: boolean;
   /** You can skip the KYC onboarding steps in the Authorization Flow and use the the details, additional data, and verifications API endpoints after you have gotten the authorization. */
   skip_kyc?: boolean;
@@ -616,7 +619,10 @@ export interface AuthFlowOptionsShared {
 export interface AuthFlowOptions extends AuthFlowOptionsShared {
   /** the email of the user to prefill the login form */
   email?: string;
-  /** skip account creation in auth flow */
+  /**
+   * skip account creation in auth flow
+   * @deprecated: acccount creation is no longer offered in the auth flow
+   */
   skipCreateAccount?: boolean;
   /** skip KYC in auth flow */
   skipKyc?: boolean;

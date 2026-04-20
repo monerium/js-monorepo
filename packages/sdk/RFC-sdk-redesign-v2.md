@@ -100,6 +100,8 @@ Everything is exported from a single entry point: `@monerium/sdk`. Optional stab
 │   ├── createMoneriumClient()      (primary API — factory function)
 │   └── MoneriumClient              (deprecated in v3.x, removed in v4.0 — use createMoneriumClient())
 │
+├── src/errors.ts         # MoneriumApiError, MoneriumSdkError
+├── src/transport.ts      # Transport types and defaultTransport
 ├── src/utils.ts          # Pure utility functions (unchanged from today)
 │
 ├── src/types.ts          # All TypeScript types and interfaces
@@ -240,7 +242,6 @@ import {
 
 // Express route: GET /callback
 app.get('/callback', async (req, res) => {
-  // TODO: not sure we need parseAuthorizationReponse anymore.
   const { code, error, errorDescription } = parseAuthorizationResponse(
     new URL(req.url, 'https://your-app.com')
   );
@@ -854,12 +855,9 @@ const bearerProfile = await authorizationCodeGrant({
   codeVerifier,
 });
 
-mySecureStore.set('access_token', bearerProfile.access_token);
-mySecureStore.set('refresh_token', bearerProfile.refresh_token);
-mySecureStore.set(
-  'access_expiry',
-  String(Date.now() + bearerProfile.expires_in * 1000)
-);
+req.session.accessToken = bearerProfile.access_token;
+req.session.refreshToken = bearerProfile.refresh_token;
+req.session.accessExpiry = Date.now() + bearerProfile.expires_in * 1000;
 
 // --- Use the API ---
 const client = createMoneriumClient({

@@ -48,7 +48,6 @@ export interface BuildAuthorizationUrlOptions {
   codeChallenge: string;
   state?: string;
   email?: string;
-  skipCreateAccount?: boolean;
   skipKyc?: boolean;
   address?: string;
   signature?: string;
@@ -75,7 +74,6 @@ export const buildAuthorizationUrl = (
     code_challenge_method: 'S256',
     response_type: 'code',
     state: options.state,
-    skip_create_account: options.skipCreateAccount,
     skip_kyc: options.skipKyc,
     email: options.email,
     address: options.address,
