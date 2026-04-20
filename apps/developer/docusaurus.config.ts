@@ -1,8 +1,7 @@
-import path from 'path';
-import React from 'react';
-import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type { Config } from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import React from 'react';
 
 import type * as Redocusaurus from 'redocusaurus';
 import typedocConfig from './typedoc.config';
@@ -33,6 +32,7 @@ const config: Config = {
         tsconfig: '../../packages/sdk/tsconfig.json',
         out: 'docs/packages/sdk',
         publicPath: '/packages/sdk',
+        watch: process?.env?.TYPEDOC_WATCH === 'true',
       },
     ],
     [
@@ -44,6 +44,7 @@ const config: Config = {
         tsconfig: '../../packages/sdk-react-provider/tsconfig.json',
         out: 'docs/packages/sdk-react-provider',
         publicPath: '/packages/sdk-react-provider',
+        watch: process?.env?.TYPEDOC_WATCH === 'true',
       },
     ],
   ],
