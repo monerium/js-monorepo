@@ -1,4 +1,4 @@
-# RFC 3: JavaScript SDK v3.0 — Redesign
+# RFC 3: JavaScript SDK v4.0 — Redesign
 
 - **Author:** @Einar
 - **State:** Draft
@@ -72,7 +72,7 @@ The auth flow becomes an explicit sequence of function calls that the consumer o
 | Token refresh    | Handled inside `getAccess()`                                   | `getAccessToken` callback on the client                                 |
 | Client creation  | `new MoneriumClient()` (OOP-first)                             | `createMoneriumClient()` (factory, primary API)                         |
 | HTTP transport   | Internal `fetch` calls; no way to intercept or replace         | Optional `transport` callback on the client replaces the internal fetch |
-| WebSockets       | `subscribeOrderNotifications()` stored internally on the class | Removed in v3 — use webhooks instead                                    |
+| WebSockets       | `subscribeOrderNotifications()` stored internally on the class | Removed in v4 — use webhooks instead                                    |
 | Errors           | Raw JSON objects or plain Error strings                        | Typed Errors                                                            |
 
 ---
@@ -98,7 +98,7 @@ Everything is exported from a single entry point: `@monerium/sdk`. Optional stab
 │
 ├── src/client.ts         # Auth-stateless REST API client
 │   ├── createMoneriumClient()      (primary API — factory function)
-│   └── MoneriumClient              (deprecated in v2.x, removed in v3.0 — use createMoneriumClient())
+│   └── MoneriumClient              (deprecated in v3.x, removed in v4.0 — use createMoneriumClient())
 │
 ├── src/utils.ts          # Pure utility functions (unchanged from today)
 │
@@ -108,7 +108,7 @@ Everything is exported from a single entry point: `@monerium/sdk`. Optional stab
 
 ### The API client
 
-`createMoneriumClient()` is the documented API. `MoneriumClient` exists in v2.x for source compatibility only — it is deprecated from day one, carries a `@deprecated` JSDoc tag, and is removed in v3.0. It is not the preferred style. The client holds no bearer profile, no refresh token, and no socket registry.
+`createMoneriumClient()` is the documented API. `MoneriumClient` exists in v3.x for source compatibility only — it is deprecated from day one, carries a `@deprecated` JSDoc tag, and is removed in v4.0. It is not the preferred style. The client holds no bearer profile, no refresh token, and no socket registry.
 
 The client accepts one of two token supply strategies, which are mutually exclusive at the type level (TypeScript prevents passing both):
 
@@ -762,11 +762,11 @@ The primary trade-off is deliberate: the SDK no longer manages PKCE state, token
 
 ## Rollout and Migration
 
-### Phase 1 — v2.x (source-compatible deprecation release)
+### Phase 1 — v3.x (source-compatible deprecation release)
 
 All new exports are added alongside the old ones. Old names receive `@deprecated` JSDoc tags so TypeScript consumers see IDE strikethrough warnings without any configuration. No old names are removed. All legacy `localStorage` and `window.location` code is isolated in `src/compat.ts`. Consumers can migrate at their own pace.
 
-Deprecated wrappers preserve existing v2 behaviour while delegating internally to the new primitives where possible. From the caller's perspective nothing changes:
+Deprecated wrappers preserve existing v3 behaviour while delegating internally to the new primitives where possible. From the caller's perspective nothing changes:
 
 - `authorize()` and `siwe()` still redirect — the wrapper calls `window.location.assign` internally
 - `preparePKCEChallenge()` still writes to `localStorage` — the wrapper handles this internally as before
@@ -776,28 +776,28 @@ Deprecated wrappers preserve existing v2 behaviour while delegating internally t
 
 | Name                                 | Deprecated in | Removed in | Replacement                                                                     |
 | ------------------------------------ | ------------- | ---------- | ------------------------------------------------------------------------------- |
-| `preparePKCEChallenge()`             | v2.x          | v3.0       | `randomPKCECodeVerifier()` + `calculatePKCECodeChallenge()`                     |
-| `authorize()`                        | v2.x          | v3.0       | `buildAuthorizationUrl()`                                                       |
-| `siwe()`                             | v2.x          | v3.0       | `buildSiweAuthorizationUrl()`                                                   |
-| `getAccess()`                        | v2.x          | v3.0       | `authorizationCodeGrant()` / `refreshTokenGrant()` / `clientCredentialsGrant()` |
-| `disconnect()`                       | v2.x          | v3.0       | _(none — caller manages state)_                                                 |
-| `revokeAccess()`                     | v2.x          | v3.0       | _(none — caller manages storage)_                                               |
-| `subscribeOrderNotifications()`      | v2.x          | v3.0       | _(none — use webhooks instead - not in scope)_                                  |
-| `unsubscribeOrderNotifications()`    | v2.x          | v3.0       | _(none — use webhooks instead - not in scope)_                                  |
-| `ClassOptions`                       | v2.x          | v3.0       | `MoneriumClientOptions`                                                         |
-| `AuthFlowOptions`                    | v2.x          | v3.0       | `BuildAuthorizationUrlOptions`                                                  |
-| `AuthFlowSIWEOptions`                | v2.x          | v3.0       | `BuildSiweAuthorizationUrlOptions`                                              |
-| `AuthorizationCodeCredentials`       | v2.x          | v3.0       | `AuthorizationCodeGrantOptions`                                                 |
-| `ClientCredentials`                  | v2.x          | v3.0       | `ClientCredentialsGrantOptions`                                                 |
-| `MoneriumClient` (class constructor) | v2.x          | v3.0       | `createMoneriumClient()`                                                        |
+| `preparePKCEChallenge()`             | v3.x          | v4.0       | `randomPKCECodeVerifier()` + `calculatePKCECodeChallenge()`                     |
+| `authorize()`                        | v3.x          | v4.0       | `buildAuthorizationUrl()`                                                       |
+| `siwe()`                             | v3.x          | v4.0       | `buildSiweAuthorizationUrl()`                                                   |
+| `getAccess()`                        | v3.x          | v4.0       | `authorizationCodeGrant()` / `refreshTokenGrant()` / `clientCredentialsGrant()` |
+| `disconnect()`                       | v3.x          | v4.0       | _(none — caller manages state)_                                                 |
+| `revokeAccess()`                     | v3.x          | v4.0       | _(none — caller manages storage)_                                               |
+| `subscribeOrderNotifications()`      | v3.x          | v4.0       | _(none — use webhooks instead - not in scope)_                                  |
+| `unsubscribeOrderNotifications()`    | v3.x          | v4.0       | _(none — use webhooks instead - not in scope)_                                  |
+| `ClassOptions`                       | v3.x          | v4.0       | `MoneriumClientOptions`                                                         |
+| `AuthFlowOptions`                    | v3.x          | v4.0       | `BuildAuthorizationUrlOptions`                                                  |
+| `AuthFlowSIWEOptions`                | v3.x          | v4.0       | `BuildSiweAuthorizationUrlOptions`                                              |
+| `AuthorizationCodeCredentials`       | v3.x          | v4.0       | `AuthorizationCodeGrantOptions`                                                 |
+| `ClientCredentials`                  | v3.x          | v4.0       | `ClientCredentialsGrantOptions`                                                 |
+| `MoneriumClient` (class constructor) | v3.x          | v4.0       | `createMoneriumClient()`                                                        |
 
-### Phase 2 — v3.0 (breaking, clean removal)
+### Phase 2 — v4.0 (breaking, clean removal)
 
 `src/compat.ts` is deleted. All deprecated names are removed. `CHANGELOG.md` documents every removed name with a before/after migration snippet. `README.md` is rewritten with `createMoneriumClient` and `getAccessToken` as the primary examples.
 
 ### Before/after migration snapshot
 
-**Before (current v2 API)**
+**Before (current v3 API)**
 
 ```ts
 import { MoneriumClient } from '@monerium/sdk';
@@ -814,7 +814,7 @@ await monerium.getAccess(); // reads window.location.search and localStorage
 await monerium.disconnect(); // clears localStorage
 ```
 
-**After (v3 API)**
+**After (v4 API)**
 
 ```ts
 import {
