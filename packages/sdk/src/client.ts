@@ -1,6 +1,6 @@
-import { MONERIUM_CONFIG } from './config';
 import { MoneriumApiError, MoneriumSdkError } from './errors';
 import { queryParams } from './helpers';
+import { getEnv } from './helpers/internal.helpers';
 import type { Transport } from './transport';
 import { defaultTransport } from './transport';
 import type {
@@ -75,7 +75,7 @@ export type MoneriumClientOptions =
  * @category v4 - Client instance.
  */
 export function createMoneriumClient(options: MoneriumClientOptions) {
-  const env = MONERIUM_CONFIG.environments[options.environment ?? 'sandbox'];
+  const env = getEnv(options.environment);
   const transport = options.transport ?? defaultTransport;
 
   async function getToken(): Promise<string | null> {
