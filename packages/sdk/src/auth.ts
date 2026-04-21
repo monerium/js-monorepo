@@ -1,4 +1,5 @@
 import { MoneriumApiError } from './errors';
+import { queryParams } from './helpers';
 import { getEnv } from './helpers/internal.helpers';
 import type { Transport, TransportResponse } from './transport';
 import { defaultTransport } from './transport';
@@ -38,7 +39,7 @@ export const buildAuthorizationUrl = (
 ): string => {
   const env = getEnv(options.environment);
 
-  const params = urlEncoded({
+  const params = queryParams({
     client_id: options.clientId,
     redirect_uri: options.redirectUri,
     code_challenge: options.codeChallenge,
@@ -52,7 +53,7 @@ export const buildAuthorizationUrl = (
     chain: options.chain,
   });
 
-  return `${env.api}/auth?${params}`;
+  return `${env.api}/auth${params}`;
 };
 
 /**
@@ -84,7 +85,7 @@ export const buildSiweAuthorizationUrl = (
 ): string => {
   const env = getEnv(options.environment);
 
-  const params = urlEncoded({
+  const params = queryParams({
     client_id: options.clientId,
     redirect_uri: options.redirectUri,
     message: options.message,
@@ -95,7 +96,7 @@ export const buildSiweAuthorizationUrl = (
     state: options.state,
   });
 
-  return `${env.api}/auth?${params}`;
+  return `${env.api}/auth${params}`;
 };
 
 // ─── Token requests ───────────────────────────────────────────────────────────
@@ -271,35 +272,40 @@ export interface ParsedAuthorizationResponse {
  *   contains an OAuth2 authorization response.
  *
  * @example
- * const { code, error } = parseAuthorizationResponse(window.location.href);
+ * const { code, error } = parseAuthorizationResponse(req.url);
  * const { code, error } = parseAuthorizationResponse('?code=abc&state=xyz');
  * @experimental  may not be included in v4
  * @group v4
  * @category v4 - Helpers
  */
 export const parseAuthorizationResponse = (
-  input: string | URL
+  input: string
 ): ParsedAuthorizationResponse => {
-  let params: URLSearchParams;
+  // Runtime-agnostic string parser
+  if (typeof input !== 'string') return {};
+  const str = input;
 
-  try {
-    // Handles full URLs: https://example.com/callback?code=abc
-    params = new URL(typeof input === 'string' ? input : input.toString())
-      .searchParams;
-  } catch {
-    // Handles bare query strings: ?code=abc or code=abc
-    params = new URLSearchParams(
-      typeof input === 'string' ? input : input.toString()
+  // Extract the query string from a full URL, or use the input as-is
+  const queryString = str.includes('?') ? str.split('?')[1] : str;
+  if (!queryString) return {};
+
+  const map: Record<string, string> = {};
+  for (const pair of queryString.split('&')) {
+    const eqIndex = pair.indexOf('=');
+    if (eqIndex === -1) continue;
+    const key = decodeURIComponent(pair.slice(0, eqIndex));
+    const value = decodeURIComponent(
+      pair.slice(eqIndex + 1).replace(/\+/g, ' ')
     );
+    map[key] = value;
   }
 
   const result: ParsedAuthorizationResponse = {};
-
-  if (params.has('code')) result.code = params.get('code')!;
-  if (params.has('state')) result.state = params.get('state')!;
-  if (params.has('error')) result.error = params.get('error')!;
-  if (params.has('error_description'))
-    result.errorDescription = params.get('error_description')!;
+  if (map['code']) result.code = map['code'];
+  if (map['state']) result.state = map['state'];
+  if (map['error']) result.error = map['error'];
+  if (map['error_description'])
+    result.errorDescription = map['error_description'];
 
   return result;
 };

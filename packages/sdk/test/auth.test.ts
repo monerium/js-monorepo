@@ -262,11 +262,10 @@ describe('parseAuthorizationResponse', () => {
     expect(result).toEqual({});
   });
 
-  test('accepts a URL object', () => {
-    const url = new URL(
+  test('accepts a full URL string', () => {
+    const result = parseAuthorizationResponse(
       'https://app.example.com/callback?code=fromurl&state=st'
     );
-    const result = parseAuthorizationResponse(url);
     expect(result.code).toBe('fromurl');
     expect(result.state).toBe('st');
   });
@@ -274,6 +273,7 @@ describe('parseAuthorizationResponse', () => {
   test('never throws', () => {
     expect(() => parseAuthorizationResponse('')).not.toThrow();
     expect(() => parseAuthorizationResponse('garbage')).not.toThrow();
+    expect(() => parseAuthorizationResponse({})).not.toThrow();
     expect(() =>
       parseAuthorizationResponse('https://app.example.com/no-params')
     ).not.toThrow();
