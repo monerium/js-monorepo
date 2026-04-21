@@ -65,6 +65,11 @@ describe('url params', () => {
     const params = new URLSearchParams(obj);
     expect(params.toString()).toEqual(urlEncoded(obj));
   });
+  test('should filter out empty values', () => {
+    const obj = { foo: 'bar', bar: 'foo', baz: undefined };
+    const params = new URLSearchParams(obj);
+    expect('foo=bar&bar=foo').toEqual(urlEncoded(obj));
+  });
   test('should create an empty query string when given an empty object', () => {
     const obj = {};
     const params = new URLSearchParams(obj);
