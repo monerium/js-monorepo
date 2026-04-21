@@ -1,5 +1,5 @@
-import { MONERIUM_CONFIG } from './config';
 import { MoneriumApiError } from './errors';
+import { getEnv } from './helpers/internal.helpers';
 import type { Transport, TransportResponse } from './transport';
 import { defaultTransport } from './transport';
 import type { BearerProfile, ENV } from './types';
@@ -36,7 +36,7 @@ export interface BuildAuthorizationUrlOptions {
 export const buildAuthorizationUrl = (
   options: BuildAuthorizationUrlOptions
 ): string => {
-  const env = MONERIUM_CONFIG.environments[options.environment ?? 'sandbox'];
+  const env = getEnv(options.environment);
 
   const params = urlEncoded({
     client_id: options.clientId,
@@ -82,7 +82,7 @@ export interface BuildSiweAuthorizationUrlOptions {
 export const buildSiweAuthorizationUrl = (
   options: BuildSiweAuthorizationUrlOptions
 ): string => {
-  const env = MONERIUM_CONFIG.environments[options.environment ?? 'sandbox'];
+  const env = getEnv(options.environment);
 
   const params = urlEncoded({
     client_id: options.clientId,
@@ -174,7 +174,7 @@ export interface AuthorizationCodeGrantOptions {
 export const authorizationCodeGrant = (
   options: AuthorizationCodeGrantOptions
 ): Promise<BearerProfile> => {
-  const env = MONERIUM_CONFIG.environments[options.environment ?? 'sandbox'];
+  const env = getEnv(options.environment);
 
   return tokenRequest(
     `${env.api}/auth/token`,
@@ -204,7 +204,7 @@ export interface RefreshTokenGrantOptions {
 export const refreshTokenGrant = (
   options: RefreshTokenGrantOptions
 ): Promise<BearerProfile> => {
-  const env = MONERIUM_CONFIG.environments[options.environment ?? 'sandbox'];
+  const env = getEnv(options.environment);
 
   return tokenRequest(
     `${env.api}/auth/token`,
@@ -235,7 +235,7 @@ export interface ClientCredentialsGrantOptions {
 export const clientCredentialsGrant = (
   options: ClientCredentialsGrantOptions
 ): Promise<BearerProfile> => {
-  const env = MONERIUM_CONFIG.environments[options.environment ?? 'sandbox'];
+  const env = getEnv(options.environment);
 
   return tokenRequest(
     `${env.api}/auth/token`,
