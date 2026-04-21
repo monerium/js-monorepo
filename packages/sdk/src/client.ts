@@ -413,9 +413,23 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
      * @group Files
      * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
      */
-    uploadSupportingDocument: (document: Blob): Promise<SupportingDoc> => {
+    /**
+     * Upload a supporting document for KYC onboarding or order support.
+     *
+     * Requires `Blob` and `FormData` support — available in Node.js 18+,
+     * browsers, and Cloudflare Workers. Not available in all environments.
+     *
+     * @param document - File content as a `Blob`, `Uint8Array`, or `ArrayBuffer`.
+     *   Node.js `Buffer` is a `Uint8Array` and works directly.
+     * @param filename - Optional filename sent to the API (e.g. `'kyc.pdf'`).
+     */
+    uploadSupportingDocument: (
+      document: Blob | Uint8Array | ArrayBuffer,
+      filename?: string
+    ): Promise<SupportingDoc> => {
+      const blob = document instanceof Blob ? document : new Blob([document]);
       const formData = new FormData();
-      formData.append('file', document);
+      formData.append('file', blob, filename);
       return requestFormData<SupportingDoc>('POST', 'files', formData);
     },
   };
