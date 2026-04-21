@@ -169,6 +169,17 @@ describe('buildAuthorizationUrl', () => {
     expect(() => buildAuthorizationUrl(base)).not.toThrow();
     expect(typeof buildAuthorizationUrl(base)).toBe('string');
   });
+  test('skips undefined optional parameters', () => {
+    const url = buildAuthorizationUrl({
+      ...base,
+      state: undefined,
+      email: undefined,
+      address: undefined,
+    });
+    expect(url).not.toContain('state=');
+    expect(url).not.toContain('email=');
+    expect(url).not.toContain('address=');
+  });
 });
 
 // ─── buildSiweAuthorizationUrl ────────────────────────────────────────────────
