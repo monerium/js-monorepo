@@ -690,6 +690,7 @@ export class MoneriumClient {
   }
 
   /**
+   * @deprecated There is no longer a PUT endpoint for profile details. Use PATCH instead.
    * @group Profiles
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile-details | API Documentation}
    */

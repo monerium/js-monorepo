@@ -4,10 +4,8 @@ import {
   buildSiweAuthorizationUrl,
   calculatePKCECodeChallenge,
   clientCredentialsGrant,
-  exchangeAuthorizationCode,
   parseAuthorizationResponse,
   randomPKCECodeVerifier,
-  refreshAccessToken,
   refreshTokenGrant,
 } from '../src/auth';
 import { MoneriumApiError } from '../src/errors';
@@ -400,12 +398,6 @@ describe('authorizationCodeGrant', () => {
   });
 });
 
-describe('exchangeAuthorizationCode', () => {
-  test('is an alias for authorizationCodeGrant', () => {
-    expect(exchangeAuthorizationCode).toBe(authorizationCodeGrant);
-  });
-});
-
 // ─── refreshTokenGrant ────────────────────────────────────────────────────────
 
 describe('refreshTokenGrant', () => {
@@ -462,12 +454,6 @@ describe('refreshTokenGrant', () => {
       expect((err as MoneriumApiError).status).toBe('Unauthorized');
       expect((err as MoneriumApiError).message).toBe('Token expired');
     }
-  });
-});
-
-describe('refreshAccessToken', () => {
-  test('is an alias for refreshTokenGrant', () => {
-    expect(refreshAccessToken).toBe(refreshTokenGrant);
   });
 });
 

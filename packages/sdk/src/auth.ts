@@ -218,9 +218,6 @@ export const authorizationCodeGrant = (
   );
 };
 
-/** Friendly alias for {@link authorizationCodeGrant}. */
-export const exchangeAuthorizationCode = authorizationCodeGrant;
-
 export interface RefreshTokenGrantOptions {
   environment?: ENV;
   clientId: string;
@@ -248,9 +245,6 @@ export const refreshTokenGrant = (
     options.transport
   );
 };
-
-/** Friendly alias for {@link refreshTokenGrant}. */
-export const refreshAccessToken = refreshTokenGrant;
 
 export interface ClientCredentialsGrantOptions {
   environment?: ENV;

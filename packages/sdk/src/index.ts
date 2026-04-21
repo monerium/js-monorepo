@@ -110,10 +110,8 @@ export {
   buildSiweAuthorizationUrl,
   calculatePKCECodeChallenge,
   clientCredentialsGrant,
-  exchangeAuthorizationCode, // alias for authorizationCodeGrant
   parseAuthorizationResponse,
   randomPKCECodeVerifier,
-  refreshAccessToken, // alias for refreshTokenGrant
   refreshTokenGrant,
 } from './auth';
 
