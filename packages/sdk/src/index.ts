@@ -108,12 +108,15 @@ export {
   authorizationCodeGrant,
   buildAuthorizationUrl,
   buildSiweAuthorizationUrl,
-  calculatePKCECodeChallenge,
   clientCredentialsGrant,
   parseAuthorizationResponse,
-  randomPKCECodeVerifier,
   refreshTokenGrant,
 } from './auth';
+
+export {
+  calculatePKCECodeChallenge,
+  randomPKCECodeVerifier,
+} from './helpers/auth.helpers';
 
 export type {
   AuthorizationCodeGrantOptions,

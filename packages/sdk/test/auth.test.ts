@@ -2,13 +2,15 @@ import {
   authorizationCodeGrant,
   buildAuthorizationUrl,
   buildSiweAuthorizationUrl,
-  calculatePKCECodeChallenge,
   clientCredentialsGrant,
   parseAuthorizationResponse,
-  randomPKCECodeVerifier,
   refreshTokenGrant,
 } from '../src/auth';
 import { MoneriumApiError } from '../src/errors';
+import {
+  calculatePKCECodeChallenge,
+  randomPKCECodeVerifier,
+} from '../src/helpers/auth.helpers';
 import { Transport, TransportRequest } from '../src/transport';
 
 // ─── Transport helpers ────────────────────────────────────────────────────────
