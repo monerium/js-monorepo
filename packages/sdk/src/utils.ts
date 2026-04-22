@@ -3,7 +3,7 @@ import {
   productionToSandbox,
   validEvmChainNames,
 } from './chains';
-import { generateRandomString } from './helpers';
+import { randomPKCECodeVerifier } from './helpers/auth.helpers';
 import {
   Balances,
   Chain,
@@ -166,7 +166,7 @@ Allow ${appName} to access my data on Monerium
 URI: ${redirectUri}
 Version: 1
 Chain ID: ${chainId}
-Nonce: ${generateRandomString().slice(0, 16)}
+Nonce: ${randomPKCECodeVerifier().slice(0, 16)}
 Issued At: ${issuedAt}
 Expiration Time: ${expiryAt}
 Resources:

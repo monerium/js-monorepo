@@ -2,21 +2,6 @@ import { MONERIUM_CONFIG } from '../config';
 import { ENV, Environment } from '../types';
 
 /**
- * Used to identify open websockets.
- * @param obj any query params
- * @returns string identifier
- */
-export const getKey = (obj: Record<string, unknown>) => {
-  // Filter out properties with null or undefined values
-  const validEntries = Object.entries(obj).filter(
-    ([_, value]) => value != null
-  );
-
-  // Join the entries with a hyphen
-  return validEntries.map(([key, value]) => `${key}-${value}`).join('-');
-};
-
-/**
  * Only activated in tests, speeds up debugging.
  * @internal
  * @hidden

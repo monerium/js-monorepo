@@ -1,4 +1,7 @@
-import { MoneriumClient } from '../dist/index.mjs';
+import {
+  clientCredentialsGrant,
+  createMoneriumClient,
+} from '../dist/index.mjs';
 import {
   APP_ONE_CREDENTIALS_CLIENT_ID,
   APP_ONE_CREDENTIALS_SECRET,
@@ -6,20 +9,22 @@ import {
 } from './constants.ts';
 
 test('should import without throwing', () => {
-  expect(MoneriumClient).toBeDefined();
+  expect(createMoneriumClient).toBeDefined();
+  expect(clientCredentialsGrant).toBeDefined();
 });
+
 process.env.CI !== 'true' &&
   test('ES Module bundle smoke test', async () => {
-    const client = new MoneriumClient({
+    const { access_token } = await clientCredentialsGrant({
+      environment: 'sandbox',
       clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
       clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
-    try {
-      await client.getAccess();
-    } catch (error) {
-      console.log(error);
-    }
+    const client = createMoneriumClient({
+      environment: 'sandbox',
+      accessToken: access_token,
+    });
 
     const { profiles } = await client.getProfiles();
 

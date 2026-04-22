@@ -9,9 +9,8 @@ import { urlEncoded } from './utils';
 // ─── URL builders ─────────────────────────────────────────────────────────────
 
 /**
- * @group v4
- * @category v4 - Authorization
- * @beta
+ * @group Auth
+ * @category Authorization
  */
 export interface BuildAuthorizationUrlOptions {
   environment?: ENV;
@@ -30,9 +29,8 @@ export interface BuildAuthorizationUrlOptions {
  * Build the authorization redirect URL.
  * Returns a URL string — the caller navigates to it.
  * The SDK does not redirect.
- * @group v4
- * @category v4 - Authorization
- * @beta
+ * @group Auth
+ * @category Authorization
  */
 export const buildAuthorizationUrl = (
   options: BuildAuthorizationUrlOptions
@@ -57,9 +55,8 @@ export const buildAuthorizationUrl = (
 };
 
 /**
- * @group v4
- * @category v4 - Authorization
- * @beta
+ * @group Auth
+ * @category Authorization
  */
 export interface BuildSiweAuthorizationUrlOptions {
   environment?: ENV;
@@ -76,9 +73,8 @@ export interface BuildSiweAuthorizationUrlOptions {
  * Returns a URL string — the caller navigates to it.
  * The SDK does not redirect.
  *
- * @group v4
- * @category v4 - Authorization
- * @beta
+ * @group Auth
+ * @category Authorization
  */
 export const buildSiweAuthorizationUrl = (
   options: BuildSiweAuthorizationUrlOptions
@@ -101,12 +97,7 @@ export const buildSiweAuthorizationUrl = (
 
 // ─── Token requests ───────────────────────────────────────────────────────────
 
-/**
- *
- * @group v4
- * @category v4 - Authorization
- * @beta
- */
+/** @internal */
 async function tokenRequest(
   url: string,
   body: Record<string, string | undefined>,
@@ -151,9 +142,8 @@ async function tokenRequest(
 // ─── Grant types ──────────────────────────────────────────────────────────────
 
 /**
- * @group v4
- * @category v4 - Authorization
- * @beta
+ * @group Auth
+ * @category Authorization
  */
 export interface AuthorizationCodeGrantOptions {
   environment?: ENV;
@@ -168,9 +158,8 @@ export interface AuthorizationCodeGrantOptions {
  * Exchange an authorization code for tokens.
  * The caller stores the returned BearerProfile — the SDK does not write to any storage.
  *
- * @group v4
- * @category v4 - Authorization
- * @beta
+ * @group Auth
+ * @category Authorization
  */
 export const authorizationCodeGrant = (
   options: AuthorizationCodeGrantOptions
@@ -190,6 +179,10 @@ export const authorizationCodeGrant = (
   );
 };
 
+/**
+ * @group Auth
+ * @category Authorization
+ */
 export interface RefreshTokenGrantOptions {
   environment?: ENV;
   clientId: string;
@@ -200,7 +193,8 @@ export interface RefreshTokenGrantOptions {
 /**
  * Get a new access token using a refresh token.
  * The caller stores the returned BearerProfile — the SDK does not write to any storage.
- * @beta
+ * @group Auth
+ * @category Authorization
  */
 export const refreshTokenGrant = (
   options: RefreshTokenGrantOptions
@@ -218,6 +212,10 @@ export const refreshTokenGrant = (
   );
 };
 
+/**
+ * @group Auth
+ * @category Authorization
+ */
 export interface ClientCredentialsGrantOptions {
   environment?: ENV;
   clientId: string;
@@ -229,9 +227,8 @@ export interface ClientCredentialsGrantOptions {
  * Get an access token using client credentials. Server-side only.
  * clientSecret must never be used in a browser context.
  *
- * @group v4
- * @category v4 - Authorization
- * @beta
+ * @group Auth
+ * @category Authorization
  */
 export const clientCredentialsGrant = (
   options: ClientCredentialsGrantOptions
@@ -252,9 +249,8 @@ export const clientCredentialsGrant = (
 // ─── Callback parsing ─────────────────────────────────────────────────────────
 
 /**
- * @group v4
- * @category v4 - Authorization
- * @beta
+ * @group Auth
+ * @category Helpers
  */
 export interface ParsedAuthorizationResponse {
   code?: string;
@@ -274,9 +270,8 @@ export interface ParsedAuthorizationResponse {
  * @example
  * const { code, error } = parseAuthorizationResponse(req.url);
  * const { code, error } = parseAuthorizationResponse('?code=abc&state=xyz');
- * @experimental  may not be included in v4
- * @group v4
- * @category v4 - Helpers
+ * @group Auth
+ * @category Helpers
  */
 export const parseAuthorizationResponse = (
   input: string

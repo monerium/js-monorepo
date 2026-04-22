@@ -74,20 +74,14 @@ yarn add @monerium/sdk
 
 ### Environments - Networks
 
-| Environment | Chain    | Name     |
-| ----------- | -------- | -------- |
-| sandbox     | ethereum | sepolia  |
-|             | polygon  | mumbai   |
-|             | gnosis   | chiado   |
-|             | linea    | sepolia  |
-|             | scroll   | sepolia  |
-|             | camino   | columbus |
-| production  | ethereum | mainnet  |
-|             | polygon  | mainnet  |
-|             | gnosis   | mainnet  |
-|             | linea    | mainnet  |
-|             | scroll   | mainnet  |
-|             | camino   | mainnet  |
+| production | sandbox |
+| ethereum | sepolia |
+| gnosis | chiado |
+| polygon | amoy |
+| arbitrum | arbitrumsepolia |
+| base | basesepolia |
+| linea | lineasepolia |
+| scroll | scrollsepolia |
 
 ## Usage Examples
 

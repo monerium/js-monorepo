@@ -1,7 +1,7 @@
 {
   "name": "@monerium/sdk",
-  "version": "3.5.0",
-  "description": "Essential tools to interact with the Monerium API, an electronic money issuer.",
+  "version": "4.0.0",
+  "description": "Essential tools to interact with the Monerium API, an electronic money issuer. Node.js and server-side runtimes first.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/monerium/js-monorepo.git",
@@ -43,7 +43,6 @@
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
     "jest-fetch-mock": "^3.0.3",
-    "jest-localstorage-mock": "^2.4.26",
     "timezone-mock": "^1.3.6"
   },
   "engines": {

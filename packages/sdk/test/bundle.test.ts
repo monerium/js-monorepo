@@ -2,7 +2,10 @@
  * @jest-environment node
  */
 
-const MoneriumClient = require('../dist/index.js').MoneriumClient;
+const {
+  createMoneriumClient,
+  clientCredentialsGrant,
+} = require('../dist/index.js');
 
 import * as constants from './constants';
 
@@ -13,16 +16,23 @@ const {
 } = constants;
 
 test('should import without throwing', () => {
-  expect(MoneriumClient).toBeDefined();
+  expect(createMoneriumClient).toBeDefined();
+  expect(clientCredentialsGrant).toBeDefined();
 });
+
 process.env.CI !== 'true' &&
   test('CommonJs bundle smoke test', async () => {
-    const client = new MoneriumClient({
+    const { access_token } = await clientCredentialsGrant({
+      environment: 'sandbox',
       clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
       clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
-    await client.getAccess();
+    const client = createMoneriumClient({
+      environment: 'sandbox',
+      accessToken: access_token,
+    });
+
     const { profiles } = await client.getProfiles();
 
     expect(profiles?.[0]?.id).toBe(DEFAULT_PROFILE);

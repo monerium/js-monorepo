@@ -2,7 +2,7 @@ import encodeBase64Url from 'crypto-js/enc-base64url.js';
 import SHA256 from 'crypto-js/sha256.js';
 import timezone_mock from 'timezone-mock';
 
-import { generateRandomString } from '../src/helpers';
+import { randomPKCECodeVerifier } from '../src/helpers/auth.helpers';
 import { Balances, Currency } from '../src/types';
 import {
   getAmount,
@@ -77,7 +77,7 @@ describe('url params', () => {
     expect(urlEncoded(obj)).toEqual('foobar=bazqux%204quux');
   });
   test('handles special characters in code challenge', () => {
-    const codeVerifier = generateRandomString();
+    const codeVerifier = randomPKCECodeVerifier();
     const challenge = encodeBase64Url.stringify(SHA256(codeVerifier as string));
 
     const obj = {

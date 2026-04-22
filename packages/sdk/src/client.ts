@@ -70,9 +70,8 @@ export type MoneriumClientOptions =
 
 /**
  * Creates a Monerium client instance.
- * @beta
- * @group v4
- * @category v4 - Client instance.
+ * @group Client
+ * @category Client
  */
 export function createMoneriumClient(options: MoneriumClientOptions) {
   const env = getEnv(options.environment);

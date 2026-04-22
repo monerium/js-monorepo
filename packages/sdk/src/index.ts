@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * A library to interact with Monerium API.
+ * A library to interact with the Monerium API.
  *
  * ![npm version](https://img.shields.io/npm/v/@monerium/sdk)
  *
@@ -12,38 +12,17 @@
  *
  * @example
  * ```ts
- * // Current version - Deprecated in v4
- * import { MoneriumClient } from '@monerium/sdk';
- * const monerium = new MoneriumClient({
- *  clientId: '...',
- *  redirectUri: '...',
- *  environment: 'sandbox',
- * });
- *
- * // Will redirect the user to Monerium's authentication code flow.
- * await monerium.authorize();
- *
- * // Will use the authorization code flow code to get access token
- * await monerium.getAccess();
- *
- * // or use refresh token to get access token if provided.
- * await monerium.getAccess(refreshToken);
- *
- * // Retrieve profiles the client has access to.
- * await monerium.getProfiles();
- * ```
- * ```ts
- * // Upcoming v4 — factory function
  * import {
  *   randomPKCECodeVerifier,
  *   calculatePKCECodeChallenge,
  *   buildAuthorizationUrl,
  *   authorizationCodeGrant,
+ *   parseAuthorizationResponse,
  *   refreshTokenGrant,
  *   createMoneriumClient,
  * } from '@monerium/sdk';
  *
- * // --- Initiate login ---
+ * // --- Initiate login (server route) ---
  * const codeVerifier = randomPKCECodeVerifier();
  * const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
  * session.set('pkce_verifier', codeVerifier); // server-side session
@@ -56,10 +35,8 @@
  * });
  * res.redirect(url);
  *
- * // --- On the callback page ---
- * const { code } = parseAuthorizationResponse(
- *   new URL(req.url, 'https://your-app.com')
- * );
+ * // --- Handle the callback (server route) ---
+ * const { code } = parseAuthorizationResponse(req.url);
  * const codeVerifier = session.get('pkce_verifier');
  * session.delete('pkce_verifier');
  *
@@ -97,13 +74,13 @@
  * ```
  */
 
-// ─── v4 API ───────────────────────────────────────────────────────────────
+// ─── Client ───────────────────────────────────────────────────────────────────
 
-// Client
 export { createMoneriumClient } from './client';
 export type { MoneriumClientOptions } from './client';
 
-// Auth helpers
+// ─── Auth helpers ─────────────────────────────────────────────────────────────
+
 export {
   authorizationCodeGrant,
   buildAuthorizationUrl,
@@ -127,25 +104,20 @@ export type {
   RefreshTokenGrantOptions,
 } from './auth';
 
-// Errors
+// ─── Errors ───────────────────────────────────────────────────────────────────
+
 export { MoneriumApiError, MoneriumSdkError } from './errors';
 export type { MoneriumSdkErrorType } from './errors';
 
-// Transport
+// ─── Transport ────────────────────────────────────────────────────────────────
+
 export type {
   Transport,
   TransportRequest,
   TransportResponse,
 } from './transport';
 
-// ─── Deprecated — will be removed in v4.0 ────────────────────────────────────
-
-import { MoneriumClient } from './compat';
-
-export { MoneriumClient };
-export default MoneriumClient;
-
-// ─── Unchanged public API ─────────────────────────────────────────────────────
+// ─── Public API ───────────────────────────────────────────────────────────────
 
 export { default as constants } from './constants';
 export * from './types';
