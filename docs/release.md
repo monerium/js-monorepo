@@ -14,11 +14,11 @@ Releases are automated using [release-please](https://github.com/googleapis/rele
 
 ## Packages that get published
 
-| Package | Path |
-|---|---|
-| `@monerium/sdk` | `packages/sdk` |
+| Package                        | Path                          |
+| ------------------------------ | ----------------------------- |
+| `@monerium/sdk`                | `packages/sdk`                |
 | `@monerium/sdk-react-provider` | `packages/sdk-react-provider` |
-| `@monerium/openapi` | `packages/openapi` |
+| `@monerium/openapi`            | `packages/openapi`            |
 
 ## Manual publish
 
@@ -35,21 +35,22 @@ To publish without going through a full release cycle, trigger the **CI** workfl
 Publishing uses GitHub Actions OIDC — no npm automation token is needed or stored.
 
 **How it works:**
+
 - At publish time, npm exchanges a short-lived GitHub OIDC token for a granular npm access token
 - The npm registry validates the token against the Trusted Publisher configuration for each package
 - If the claims match, publishing proceeds without any stored credentials
 
 **Configuration on npmjs.com** (Settings → Trusted Publishers for each package):
 
-| Field | Value |
-|---|---|
-| Publisher | GitHub Actions |
-| Organization | `monerium` |
-| Repository | `js-monorepo` |
-| Workflow filename | `ci.yml` |
-| Environment | `npm-production` |
+| Field             | Value            |
+| ----------------- | ---------------- |
+| Publisher         | GitHub Actions   |
+| Organization      | `monerium`       |
+| Repository        | `js-monorepo`    |
+| Workflow filename | `ci.yml`         |
+| Environment       | `npm-production` |
 
-> The workflow filename must be `ci.yml` — not `publish.yml`. npm validates the `workflow_ref` claim in the OIDC token, which is always the *calling* workflow. Since all publishes (both automatic and manual) are triggered from `ci.yml`, this must match.
+> The workflow filename must be `ci.yml` — not `publish.yml`. npm validates the `workflow_ref` claim in the OIDC token, which is always the _calling_ workflow. Since all publishes (both automatic and manual) are triggered from `ci.yml`, this must match.
 
 ## Workflow structure
 
@@ -63,6 +64,32 @@ ci.yml  (single entry point for all publishes)
 ```
 
 `publish.yml` is a reusable workflow only — it has no `workflow_dispatch` trigger and cannot be run directly.
+
+## Introducing a breaking change
+
+release-please bumps the major version automatically when it sees a commit with a breaking change footer or a `!` in the type.
+
+**In your commit message, use either:**
+
+```
+feat!: remove deprecated authorize() method
+```
+
+or a footer:
+
+```
+feat: replace authorize() with buildAuthorizationUrl()
+
+BREAKING CHANGE: authorize() has been removed. Use buildAuthorizationUrl() instead.
+```
+
+Both will cause release-please to bump the major version (e.g. `1.x.x` → `2.0.0`) and add a `### ⚠ BREAKING CHANGES` section to the changelog.
+
+**Tips:**
+
+- You can stack multiple commits before merging the release PR — release-please will accumulate all breaking changes into one release
+- Add a `BREAKING CHANGE` footer with a clear description of what changed and how to migrate; this goes directly into the changelog
+- If you want to ship breaking changes alongside regular features in the same release, just include both commit types in the same batch — release-please will always use the highest version bump required
 
 ## Adjusting a version manually
 
