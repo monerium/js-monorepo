@@ -77,28 +77,9 @@ This Turborepo includes the following packages/apps:
 
 ### Pipeline
 
-We use [release-please](https://github.com/googleapis/release-please), for automated releases. The configuration file is located at `release-please-config.json`, and the manifest file is at `.release-please-manifest.json`. In general, you don't need to manually update the manifest file because the release-please action automatically updates it.
+Releases are automated with release-please and published to npm via OIDC Trusted Publisher — no tokens stored anywhere.
 
-If you need to adjust a package version, you can update the `release-please-config.json` file with `"release-as": "0.0.1"` for that package. Just remember to remove it after the release.
-
-To trigger a release, you merge a PR into the main branch. The release process will create a new release branch and a PR. When you merge this PR into the main branch, a release will be created.
-
-The pipeline will automatically publish the following packages if there are changes when a release is created:
-
-- `@monerium/sdk` at 'packages/sdk'
-- `@monerium/sdk-react-provider` at 'packages/sdk-react-provider'
-- `@monerium/openapi` at 'packages/openapi'
-- TBD: `@repo/ui` at 'packages/ui'
-
-We use OIDC - Trusted Publisher to publish to NPM.
-`Workflow filename` has to match the filename that triggers the publishing, in our case `ci.yml`
-See: https://www.npmjs.com/package/@monerium/sdk/access
-
-#### Useful links
-
-[Release please - Github action](https://github.com/marketplace/actions/release-please-action)
-
-[Release please - Config file options](https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md#configfile)
+See **[docs/release.md](docs/release.md)** for the full details.
 
 # FAQ
 
