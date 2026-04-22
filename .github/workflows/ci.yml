@@ -81,6 +81,9 @@ jobs:
   publish-sdk:
     needs: [release-please, build]
     if: needs.release-please.outputs.release_created_sdk == 'true'
+    permissions:
+      id-token: write
+      contents: read
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     with:
@@ -91,6 +94,9 @@ jobs:
   publish-sdk-react-provider:
     needs: [release-please, build]
     if: needs.release-please.outputs.release_created_sdk_react_provider == 'true'
+    permissions:
+      id-token: write
+      contents: read
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     with:
@@ -101,6 +107,9 @@ jobs:
   publish-openapi:
     needs: [release-please, build]
     if: needs.release-please.outputs.release_created_openapi == 'true'
+    permissions:
+      id-token: write
+      contents: read
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     with:
