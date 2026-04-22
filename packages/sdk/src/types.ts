@@ -1,22 +1,46 @@
 // --- Config --- //
 
+/**
+ * @group Primitives
+ */
 export type Environment = { name: ENV; api: string; web: string; wss: string };
 
+/**
+ * @group Primitives
+ */
 export type Config = {
   environments: { production: Environment; sandbox: Environment };
 };
 
+/**
+ * @group Primitives
+ */
 export type ENV = 'sandbox' | 'production';
 
 import type { EvmChainId, ProductionChain, SandboxChain } from './chains';
+/**
+ * @group Primitives
+ */
 export type { EvmChainId, ProductionChain, SandboxChain };
 
+/**
+ * @group Primitives
+ */
 export type Chain = string | ProductionChain | SandboxChain;
 
+/**
+ * @group Primitives
+ */
 export type ChainId = EvmChainId | CosmosChainId;
 
+/**
+ * @group Primitives
+ */
 export type CosmosChainId = 'noble-1' | 'grand-1' | 'florin-1';
 
+/**
+ * @group Tokens
+ */
 export enum Currency {
   eur = 'eur',
   usd = 'usd',
@@ -24,10 +48,26 @@ export enum Currency {
   isk = 'isk',
 }
 
+/**
+ * @group Tokens
+ */
 export type TokenSymbol = 'EURe' | 'GBPe' | 'USDe' | 'ISKe';
+
+/**
+ * @group Tokens
+ */
 export type Ticker = 'EUR' | 'GBP' | 'USD' | 'ISK';
+
+/**
+ * @group Tokens
+ */
 export type CurrencyCode = 'eur' | 'gbp' | 'usd' | 'isk';
 
+/**
+ * Returned by all auth grant functions. Store server-side — never in the browser.
+ * @group Auth
+ * @category Types
+ */
 export interface BearerProfile {
   access_token: string;
   token_type: string;
@@ -39,6 +79,9 @@ export interface BearerProfile {
 
 // -- authContext
 
+/**
+ * @group Profiles
+ */
 export enum Method {
   password = 'password',
   resource = 'resource',
@@ -47,17 +90,25 @@ export enum Method {
   bearer = 'bearer',
 }
 
+/**
+ * @group Profiles
+ */
 export enum ProfileType {
   corporate = 'corporate',
   personal = 'personal',
 }
 
+/**
+ * @group Profiles
+ */
 export enum Permission {
   read = 'read',
   write = 'write',
 }
-// -- getProfile
 
+/**
+ * @group Profiles
+ */
 export enum ProfileState {
   /** The profile has been created but no details have been submitted.*/
   created = 'created',
@@ -71,6 +122,9 @@ export enum ProfileState {
   blocked = 'blocked',
 }
 
+/**
+ * @group Profiles
+ */
 export enum KYCState {
   absent = 'absent',
   submitted = 'submitted',
@@ -78,12 +132,18 @@ export enum KYCState {
   confirmed = 'confirmed',
 }
 
+/**
+ * @group Profiles
+ */
 export enum KYCOutcome {
   approved = 'approved',
   rejected = 'rejected',
   unknown = 'unknown',
 }
 
+/**
+ * @group IBANs
+ */
 export enum AccountState {
   requested = 'requested',
   approved = 'approved',
@@ -92,20 +152,28 @@ export enum AccountState {
   closed = 'closed',
 }
 
+/**
+ * @group Profiles
+ */
 export interface KYC {
   state: KYCState;
   outcome: KYCOutcome;
 }
 
+/**
+ * @group Orders
+ */
 export enum PaymentStandard {
   iban = 'iban',
   scan = 'scan',
   chain = 'chain',
   account = 'account',
 }
+
 /**
  * The type of ID document. Passports, National ID cards, and driving licenses are supported.
- * The ID document must verify the person's name, birthday, and nationality
+ * The ID document must verify the person's name, birthday, and nationality.
+ * @group Profiles
  */
 export enum IdDocumentKind {
   passport = 'passport',
@@ -113,11 +181,17 @@ export enum IdDocumentKind {
   drivingLicense = 'drivingLicense',
 }
 
+/**
+ * @group Orders
+ */
 export interface Identifier {
   standard: PaymentStandard;
   bic?: string;
 }
 
+/**
+ * @group Profiles
+ */
 export interface AuthContext {
   userId: string;
   email: string;
@@ -138,19 +212,26 @@ export interface AuthContext {
   }[];
 }
 
+/**
+ * @group Profiles
+ */
 export interface ProfilesResponse {
   profiles: Profile[];
 }
+
+/**
+ * @group Profiles
+ */
 export interface Profile {
   id: string;
   name: string;
   kind: ProfileType;
   state: ProfileState;
-  // kyc: KYC;
 }
-/** @deprecated use Profile */
-export type ProfilePermissions = Profile;
 
+/**
+ * @group Profiles
+ */
 export interface ProfilesQueryParams {
   /** profile state to filter by */
   state?: ProfileState;
@@ -158,6 +239,9 @@ export interface ProfilesQueryParams {
   kind?: ProfileType;
 }
 
+/**
+ * @group Profiles
+ */
 export interface PersonalProfileDetails {
   idDocument: {
     number: string;
@@ -174,17 +258,34 @@ export interface PersonalProfileDetails {
   birthday: string;
 }
 
+/**
+ * @group Profiles
+ */
 export interface PersonalProfileDetailsRequest {
   personal: PersonalProfileDetails;
 }
 
+/**
+ * @group Profiles
+ */
 export type Representative = PersonalProfileDetails;
+
+/**
+ * @group Profiles
+ */
 export type Beneficiary = Omit<PersonalProfileDetails, 'idDocument'> & {
   /** Ownership in % that is between 25% and 100%. */
   ownershipPercentage: number;
 };
+
+/**
+ * @group Profiles
+ */
 export type Director = Omit<PersonalProfileDetails, 'idDocument'>;
 
+/**
+ * @group Profiles
+ */
 export interface CorporateProfileDetails {
   name: string;
   registrationNumber: string;
@@ -200,15 +301,26 @@ export interface CorporateProfileDetails {
   /** List of Individual who has powers to legally bind the company (power of procuration). */
   directors: Director[];
 }
+
+/**
+ * @group Profiles
+ */
 export interface CorporateProfileDetailsRequest {
   corporate: CorporateProfileDetails;
 }
 
+/**
+ * @group Profiles
+ */
 export type SubmitProfileDetailsPayload =
   | PersonalProfileDetailsRequest
   | CorporateProfileDetailsRequest;
 
 // -- getAddresses
+
+/**
+ * @group Addresses
+ */
 export interface AddressesQueryParams {
   /** Filter the list by profile */
   profile?: string;
@@ -216,6 +328,9 @@ export interface AddressesQueryParams {
   chain?: Chain | ChainId;
 }
 
+/**
+ * @group Addresses
+ */
 export interface Address {
   /** The id of the profile the address belongs to. */
   profile: string;
@@ -225,17 +340,26 @@ export interface Address {
   chains: Chain[];
 }
 
+/**
+ * @group Addresses
+ */
 export interface AddressesResponse {
   addresses: Address[];
 }
 
 // -- getBalances
 
+/**
+ * @group Addresses
+ */
 export interface CurrencyBalance {
   currency: Currency;
   amount: string;
 }
 
+/**
+ * @group Addresses
+ */
 export interface Balances {
   id: string;
   address: string;
@@ -243,13 +367,19 @@ export interface Balances {
   balances: CurrencyBalance[];
 }
 
-// --getOrders
+// -- getOrders
 
+/**
+ * @group Orders
+ */
 export enum OrderKind {
   redeem = 'redeem',
   issue = 'issue',
 }
 
+/**
+ * @group Orders
+ */
 export enum OrderState {
   placed = 'placed',
   pending = 'pending',
@@ -257,17 +387,26 @@ export enum OrderState {
   rejected = 'rejected',
 }
 
+/**
+ * @group Orders
+ */
 export interface Fee {
   provider: 'satchel';
   currency: Currency;
   amount: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface IBANIdentifier extends Identifier {
   standard: PaymentStandard.iban;
   iban: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface CrossChainIdentifier extends Identifier {
   standard: PaymentStandard.chain;
   /** The receivers address */
@@ -276,6 +415,9 @@ export interface CrossChainIdentifier extends Identifier {
   chain: Chain | ChainId;
 }
 
+/**
+ * @group Orders
+ */
 export interface BankAccountIdentifier extends Identifier {
   /** The standard of the bank account. This is used to identify generic bank account. */
   standard: PaymentStandard.account;
@@ -284,27 +426,43 @@ export interface BankAccountIdentifier extends Identifier {
   /** The address of the bank account holder. */
   address: string;
 }
+
+/**
+ * @group Orders
+ */
 export interface SCANIdentifier extends Identifier {
   standard: PaymentStandard.scan;
   sortCode: string;
   accountNumber: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface Individual extends CounterpartDetails {
   firstName?: string;
   lastName?: string;
   address?: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface Corporation extends CounterpartDetails {
   companyName: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface Issuer {
   /** The sender name. This can be a corporate or an individual. */
   name: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface Counterpart {
   identifier:
     | IBANIdentifier
@@ -314,18 +472,27 @@ export interface Counterpart {
   details: Individual | Corporation | Issuer;
 }
 
+/**
+ * @group Orders
+ */
 export interface CounterpartDetails {
   name?: string;
   bank?: CounterpartBank;
   country?: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface CounterpartBank {
   name?: string;
   address?: string;
   bic?: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface OrderMetadata {
   placedAt: string;
   processedAt?: string;
@@ -334,6 +501,9 @@ export interface OrderMetadata {
   supportingDocumentId?: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface OrderFilter {
   address?: string;
   txHash?: string;
@@ -343,6 +513,9 @@ export interface OrderFilter {
   state?: OrderState;
 }
 
+/**
+ * @group Orders
+ */
 export interface Order {
   id: string;
   profile: string;
@@ -351,8 +524,6 @@ export interface Order {
   chain: Chain;
   amount: string;
   currency: Currency;
-  // totalFee: string;
-  // fees: Fee[];
   counterpart: Counterpart;
   memo: string;
   referenceNumber?: string; // see https://help.monerium.com/article/22-using-memos-and-references-in-sepa-payments
@@ -360,13 +531,18 @@ export interface Order {
   state: OrderState;
 }
 
+/**
+ * @group Orders
+ */
 export interface OrdersResponse {
   orders: Order[];
 }
 
 // -- getTokens
+
 /**
  * Information about the EURe token on different networks.
+ * @group Tokens
  */
 export interface Token {
   currency: Currency;
@@ -379,10 +555,16 @@ export interface Token {
   decimals: number;
 }
 
-// --placeOrder
+// -- placeOrder
 
+/**
+ * @group Orders
+ */
 export type NewOrder = NewOrderByAddress | NewOrderByAccountId;
 
+/**
+ * @group Orders
+ */
 export interface NewOrderCommon {
   /** The unique identifier of the order */
   id?: string;
@@ -394,23 +576,37 @@ export interface NewOrderCommon {
   memo?: string;
   supportingDocumentId?: string;
 }
+
+/**
+ * @group Orders
+ */
 export interface NewOrderByAddress extends NewOrderCommon {
   address: string;
   /** The senders network  */
   chain: Chain | ChainId;
 }
+
+/**
+ * @group Orders
+ */
 export interface NewOrderByAccountId extends NewOrderCommon {
   accountId: string;
 }
 
 // -- uploadSupportingDocument
 
+/**
+ * @group Orders
+ */
 export interface SupportingDocMetadata {
   uploadedBy: string;
   createdAt: string;
   updatedAt: string;
 }
 
+/**
+ * @group Orders
+ */
 export interface SupportingDoc {
   id: string;
   name: string;
@@ -422,6 +618,9 @@ export interface SupportingDoc {
 
 // -- linkAddress
 
+/**
+ * @group Addresses
+ */
 export interface LinkAddress {
   /** Profile ID that owns the address. */
   profile?: string;
@@ -441,6 +640,10 @@ export interface LinkAddress {
   signature: string;
   chain: Chain | ChainId;
 }
+
+/**
+ * @group Addresses
+ */
 export interface LinkedAddress {
   profile: string;
   address: string;
@@ -453,6 +656,9 @@ export interface LinkedAddress {
 
 // -- IBANs
 
+/**
+ * @group IBANs
+ */
 export interface RequestIbanPayload {
   /** the address to request the IBAN. */
   address: string;
@@ -462,11 +668,17 @@ export interface RequestIbanPayload {
   emailNotifications: boolean;
 }
 
+/**
+ * @group IBANs
+ */
 export interface IbansQueryParams {
   profile?: string;
   chain?: Chain | ChainId;
 }
 
+/**
+ * @group IBANs
+ */
 export interface IBAN {
   iban: string;
   bic: string;
@@ -477,10 +689,16 @@ export interface IBAN {
   emailNotifications: boolean;
 }
 
+/**
+ * @group IBANs
+ */
 export interface IBANsResponse {
   ibans: IBAN[];
 }
 
+/**
+ * @group IBANs
+ */
 export interface MoveIbanPayload {
   /** the address to move iban to */
   address: string;
@@ -488,6 +706,10 @@ export interface MoveIbanPayload {
   chain: Chain | ChainId;
 }
 
+/**
+ * @group Primitives
+ * @internal
+ */
 export type ResponseStatus = {
   status: number;
   statusText: string;
@@ -497,11 +719,13 @@ export type ResponseStatus = {
 
 /**
  * Type of pending signature
+ * @group Signatures
  */
 export type PendingSignatureKind = 'linkAddress' | 'order';
 
 /**
  * Base interface for pending signatures
+ * @group Signatures
  */
 interface PendingSignatureBase {
   kind: PendingSignatureKind;
@@ -512,6 +736,7 @@ interface PendingSignatureBase {
 
 /**
  * Pending signature for an order
+ * @group Signatures
  */
 export interface PendingOrderSignature extends PendingSignatureBase {
   id: string;
@@ -523,6 +748,7 @@ export interface PendingOrderSignature extends PendingSignatureBase {
 
 /**
  * Pending signature for linking an address
+ * @group Signatures
  */
 export interface PendingLinkAddressSignature extends PendingSignatureBase {
   kind: 'linkAddress';
@@ -530,6 +756,7 @@ export interface PendingLinkAddressSignature extends PendingSignatureBase {
 
 /**
  * Union type for all pending signature types
+ * @group Signatures
  */
 export type PendingSignature =
   | PendingOrderSignature
@@ -537,6 +764,7 @@ export type PendingSignature =
 
 /**
  * Query parameters for fetching pending signatures
+ * @group Signatures
  */
 export interface SignaturesQueryParams {
   /** Filter by blockchain address */
@@ -551,6 +779,7 @@ export interface SignaturesQueryParams {
 
 /**
  * Response from the signatures endpoint
+ * @group Signatures
  */
 export interface SignaturesResponse {
   /** Array of pending signatures */

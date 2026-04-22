@@ -46,6 +46,10 @@ function resolveChain<T extends Record<string, unknown>>(obj: T): T {
 
 // ─── Client options ───────────────────────────────────────────────────────────
 
+/**
+ * @group Client
+ * @category Types
+ */
 export type MoneriumClientOptions =
   | {
       environment?: ENV;

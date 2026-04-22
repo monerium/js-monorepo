@@ -49,10 +49,16 @@ export const EVM_CHAIN_PAIRS = [
 
 // ── Derived types ─────────────────────────────────────────────────────────────
 
+/**
+ * @group Primitives
+ */
 export type ProductionChain =
   | (typeof EVM_CHAIN_PAIRS)[number]['production']['id']
   | 'noble';
 
+/**
+ * @group Primitives
+ */
 export type SandboxChain =
   | (typeof EVM_CHAIN_PAIRS)[number]['sandbox']['id']
   | 'grand';
@@ -60,6 +66,7 @@ export type SandboxChain =
 /**
  * All known EVM chain IDs. The union extends `number` for backwards
  * compatibility — known values are listed in EVM_CHAIN_PAIRS above.
+ * @group Primitives
  */
 export type EvmChainId =
   | number

@@ -1,3 +1,6 @@
+/**
+ * @group Utilities
+ */
 export default {
   /**
    * The message used to link addresses.

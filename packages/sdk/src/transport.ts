@@ -2,6 +2,10 @@ import { MoneriumSdkError } from './errors';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+/**
+ * @group Client
+ * @category Types
+ */
 export type TransportRequest = {
   method: string;
   url: string;
@@ -10,6 +14,10 @@ export type TransportRequest = {
   signal?: AbortSignal; // for request cancellation
 };
 
+/**
+ * @group Client
+ * @category Types
+ */
 export type TransportResponse = {
   status: number;
   headers?: Record<string, string>;
@@ -21,6 +29,8 @@ export type TransportResponse = {
  * `Accept`) are pre-populated. Must return a `Promise` resolving with the raw
  * response `status` and `bodyText`. Throw on network-level failures.
  * The SDK owns JSON parsing and error normalisation.
+ * @group Client
+ * @category Types
  */
 export type Transport = (
   request: TransportRequest

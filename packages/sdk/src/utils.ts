@@ -14,11 +14,11 @@ import {
 } from './types';
 
 /**
- *
  * @param d Date to be formatted
  * @returns RFC3339 date format.
  * @example 2023-04-30T12:00:00+01:00
  * @example 2023-04-30T02:08:15Z
+ * @group Utilities
  */
 export const rfc3339 = (d: Date) => {
   if (d.toString() === 'Invalid Date') {
@@ -72,6 +72,7 @@ const isValidEvmName = (chain: string): boolean =>
  * This will resolve the chainId number to the corresponding chain name.
  * @param chain The chainId of the network
  * @returns chain name, 'ethereum', 'polygon', 'gnosis', etc.
+ * @group Utilities
  */
 export const parseChain = (chain: Chain | ChainId): Chain => {
   if (typeof chain === 'number') {
@@ -117,6 +118,7 @@ export const parseChainBackwardsCompatible = (
  * @example `Send EUR 1 to 0x1234123412341234123412341234123412341234 on ethereum at 2023-04-30T12:00:00+01:00`
  *
  * @example `Send EUR 1 to IS1234123412341234 at 2023-04-30T12:00:00+01:00`
+ * @group Utilities
  */
 export const placeOrderMessage = (
   amount: string | number,
@@ -135,7 +137,9 @@ export const placeOrderMessage = (
   return `Send ${curr} ${amount} to ${receiver} at ${rfc3339(new Date())}`;
 };
 /**
- * https://monerium.com/siwe
+ * Construct an EIP-4361 SIWE message for use with {@link buildSiweAuthorizationUrl}.
+ * @see https://monerium.com/siwe
+ * @group Utilities
  */
 export const siweMessage = ({
   domain,
@@ -213,6 +217,7 @@ export const urlEncoded = (
  * getChain(137) // 'polygon'
  * getChain(80002) // 'amoy'
  * ```
+ * @group Utilities
  */
 export const getChain = (chainId: number): Chain => {
   const name = chainIdToName.get(chainId);
@@ -220,6 +225,10 @@ export const getChain = (chainId: number): Chain => {
   return name as Chain;
 };
 
+/**
+ * Shorten an IBAN for display: `GB29...2917`
+ * @group Utilities
+ */
 export const shortenIban = (iban?: string) => {
   if (typeof iban !== 'string' || !iban?.length) return iban;
   const ns = iban.replace(/\s/g, ''); // remove spaces
@@ -228,6 +237,10 @@ export const shortenIban = (iban?: string) => {
     : iban;
 };
 
+/**
+ * Shorten a blockchain address for display: `0x1234...abcd`
+ * @group Utilities
+ */
 export const shortenAddress = (address?: string) => {
   if (typeof address !== 'string' || !address?.length) return address;
   return address?.length > 11

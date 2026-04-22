@@ -10,7 +10,7 @@ import { urlEncoded } from './utils';
 
 /**
  * @group Auth
- * @category Authorization
+ * @category Types
  */
 export interface BuildAuthorizationUrlOptions {
   environment?: ENV;
@@ -30,7 +30,7 @@ export interface BuildAuthorizationUrlOptions {
  * Returns a URL string — the caller navigates to it.
  * The SDK does not redirect.
  * @group Auth
- * @category Authorization
+ * @category Functions
  */
 export const buildAuthorizationUrl = (
   options: BuildAuthorizationUrlOptions
@@ -56,7 +56,7 @@ export const buildAuthorizationUrl = (
 
 /**
  * @group Auth
- * @category Authorization
+ * @category Types
  */
 export interface BuildSiweAuthorizationUrlOptions {
   environment?: ENV;
@@ -74,7 +74,7 @@ export interface BuildSiweAuthorizationUrlOptions {
  * The SDK does not redirect.
  *
  * @group Auth
- * @category Authorization
+ * @category Functions
  */
 export const buildSiweAuthorizationUrl = (
   options: BuildSiweAuthorizationUrlOptions
@@ -143,7 +143,7 @@ async function tokenRequest(
 
 /**
  * @group Auth
- * @category Authorization
+ * @category Types
  */
 export interface AuthorizationCodeGrantOptions {
   environment?: ENV;
@@ -159,7 +159,7 @@ export interface AuthorizationCodeGrantOptions {
  * The caller stores the returned BearerProfile — the SDK does not write to any storage.
  *
  * @group Auth
- * @category Authorization
+ * @category Functions
  */
 export const authorizationCodeGrant = (
   options: AuthorizationCodeGrantOptions
@@ -181,7 +181,7 @@ export const authorizationCodeGrant = (
 
 /**
  * @group Auth
- * @category Authorization
+ * @category Types
  */
 export interface RefreshTokenGrantOptions {
   environment?: ENV;
@@ -194,7 +194,7 @@ export interface RefreshTokenGrantOptions {
  * Get a new access token using a refresh token.
  * The caller stores the returned BearerProfile — the SDK does not write to any storage.
  * @group Auth
- * @category Authorization
+ * @category Functions
  */
 export const refreshTokenGrant = (
   options: RefreshTokenGrantOptions
@@ -214,7 +214,7 @@ export const refreshTokenGrant = (
 
 /**
  * @group Auth
- * @category Authorization
+ * @category Types
  */
 export interface ClientCredentialsGrantOptions {
   environment?: ENV;
@@ -228,7 +228,7 @@ export interface ClientCredentialsGrantOptions {
  * clientSecret must never be used in a browser context.
  *
  * @group Auth
- * @category Authorization
+ * @category Functions
  */
 export const clientCredentialsGrant = (
   options: ClientCredentialsGrantOptions
@@ -250,7 +250,7 @@ export const clientCredentialsGrant = (
 
 /**
  * @group Auth
- * @category Helpers
+ * @category Types
  */
 export interface ParsedAuthorizationResponse {
   code?: string;
@@ -262,7 +262,6 @@ export interface ParsedAuthorizationResponse {
 /**
  * Parse a callback URL or query string into structured fields.
  *
- * - No globals. No side effects. Never throws.
  * - Returns an empty object if none of the expected parameters are present.
  * - Check for the presence of `code` or `error` to determine if the URL
  *   contains an OAuth2 authorization response.
@@ -271,7 +270,7 @@ export interface ParsedAuthorizationResponse {
  * const { code, error } = parseAuthorizationResponse(req.url);
  * const { code, error } = parseAuthorizationResponse('?code=abc&state=xyz');
  * @group Auth
- * @category Helpers
+ * @category Functions
  */
 export const parseAuthorizationResponse = (
   input: string

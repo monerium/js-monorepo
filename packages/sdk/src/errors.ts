@@ -13,8 +13,7 @@
  *     console.log(err.errors);  // field-level validation errors, if present
  *   }
  * }
- * @group v4
- * @category v4 - Errors
+ * @group Errors
  */
 export class MoneriumApiError extends Error {
   code: number;
@@ -38,6 +37,9 @@ export class MoneriumApiError extends Error {
   }
 }
 
+/**
+ * @group Errors
+ */
 export type MoneriumSdkErrorType =
   | 'network_error' //          fetch failed (DNS, timeout, connection refused)
   | 'authentication_required' // authenticated endpoint called with no token
@@ -55,8 +57,7 @@ export type MoneriumSdkErrorType =
  *     console.log(err.cause); // underlying fetch error, if type === 'network_error'
  *   }
  * }
- * @group v4
- * @category v4 - Errors
+ * @group Errors
  */
 export class MoneriumSdkError extends Error {
   type: MoneriumSdkErrorType;
