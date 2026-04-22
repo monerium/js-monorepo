@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.1.0...openapi-v2.2.0) (2026-04-22)
+
+
+### Features
+
+* new developer experience docx ([#168](https://github.com/monerium/js-monorepo/issues/168)) ([211888b](https://github.com/monerium/js-monorepo/commit/211888bc26ef8e9870740442d9f4c89783007261))
+
+
+### Bug Fixes
+
+* openapi link to detail authorization ([b13c099](https://github.com/monerium/js-monorepo/commit/b13c09965e35533d7fac9ec1d1ac0f86e0d7d87d))
+
 ## [2.1.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.0.3...openapi-v2.1.0) (2026-04-09)
 
 
