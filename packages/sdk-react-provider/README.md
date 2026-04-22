@@ -1,7 +1,7 @@
 | [Monerium.com](https://monerium.com/) | [Monerium.app](https://monerium.app/) | [Monerium Dev Docs](https://docs.monerium.com/) |
 | ------------------------------------- | ------------------------------------- | ----------------------------------------------- |
 
-# Monerium SDK React Provider
+# Monerium SDK React Provider.
 
 This package depends on the SDK, it's currently pinned to v3.5.
 

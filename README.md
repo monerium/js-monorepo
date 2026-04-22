@@ -90,6 +90,10 @@ The pipeline will automatically publish the following packages if there are chan
 - `@monerium/openapi` at 'packages/openapi'
 - TBD: `@repo/ui` at 'packages/ui'
 
+We use OIDC - Trusted Publisher to publish to NPM.
+`Workflow filename` has to match the filename that triggers the publishing, in our case `ci.yml`
+See: https://www.npmjs.com/package/@monerium/sdk/access
+
 #### Useful links
 
 [Release please - Github action](https://github.com/marketplace/actions/release-please-action)
