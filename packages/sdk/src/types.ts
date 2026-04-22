@@ -1,9 +1,11 @@
 // --- Config --- //
 
+import { Chain, ChainId } from './chains';
+
 /**
  * @group Primitives
  */
-export type Environment = { name: ENV; api: string; web: string; wss: string };
+export type Environment = { name: ENV; api: string; web: string };
 
 /**
  * @group Primitives
@@ -16,27 +18,6 @@ export type Config = {
  * @group Primitives
  */
 export type ENV = 'sandbox' | 'production';
-
-import type { EvmChainId, ProductionChain, SandboxChain } from './chains';
-/**
- * @group Primitives
- */
-export type { EvmChainId, ProductionChain, SandboxChain };
-
-/**
- * @group Primitives
- */
-export type Chain = string | ProductionChain | SandboxChain;
-
-/**
- * @group Primitives
- */
-export type ChainId = EvmChainId | CosmosChainId;
-
-/**
- * @group Primitives
- */
-export type CosmosChainId = 'noble-1' | 'grand-1' | 'florin-1';
 
 /**
  * @group Tokens
@@ -560,13 +541,11 @@ export interface Token {
 /**
  * @group Orders
  */
-export type NewOrder = NewOrderByAddress | NewOrderByAccountId;
-
-/**
- * @group Orders
- */
-export interface NewOrderCommon {
+export interface NewOrder {
   /** The unique identifier of the order */
+  address: string;
+  /** The senders network  */
+  chain: Chain | ChainId;
   id?: string;
   amount: string;
   signature: string;
@@ -577,24 +556,7 @@ export interface NewOrderCommon {
   supportingDocumentId?: string;
 }
 
-/**
- * @group Orders
- */
-export interface NewOrderByAddress extends NewOrderCommon {
-  address: string;
-  /** The senders network  */
-  chain: Chain | ChainId;
-}
-
-/**
- * @group Orders
- */
-export interface NewOrderByAccountId extends NewOrderCommon {
-  accountId: string;
-}
-
 // -- uploadSupportingDocument
-
 /**
  * @group Orders
  */
@@ -710,9 +672,9 @@ export interface MoveIbanPayload {
  * @group Primitives
  * @internal
  */
-export type ResponseStatus = {
-  status: number;
-  statusText: string;
+export type AcceptedResponse = {
+  code: 202;
+  status: 'Accepted';
 };
 
 // -- Signatures

@@ -1,16 +1,16 @@
+import { Chain, ChainId } from './chains';
 import { MoneriumApiError, MoneriumSdkError } from './errors';
 import { queryParams } from './helpers';
 import { getEnv } from './helpers/internal.helpers';
 import type { Transport } from './transport';
 import { defaultTransport } from './transport';
 import type {
+  AcceptedResponse,
   Address,
   AddressesQueryParams,
   AddressesResponse,
   AuthContext,
   Balances,
-  Chain,
-  ChainId,
   Currency,
   ENV,
   IBAN,
@@ -27,7 +27,6 @@ import type {
   ProfilesQueryParams,
   ProfilesResponse,
   RequestIbanPayload,
-  ResponseStatus,
   SignaturesQueryParams,
   SignaturesResponse,
   SubmitProfileDetailsPayload,
@@ -70,14 +69,158 @@ export type MoneriumClientOptions =
       transport?: Transport;
     };
 
+// ─── Client interface ─────────────────────────────────────────────────────────
+
+/**
+ * The client instance returned by {@link createMoneriumClient}.
+ * Provides typed methods for every Monerium REST API endpoint.
+ * @group Client
+ * @category Interface
+ */
+export interface MoneriumClient {
+  // ─── Auth ────────────────────────────────────────────────────────────────
+  /**
+   * @see {@link https://docs.monerium.com/api#tag/auth/operation/auth-context | API Documentation}
+   */
+  getAuthContext(): Promise<AuthContext>;
+
+  // ─── Profiles ────────────────────────────────────────────────────────────
+  /**
+   * @param id - The id of the profile to fetch.
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile | API Documentation}
+   */
+  getProfile(id: string): Promise<Profile>;
+
+  /**
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profiles | API Documentation}
+   */
+  getProfiles(params?: ProfilesQueryParams): Promise<ProfilesResponse>;
+
+  /**
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
+   */
+  submitProfileDetails(
+    profileId: string,
+    body: SubmitProfileDetailsPayload
+  ): Promise<AcceptedResponse>;
+
+  // ─── Addresses ───────────────────────────────────────────────────────────
+  /**
+   * Get details for a single address after it has been linked to Monerium.
+   * @param address - The public key of the blockchain account.
+   * @see {@link https://docs.monerium.com/api#tag/addresses/operation/address | API Documentation}
+   */
+  getAddress(address: string): Promise<Address>;
+
+  /**
+   * @see {@link https://docs.monerium.com/api#tag/addresses/operation/addresses | API Documentation}
+   */
+  getAddresses(params?: AddressesQueryParams): Promise<AddressesResponse>;
+
+  /**
+   * @see {@link https://docs.monerium.com/api#tag/addresses/operation/balances | API Documentation}
+   */
+  getBalances(
+    address: string,
+    chain: Chain | ChainId,
+    currencies?: Currency | Currency[]
+  ): Promise<Balances>;
+
+  /**
+   * Add a new address to the profile.
+   * @see {@link https://docs.monerium.com/api#tag/addresses/operation/link-address | API Documentation}
+   */
+  linkAddress(payload: LinkAddress): Promise<LinkedAddress>;
+
+  // ─── IBANs ───────────────────────────────────────────────────────────────
+  /**
+   * Fetch details about a single IBAN.
+   * @param iban - The IBAN to fetch.
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/iban | API Documentation}
+   */
+  getIban(iban: string): Promise<IBAN>;
+
+  /**
+   * Fetch all IBANs for the profile.
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/ibans | API Documentation}
+   */
+  getIbans(params?: IbansQueryParams): Promise<IBANsResponse>;
+
+  /**
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/request-iban | API Documentation}
+   */
+  requestIban(payload: RequestIbanPayload): Promise<AcceptedResponse>;
+
+  /**
+   * @param iban - The IBAN to move.
+   * @param payload - The destination address and chain.
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/move-iban | API Documentation}
+   */
+  moveIban(iban: string, payload: MoveIbanPayload): Promise<AcceptedResponse>;
+
+  // ─── Orders ──────────────────────────────────────────────────────────────
+  /**
+   * @see {@link https://docs.monerium.com/api/#tag/orders/operation/order | API Documentation}
+   */
+  getOrder(orderId: string): Promise<Order>;
+
+  /**
+   * @see {@link https://docs.monerium.com/api/#tag/orders/operation/orders | API Documentation}
+   */
+  getOrders(filter?: OrderFilter): Promise<OrdersResponse>;
+
+  /**
+   * Place a new order.
+   *
+   * **Note:** For multi-signature orders, the API returns a 202 Accepted response
+   * with `{ status: 202, statusText: "Accepted" }` instead of the full Order object.
+   *
+   * @returns `Order` for regular orders; `AcceptedResponse` for multi-sig orders.
+   * @see {@link https://docs.monerium.com/api#tag/orders/operation/post-orders | API Documentation}
+   */
+  placeOrder(order: NewOrder): Promise<Order | AcceptedResponse>;
+
+  // ─── Tokens ──────────────────────────────────────────────────────────────
+  /**
+   * @see {@link https://docs.monerium.com/api#tag/tokens | API Documentation}
+   */
+  getTokens(): Promise<Token[]>;
+
+  // ─── Signatures ──────────────────────────────────────────────────────────
+  /**
+   * Get pending signatures for the authenticated user.
+   * @see {@link https://docs.monerium.com/api#tag/signatures/operation/get-signatures | API Documentation}
+   */
+  getSignatures(params?: SignaturesQueryParams): Promise<SignaturesResponse>;
+
+  // ─── Files ───────────────────────────────────────────────────────────────
+  /**
+   * Upload a supporting document for KYC onboarding or order support.
+   *
+   * Requires `Blob` and `FormData` — available in Node.js 18+, browsers, and
+   * Cloudflare Workers. Not available in all environments (e.g. MetaMask Snaps).
+   *
+   * @param document - File content as a `Blob`, `Uint8Array`, or `ArrayBuffer`.
+   *   Node.js `Buffer` is a `Uint8Array` and works directly.
+   * @param filename - Optional filename sent to the API (e.g. `'kyc.pdf'`).
+   * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
+   */
+  uploadSupportingDocument(
+    document: Blob | Uint8Array | ArrayBuffer,
+    filename?: string
+  ): Promise<SupportingDoc>;
+}
+
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
 /**
- * Creates a Monerium client instance.
+ * Creates a Monerium API client.
  * @group Client
- * @category Client
+ * @category Functions
  */
-export function createMoneriumClient(options: MoneriumClientOptions) {
+export function createMoneriumClient(
+  options: MoneriumClientOptions
+): MoneriumClient {
   const env = getEnv(options.environment);
   const transport = options.transport ?? defaultTransport;
 
@@ -185,75 +328,33 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
   }
 
   return {
-    // ─── Auth ──────────────────────────────────────────────────────────────
+    getAuthContext: () => request<AuthContext>('GET', 'auth/context'),
 
-    /**
-     * @group Authentication
-     * @see {@link https://docs.monerium.com/api#tag/auth/operation/auth-context | API Documentation}
-     */
-    getAuthContext: (): Promise<AuthContext> =>
-      request<AuthContext>('GET', 'auth/context'),
+    getProfile: (id: string) => request<Profile>('GET', `profiles/${id}`),
 
-    // ─── Profiles ──────────────────────────────────────────────────────────
-
-    /**
-     * @group Profiles
-     * @param {string} profile - the id of the profile to fetch.
-     * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile | API Documentation}
-     */
-    getProfile: (id: string): Promise<Profile> =>
-      request<Profile>('GET', `profiles/${id}`),
-
-    /**
-     * @group Profiles
-     * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profiles | API Documentation}
-     */
-    getProfiles: (params?: ProfilesQueryParams): Promise<ProfilesResponse> =>
+    getProfiles: (params?: ProfilesQueryParams) =>
       request<ProfilesResponse>('GET', `profiles${queryParams(params)}`),
 
-    /**
-     * @group Profiles
-     * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
-     */
     submitProfileDetails: (
       profileId: string,
       body: SubmitProfileDetailsPayload
-    ): Promise<ResponseStatus> =>
-      request<ResponseStatus>('PATCH', `profiles/${profileId}/details`, body),
+    ) =>
+      request<AcceptedResponse>('PATCH', `profiles/${profileId}/details`, body),
 
-    // ─── Addresses ─────────────────────────────────────────────────────────
-
-    /**
-     * Get details for a single address by using the address public key after the
-     * address has been successfully linked to Monerium.
-     *
-     * @group Addresses
-     * @param {string} address - The public key of the blockchain account.
-     * @see {@link https://docs.monerium.com/api#tag/addresses/operation/address | API Documentation}
-     */
-    getAddress: (address: string): Promise<Address> =>
+    getAddress: (address: string) =>
       request<Address>('GET', `addresses/${address}`),
 
-    /**
-     * @group Addresses
-     * @param {AddressesQueryParams} [params] - No required parameters.
-     * @see {@link https://docs.monerium.com/api#tag/addresses/operation/addresses | API Documentation}
-     */
-    getAddresses: (params?: AddressesQueryParams): Promise<AddressesResponse> =>
+    getAddresses: (params?: AddressesQueryParams) =>
       request<AddressesResponse>(
         'GET',
         `addresses${queryParams(params ? resolveChain(params as Record<string, unknown>) : undefined)}`
       ),
 
-    /**
-     * @group Addresses
-     * @see {@link https://docs.monerium.com/api#tag/addresses/operation/balances | API Documentation}
-     */
     getBalances: (
       address: string,
       chain: Chain | ChainId,
       currencies?: Currency | Currency[]
-    ): Promise<Balances> => {
+    ) => {
       const resolvedChain = parseChain(chain);
       const currencyParams = Array.isArray(currencies)
         ? currencies.map((c) => `currency=${c}`).join('&')
@@ -267,105 +368,45 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
       );
     },
 
-    /**
-     * Add a new address to the profile.
-     *
-     * @group Addresses
-     * @see {@link https://docs.monerium.com/api#tag/addresses/operation/link-address | API Documentation}
-     */
-    linkAddress: (payload: LinkAddress): Promise<LinkedAddress> =>
+    linkAddress: (payload: LinkAddress) =>
       request<LinkedAddress>(
         'POST',
         'addresses',
         resolveChain(payload as unknown as Record<string, unknown>)
       ),
 
-    // ─── IBANs ─────────────────────────────────────────────────────────────
+    getIban: (iban: string) => request<IBAN>('GET', `ibans/${encodeURI(iban)}`),
 
-    /**
-     * Fetch details about a single IBAN.
-     *
-     * @group IBANs
-     * @param {string} iban - the IBAN to fetch.
-     * @see {@link https://docs.monerium.com/api#tag/ibans/operation/iban | API Documentation}
-     */
-    getIban: (iban: string): Promise<IBAN> =>
-      request<IBAN>('GET', `ibans/${encodeURI(iban)}`),
-
-    /**
-     * Fetch all IBANs for the profile.
-     *
-     * @group IBANs
-     * @see {@link https://docs.monerium.com/api#tag/ibans/operation/ibans | API Documentation}
-     */
-    getIbans: (params?: IbansQueryParams): Promise<IBANsResponse> => {
+    getIbans: (params?: IbansQueryParams) => {
       const resolved = params
         ? resolveChain(params as unknown as Record<string, unknown>)
         : undefined;
       return request<IBANsResponse>('GET', `ibans${queryParams(resolved)}`);
     },
 
-    /**
-     * @group IBANs
-     * @param {RequestIbanPayload} payload
-     * @see {@link https://docs.monerium.com/api#tag/ibans/operation/request-iban | API Documentation}
-     */
     requestIban: ({
       address,
       chain,
       emailNotifications = true,
-    }: RequestIbanPayload): Promise<ResponseStatus> =>
-      request<ResponseStatus>('POST', 'ibans', {
+    }: RequestIbanPayload) =>
+      request<AcceptedResponse>('POST', 'ibans', {
         address,
         chain: parseChain(chain),
         emailNotifications,
       }),
 
-    /**
-     * @group IBANs
-     * @param {string} iban - the IBAN to move.
-     * @param {MoveIbanPayload} payload - the payload to move the IBAN.
-     * @see {@link https://docs.monerium.com/api#tag/ibans/operation/move-iban | API Documentation}
-     */
-    moveIban: (
-      iban: string,
-      { address, chain }: MoveIbanPayload
-    ): Promise<ResponseStatus> =>
-      request<ResponseStatus>('PATCH', `ibans/${iban}`, {
+    moveIban: (iban: string, { address, chain }: MoveIbanPayload) =>
+      request<AcceptedResponse>('PATCH', `ibans/${iban}`, {
         address,
         chain: parseChain(chain),
       }),
 
-    // ─── Orders ────────────────────────────────────────────────────────────
+    getOrder: (orderId: string) => request<Order>('GET', `orders/${orderId}`),
 
-    /**
-     * @group Orders
-     * @see {@link https://docs.monerium.com/api/#tag/orders/operation/order | API Documentation}
-     */
-    getOrder: (orderId: string): Promise<Order> =>
-      request<Order>('GET', `orders/${orderId}`),
-
-    /**
-     * @group Orders
-     * @see {@link https://docs.monerium.com/api/#tag/orders/operation/orders | API Documentation}
-     */
-    getOrders: (filter?: OrderFilter): Promise<OrdersResponse> =>
+    getOrders: (filter?: OrderFilter) =>
       request<OrdersResponse>('GET', `orders${queryParams(filter)}`),
 
-    /**
-     * Place a new order.
-     *
-     * **Note:** For multi-signature orders, the API returns a 202 Accepted response
-     * with `{status: 202, statusText: "Accepted"}` instead of the full Order object.
-     *
-     * @returns Promise that resolves to either:
-     * - `Order` - Full order object for regular orders
-     * - `ResponseStatus` - Status object for multi-sig orders
-     *
-     * @group Orders
-     * @see {@link https://docs.monerium.com/api#tag/orders/operation/post-orders | API Documentation}
-     */
-    placeOrder: (order: NewOrder): Promise<Order | ResponseStatus> => {
+    placeOrder: (order: NewOrder) => {
       const body = {
         kind: 'redeem' as const,
         ...resolveChain(order as unknown as Record<string, unknown>),
@@ -378,29 +419,12 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
           },
         }),
       };
-      return request<Order | ResponseStatus>('POST', 'orders', body);
+      return request<Order | AcceptedResponse>('POST', 'orders', body);
     },
 
-    // ─── Tokens ────────────────────────────────────────────────────────────
+    getTokens: () => request<Token[]>('GET', 'tokens'),
 
-    /**
-     * @group Tokens
-     * @see {@link https://docs.monerium.com/api#tag/tokens | API Documentation}
-     */
-    getTokens: (): Promise<Token[]> => request<Token[]>('GET', 'tokens'),
-
-    // ─── Signatures ────────────────────────────────────────────────────────
-
-    /**
-     * Get pending signatures for the authenticated user.
-     *
-     * @group Signatures
-     * @param {SignaturesQueryParams} [params] - Optional query parameters to filter signatures.
-     * @see {@link https://docs.monerium.com/api#tag/signatures/operation/get-signatures | API Documentation}
-     */
-    getSignatures: (
-      params?: SignaturesQueryParams
-    ): Promise<SignaturesResponse> => {
+    getSignatures: (params?: SignaturesQueryParams) => {
       const resolved = params
         ? resolveChain(params as unknown as Record<string, unknown>)
         : undefined;
@@ -410,26 +434,10 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
       );
     },
 
-    // ─── KYC ───────────────────────────────────────────────────────────────
-
-    /**
-     * @group Files
-     * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
-     */
-    /**
-     * Upload a supporting document for KYC onboarding or order support.
-     *
-     * Requires `Blob` and `FormData` support — available in Node.js 18+,
-     * browsers, and Cloudflare Workers. Not available in all environments.
-     *
-     * @param document - File content as a `Blob`, `Uint8Array`, or `ArrayBuffer`.
-     *   Node.js `Buffer` is a `Uint8Array` and works directly.
-     * @param filename - Optional filename sent to the API (e.g. `'kyc.pdf'`).
-     */
     uploadSupportingDocument: (
       document: Blob | Uint8Array | ArrayBuffer,
       filename?: string
-    ): Promise<SupportingDoc> => {
+    ) => {
       const blob = document instanceof Blob ? document : new Blob([document]);
       const formData = new FormData();
       formData.append('file', blob, filename);

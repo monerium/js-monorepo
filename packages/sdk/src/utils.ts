@@ -1,17 +1,13 @@
 import {
+  Chain,
+  ChainId,
   chainIdToName,
+  EvmChainId,
   productionToSandbox,
   validEvmChainNames,
 } from './chains';
 import { randomPKCECodeVerifier } from './helpers/auth.helpers';
-import {
-  Balances,
-  Chain,
-  ChainId,
-  Currency,
-  Environment,
-  EvmChainId,
-} from './types';
+import { Balances, Currency, Environment } from './types';
 
 /**
  * @param d Date to be formatted
@@ -270,7 +266,7 @@ const chainNameBackwardsCompatibility = (
   env: Environment['name']
 ) => {
   if (env === 'sandbox' && typeof chain === 'string') {
-    return productionToSandbox.get(chain) ?? chain;
+    return (productionToSandbox.get(chain) as Chain) ?? chain;
   }
   return chain;
 };

@@ -10,6 +10,33 @@
  * pnpm add @monerium/sdk
  * ```
  *
+ * ## Overview
+ *
+ * The SDK is designed for **Node.js and server-side runtimes**. Most Monerium API
+ * endpoints will eventually be CORS-locked and cannot be called directly from a browser.
+ *
+ * The auth flow is a explicit sequence of function calls that you orchestrate.
+ * Each function returns a value — nothing is stored, redirected, or mutated
+ * unless you explicitly do so. Tokens, verifiers, and expiry values are returned
+ * as plain objects for you to store however you choose.
+ *
+ * ## Custom transport
+ *
+ * By default the SDK uses the platform's built-in `fetch`. You can replace it
+ * with a `transport` option on {@link createMoneriumClient} — useful for
+ * injecting custom headers, routing requests through a proxy, or testing:
+ *
+ * ```ts
+ * const client = createMoneriumClient({
+ *   environment: 'sandbox',
+ *   accessToken: token,
+ *   transport: async ({ method, url, headers, body }) => {
+ *     const res = await myFetch(url, { method, headers, body });
+ *     return { status: res.status, bodyText: await res.text() };
+ *   },
+ * });
+ * ```
+ *
  * @example
  * ```ts
  * import {
@@ -77,7 +104,7 @@
 // ─── Client ───────────────────────────────────────────────────────────────────
 
 export { createMoneriumClient } from './client';
-export type { MoneriumClientOptions } from './client';
+export type { MoneriumClient, MoneriumClientOptions } from './client';
 
 // ─── Auth helpers ─────────────────────────────────────────────────────────────
 
@@ -119,6 +146,7 @@ export type {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
+export type { Chain, ProductionChain, SandboxChain } from './chains';
 export { default as constants } from './constants';
 export * from './types';
 export {
