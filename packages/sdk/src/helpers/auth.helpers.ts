@@ -1,7 +1,7 @@
 import encodeBase64Url from 'crypto-js/enc-base64url.js';
+import WordArray from 'crypto-js/lib-typedarrays.js';
 import SHA256 from 'crypto-js/sha256.js';
 
-import constants from '../constants';
 import {
   AuthArgs,
   AuthCodePayload,
@@ -10,11 +10,13 @@ import {
 } from '../types';
 
 /**
+ * @deprecated: will be removed in v4, use `randomPKCECodeVerifier` instead
  * Find a more secure way to generate a random string
  * Using crypto-js to generate a random string was causing the following error:
  * `Error: Native crypto module could not be used to get secure random number.`
  * https://github.com/brix/crypto-js/issues/256
  */
+
 export const generateRandomString = () => {
   let result = '';
   const characters =
@@ -28,18 +30,13 @@ export const generateRandomString = () => {
   return result;
 };
 
-/** Generate the PKCE code challenge */
+/**
+ * @deprecated: will be removed in v4, use `calculatePKCECodeChallenge` instead
+ * Generate the PKCE code challenge
+ *
+ */
 export const generateCodeChallenge = (codeVerifier: string) => {
   return encodeBase64Url.stringify(SHA256(codeVerifier as string));
-};
-
-export const preparePKCEChallenge = (): string => {
-  const codeVerifier = generateRandomString();
-  const codeChallenge = generateCodeChallenge(codeVerifier);
-
-  localStorage.setItem(constants.STORAGE_CODE_VERIFIER, codeVerifier || '');
-
-  return codeChallenge;
 };
 
 /**
@@ -68,4 +65,28 @@ export const isClientCredentials = (
   args: AuthArgs
 ): args is ClientCredentialsPayload => {
   return (args as ClientCredentialsPayload).client_secret != undefined;
+};
+
+// v4
+/**
+ * Generate a cryptographically random PKCE code verifier (RFC 7636).
+ * Returns a base64url-encoded string of 32 random bytes (256 bits of entropy).
+ * The caller is responsible for storing this until the callback.
+ * @group v4
+ * @category v4 - PKCE
+ */
+export const randomPKCECodeVerifier = (): string => {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return encodeBase64Url.stringify(WordArray.create(bytes));
+};
+
+/**
+ * Derive the S256 code challenge from a code verifier.
+ * Synchronous. Returns a base64url-encoded SHA-256 hash.
+ * @group v4
+ * @category v4 - PKCE
+ */
+export const calculatePKCECodeChallenge = (codeVerifier: string): string => {
+  return encodeBase64Url.stringify(SHA256(codeVerifier as string));
 };

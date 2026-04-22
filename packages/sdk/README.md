@@ -98,6 +98,7 @@ We recommend starting in the [Developer Portal](https://docs.monerium.com). Ther
 > Client Credentials is used when there's no need for user interaction, and the system-to-system interaction requires authentication.
 
 ```ts
+// Current version - Deprecated in v4
 import { MoneriumClient } from '@monerium/sdk';
 // Initialize the client with credentials
 const monerium = new MoneriumClient({
@@ -116,6 +117,71 @@ const { access_token, refresh_token } = monerium.bearerProfile as BearerProfile;
 
 // Use refresh token to get a new access token
 await monerium.getAccess(refresh_token);
+
+/*
+ * Upcoming v4 - factory function
+ */
+
+import {
+  randomPKCECodeVerifier,
+  calculatePKCECodeChallenge,
+  buildAuthorizationUrl,
+  authorizationCodeGrant,
+  refreshTokenGrant,
+  createMoneriumClient,
+} from '@monerium/sdk';
+
+// --- Initiate login ---
+const codeVerifier = randomPKCECodeVerifier();
+const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
+session.set('pkce_verifier', codeVerifier); // server-side session
+
+const url = buildAuthorizationUrl({
+  environment: 'sandbox',
+  clientId: 'your-client-id',
+  redirectUri: 'https://your-app.com/callback',
+  codeChallenge,
+});
+res.redirect(url);
+
+// --- On the callback page ---
+const { code } = parseAuthorizationResponse(
+  new URL(req.url, 'https://your-app.com')
+);
+const codeVerifier = session.get('pkce_verifier');
+session.delete('pkce_verifier');
+
+const bearerProfile = await authorizationCodeGrant({
+  environment: 'sandbox',
+  clientId: 'your-client-id',
+  redirectUri: 'https://your-app.com/callback',
+  code,
+  codeVerifier,
+});
+
+req.session.accessToken = bearerProfile.access_token;
+req.session.refreshToken = bearerProfile.refresh_token;
+req.session.accessExpiry = Date.now() + bearerProfile.expires_in * 1000;
+
+// --- Use the API ---
+const client = createMoneriumClient({
+  environment: 'sandbox',
+  getAccessToken: async () => {
+    if (Date.now() > session.accessExpiry) {
+      const newProfile = await refreshTokenGrant({
+        environment: 'sandbox',
+        clientId: 'your-client-id',
+        refreshToken: session.refreshToken,
+      });
+      session.accessToken = newProfile.access_token;
+      session.accessExpiry = Date.now() + newProfile.expires_in * 1000;
+      return newProfile.access_token;
+    }
+    return session.accessToken;
+  },
+});
+
+const profiles = await client.getProfiles();
 ```
 
 API documentation:

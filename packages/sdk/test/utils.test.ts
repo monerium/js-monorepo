@@ -62,18 +62,19 @@ describe('getMessage', () => {
 describe('url params', () => {
   test('should create a query string from an object', () => {
     const obj = { foo: 'bar', bar: 'foo' };
-    const params = new URLSearchParams(obj);
-    expect(params.toString()).toEqual(urlEncoded(obj));
+    expect(urlEncoded(obj)).toEqual('foo=bar&bar=foo');
+  });
+  test('should filter out empty values', () => {
+    const obj = { foo: 'bar', bar: 'foo', baz: undefined };
+    expect(urlEncoded(obj)).toEqual('foo=bar&bar=foo');
   });
   test('should create an empty query string when given an empty object', () => {
     const obj = {};
-    const params = new URLSearchParams(obj);
-    expect(params.toString()).toEqual(urlEncoded(obj));
+    expect(urlEncoded(obj)).toEqual('');
   });
   test('handle spaces as plus', () => {
     const obj = { foobar: 'bazqux 4quux' };
-    const params = new URLSearchParams(obj);
-    expect(params.toString().replace('+', '%20')).toEqual(urlEncoded(obj));
+    expect(urlEncoded(obj)).toEqual('foobar=bazqux%204quux');
   });
   test('handles special characters in code challenge', () => {
     const codeVerifier = generateRandomString();
@@ -85,8 +86,10 @@ describe('url params', () => {
       code_challenge_method: 'S256',
       response_type: 'code',
     };
-    const params = new URLSearchParams(obj);
-    expect(params.toString()).toEqual(urlEncoded(obj));
+    // urlEncoded filters empty strings — client_id='' is intentionally excluded
+    expect(urlEncoded(obj)).toEqual(
+      `code_challenge=${encodeURIComponent(challenge)}&code_challenge_method=S256&response_type=code`
+    );
   });
 
   describe('getAmount', () => {

@@ -177,6 +177,7 @@ Resources:
 
 /**
  * Replacement for URLSearchParams, Metamask snaps do not include node globals.
+ * We remove empty strings, URLSearchParams includes it. `foo=1bar=`
  * It will not handle all special characters the same way as URLSearchParams, but it will be good enough for our use case.
  * @param body a json format of the body to be encoded
  * @returns 'application/x-www-form-urlencoded' compatible string
@@ -186,7 +187,9 @@ export const urlEncoded = (
 ): string | undefined => {
   return body && Object.entries(body)?.length > 0
     ? Object.entries(body)
-        .filter(([_, value]) => value !== undefined) // Filter out undefined values
+        .filter(
+          ([_, value]) => value !== '' && value !== undefined && value !== null
+        ) // Filter out empty, undefined, or null
         .map(
           ([key, value]) =>
             `${encodeURIComponent(key)}=${encodeURIComponent(value as string | boolean | number)}`

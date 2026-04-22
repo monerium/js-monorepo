@@ -3,15 +3,18 @@
  */
 import 'jest-localstorage-mock';
 
+import { preparePKCEChallenge } from '../src/compat';
 import constants from '../src/constants';
 import { queryParams } from '../src/helpers';
 import {
+  calculatePKCECodeChallenge,
   generateCodeChallenge,
-  preparePKCEChallenge,
+  randomPKCECodeVerifier,
 } from '../src/helpers/auth.helpers';
 
 const { STORAGE_CODE_VERIFIER } = constants;
 
+/* @deprecated: will be removed in v4 */
 describe('preparePKCEChallenge', () => {
   afterEach(() => {
     localStorage.clear();
@@ -21,6 +24,23 @@ describe('preparePKCEChallenge', () => {
     const codeChallenge = preparePKCEChallenge();
 
     const codeVerifier = localStorage.getItem(STORAGE_CODE_VERIFIER);
+    const codeChallengeFromVerifier = generateCodeChallenge(
+      codeVerifier as string
+    );
+
+    expect(codeChallenge).toEqual(codeChallengeFromVerifier);
+  });
+});
+
+describe('code verifier -> code challenge', () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  test('should generate code challenge and store code verifier', () => {
+    const codeVerifier = randomPKCECodeVerifier();
+    const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
+
     const codeChallengeFromVerifier = generateCodeChallenge(
       codeVerifier as string
     );

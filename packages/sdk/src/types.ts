@@ -9,7 +9,7 @@ export type Config = {
 export type ENV = 'sandbox' | 'production';
 
 import type { EvmChainId, ProductionChain, SandboxChain } from './chains';
-export type { ProductionChain, SandboxChain, EvmChainId };
+export type { EvmChainId, ProductionChain, SandboxChain };
 
 export type Chain = string | ProductionChain | SandboxChain;
 
@@ -111,7 +111,10 @@ export interface PKCERequest extends PKCERequestShared {
   signature?: string;
   /** The network of the wallet to automatically link  */
   chain?: Chain | ChainId;
-  /** You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization */
+  /**
+   * You can skip the connect wallet and request IBAN steps in the Authorization Flow and use the Link Address and Request IBAN API endpoints after you have gotten the authorization
+   * @deprecated Account creation is no longer offered in the auth flow
+   *  */
   skip_create_account?: boolean;
   /** You can skip the KYC onboarding steps in the Authorization Flow and use the the details, additional data, and verifications API endpoints after you have gotten the authorization. */
   skip_kyc?: boolean;
@@ -597,6 +600,9 @@ export interface OrderNotificationQueryParams {
   profile?: string;
 }
 
+/**
+ * @deprecated Will be removed in v4 in favour of 'MoneriumClientOptions'
+ */
 export type ClassOptions = {
   environment?: ENV;
   debug?: boolean;
@@ -606,10 +612,17 @@ export interface AuthFlowOptionsShared {
   /** the state oauth parameter */
   state?: string;
 }
+
+/**
+ * @deprecated Will be removed in v4 in favour of 'BuildAuthorizationUrlOptions'
+ */
 export interface AuthFlowOptions extends AuthFlowOptionsShared {
   /** the email of the user to prefill the login form */
   email?: string;
-  /** skip account creation in auth flow */
+  /**
+   * skip account creation in auth flow
+   * @deprecated: acccount creation is no longer offered in the auth flow
+   */
   skipCreateAccount?: boolean;
   /** skip KYC in auth flow */
   skipKyc?: boolean;
@@ -621,6 +634,9 @@ export interface AuthFlowOptions extends AuthFlowOptionsShared {
   chain?: Chain | ChainId;
 }
 
+/**
+ * @deprecated Will be removed in v4 in favour of 'BuildSiweAuthorizationUrlOptions'
+ */
 export interface AuthFlowSIWEOptions extends AuthFlowOptionsShared {
   /** Signature for the SIWE message. Must include the 0x prefix. */
   signature: string;
@@ -631,12 +647,16 @@ export interface AuthFlowSIWEOptions extends AuthFlowOptionsShared {
    * */
   message: string;
 }
-
+/*
+ * @deprecated Will be removed in v4 in favour of 'ClientCredentialsGrantOptions'
+ */
 export interface ClientCredentials {
   clientId: string;
   clientSecret: string;
 }
-
+/*
+ * @deprecated Will be removed in v4 in favour of 'AuthorizationCodeGrantOptions'
+ */
 export interface AuthorizationCodeCredentials {
   clientId: string;
   redirectUri: string;
