@@ -17,8 +17,8 @@ on:
         required: false
         type: boolean
         default: false
-      skip_checks:
-        description: 'Skip build and test steps'
+      skip_tests:
+        description: 'Skip test and lint steps'
         required: false
         type: boolean
         default: false
@@ -32,8 +32,8 @@ on:
         description: 'Dry-run only (no actual publish)'
         type: boolean
         default: false
-      skip_checks:
-        description: 'Skip build and test (set to true when called from ci.yml which already ran them)'
+      skip_tests:
+        description: 'Skip test and lint steps (set to true when called from ci.yml which already ran them)'
         type: boolean
         default: false
 
@@ -57,25 +57,19 @@ jobs:
       - name: Cache PNPM install and Turbo
         uses: ./.github/actions/cache-setup
 
-      - name: Configure npm registry
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-
-      # setup-node always sets NODE_AUTH_TOKEN to the GitHub token, which breaks
-      # OIDC Trusted Publisher auth. We clear it here so npm can pick up the
-      # OIDC token automatically via NPM_CONFIG_PROVENANCE=true.
+      # Remove the _authToken written by setup-node (via cache-setup) so npm
+      # falls through cleanly to OIDC Trusted Publisher auth.
+      # Setting NODE_AUTH_TOKEN="" leaves a blank token in .npmrc; deleting it
+      # entirely is more reliable.
       # See: https://github.com/actions/setup-node/issues/1440
-      - name: Clear NODE_AUTH_TOKEN for OIDC Trusted Publisher
-        run: echo "NODE_AUTH_TOKEN=" >> $GITHUB_ENV
+      - name: Configure npm for OIDC Trusted Publisher
+        run: npm config delete //registry.npmjs.org/:_authToken
 
       - name: Build
-        if: inputs.skip_checks == false
         run: pnpm build
 
       - name: Test
-        if: inputs.skip_checks == false
+        if: inputs.skip_tests == false
         run: pnpm test
 
       # ── Dry-run checks (verifies packages are publishable, no real publish) ─

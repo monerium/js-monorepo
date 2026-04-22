@@ -3,6 +3,8 @@
 
 # Monerium SDK React Provider
 
+SDK version is pinned to v3.5
+
   <a href="https://docs.monerium.com/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7"></source>
