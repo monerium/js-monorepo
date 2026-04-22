@@ -17,7 +17,7 @@ on:
         required: false
         type: boolean
         default: false
-      skip_tests:
+      skip_checks:
         description: 'Skip test and lint steps'
         required: false
         type: boolean
@@ -32,7 +32,7 @@ on:
         description: 'Dry-run only (no actual publish)'
         type: boolean
         default: false
-      skip_tests:
+      skip_checks:
         description: 'Skip test and lint steps (set to true when called from ci.yml which already ran them)'
         type: boolean
         default: false
@@ -57,19 +57,22 @@ jobs:
       - name: Cache PNPM install and Turbo
         uses: ./.github/actions/cache-setup
 
-      # Remove the _authToken written by setup-node (via cache-setup) so npm
-      # falls through cleanly to OIDC Trusted Publisher auth.
-      # Setting NODE_AUTH_TOKEN="" leaves a blank token in .npmrc; deleting it
-      # entirely is more reliable.
+      # setup-node (via cache-setup) writes _authToken=${NODE_AUTH_TOKEN} to
+      # .npmrc and exports NODE_AUTH_TOKEN as the GitHub token. We must clear
+      # both: deleting _authToken from .npmrc removes npm's reference, and
+      # clearing NODE_AUTH_TOKEN removes the env var pnpm reads directly.
+      # Without both, pnpm uses the GitHub token → 401 → ENEEDAUTH.
       # See: https://github.com/actions/setup-node/issues/1440
       - name: Configure npm for OIDC Trusted Publisher
-        run: npm config delete //registry.npmjs.org/:_authToken
+        run: |
+          npm config delete //registry.npmjs.org/:_authToken
+          echo "NODE_AUTH_TOKEN=" >> $GITHUB_ENV
 
       - name: Build
         run: pnpm build
 
       - name: Test
-        if: inputs.skip_tests == false
+        if: inputs.skip_checks == false
         run: pnpm test
 
       # ── Dry-run checks (verifies packages are publishable, no real publish) ─

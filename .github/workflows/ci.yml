@@ -89,7 +89,7 @@ jobs:
     with:
       package: sdk
       dry_run: false
-      skip_tests: true
+      skip_checks: true
 
   publish-sdk-react-provider:
     needs: [release-please, build]
@@ -102,7 +102,7 @@ jobs:
     with:
       package: sdk-react-provider
       dry_run: false
-      skip_tests: true
+      skip_checks: true
 
   publish-openapi:
     needs: [release-please, build]
@@ -115,7 +115,7 @@ jobs:
     with:
       package: openapi
       dry_run: false
-      skip_tests: true
+      skip_checks: true
 
   # ── Deploy docs to GitHub Pages ───────────────────────────────────────────────
 

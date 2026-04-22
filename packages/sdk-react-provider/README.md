@@ -3,7 +3,7 @@
 
 # Monerium SDK React Provider
 
-SDK version is pinned to v3.5
+This package depends on the SDK, it's currently pinned to v3.5.
 
   <a href="https://docs.monerium.com/">
     <picture>
