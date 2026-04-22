@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.8](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.7...sdk-react-provider-v1.3.8) (2026-04-22)
+
+
+### Miscellaneous
+
+* attempt to fix publish ([082f022](https://github.com/monerium/js-monorepo/commit/082f022cb5c175c66e9c53170afe96e6d55edee4))
+
 ## [1.3.7](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.6...sdk-react-provider-v1.3.7) (2026-04-22)
 
 
