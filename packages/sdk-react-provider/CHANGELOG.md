@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.3.9](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.8...sdk-react-provider-v1.3.9) (2026-04-22)
+
+
+### Bug Fixes
+
+* attempt to fix oidc auth error ([3d7b13c](https://github.com/monerium/js-monorepo/commit/3d7b13c658898621ad951a3937fde886943e4ae1))
+
+
+### Miscellaneous
+
+* bump react provider ([3d7b13c](https://github.com/monerium/js-monorepo/commit/3d7b13c658898621ad951a3937fde886943e4ae1))
+* debug npm auth action ([3d7b13c](https://github.com/monerium/js-monorepo/commit/3d7b13c658898621ad951a3937fde886943e4ae1))
+* debug npm auth action ([3d7b13c](https://github.com/monerium/js-monorepo/commit/3d7b13c658898621ad951a3937fde886943e4ae1))
+* debug npm auth action ([3d7b13c](https://github.com/monerium/js-monorepo/commit/3d7b13c658898621ad951a3937fde886943e4ae1))
+* debug npm auth action ([3d7b13c](https://github.com/monerium/js-monorepo/commit/3d7b13c658898621ad951a3937fde886943e4ae1))
+* debug npm auth action ([3d7b13c](https://github.com/monerium/js-monorepo/commit/3d7b13c658898621ad951a3937fde886943e4ae1))
+* debug npm auth action ([3d7b13c](https://github.com/monerium/js-monorepo/commit/3d7b13c658898621ad951a3937fde886943e4ae1))
+
 ## [1.3.8](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.7...sdk-react-provider-v1.3.8) (2026-04-22)
 
 
