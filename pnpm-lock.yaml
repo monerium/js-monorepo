@@ -82,8 +82,8 @@ importers:
         specifier: ^11.11.5
         version: 11.14.1(@emotion/react@11.14.0(@types/react@18.3.28)(react@18.3.1))(@types/react@18.3.28)(react@18.3.1)
       '@monerium/sdk':
-        specifier: workspace:latest
-        version: link:../../packages/sdk
+        specifier: 3.5.0
+        version: 3.5.0
       '@monerium/sdk-react-provider':
         specifier: workspace:latest
         version: link:../../packages/sdk-react-provider
@@ -304,8 +304,8 @@ importers:
   packages/sdk-react-provider:
     dependencies:
       '@monerium/sdk':
-        specifier: workspace:latest
-        version: link:../sdk
+        specifier: 3.5.0
+        version: 3.5.0
       '@tanstack/react-query':
         specifier: '>=5.0.0'
         version: 5.90.21(react@18.3.1)
@@ -2660,6 +2660,10 @@ packages:
   '@metamask/utils@9.3.0':
     resolution: {integrity: sha512-w8CVbdkDrVXFJbfBSlDfafDR6BAkpDmv1bC1UJVCoVny5tW2RKAdn9i68Xf7asYT4TnUhl/hN4zfUiKQq9II4g==}
     engines: {node: '>=16.0.0'}
+
+  '@monerium/sdk@3.5.0':
+    resolution: {integrity: sha512-yzqQs8HX7qQW+yVxTWPh+4X/8a5zzOzvEH5YJFoDOYJRsj4qsJNFsP069DfYP0dFfH37DK2gqG5HrbZJnlpzLA==}
+    engines: {node: '>= 16.15'}
 
   '@mui/core-downloads-tracker@5.18.0':
     resolution: {integrity: sha512-jbhwoQ1AY200PSSOrNXmrFCaSDSJWP7qk6urkTmIirvRXDROkqe+QwcLlUiw/PrREwsIF/vm3/dAXvjlMHF0RA==}
@@ -15393,6 +15397,10 @@ snapshots:
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
+
+  '@monerium/sdk@3.5.0':
+    dependencies:
+      crypto-js: 4.2.0
 
   '@mui/core-downloads-tracker@5.18.0': {}
 
