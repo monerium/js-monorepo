@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.7](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.6...sdk-react-provider-v1.3.7) (2026-04-22)
+
+
+### Miscellaneous
+
+* pin SDK to latest 3.x in react-provider and demo app ([fc636b6](https://github.com/monerium/js-monorepo/commit/fc636b67370fac5140d4dd73216818b9956211c7))
+
 ## [1.3.6](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.5...sdk-react-provider-v1.3.6) (2026-04-09)
 
 

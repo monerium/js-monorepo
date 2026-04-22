@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/monerium/js-monorepo/compare/customer-v0.9.1...customer-v0.9.2) (2026-04-22)
+
+
+### Miscellaneous
+
+* pin SDK to latest 3.x in react-provider and demo app ([fc636b6](https://github.com/monerium/js-monorepo/commit/fc636b67370fac5140d4dd73216818b9956211c7))
+
 ## [0.9.1](https://github.com/monerium/js-monorepo/compare/customer-v0.9.0...customer-v0.9.1) (2026-02-23)
 
 
