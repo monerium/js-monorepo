@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.10](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.9...sdk-react-provider-v1.3.10) (2026-04-22)
+
+
+### Miscellaneous
+
+* bump react provider ([d88a7d1](https://github.com/monerium/js-monorepo/commit/d88a7d1ae4bb0f89c8febc3ba4de1b6bbb2fd666))
+
 ## [1.3.9](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.8...sdk-react-provider-v1.3.9) (2026-04-22)
 
 
