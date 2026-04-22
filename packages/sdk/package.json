@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup",
+    "build": "tsc --noEmit && tsup",
     "typedoc": "typedoc",
     "type-map": "tsc --emitDeclarationOnly --declaration",
     "lint": "eslint . --fix",
