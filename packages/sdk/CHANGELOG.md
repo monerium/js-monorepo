@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.5.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.11...sdk-v3.5.0) (2026-04-22)
+
+
+### Features
+
+* sdk v4 preperation ([#172](https://github.com/monerium/js-monorepo/issues/172)) ([547b32b](https://github.com/monerium/js-monorepo/commit/547b32b2548c92408e0d355e88f32f763205f2ef))
+
+
+### Refactors
+
+* make adding new chains less error prone ([#170](https://github.com/monerium/js-monorepo/issues/170)) ([c21d8fc](https://github.com/monerium/js-monorepo/commit/c21d8fcf13fc233fb586d9c3609bda5ba0069706))
+
 ## [3.4.11](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.10...sdk-v3.4.11) (2026-04-09)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/monerium/js-monorepo/compare/developer-v1.1.3...developer-v1.2.0) (2026-04-22)
+
+
+### Features
+
+* new developer experience docx ([#168](https://github.com/monerium/js-monorepo/issues/168)) ([211888b](https://github.com/monerium/js-monorepo/commit/211888bc26ef8e9870740442d9f4c89783007261))
+* sdk v4 preperation ([#172](https://github.com/monerium/js-monorepo/issues/172)) ([547b32b](https://github.com/monerium/js-monorepo/commit/547b32b2548c92408e0d355e88f32f763205f2ef))
+
 ## [1.1.3](https://github.com/monerium/js-monorepo/compare/developer-v1.1.2...developer-v1.1.3) (2026-04-09)
 
 
