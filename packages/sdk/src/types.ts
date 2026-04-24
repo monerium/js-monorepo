@@ -1,5 +1,3 @@
-// --- Config --- //
-
 import { Chain, ChainId } from './chains';
 
 /**
@@ -45,6 +43,21 @@ export type Ticker = 'EUR' | 'GBP' | 'USD' | 'ISK';
 export type CurrencyCode = 'eur' | 'gbp' | 'usd' | 'isk';
 
 /**
+ * Information about the EURe token on different networks.
+ * @group Tokens
+ */
+export interface Token {
+  currency: Currency;
+  ticker: Ticker;
+  symbol: TokenSymbol;
+  chain: Chain;
+  /** The address of the EURe contract on this network */
+  address: string;
+  /** How many decimals this token supports */
+  decimals: number;
+}
+
+/**
  * Returned by all auth grant functions. Store server-side — never in the browser.
  * @group Auth
  * @category Types
@@ -58,100 +71,39 @@ export interface BearerProfile {
   userId: string;
 }
 
-// -- authContext
+/**
+ * @group Profiles
+ */
+export type Method = 'password' | 'resource' | 'jwt' | 'apiKey' | 'bearer';
 
 /**
  * @group Profiles
  */
-export enum Method {
-  password = 'password',
-  resource = 'resource',
-  jwt = 'jwt',
-  apiKey = 'apiKey',
-  bearer = 'bearer',
-}
-
-/**
- * @group Profiles
- */
-export enum ProfileKind {
-  corporate = 'corporate',
-  personal = 'personal',
-}
+export type ProfileKind = 'corporate' | 'personal';
 /**
  * @ignore
  * @deprecated Use ProfileKind instead
  *  */
-export const ProfileType = ProfileKind;
+export enum ProfileType {
+  corporate = 'corporate',
+  personal = 'personal',
+}
 
 /**
  * @group Profiles
  */
-export enum Permission {
-  read = 'read',
-  write = 'write',
-}
+export type Permission = 'read' | 'write';
 
 /**
  * The state of the profile lifecycle.
  * @group Profiles
  */
-export enum ProfileState {
-  /** The profile has been created but no details have been submitted.*/
-  created = 'created',
-  /** One or more sections still require information. The partner can submit or update data. */
-  incomplete = 'incomplete',
-  /** All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`. */
-  submitted = 'submitted',
-  /** The profile is active and all Monerium services are available.*/
-  approved = 'approved',
-  /** Final rejection — the applicant details did not meet compliance requirements. */
-  rejected = 'rejected',
-}
-
-/**
- * The state of a profile section.
- *
- * @group Profiles
- */
-// export enum ProfileState {
-//   /* The partner can still submit or update this section. */
-//   incomplete = 'incomplete',
-//   /* All required information has been provided; awaiting review. */
-//   submitted = 'submitted',
-//   /* The section has been approved. */
-//   approved = 'approved',
-//   /* Final rejection; no resubmission possible. */
-//   rejected = 'rejected',
-// }
-
-/**
- * @group Profiles
- */
-export enum KYCOutcome {
-  approved = 'approved',
-  rejected = 'rejected',
-  unknown = 'unknown',
-}
-
-/**
- * @group IBANs
- */
-export enum AccountState {
-  requested = 'requested',
-  approved = 'approved',
-  pending = 'pending',
-  rejected = 'rejected',
-  closed = 'closed',
-}
-
-/**
- * @group Profiles
- */
-export interface KYC {
-  state: ProfileState;
-  outcome: KYCOutcome;
-}
+export type ProfileState =
+  | 'created'
+  | 'incomplete'
+  | 'submitted'
+  | 'approved'
+  | 'rejected';
 
 /**
  * KYC details section with its current state.
@@ -171,16 +123,30 @@ export interface ProfileFormState {
 }
 
 /**
- * The type of verification.
+ * The type of personal profile verification.
  *
  * @group Profiles
  */
-export enum VerificationKind {
-  idDocument = 'idDocument',
-  facialSimilarity = 'facialSimilarity',
-  proofOfResidency = 'proofOfResidency',
-  sourceOfFunds = 'sourceOfFunds',
-}
+
+export type PersonalVerificationKind =
+  | 'idDocument'
+  | 'facialSimilarity'
+  | 'proofOfResidency'
+  | 'sourceOfFunds';
+
+/**
+ * The type of corporate profile verification.
+ *
+ * @group Profiles
+ */
+export type CorporateVerificationKind =
+  | 'sourceOfFunds'
+  | 'corporateName'
+  | 'corporateAddress'
+  | 'registrationNumber'
+  | 'dateOfRegistration'
+  | 'beneficialOwnership'
+  | 'powerOfAttorney';
 
 /**
  * Verification items required for this profile, each with its current state.
@@ -188,18 +154,8 @@ export enum VerificationKind {
  * @group Profiles
  */
 export interface ProfileVerificationState {
-  kind: VerificationKind;
+  kind: PersonalVerificationKind | CorporateVerificationKind;
   state: ProfileState;
-}
-
-/**
- * @group Orders
- */
-export enum PaymentStandard {
-  iban = 'iban',
-  scan = 'scan',
-  chain = 'chain',
-  account = 'account',
 }
 
 /**
@@ -207,19 +163,10 @@ export enum PaymentStandard {
  * The ID document must verify the person's name, birthday, and nationality.
  * @group Profiles
  */
-export enum IdDocumentKind {
-  passport = 'passport',
-  nationalIdentityCard = 'nationalIdentityCard',
-  drivingLicense = 'drivingLicense',
-}
-
-/**
- * @group Orders
- */
-export interface Identifier {
-  standard: PaymentStandard;
-  bic?: string;
-}
+export type IdDocumentKind =
+  | 'passport'
+  | 'nationalIdentityCard'
+  | 'drivingLicense';
 
 /**
  * @group Profiles
@@ -228,7 +175,7 @@ export interface AuthContext {
   userId: string;
   email: string;
   name: string;
-  roles: [] | null;
+  roles?: string[];
   auth: {
     method: Method;
     subject: string;
@@ -248,7 +195,7 @@ export interface AuthContext {
  * @group Profiles
  */
 export interface ProfilesResponse {
-  profiles: Profile[];
+  profiles: Omit<Profile, 'details' | 'form' | 'verifications'>[];
 }
 
 /**
@@ -274,7 +221,7 @@ export interface Profile {
 /**
  * @group Profiles
  */
-export interface ProfilesQueryParams {
+export interface GetProfilesParams {
   /** Filter the list on the state of profiles */
   state?: ProfileState;
   /** Filter the list on the kind of profiles*/
@@ -360,10 +307,21 @@ export interface CorporateProfileDetails {
 /**
  * @group Profiles
  */
-export type UpdateProfileDetailsBody =
-  | { personal: PersonalProfileDetails }
-  | { corporate: CorporateProfileDetails };
+export type UpdateProfileDetailsInput =
+  | {
+      /** The profile ID to update. */
+      profile: string;
+      personal: PersonalProfileDetails;
+    }
+  | {
+      /** The profile ID to update. */
+      profile: string;
+      corporate: CorporateProfileDetails;
+    };
 
+/**
+ * @group Profiles
+ */
 export type PersonalProfileForm = {
   /** The occupation code representing the individual's current employment status. */
   occupation:
@@ -462,34 +420,52 @@ export type PersonalProfileForm = {
   /** Tax Identification Number (TIN) assigned by the individual's tax authority. Format varies by country (e.g. SSN in the US, NI number in the UK). */
   taxId: string;
 };
+
 /**
+ * Form for a company
  * @group Profiles
  */
-export type UpdateProfileFormBody =
-  | { personal: PersonalProfileForm }
-  | { corporate: CorporateProfileForm };
+export type CorporateProfileForm = {
+  /** A brief description of the company's services. */
+  service: string;
+};
 
 /**
  * @group Profiles
  */
-export interface CreateProfileBody {
-  /* Determines whether the profile is personal or corporate, and which body structure to use in subsequent PATCH endpoints. */
+export type UpdateProfileFormInput =
+  | {
+      /** The profile ID to update. */
+      profile: string;
+      personal: PersonalProfileForm;
+    }
+  | {
+      /** The profile ID to update. */
+      profile: string;
+      corporate: CorporateProfileForm;
+    };
+
+/**
+ * @group Profiles
+ */
+export interface CreateProfileInput {
+  /** Determines whether the profile is personal or corporate, and which body structure to use in subsequent PATCH endpoints. */
   kind: ProfileKind;
-  /* Optional partner-supplied profile ID. */
+  /** Optional partner-supplied profile ID. */
   id?: string;
 }
 
 /**
  * @group Profiles
  */
-export enum KYCProvider {
-  sumsub = 'sumsub',
-}
+export type KYCProvider = 'sumsub';
 
 /**
  * @group Profiles
  */
-export interface ShareProfileKYCBody {
+export interface ShareProfileKYCInput {
+  /** Id of the profile to share. */
+  profile: string;
   /** Determines whether the profile is personal or corporate, and which body structure to use in subsequent PATCH endpoints. */
   provider: KYCProvider;
   /** Token for a personal profile applicant. */
@@ -499,7 +475,39 @@ export interface ShareProfileKYCBody {
   };
 }
 
-// -- getAddresses
+/**
+ * @group Profiles
+ */
+export interface PersonalProfileVerification {
+  /** The type of the verification. */
+  kind: PersonalVerificationKind;
+  /** ID of a previously uploaded file associated with this verification. */
+  fileId: string;
+}
+/**
+ * @group Profiles
+ */
+export interface CorporateProfileVerification {
+  /** The type of the verification. */
+  kind: CorporateVerificationKind;
+  /** ID of a previously uploaded file associated with this verification. */
+  fileId: string;
+}
+
+/**
+ * @group Profiles
+ */
+export type UpdateProfileVerificationsInput =
+  | {
+      /** The profile ID to update. */
+      profile: string;
+      personal: PersonalProfileVerification[];
+    }
+  | {
+      /** The profile ID to update. */
+      profile: string;
+      corporate: CorporateProfileVerification[];
+    };
 
 /**
  * @group Addresses
@@ -530,14 +538,21 @@ export interface AddressesResponse {
   addresses: Address[];
 }
 
-// -- getBalances
-
 /**
  * @group Addresses
  */
 export interface CurrencyBalance {
   currency: Currency;
   amount: string;
+}
+
+/**
+ * @group Addresses
+ */
+export interface GetBalancesParams {
+  address: string;
+  chain: Chain | ChainId;
+  currencies?: Currency | Currency[];
 }
 
 /**
@@ -550,25 +565,28 @@ export interface Balances {
   balances: CurrencyBalance[];
 }
 
-// -- getOrders
+/**
+ * @group Orders
+ */
+export type PaymentStandard = 'iban' | 'scan' | 'chain' | 'account';
 
 /**
  * @group Orders
  */
-export enum OrderKind {
-  redeem = 'redeem',
-  issue = 'issue',
+export interface Identifier {
+  standard: PaymentStandard;
+  bic?: string;
 }
 
 /**
  * @group Orders
  */
-export enum OrderState {
-  placed = 'placed',
-  pending = 'pending',
-  processed = 'processed',
-  rejected = 'rejected',
-}
+export type OrderKind = 'issue' | 'redeem';
+
+/**
+ * @group Orders
+ */
+export type OrderState = 'placed' | 'pending' | 'processed' | 'rejected';
 
 /**
  * @group Orders
@@ -583,7 +601,7 @@ export interface Fee {
  * @group Orders
  */
 export interface IBANIdentifier extends Identifier {
-  standard: PaymentStandard.iban;
+  standard: 'iban';
   iban: string;
 }
 
@@ -591,7 +609,7 @@ export interface IBANIdentifier extends Identifier {
  * @group Orders
  */
 export interface CrossChainIdentifier extends Identifier {
-  standard: PaymentStandard.chain;
+  standard: 'chain';
   /** The receivers address */
   address: string;
   /** The receivers network  */
@@ -603,7 +621,7 @@ export interface CrossChainIdentifier extends Identifier {
  */
 export interface BankAccountIdentifier extends Identifier {
   /** The standard of the bank account. This is used to identify generic bank account. */
-  standard: PaymentStandard.account;
+  standard: 'account';
   /** The account number of the bank account. */
   accountNumber: number;
   /** The address of the bank account holder. */
@@ -614,7 +632,7 @@ export interface BankAccountIdentifier extends Identifier {
  * @group Orders
  */
 export interface SCANIdentifier extends Identifier {
-  standard: PaymentStandard.scan;
+  standard: 'scan';
   sortCode: string;
   accountNumber: string;
 }
@@ -687,7 +705,7 @@ export interface OrderMetadata {
 /**
  * @group Orders
  */
-export interface OrderFilter {
+export interface OrderParams {
   address?: string;
   txHash?: string;
   profile?: string;
@@ -721,29 +739,10 @@ export interface OrdersResponse {
   orders: Order[];
 }
 
-// -- getTokens
-
-/**
- * Information about the EURe token on different networks.
- * @group Tokens
- */
-export interface Token {
-  currency: Currency;
-  ticker: Ticker;
-  symbol: TokenSymbol;
-  chain: Chain;
-  /** The address of the EURe contract on this network */
-  address: string;
-  /** How many decimals this token supports */
-  decimals: number;
-}
-
-// -- placeOrder
-
 /**
  * @group Orders
  */
-export interface NewOrder {
+export interface PlaceOrderInput {
   /** The unique identifier of the order */
   address: string;
   /** The senders network  */
@@ -769,9 +768,9 @@ export interface SupportingDocMetadata {
 }
 
 /**
- * @group Orders
+ * @group Files
  */
-export interface SupportingDoc {
+export interface FileResponse {
   id: string;
   name: string;
   type: string;
@@ -780,12 +779,10 @@ export interface SupportingDoc {
   meta: SupportingDocMetadata;
 }
 
-// -- linkAddress
-
 /**
  * @group Addresses
  */
-export interface LinkAddress {
+export interface LinkAddressInput {
   /** Profile ID that owns the address. */
   profile?: string;
   /** The public key of the blockchain account. */
@@ -808,7 +805,7 @@ export interface LinkAddress {
 /**
  * @group Addresses
  */
-export interface LinkedAddress {
+export interface LinkAddressResponse {
   profile: string;
   address: string;
   state: string;
@@ -817,25 +814,38 @@ export interface LinkedAddress {
     linkedAt: string;
   };
 }
-
-// -- IBANs
+/*
+ * @ignore
+ * @deprecated Use {@link LinkAddressResponse} instead.
+ */
+export type LinkAddress = LinkAddressResponse;
 
 /**
  * @group IBANs
  */
-export interface RequestIbanPayload {
+export type IBANState =
+  | 'requested'
+  | 'approved'
+  | 'pending'
+  | 'rejected'
+  | 'closed';
+
+/**
+ * @group IBANs
+ */
+export interface RequestIbanInput {
   /** the address to request the IBAN. */
   address: string;
   /** the chain to request the IBAN. */
   chain: Chain | ChainId;
   /** payment email notifications sent to customers, `true` by default. */
-  emailNotifications: boolean;
+  emailNotifications?: boolean;
 }
 
 /**
  * @group IBANs
  */
-export interface IbansQueryParams {
+export interface IbansParams {
   profile?: string;
   chain?: Chain | ChainId;
 }
@@ -844,12 +854,19 @@ export interface IbansQueryParams {
  * @group IBANs
  */
 export interface IBAN {
+  /** The IBAN is a unique identifier for a bank account across different countries and includes a two-letter country code, two check digits, and a number of alphanumeric characters. It may include spaces for readability but should be stored without spaces. */
   iban: string;
+  /** Bank Identifier Code (BIC) of the bank associated with this IBAN. */
   bic: string;
+  /** The profile id that owns the IBAN */
   profile: string;
+  /** The address that this IBAN is connected to */
   address: string;
+  /** The chain that this IBAN is connected to */
   chain: Chain;
-  state: AccountState;
+  /* The name of the IBAN owner. This can be a corporate or an individual. */
+  name: string;
+  state: IBANState;
   emailNotifications: boolean;
 }
 
@@ -863,7 +880,8 @@ export interface IBANsResponse {
 /**
  * @group IBANs
  */
-export interface MoveIbanPayload {
+export interface MoveIbanInput {
+  iban: string;
   /** the address to move iban to */
   address: string;
   /** the chain to move iban to */
@@ -878,8 +896,6 @@ export type AcceptedResponse = {
   code: 202;
   status: 'Accepted';
 };
-
-// -- Signatures
 
 /**
  * Type of pending signature
@@ -930,7 +946,7 @@ export type PendingSignature =
  * Query parameters for fetching pending signatures
  * @group Signatures
  */
-export interface SignaturesQueryParams {
+export interface SignaturesParams {
   /** Filter by blockchain address */
   address?: string;
   /** Filter by blockchain network */

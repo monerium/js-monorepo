@@ -77,3 +77,35 @@ Groups and categories are used to structure the Docusaurus output. Every exporte
 | `Signatures` | PendingSignature and related types                                                 |
 | `Utilities`  | Pure utility functions, `constants`                                                |
 | `Primitives` | Chain, ChainId, ENV, Environment, ResponseStatus and low-level types               |
+
+# Function structures and naming conventions
+
+### singular
+
+getX(id: string)
+deleteX(id: string)
+
+### lists
+
+getX(params?: GetXParams)
+
+### create
+
+createX(input: CreateXInput)
+
+### update
+
+updateX(input: UpdateXInput)
+
+### other
+
+performX(input: PerformXInput)
+submitX(input: SubmitXInput)
+
+### example
+
+getProfile(profileId: string)
+getProfiles(params?: GetProfilesParams)
+
+createProfile(input: CreateProfileInput)
+updateProfile(input: UpdateProfileInput)
