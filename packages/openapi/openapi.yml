@@ -2580,7 +2580,17 @@ components:
           description: 'Verification items required for this profile, each with its current state.'
           type: array
           items:
-            $ref: '#/components/schemas/VerificationItem'
+            oneOf:
+              - title: Personal
+                properties:
+                  personal:
+                    description: Verifications for an individual
+                    $ref: '#/components/schemas/PersonalVerifications'
+              - title: Corporate
+                properties:
+                  corporate:
+                    description: Verifications for a company
+                    $ref: '#/components/schemas/CorporateVerifications'
     Tokens:
       type: array
       items:
