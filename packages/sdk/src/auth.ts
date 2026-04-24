@@ -20,9 +20,6 @@ export interface BuildAuthorizationUrlOptions {
   state?: string;
   email?: string;
   skipKyc?: boolean;
-  address?: string;
-  signature?: string;
-  chain?: string;
 }
 
 /**
@@ -46,9 +43,6 @@ export const buildAuthorizationUrl = (
     state: options.state,
     skip_kyc: options.skipKyc,
     email: options.email,
-    address: options.address,
-    signature: options.signature,
-    chain: options.chain,
   });
 
   return `${env.api}/auth${params}`;

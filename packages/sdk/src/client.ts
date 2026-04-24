@@ -11,6 +11,7 @@ import type {
   AddressesResponse,
   AuthContext,
   Balances,
+  CreateProfileBody,
   Currency,
   ENV,
   IBAN,
@@ -27,11 +28,13 @@ import type {
   ProfilesQueryParams,
   ProfilesResponse,
   RequestIbanPayload,
+  ShareProfileKYCBody,
   SignaturesQueryParams,
   SignaturesResponse,
   SubmitProfileDetailsPayload,
   SupportingDoc,
   Token,
+  UpdateProfileDetailsBody,
 } from './types';
 import { parseChain } from './utils';
 
@@ -80,23 +83,68 @@ export type MoneriumClientOptions =
 export interface MoneriumClient {
   // ─── Auth ────────────────────────────────────────────────────────────────
   /**
+   * Get the current auth context.
+   *
+   * @group Auth
    * @see {@link https://docs.monerium.com/api#tag/auth/operation/auth-context | API Documentation}
    */
   getAuthContext(): Promise<AuthContext>;
 
   // ─── Profiles ────────────────────────────────────────────────────────────
   /**
+   * Get a profile by its id.
+   *
+   * @group Profiles
    * @param id - The id of the profile to fetch.
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile | API Documentation}
    */
   getProfile(id: string): Promise<Profile>;
 
   /**
+   * Get all profiles.
+   *
+   * @group Profiles
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profiles | API Documentation}
    */
   getProfiles(params?: ProfilesQueryParams): Promise<ProfilesResponse>;
 
   /**
+   * Creates a new profile.
+   *
+   * @group Profiles
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/create-profile | API Documentation}
+   */
+  createProfile(body: CreateProfileBody): Promise<Profile>;
+
+  /**
+   * Share KYC data
+   *
+   * @group Profiles
+   * @returns {Promise<AcceptedResponse>} The KYC data import has been initiated. Subscribe to `profile.update` webhook to monitor the progress.
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/share-profile-kyc | API Documentation}
+   */
+  shareProfileKYC(
+    profileId: string,
+    body: ShareProfileKYCBody
+  ): Promise<AcceptedResponse>;
+
+  /**
+   * Submit the compliance details for a profile. Updates only the `details` section without affecting other sections.
+   *
+   * > **KYC reliance model only.** Most integrations should use `shareProfileKYC()` to populate details via Sumsub instead.
+   *
+   * @group Profiles
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
+   */
+  updateProfileDetails(
+    profileId: string,
+    body: UpdateProfileDetailsBody
+  ): Promise<AcceptedResponse>;
+
+  /**
+   * Submit profile details.
+   *
+   * @group Profiles
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
    */
   submitProfileDetails(
@@ -195,18 +243,22 @@ export interface MoneriumClient {
 
   // ─── Files ───────────────────────────────────────────────────────────────
   /**
-   * Upload a supporting document for KYC onboarding or order support.
+   * Upload a supporting document for KYC onboarding or order support using `multipart/form-data`.
    *
-   * Requires `Blob` and `FormData` — available in Node.js 18+, browsers, and
-   * Cloudflare Workers. Not available in all environments (e.g. MetaMask Snaps).
+   * Accepts binary data in multiple formats and normalizes it to a {@link Blob}
+   * internally before sending the request.
    *
-   * @param document - File content as a `Blob`, `Uint8Array`, or `ArrayBuffer`.
-   *   Node.js `Buffer` is a `Uint8Array` and works directly.
-   * @param filename - Optional filename sent to the API (e.g. `'kyc.pdf'`).
+   * @param file - The document to upload. Can be a {@link Blob}, {@link Uint8Array}, or {@link ArrayBuffer}.
+   * @param filename - Optional filename to associate with the uploaded file.
+   * If not provided, a default name will be inferred when possible, otherwise `"document"` is used.
    * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
+   * @remarks
+   * This method constructs a {@link FormData} payload internally and sends it to the `POST /files` endpoint.
+   * Consumers do not need to manually create or manage multipart form data.
+   *
    */
   uploadSupportingDocument(
-    document: Blob | Uint8Array | ArrayBuffer,
+    file: Blob | Uint8Array | ArrayBuffer,
     filename?: string
   ): Promise<SupportingDoc>;
 }
@@ -335,6 +387,19 @@ export function createMoneriumClient(
     getProfiles: (params?: ProfilesQueryParams) =>
       request<ProfilesResponse>('GET', `profiles${queryParams(params)}`),
 
+    createProfile: (body: CreateProfileBody) =>
+      request<Profile>('POST', 'profiles', body),
+
+    shareProfileKYC: (profileId: string) =>
+      request<AcceptedResponse>('POST', `profiles/${profileId}/share`),
+
+    updateProfileDetails: (
+      profileId: string,
+      body: SubmitProfileDetailsPayload // TODO:!!!
+    ) =>
+      request<AcceptedResponse>('PATCH', `profiles/${profileId}/details`, body),
+
+    // TODO REMOVE
     submitProfileDetails: (
       profileId: string,
       body: SubmitProfileDetailsPayload
@@ -435,12 +500,16 @@ export function createMoneriumClient(
     },
 
     uploadSupportingDocument: (
-      document: Blob | Uint8Array | ArrayBuffer,
+      file: Blob | Uint8Array | ArrayBuffer,
       filename?: string
     ) => {
-      const blob = document instanceof Blob ? document : new Blob([document]);
+      const blob = file instanceof Blob ? file : new Blob([file]);
       const formData = new FormData();
-      formData.append('file', blob, filename);
+      formData.append(
+        'file',
+        blob,
+        filename ?? ('name' in file ? String(file.name) : 'document')
+      );
       return requestFormData<SupportingDoc>('POST', 'files', formData);
     },
   };

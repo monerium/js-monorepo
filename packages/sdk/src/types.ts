@@ -74,10 +74,15 @@ export enum Method {
 /**
  * @group Profiles
  */
-export enum ProfileType {
+export enum ProfileKind {
   corporate = 'corporate',
   personal = 'personal',
 }
+/**
+ * @ignore
+ * @deprecated Use ProfileKind instead
+ *  */
+export const ProfileType = ProfileKind;
 
 /**
  * @group Profiles
@@ -88,30 +93,37 @@ export enum Permission {
 }
 
 /**
+ * The state of the profile lifecycle.
  * @group Profiles
  */
 export enum ProfileState {
   /** The profile has been created but no details have been submitted.*/
   created = 'created',
-  /** The details have been submitted and are being processed. */
-  pending = 'pending',
-  /** The profile is active and all Monerium services are supported.*/
+  /** One or more sections still require information. The partner can submit or update data. */
+  incomplete = 'incomplete',
+  /** All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`. */
+  submitted = 'submitted',
+  /** The profile is active and all Monerium services are available.*/
   approved = 'approved',
-  /**The applicant details did not meet the compliance requirements of Monerium. Details can be fixed and re-submitted for processing.*/
+  /** Final rejection — the applicant details did not meet compliance requirements. */
   rejected = 'rejected',
-  /**Monerium is unable to offer the applicant services because of compliance reasons. Details cannot be re-submitted.*/
-  blocked = 'blocked',
 }
 
 /**
+ * The state of a profile section.
+ *
  * @group Profiles
  */
-export enum KYCState {
-  absent = 'absent',
-  submitted = 'submitted',
-  pending = 'pending',
-  confirmed = 'confirmed',
-}
+// export enum ProfileState {
+//   /* The partner can still submit or update this section. */
+//   incomplete = 'incomplete',
+//   /* All required information has been provided; awaiting review. */
+//   submitted = 'submitted',
+//   /* The section has been approved. */
+//   approved = 'approved',
+//   /* Final rejection; no resubmission possible. */
+//   rejected = 'rejected',
+// }
 
 /**
  * @group Profiles
@@ -137,8 +149,47 @@ export enum AccountState {
  * @group Profiles
  */
 export interface KYC {
-  state: KYCState;
+  state: ProfileState;
   outcome: KYCOutcome;
+}
+
+/**
+ * KYC details section with its current state.
+ *
+ * @group Profiles
+ */
+export interface ProfileDetailsState {
+  state: ProfileState;
+}
+/**
+ * Additional data section used for risk calculations.
+ *
+ * @group Profiles
+ */
+export interface ProfileFormState {
+  state: ProfileState;
+}
+
+/**
+ * The type of verification.
+ *
+ * @group Profiles
+ */
+export enum VerificationKind {
+  idDocument = 'idDocument',
+  facialSimilarity = 'facialSimilarity',
+  proofOfResidency = 'proofOfResidency',
+  sourceOfFunds = 'sourceOfFunds',
+}
+
+/**
+ * Verification items required for this profile, each with its current state.
+ *
+ * @group Profiles
+ */
+export interface ProfileVerificationState {
+  kind: VerificationKind;
+  state: ProfileState;
 }
 
 /**
@@ -187,7 +238,7 @@ export interface AuthContext {
   defaultProfile: string;
   profiles: {
     id: string;
-    kind: ProfileType | 'unknown';
+    kind: ProfileKind | 'unknown';
     name: string;
     perms: Permission[];
   }[];
@@ -204,20 +255,30 @@ export interface ProfilesResponse {
  * @group Profiles
  */
 export interface Profile {
+  /** Unique identifier of the profile. The Profile ID is the main identifier used to represent ownership of other API resources */
   id: string;
+  /** String identifier specifying the type of the profile. */
+  kind: ProfileKind;
+  /** The Profile name. This can be a corporate or an individual. */
   name: string;
-  kind: ProfileType;
+  /** The state of the profile lifecycle. */
   state: ProfileState;
+  /**  KYC details section with its current state. */
+  details?: ProfileDetailsState;
+  /** The form data for the profile. */
+  form?: ProfileFormState;
+  /** Verification items required for this profile, each with its current state. */
+  verifications?: ProfileVerificationState[];
 }
 
 /**
  * @group Profiles
  */
 export interface ProfilesQueryParams {
-  /** profile state to filter by */
+  /** Filter the list on the state of profiles */
   state?: ProfileState;
-  /** profile kind to filter by */
-  kind?: ProfileType;
+  /** Filter the list on the kind of profiles*/
+  kind?: ProfileKind;
 }
 
 /**
@@ -225,25 +286,27 @@ export interface ProfilesQueryParams {
  */
 export interface PersonalProfileDetails {
   idDocument: {
+    /** The document number. */
     number: string;
+    /** The type of ID document. Must verify the person's name, birthday, and nationality */
     kind: IdDocumentKind;
   };
   firstName: string;
   lastName: string;
+  /** Street and building number where the person lives. */
   address: string;
+  /** Postal code where the person lives. */
   postalCode: string;
+  /** City where the person lives. */
   city: string;
+  /**Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the person lives */
   country: string;
+  /** State/County where the person lives. */
   countryState?: string;
+  /** Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) for the person's nationality. */
   nationality: string;
+  /** The person's date of birth in `YYYY-MM-DD format. */
   birthday: string;
-}
-
-/**
- * @group Profiles
- */
-export interface PersonalProfileDetailsRequest {
-  personal: PersonalProfileDetails;
 }
 
 /**
@@ -270,10 +333,21 @@ export type Director = Omit<PersonalProfileDetails, 'idDocument'>;
 export interface CorporateProfileDetails {
   name: string;
   registrationNumber: string;
+  /** The company's registration date in the `YYYY-MM-DD` format. */
+  registrationDate?: string;
+  /** The company's VAT number */
+  vatNumber?: string;
+  /** The company's website */
+  website?: string;
+  /** Street and building number where the corporate is located. */
   address: string;
+  /** Postal code where the corporate is located. */
   postalCode: string;
+  /** City where the corporate is located. */
   city: string;
+  /** Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the corporate is located */
   country: string;
+  /** State/County where the corporate is located. */
   countryState: string;
   /** List of individuals representing the company and authorized to act on it's behalf. */
   representatives: Representative[];
@@ -286,16 +360,144 @@ export interface CorporateProfileDetails {
 /**
  * @group Profiles
  */
-export interface CorporateProfileDetailsRequest {
-  corporate: CorporateProfileDetails;
+export type UpdateProfileDetailsBody =
+  | { personal: PersonalProfileDetails }
+  | { corporate: CorporateProfileDetails };
+
+export type PersonalProfileForm = {
+  /** The occupation code representing the individual's current employment status. */
+  occupation:
+    | 'OCCUPATION_STUDENT'
+    | 'OCCUPATION_EMPLOYED'
+    | 'OCCUPATION_SELF_EMPLOYED'
+    | 'OCCUPATION_UNEMPLOYED'
+    | 'OCCUPATION_RETIRED';
+  /** The profession code representing the individual's professional field. */
+  profession:
+    | 'PROF_ACCOUNTANCY'
+    | 'PROF_ADMINISTRATIVE'
+    | 'PROF_AGRICULTURE'
+    | 'PROF_ARTS_MEDIA'
+    | 'PROF_BROKER_DEALER'
+    | 'PROF_CATERING_HOSPITALITY'
+    | 'PROF_CHARITY'
+    | 'PROF_CONSTRUCTION_REAL_ESTATE'
+    | 'PROF_DEALER_HIGH_VALUE_GOODS'
+    | 'PROF_DEALER_PRECIOUS_METALS'
+    | 'PROF_EDUCATION'
+    | 'PROF_EMERGENCY_SERVICES'
+    | 'PROF_EXTRACTIVE_INDUSTRY'
+    | 'PROF_FIN_SERVICES_BANKING'
+    | 'PROF_FIN_SERVICES_INSURANCE'
+    | 'PROF_FIN_SERVICES_OTHER'
+    | 'PROF_FIN_SERVICES_PRIVATE_BANKING'
+    | 'PROF_GAMBLING'
+    | 'PROF_GOVERNMENT'
+    | 'PROF_HEALTHCARE_MEDICAL'
+    | 'PROF_INFORMATION_TECHNOLOGY'
+    | 'PROF_LEGAL'
+    | 'PROF_MANUFACTURING'
+    | 'PROF_MARKETING'
+    | 'PROF_MILITARY_DEFENCE'
+    | 'PROF_MONEY_SERVICE_BUSINESS'
+    | 'PROF_PENSIONER'
+    | 'PROF_PUBLIC_PROCUREMENT'
+    | 'PROF_RETAIL_SALES';
+  /** The origin of the fund code representing the source of the individual's funds. */
+  fundOrigin:
+    | 'FUND_ORIGIN_SALARY'
+    | 'FUND_ORIGIN_DIVIDENDS'
+    | 'FUND_ORIGIN_INHERITANCE'
+    | 'FUND_ORIGIN_SAVINGS'
+    | 'FUND_ORIGIN_INVESTMENT'
+    | 'FUND_ORIGIN_GIFT'
+    | 'FUND_ORIGIN_MINING'
+    | 'FUND_ORIGIN_REAL_ESTATE'
+    | 'FUND_ORIGIN_LOAN';
+  /** The code representing the individual's annual income range. */
+  annualIncome:
+    | 'ANNUAL_INCOME_UNDER_10K'
+    | 'ANNUAL_INCOME_10K_TO_50K'
+    | 'ANNUAL_INCOME_50K_TO_150K'
+    | 'ANNUAL_INCOME_150K_TO_300K'
+    | 'ANNUAL_INCOME_OVER_300K';
+
+  /** The code representing the individual's monthly turnover range. */
+  monthlyTurnover:
+    | 'TURNOVER_UNDER_10K'
+    | 'TURNOVER_10K_TO_50K'
+    | 'TURNOVER_50K_TO_150K'
+    | 'TURNOVER_150K_TO_500K'
+    | 'TURNOVER_OVER_500K';
+
+  /** The code representing the number of transactions the individual makes each month. */
+  monthlyTransactionCount:
+    | 'TRANSACTION_COUNT_LESS_THAN_5'
+    | 'TRANSACTION_COUNT_5_TO_50'
+    | 'TRANSACTION_COUNT_50_TO_100'
+    | 'TRANSACTION_COUNT_100_TO_200'
+    | 'TRANSACTION_COUNT_OVER_200';
+
+  /** List of codes representing the individual's financial activities. */
+  activities: (
+    | 'ACTIVITY_COMMERCE_SELLING'
+    | 'ACTIVITY_COMMERCE_BUYING'
+    | 'ACTIVITY_INVESTING_CRYPTO'
+    | 'ACTIVITY_OTHER'
+  )[];
+  /** A description of the other activity if the code `ACTIVITY_OTHER` is chosen. */
+  activityOther?: string;
+  /** Indicates whether the individual holds a politically exposed person (PEP) status. */
+  publicFunction: boolean;
+
+  /** Indicates whether the individual is the owner of the funds. */
+  fundOwner: boolean;
+
+  /** Indicates whether the individual is a United States citizen. */
+  usCitizen: boolean;
+
+  /** Indicates whether the individual is subject to US tax obligations (e.g. holds a US tax identification number or is a US resident for tax purposes). */
+  usTaxPerson: boolean;
+
+  /** Tax Identification Number (TIN) assigned by the individual's tax authority. Format varies by country (e.g. SSN in the US, NI number in the UK). */
+  taxId: string;
+};
+/**
+ * @group Profiles
+ */
+export type UpdateProfileFormBody =
+  | { personal: PersonalProfileForm }
+  | { corporate: CorporateProfileForm };
+
+/**
+ * @group Profiles
+ */
+export interface CreateProfileBody {
+  /* Determines whether the profile is personal or corporate, and which body structure to use in subsequent PATCH endpoints. */
+  kind: ProfileKind;
+  /* Optional partner-supplied profile ID. */
+  id?: string;
 }
 
 /**
  * @group Profiles
  */
-export type SubmitProfileDetailsPayload =
-  | PersonalProfileDetailsRequest
-  | CorporateProfileDetailsRequest;
+export enum KYCProvider {
+  sumsub = 'sumsub',
+}
+
+/**
+ * @group Profiles
+ */
+export interface ShareProfileKYCBody {
+  /** Determines whether the profile is personal or corporate, and which body structure to use in subsequent PATCH endpoints. */
+  provider: KYCProvider;
+  /** Token for a personal profile applicant. */
+  personal: {
+    /** Provider-issued applicant token. */
+    token: string;
+  };
+}
 
 // -- getAddresses
 
