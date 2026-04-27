@@ -759,7 +759,7 @@ export interface PlaceOrderInput {
 
 // -- uploadSupportingDocument
 /**
- * @group Orders
+ * @group Files
  */
 export interface SupportingDocMetadata {
   uploadedBy: string;
@@ -770,7 +770,7 @@ export interface SupportingDocMetadata {
 /**
  * @group Files
  */
-export interface FileResponse {
+export interface FilesResponse {
   id: string;
   name: string;
   type: string;

@@ -13,12 +13,11 @@ import type {
   Balances,
   CreateProfileInput,
   ENV,
-  FileResponse,
+  FilesResponse,
   GetBalancesParams,
   GetProfilesParams,
   IBAN,
   IbansParams,
-  IbansQueryParams,
   IBANsResponse,
   LinkAddressInput,
   LinkAddressResponse,
@@ -32,9 +31,7 @@ import type {
   RequestIbanInput,
   ShareProfileKYCInput,
   SignaturesParams,
-  SignaturesQueryParams,
   SignaturesResponse,
-  SupportingDoc,
   Token,
   UpdateProfileDetailsInput,
   UpdateProfileFormInput,
@@ -303,7 +300,7 @@ export interface MoneriumClient {
   uploadSupportingDocument(
     file: Blob | Uint8Array | ArrayBuffer,
     filename?: string
-  ): Promise<FileResponse>;
+  ): Promise<FilesResponse>;
 }
 
 // ─── Factory ──────────────────────────────────────────────────────────────────
@@ -484,7 +481,7 @@ export function createMoneriumClient(
 
     getIban: (iban: string) => request<IBAN>('GET', `ibans/${encodeURI(iban)}`),
 
-    getIbans: (params?: IbansQueryParams) => {
+    getIbans: (params?: IbansParams) => {
       const resolved = params
         ? resolveChain(params as unknown as Record<string, unknown>)
         : undefined;
@@ -531,7 +528,7 @@ export function createMoneriumClient(
 
     getTokens: () => request<Token[]>('GET', 'tokens'),
 
-    getSignatures: (params?: SignaturesQueryParams) => {
+    getSignatures: (params?: SignaturesParams) => {
       const resolved = params
         ? resolveChain(params as unknown as Record<string, unknown>)
         : undefined;
@@ -552,7 +549,7 @@ export function createMoneriumClient(
         blob,
         filename ?? ('name' in file ? String(file.name) : 'document')
       );
-      return requestFormData<SupportingDoc>('POST', 'files', formData);
+      return requestFormData<FilesResponse>('POST', 'files', formData);
     },
   };
 }
