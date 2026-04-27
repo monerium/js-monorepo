@@ -90,6 +90,13 @@ paths:
                           description: You can skip the KYC onboarding steps in the Authorization Flow during testing.
                           type: boolean
                           example: true
+                        auth_mode:
+                          description: Controls which auth screen to show first when the user is not authenticated. Defaults to the start screen.
+                          type: string
+                          example: login
+                          enum:
+                            - login
+                            - signup
                       required:
                         - client_id
                         - code_challenge
@@ -3617,6 +3624,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-04-27:
+      * [POST /auth](#operation/auth), [GET /auth](#operation/auth-get) - Added `auth_mode` query parameter to control initial auth screen (`login` or `signup`) when the user is not authenticated.
+
       ### 2026-04-08:
       * [POST /profiles](#operation/create-profile) - New endpoint to create a profile. Replaces `POST /auth/signup` as the entry point for partner-led onboarding. Requires `kind` (`personal` or `corporate`), which determines the body structure used in subsequent PATCH and share endpoints.
       * [POST /auth/signup](#operation/auth-signup) - Deprecated; use [POST /profiles](#operation/create-profile) instead.
