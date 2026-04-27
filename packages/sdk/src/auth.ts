@@ -19,7 +19,10 @@ export interface BuildAuthorizationUrlOptions {
   codeChallenge: string;
   state?: string;
   email?: string;
+  /** You can skip the KYC onboarding steps in the Authorization Flow during testing. */
   skipKyc?: boolean;
+  /** Controls which auth screen to show first when the user is not authenticated. Defaults to the start screen. */
+  authMode?: 'login' | 'signup';
 }
 
 /**
@@ -43,6 +46,7 @@ export const buildAuthorizationUrl = (
     state: options.state,
     skip_kyc: options.skipKyc,
     email: options.email,
+    auth_mode: options.authMode,
   });
 
   return `${env.api}/auth${params}`;
