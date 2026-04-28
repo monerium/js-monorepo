@@ -1,8 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { useChainId, useSignMessage } from 'wagmi';
-import { useAccount } from 'wagmi';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,16 +11,22 @@ import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import { useAccount, useChainId, useSignMessage } from 'wagmi';
 
 import {
   Chain,
   Currency,
   Order,
-  PaymentStandard,
   placeOrderMessage,
   shortenAddress,
 } from '@monerium/sdk';
-import { useAddresses, usePlaceOrder } from '@monerium/sdk-react-provider';
+import { useAddresses, usePlaceOrder } from 'hooks/monerium';
+
+const PaymentStandard = {
+  iban: 'iban' as const,
+  chain: 'chain' as const,
+};
 
 import { getChainConfig } from 'config/chains';
 

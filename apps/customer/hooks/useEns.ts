@@ -7,6 +7,7 @@ export const useEns = (address: string) => {
     queryKey: ['ens', address],
     queryFn: () =>
       publicClient.getEnsName({ address: address as `0x${string}` }),
-    enabled: !!address,
+    // enabled: !!address,
+    enabled: false, // temporarily disabled
   });
 };

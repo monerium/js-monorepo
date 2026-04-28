@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
@@ -16,20 +15,28 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
 
-import { Chain, ProfileState } from '@monerium/sdk';
+import { Chain } from '@monerium/sdk';
 import {
   useAddresses,
   useAuth,
   useAuthContext,
   useProfile,
-} from '@monerium/sdk-react-provider';
+} from 'hooks/monerium';
+
+const ProfileState: any = {
+  approved: 'approved',
+  pending: 'pending',
+  rejected: 'rejected',
+  blocked: 'blocked',
+};
 
 import ChainIcon from 'components/Chains/Icon';
 import { getChainConfig } from 'config/chains';
 
 const profileStateColor = (
-  state?: ProfileState
+  state?: string
 ): 'success' | 'warning' | 'error' | 'default' => {
   switch (state) {
     case ProfileState.approved:

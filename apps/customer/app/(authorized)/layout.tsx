@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 
-import { useAuth } from '@monerium/sdk-react-provider';
+import { useAuth } from 'hooks/monerium';
 
 import { LoadingScreen } from 'components/LoadingScreen';
 import BottomNavigation from 'components/Navigation/BottomNavigation';

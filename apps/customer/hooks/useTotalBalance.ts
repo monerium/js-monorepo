@@ -5,16 +5,20 @@ import { Balances, Chain, Currency } from '@monerium/sdk';
 export function useTotalBalance(chain?: Chain, currency?: Currency) {
   const queryClient = useQueryClient();
   return useQuery({
-    queryKey: ['monerium', 'total-balance', chain, currency],
+    queryKey: ['total-balance', chain, currency],
     queryFn: () => {
       const queryCache = queryClient.getQueryCache();
-      const balanceQueries = queryCache.findAll({
-        queryKey: [
-          'monerium',
-          'balances',
-          { currencies: [currency], ...(chain ? { chain } : {}) },
-        ],
-      });
+      const balanceQueries = queryCache
+        .findAll({
+          queryKey: ['balances'],
+        })
+        .filter((query) => {
+          const params = query.queryKey[1] as any;
+          if (!params) return true;
+          if (chain && params.chain !== chain) return false;
+          if (currency && params.currencies?.[0] !== currency) return false;
+          return true;
+        });
       // Get the latest data from all balance queries
       const balances = balanceQueries.map(
         (query) => query.state.data as Balances

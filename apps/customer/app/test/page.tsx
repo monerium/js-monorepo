@@ -1,23 +1,17 @@
 'use client';
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useAccount, useChainId, useSignMessage } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Link from 'next/link';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useAccount, useChainId, useSignMessage } from 'wagmi';
 
 import {
   Chain,
-  ChainId,
-  constants,
   Currency,
-  IdDocumentKind,
   Order,
-  OrderState,
-  PaymentStandard,
   placeOrderMessage,
   siweMessage,
 } from '@monerium/sdk';
 import {
-  MoneriumContext,
   useAddress,
   useAddresses,
   useAuth,
@@ -36,7 +30,16 @@ import {
   useSubmitProfileDetails,
   useSubscribeOrderNotification,
   useTokens,
-} from '@monerium/sdk-react-provider';
+} from 'hooks/monerium';
+
+const OrderState: any = {
+  placed: 'placed',
+  processed: 'processed',
+  rejected: 'rejected',
+};
+const PaymentStandard: any = { iban: 'iban', chain: 'chain' };
+type ChainId = any;
+const constants = {} as any;
 export default function Test() {
   // https://punkwallet.io/pk#0xc3dba5f61acf6675aee27b7141db8decf7d4e7514afafdd6b764e02138c53cac
   const COUNTERPART_ADDRESS = '0x28Bd09f59A40A0B42dAC69Ef43ef7Ffa37F12Ead';
@@ -50,8 +53,6 @@ export default function Test() {
   /**
    * Monerium queries
    */
-  const context = useContext(MoneriumContext);
-
   const {
     isAuthorized,
     authorize,
@@ -107,10 +108,10 @@ export default function Test() {
 
   const { placeOrder, error: placeOrderError } = usePlaceOrder({
     mutation: {
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         console.log('onSuccess callback', data);
       },
-      onError: (error) => {
+      onError: (error: any) => {
         console.log('onError callback', error);
       },
     },
@@ -174,7 +175,7 @@ export default function Test() {
       if (!file) {
         return;
       }
-      context?.sdk?.uploadSupportingDocument(file);
+      console.log('Uploading document', file);
     };
 
     return (
@@ -207,9 +208,7 @@ export default function Test() {
               number: formData.get(
                 'profile-detail-id-document-number'
               ) as string,
-              kind: formData.get(
-                'profile-detail-id-document-type'
-              ) as IdDocumentKind,
+              kind: formData.get('profile-detail-id-document-type') as any,
             },
             firstName: formData.get('profile-detail-first-name') as string,
             lastName: formData.get('profile-detail-last-name') as string,
@@ -245,9 +244,7 @@ export default function Test() {
                   number: formData.get(
                     'representative-id-document-number'
                   ) as string,
-                  kind: formData.get(
-                    'representative-id-document-type'
-                  ) as IdDocumentKind,
+                  kind: formData.get('representative-id-document-type') as any,
                 },
                 firstName: formData.get('representative-first-name') as string,
                 lastName: formData.get('representative-last-name') as string,
@@ -650,24 +647,17 @@ export default function Test() {
     return '';
   };
 
-  const autoLink = () => {
-    signMessageAsync({ message: constants.LINK_MESSAGE }).then((signature) => {
-      authorize({
-        address: `${walletAddress}`,
-        signature,
-        chain: chainId,
-      });
-    });
-  };
   const authorizeSiwe = () => {
+    console.log('walletAddress', walletAddress);
     const siwe_message = siweMessage({
-      domain: 'localhost:3000',
+      domain: 'localhost:5000',
       address: `${walletAddress}`,
       appName: 'SDK TEST APP',
-      redirectUri: 'http://localhost:3000/dashboard',
+      redirectUri: 'http://localhost:5000/dashboard',
       chainId: chainId,
-      privacyPolicyUrl: 'https://example.com/privacy-policy',
-      termsOfServiceUrl: 'https://example.com/terms-of-service',
+      privacyPolicyUrl: 'https://monerium.com/policies/privacy-policy',
+      termsOfServiceUrl:
+        'https://monerium.com/policies/personal-terms-of-service',
     });
 
     signMessageAsync({ message: siwe_message }).then((signature) => {
@@ -707,16 +697,11 @@ export default function Test() {
               type="submit"
               onClick={() =>
                 authorize({
-                  email: 'test@test.is',
-                  skipCreateAccount: true,
                   skipKyc: true,
                 })
               }
             >
               Authorize min (skip KYC and Wallet Connection)
-            </button>
-            <button type="submit" onClick={autoLink}>
-              Authorize with auto linking.
             </button>
             <button type="submit" onClick={authorizeSiwe}>
               Siwe.
@@ -758,7 +743,7 @@ export default function Test() {
             </div>
             <div>
               <h2>Address (first)</h2>
-              <p>address: {address?.address}</p>
+              <p>address: {(address as any)?.address}</p>
               <details>
                 <summary>Click to Expand</summary>
                 <PrettyPrintJson data={address} />
@@ -784,7 +769,7 @@ export default function Test() {
             </div>
             <div>
               <h2>Iban (first)</h2>
-              <p>iban: {iban?.iban}</p>
+              <p>iban: {(iban as any)?.iban}</p>
               <details>
                 <summary>Click to Expand</summary>
                 <PrettyPrintJson data={iban} />
@@ -806,8 +791,9 @@ export default function Test() {
                 <summary>
                   Click to Expand, balance:{' '}
                   {
-                    walletBalances?.balances.find((b) => b.currency === 'eur')
-                      ?.amount
+                    walletBalances?.balances.find(
+                      (b: any) => b.currency === 'eur'
+                    )?.amount
                   }{' '}
                   EUR
                 </summary>
@@ -821,13 +807,13 @@ export default function Test() {
                   Click to Expand, balance:{' '}
                   {
                     walletBalancesGbpUsd?.balances.find(
-                      (b) => b.currency === 'gbp'
+                      (b: any) => b.currency === 'gbp'
                     )?.amount
                   }{' '}
                   GBP,
                   {
                     walletBalancesGbpUsd?.balances.find(
-                      (b) => b.currency === 'usd'
+                      (b: any) => b.currency === 'usd'
                     )?.amount
                   }{' '}
                   USD
@@ -837,7 +823,7 @@ export default function Test() {
             </div>
             <div>
               <h2>Order (latest)</h2>
-              <p>placedAt: {order?.meta?.placedAt}</p>
+              <p>placedAt: {(order as any)?.meta?.placedAt}</p>
               <details>
                 <summary>Click to Expand</summary>
                 <PrettyPrintJson data={order} />
@@ -863,7 +849,9 @@ export default function Test() {
             <div>
               <h2>Signatures</h2>
               <details>
-                <summary>Click to Expand, total: {signatures?.total}</summary>
+                <summary>
+                  Click to Expand, total: {(signatures as any)?.total}
+                </summary>
                 <PrettyPrintJson data={signatures} />
               </details>
             </div>

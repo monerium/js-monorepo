@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import { useState } from 'react';
 
 import { Currency } from '@monerium/sdk';
-import { useAuth } from '@monerium/sdk-react-provider';
+import { useAuth } from 'hooks/monerium';
 
 import ChainFilter from 'components/Dashboard/Filters/ChainFilter';
 import TokenFilter from 'components/Dashboard/Filters/TokenFilter';
