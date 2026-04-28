@@ -43,7 +43,7 @@ export class MoneriumApiError extends Error {
 export type MoneriumSdkErrorType =
   | 'network_error' //          fetch failed (DNS, timeout, connection refused)
   | 'authentication_required' // authenticated endpoint called with no token
-  | 'invalid_configuration'; //  bad options passed to createMoneriumClient
+  | 'invalid_configuration'; //  bad options passed to createMoneriumApiClient
 
 /**
  * Thrown for SDK-level failures — no HTTP response involved.

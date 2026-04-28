@@ -7,16 +7,17 @@ This is the Monerium JavaScript SDK, v4.0.0. The public API is entirely function
 | File                              | Purpose                                                             |
 | --------------------------------- | ------------------------------------------------------------------- |
 | `src/index.ts`                    | Single public entry point — re-exports everything                   |
-| `src/auth.ts`                     | Auth flow functions (PKCE, grants, URL builders)                    |
-| `src/client.ts`                   | `createMoneriumClient` factory + `MoneriumClient` interface         |
+| `src/auth.ts`                     | `createMoneriumAuthClient` factory + `MoneriumAuthClient` interface |
+| `src/client.ts`                   | `createMoneriumApiClient` factory + `MoneriumApiClient` interface   |
 | `src/types.ts`                    | Monerium domain model types (Order, IBAN, Profile, …)               |
 | `src/chains.ts`                   | EVM chain data, derived types, lookup maps                          |
 | `src/chains.test-d.ts`            | Compile-time assertions — see Chain types section below             |
 | `src/errors.ts`                   | `MoneriumApiError` and `MoneriumSdkError`                           |
 | `src/transport.ts`                | `Transport` type and default `fetch` implementation                 |
 | `src/utils.ts`                    | Pure utility functions (rfc3339, placeOrderMessage, siweMessage, …) |
-| `src/helpers/auth.helpers.ts`     | `randomPKCECodeVerifier` and `calculatePKCECodeChallenge`           |
+| `src/helpers/auth.helpers.ts`     | `generatePKCE`                                                      |
 | `src/helpers/internal.helpers.ts` | `getEnv` — internal only, not exported                              |
+| `src/helpers/url.helpers.ts`      | `urlEncoded` and `queryParams`                                      |
 
 ## Runtime compatibility
 
@@ -25,14 +26,10 @@ All code in `src/` must be runtime-agnostic. The SDK is designed to work in Node
 **Do not use:**
 
 - `window`, `document`, `localStorage`, `sessionStorage`
-- `URL` or `URLSearchParams` (not available without node globals)
 - `TextEncoder` / `TextDecoder`
 - Any other browser globals
 
 **Use instead:**
-
-- `urlEncoded()` from `src/utils.ts` instead of `URLSearchParams`
-- `encodeURIComponent` / `decodeURIComponent` for individual values
 
 The one intentional exception is `uploadSupportingDocument` in `src/client.ts`, which requires `Blob` and `FormData`. This is documented in its JSDoc and is acceptable because file uploads are not a MetaMask Snap use case.
 
@@ -63,19 +60,19 @@ The comments need to start with `/**`, starting it with `/*` may be ignored by 
 
 Groups and categories are used to structure the Docusaurus output. Every exported symbol must have a `@group` tag. Use `@category` only inside groups that contain both functions and types.
 
-| Group        | Contents                                                                           |
-| ------------ | ---------------------------------------------------------------------------------- |
-| `Client`     | `createMoneriumClient`, `MoneriumClient`, `MoneriumClientOptions`, transport types |
-| `Auth`       | Auth grant functions, URL builders, PKCE helpers, option types, `BearerProfile`    |
-| `Errors`     | `MoneriumApiError`, `MoneriumSdkError`, `MoneriumSdkErrorType`                     |
-| `Profiles`   | Profile, KYC, AuthContext and related types                                        |
-| `Addresses`  | Address, Balances, LinkAddress and related types                                   |
-| `IBANs`      | IBAN, RequestIbanPayload, MoveIbanPayload and related types                        |
-| `Orders`     | Order, NewOrder, Counterpart, placeOrder and related types                         |
-| `Tokens`     | Token, Currency, TokenSymbol, Ticker, CurrencyCode                                 |
-| `Signatures` | PendingSignature and related types                                                 |
-| `Utilities`  | Pure utility functions, `constants`                                                |
-| `Primitives` | Chain, ChainId, ENV, Environment, ResponseStatus and low-level types               |
+| Group        | Contents                                                                                                          |
+| ------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `Client`     | `createMoneriumApiClient`, `MoneriumApiClient`, `createMoneriumAuthClient`, `MoneriumAuthClient`, transport types |
+| `Auth`       | Auth grant functions, URL builders, `generatePKCE`, option types, `BearerProfile`                                 |
+| `Errors`     | `MoneriumApiError`, `MoneriumSdkError`, `MoneriumSdkErrorType`                                                    |
+| `Profiles`   | Profile, KYC, AuthContext and related types                                                                       |
+| `Addresses`  | Address, Balances, LinkAddress and related types                                                                  |
+| `IBANs`      | IBAN, RequestIbanPayload, MoveIbanPayload and related types                                                       |
+| `Orders`     | Order, NewOrder, Counterpart, placeOrder and related types                                                        |
+| `Tokens`     | Token, Currency, TokenSymbol, Ticker, CurrencyCode                                                                |
+| `Signatures` | PendingSignature and related types                                                                                |
+| `Utilities`  | Pure utility functions, `constants`                                                                               |
+| `Primitives` | Chain, ChainId, ENV, Environment, ResponseStatus and low-level types                                              |
 
 # Function structures and naming conventions
 

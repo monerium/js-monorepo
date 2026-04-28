@@ -36,10 +36,6 @@ All incoming euro payments are automatically minted as EURe tokens to your walle
 Sending EURe to traditional bank accounts is just as easy.
 With a single signature from your wallet, your EURe is burned and sent as Euros to any bank account.
 
-## Documentation
-
-- [SDK Reference](https://monerium.github.io/js-monorepo/)
-
 ## Installation
 
 ```sh
@@ -198,4 +194,4 @@ pnpm test
 
 ## Support
 
-[Support](https://monerium.app/help) | [Telegram](https://t.me/+lGtM1gY9zWthNGE8) | [Github Issues](https://github.com/monerium/js-monorepo/issues)
+[Support](https://monerium.app/help) | [Github Issues](https://github.com/monerium/js-monorepo/issues)

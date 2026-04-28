@@ -111,6 +111,31 @@ if (process.env.CI !== 'true') {
         );
       });
 
+      test('get balances with array of currencies', async () => {
+        const balances = await client.getBalances({
+          address: PUBLIC_KEY,
+          chain: 11155111,
+          currencies: [Currency.eur, Currency.gbp],
+        });
+
+        expect(balances).toEqual(
+          expect.objectContaining({
+            chain: 'sepolia',
+            address: PUBLIC_KEY,
+            balances: expect.arrayContaining([
+              expect.objectContaining({
+                amount: expect.any(String),
+                currency: Currency.eur,
+              }),
+              expect.objectContaining({
+                amount: expect.any(String),
+                currency: Currency.gbp,
+              }),
+            ]),
+          })
+        );
+      }, 15000);
+
       test('get balances', async () => {
         const balances = await client.getBalances({
           address: PUBLIC_KEY,

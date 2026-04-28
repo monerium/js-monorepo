@@ -1,25 +1,11 @@
 import { MoneriumApiError } from './errors';
+import { queryParams, urlEncoded } from './helpers';
 export { generatePKCE } from './helpers';
 
 import { getEnv } from './helpers/internal.helpers';
 import type { Transport, TransportResponse } from './transport';
 import { defaultTransport } from './transport';
 import type { BearerProfile, ENV } from './types';
-
-function buildQueryString(
-  params: Record<string, any>,
-  includeQuestionMark = true
-): string {
-  const qs = new URLSearchParams();
-  for (const [k, v] of Object.entries(params)) {
-    if (v !== undefined && v !== null && v !== '') {
-      if (Array.isArray(v)) v.forEach((item) => qs.append(k, String(item)));
-      else qs.append(k, String(v));
-    }
-  }
-  const str = qs.toString();
-  return str ? (includeQuestionMark ? `?${str}` : str) : '';
-}
 
 // ─── URL builders ─────────────────────────────────────────────────────────────
 
@@ -52,7 +38,7 @@ export const buildAuthorizationUrl = (
 ): string => {
   const env = getEnv(options.environment);
 
-  const params = buildQueryString({
+  const params = queryParams({
     client_id: options.clientId,
     redirect_uri: options.redirectUri,
     code_challenge: options.codeChallenge,
@@ -94,7 +80,7 @@ export const buildSiweAuthorizationUrl = (
 ): string => {
   const env = getEnv(options.environment);
 
-  const params = buildQueryString({
+  const params = queryParams({
     client_id: options.clientId,
     redirect_uri: options.redirectUri,
     message: options.message,
@@ -116,7 +102,7 @@ async function tokenRequest(
   body: Record<string, string | undefined>,
   transport: Transport = defaultTransport
 ): Promise<BearerProfile> {
-  const encoded = buildQueryString(body, false);
+  const encoded = urlEncoded(body);
 
   const { status, bodyText }: TransportResponse = await transport({
     method: 'POST',

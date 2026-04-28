@@ -1,29 +1,4 @@
-export {
-  createMoneriumApiClient,
-  createProfile,
-  getAddress,
-  getAddresses,
-  getAuthContext,
-  getBalances,
-  getIban,
-  getIbans,
-  getOrder,
-  getOrders,
-  getProfile,
-  getProfiles,
-  getSignatures,
-  getTokens,
-  linkAddress,
-  moveIban,
-  placeOrder,
-  requestIban,
-  shareProfileKYC,
-  updateProfileDetails,
-  updateProfileForm,
-  updateProfileVerifications,
-  uploadSupportingDocument,
-} from './client';
-export type { MoneriumApiClient, MoneriumApiClientOptions } from './client';
+export * from './client';
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 

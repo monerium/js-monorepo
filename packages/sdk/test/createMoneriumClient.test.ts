@@ -353,6 +353,22 @@ describe('createMoneriumApiClient — addresses', () => {
     expect(requests[0].url).toBe(`${SANDBOX_API}/addresses`);
   });
 
+  test('getBalances — passes array of currencies as multiple query params', async () => {
+    const { transport, requests } = makeTransport([ok({ balances: [] })]);
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
+
+    await client.getBalances({
+      address: '0x1',
+      chain: 'ethereum',
+      currencies: ['eur', 'usd'],
+    } as any);
+
+    expect(requests[0].method).toBe('GET');
+    expect(requests[0].url).toBe(
+      `${SANDBOX_API}/balances/ethereum/0x1?currency=eur&currency=usd`
+    );
+  });
+
   test('linkAddress — POST addresses with JSON body', async () => {
     const { transport, requests } = makeTransport([ok({ address: '0x1' })]);
     const client = createMoneriumApiClient({ accessToken: 'tok', transport });

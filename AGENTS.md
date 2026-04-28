@@ -33,3 +33,7 @@ NPM packages use OIDC Trusted Publisher.
 - Be direct and technical
 - Summarize changes clearly before requesting approval
 - If multiple commands needed, show them all at once
+
+## Monorepo Execution
+
+When running build or test scripts, execute them from the monorepo root using `pnpm --filter @monerium/sdk <command>` instead of changing directories into the package.

@@ -1,5 +1,6 @@
 import { Chain, ChainId } from './chains';
 import { MoneriumApiError, MoneriumSdkError } from './errors';
+import { queryParams } from './helpers';
 import { getEnv } from './helpers/internal.helpers';
 import type { Transport } from './transport';
 import { defaultTransport } from './transport';
@@ -37,19 +38,6 @@ import type {
   UpdateProfileVerificationsInput,
 } from './types';
 import { parseChain } from './utils';
-
-function buildQueryString(params?: Record<string, any>): string {
-  if (!params) return '';
-  const qs = new URLSearchParams();
-  for (const [k, v] of Object.entries(params)) {
-    if (v !== undefined && v !== null && v !== '') {
-      if (Array.isArray(v)) v.forEach((item) => qs.append(k, String(item)));
-      else qs.append(k, String(v));
-    }
-  }
-  const str = qs.toString();
-  return str ? `?${str}` : '';
-}
 
 /** Resolve chain field in an object without backwards-compat remapping. */
 function resolveChain<T extends Record<string, unknown>>(obj: T): T {
@@ -241,10 +229,7 @@ export async function getProfiles(
   params?: GetProfilesParams
 ): Promise<ProfilesResponse> {
   const { request } = createRequestContext(options);
-  return request<ProfilesResponse>(
-    'GET',
-    `profiles${buildQueryString(params)}`
-  );
+  return request<ProfilesResponse>('GET', `profiles${queryParams(params)}`);
 }
 
 /**
@@ -370,7 +355,7 @@ export async function getAddresses(
     : undefined;
   return request<AddressesResponse>(
     'GET',
-    `addresses${buildQueryString(resolvedParams)}`
+    `addresses${queryParams(resolvedParams)}`
   );
 }
 
@@ -409,7 +394,7 @@ export async function getBalances(
 
   return request<Balances>(
     'GET',
-    `balances/${resolvedChain}/${address}${buildQueryString({ currency: currencies })}`
+    `balances/${resolvedChain}/${address}${queryParams({ currency: currencies })}`
   );
 }
 
@@ -444,7 +429,7 @@ export async function getIbans(
   const resolved = params
     ? resolveChain(params as unknown as Record<string, unknown>)
     : undefined;
-  return request<IBANsResponse>('GET', `ibans${buildQueryString(resolved)}`);
+  return request<IBANsResponse>('GET', `ibans${queryParams(resolved)}`);
 }
 
 /**
@@ -508,7 +493,7 @@ export async function getOrders(
   params?: OrderParams
 ): Promise<OrdersResponse> {
   const { request } = createRequestContext(options);
-  return request<OrdersResponse>('GET', `orders${buildQueryString(params)}`);
+  return request<OrdersResponse>('GET', `orders${queryParams(params)}`);
 }
 
 /**
@@ -572,7 +557,7 @@ export async function getSignatures(
     : undefined;
   return request<SignaturesResponse>(
     'GET',
-    `signatures${buildQueryString(resolved)}`
+    `signatures${queryParams(resolved)}`
   );
 }
 
