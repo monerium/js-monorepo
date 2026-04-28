@@ -303,10 +303,10 @@ export async function updateProfileForm(
 }
 
 /**
- * Submit verifications for a profile. Only the verifications provided are updated. `sourceOfFunds is submitted here by all partners when required; other verification kinds are populated automatically when using the Sumsub share flow.
+ * Submit verifications for a profile. Only the verifications provided are updated. `sourceOfFunds` is submitted here by all partners when required; other verification kinds are populated automatically when using the Sumsub share flow.
  *
  * @group Profiles
- * @see `https://docs.monerium.com/api#tag/profiles/operation/patch-profile-verifications` | API Documentation}
+ * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-verifications | API Documentation}
  * @returns {Promise<AcceptedResponse>} The verification data has been received and will be processed by Monerium.
  */
 export async function updateProfileVerifications(
@@ -575,7 +575,7 @@ export async function getSignatures(
  * Accepts binary data in multiple formats and normalizes it to a {@link Blob}
  * internally before sending the request.
  *
- * @param file - The document to upload. Can be a {@link Blob}, \{@link Uint8Array\}, or \{@link ArrayBuffer\}.
+ * @param file - The document to upload. Can be a {@link Blob}, {@link Uint8Array}, or {@link ArrayBuffer}.
  * @param filename - Optional filename to associate with the uploaded file.
  * If not provided, a default name will be inferred when possible, otherwise `"document"` is used.
  * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
@@ -669,10 +669,10 @@ export interface MoneriumApiClient {
    */
   updateProfileForm(input: UpdateProfileFormInput): Promise<AcceptedResponse>;
   /**
-   * Submit verifications for a profile. Only the verifications provided are updated. `sourceOfFunds is submitted here by all partners when required; other verification kinds are populated automatically when using the Sumsub share flow.
+   * Submit verifications for a profile. Only the verifications provided are updated. `sourceOfFunds` is submitted here by all partners when required; other verification kinds are populated automatically when using the Sumsub share flow.
    *
    * @group Profiles
-   * @see `https://docs.monerium.com/api#tag/profiles/operation/patch-profile-verifications` | API Documentation}
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-verifications | API Documentation}
    * @returns {Promise<AcceptedResponse>} The verification data has been received and will be processed by Monerium.
    */
   updateProfileVerifications(
@@ -736,7 +736,7 @@ export interface MoneriumApiClient {
    * Move an IBAN to a different address and chain.
    *
    * @group IBANs
-   * @see `https://docs.monerium.com/api#tag/ibans/operation/move-iban` | API Documentation}
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/move-iban | API Documentation}
    */
   moveIban(input: MoveIbanInput): Promise<AcceptedResponse>;
   /**
@@ -781,15 +781,15 @@ export interface MoneriumApiClient {
   /**
    * Upload a supporting document for KYC onboarding or order support using `multipart/form-data`.
    *
-   * Accepts binary data in multiple formats and normalizes it to a \{@link Blob\}
+   * Accepts binary data in multiple formats and normalizes it to a {@link Blob}
    * internally before sending the request.
    *
-   * @param file - The document to upload. Can be a \{@link Blob\}, \{@link Uint8Array\}, or \{@link ArrayBuffer\}.
+   * @param file - The document to upload. Can be a {@link Blob}, {@link Uint8Array}, or {@link ArrayBuffer}.
    * @param filename - Optional filename to associate with the uploaded file.
    * If not provided, a default name will be inferred when possible, otherwise `"document"` is used.
    * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
    * @remarks
-   * This method constructs a \{@link FormData\} payload internally and sends it to the `POST /files` endpoint.
+   * This method constructs a {@link FormData} payload internally and sends it to the `POST /files` endpoint.
    * Consumers do not need to manually create or manage multipart form data.
    * @group Files
    */
@@ -800,7 +800,7 @@ export interface MoneriumApiClient {
 }
 
 /**
- * Creates a \{@link MoneriumApiClient\} instance.
+ * Creates a {@link MoneriumApiClient} instance.
  * @group Client
  * @category Functions
  */
