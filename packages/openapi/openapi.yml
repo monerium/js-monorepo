@@ -569,6 +569,65 @@ paths:
         - BearerAuth: []
       tags:
         - webhooks
+  /countries:
+    get:
+      operationId: get-countries
+      summary: List countries
+      description: 'Returns a list of countries with their risk tiers for [KYC](/kyc-guide-individuals) and [KYB](/kyb-guide-corporates) onboarding.'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  countries:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - name
+                        - code
+                        - nationality
+                        - residency
+                      properties:
+                        name:
+                          description: Name of the country.
+                          type: string
+                        code:
+                          description: Two-letter country code ISO 3166-1 alpha-2.
+                          type: string
+                        nationality:
+                          description: Risk category for nationality.
+                          type: string
+                          enum:
+                            - low
+                            - medium
+                            - high
+                            - restricted
+                            - prohibited
+                        residency:
+                          description: Risk category for residency.
+                          type: string
+                          enum:
+                            - low
+                            - medium
+                            - high
+                            - restricted
+                            - prohibited
+                  total:
+                    type: integer
+              example:
+                countries:
+                  - name: France
+                    code: FR
+                    nationality: low
+                    residency: low
+                total: 1
+      security: []
+      tags:
+        - profiles
   /profiles:
     post:
       operationId: create-profile
@@ -3624,6 +3683,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-04-28:
+      * [GET /countries](#operation/get-countries) - Added countries endpoint to fetch supported countries and their details.
+
       ### 2026-04-27:
       * [POST /auth](#operation/auth), [GET /auth](#operation/auth-get) - Added `auth_mode` query parameter to control initial auth screen (`login` or `signup`) when the user is not authenticated.
 
