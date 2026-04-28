@@ -16,7 +16,6 @@ This is the Monerium JavaScript SDK, v4.0.0. The public API is entirely function
 | `src/transport.ts`                | `Transport` type and default `fetch` implementation                 |
 | `src/utils.ts`                    | Pure utility functions (rfc3339, placeOrderMessage, siweMessage, …) |
 | `src/helpers/auth.helpers.ts`     | `randomPKCECodeVerifier` and `calculatePKCECodeChallenge`           |
-| `src/helpers/url.helpers.ts`      | `queryParams` helper                                                |
 | `src/helpers/internal.helpers.ts` | `getEnv` — internal only, not exported                              |
 
 ## Runtime compatibility
