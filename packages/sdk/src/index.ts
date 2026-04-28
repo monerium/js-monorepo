@@ -23,11 +23,11 @@
  * ## Custom transport
  *
  * By default the SDK uses the platform's built-in `fetch`. You can replace it
- * with a `transport` option on {@link createMoneriumClient} — useful for
+ * with a `transport` option on {@link createMoneriumApiClient} — useful for
  * injecting custom headers, routing requests through a proxy, or testing:
  *
  * ```ts
- * const client = createMoneriumClient({
+ * const api = createMoneriumApiClient({
  *   environment: 'sandbox',
  *   accessToken: token,
  *   transport: async ({ method, url, headers, body }) => {
@@ -40,22 +40,18 @@
  * @example
  * ```ts
  * import {
- *   randomPKCECodeVerifier,
- *   calculatePKCECodeChallenge,
- *   buildAuthorizationUrl,
- *   authorizationCodeGrant,
- *   parseAuthorizationResponse,
- *   refreshTokenGrant,
- *   createMoneriumClient,
+ *   generatePKCE,
+ *   createMoneriumAuthClient,
+ *   createMoneriumApiClient,
  * } from '@monerium/sdk';
  *
  * // --- Initiate login (server route) ---
- * const codeVerifier = randomPKCECodeVerifier();
- * const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
+ * const { codeVerifier, codeChallenge } = generatePKCE();
  * session.set('pkce_verifier', codeVerifier); // server-side session
  *
- * const url = buildAuthorizationUrl({
- *   environment: 'sandbox',
+ * const auth = createMoneriumAuthClient({ environment: 'sandbox' });
+ *
+ * const url = auth.buildAuthorizationUrl({
  *   clientId: 'your-client-id',
  *   redirectUri: 'https://your-app.com/callback',
  *   codeChallenge,
@@ -63,12 +59,11 @@
  * res.redirect(url);
  *
  * // --- Handle the callback (server route) ---
- * const { code } = parseAuthorizationResponse(req.url);
+ * const { code } = auth.parseAuthorizationResponse(req.url);
  * const codeVerifier = session.get('pkce_verifier');
  * session.delete('pkce_verifier');
  *
- * const bearerProfile = await authorizationCodeGrant({
- *   environment: 'sandbox',
+ * const bearerProfile = await auth.authorizationCodeGrant({
  *   clientId: 'your-client-id',
  *   redirectUri: 'https://your-app.com/callback',
  *   code,
@@ -80,12 +75,11 @@
  * req.session.accessExpiry = Date.now() + bearerProfile.expires_in * 1000;
  *
  * // --- Use the API ---
- * const client = createMoneriumClient({
+ * const api = createMoneriumApiClient({
  *   environment: 'sandbox',
  *   getAccessToken: async () => {
  *     if (Date.now() > session.accessExpiry) {
- *       const newProfile = await refreshTokenGrant({
- *         environment: 'sandbox',
+ *       const newProfile = await auth.refreshTokenGrant({
  *         clientId: 'your-client-id',
  *         refreshToken: session.refreshToken,
  *       });
@@ -97,28 +91,54 @@
  *   },
  * });
  *
- * const profiles = await client.getProfiles();
+ * const profiles = await api.getProfiles();
  * ```
  */
 
 // ─── Client ───────────────────────────────────────────────────────────────────
 
-export { createMoneriumClient } from './client';
-export type { MoneriumClient, MoneriumClientOptions } from './client';
+export {
+  createMoneriumApiClient,
+  createProfile,
+  getAddress,
+  getAddresses,
+  getAuthContext,
+  getBalances,
+  getIban,
+  getIbans,
+  getOrder,
+  getOrders,
+  getProfile,
+  getProfiles,
+  getSignatures,
+  getTokens,
+  linkAddress,
+  moveIban,
+  placeOrder,
+  requestIban,
+  shareProfileKYC,
+  updateProfileDetails,
+  updateProfileForm,
+  updateProfileVerifications,
+  uploadSupportingDocument,
+} from './client';
+export type { MoneriumApiClient, MoneriumApiClientOptions } from './client';
 
-// ─── Auth helpers ─────────────────────────────────────────────────────────────
+// ─── Auth ─────────────────────────────────────────────────────────────────────
 
 export {
   authorizationCodeGrant,
   buildAuthorizationUrl,
   buildSiweAuthorizationUrl,
   clientCredentialsGrant,
+  createMoneriumAuthClient,
   parseAuthorizationResponse,
   refreshTokenGrant,
 } from './auth';
 
 export {
   calculatePKCECodeChallenge,
+  generatePKCE,
   randomPKCECodeVerifier,
 } from './helpers/auth.helpers';
 
@@ -127,6 +147,8 @@ export type {
   BuildAuthorizationUrlOptions,
   BuildSiweAuthorizationUrlOptions,
   ClientCredentialsGrantOptions,
+  MoneriumAuthClient,
+  MoneriumAuthClientOptions,
   ParsedAuthorizationResponse,
   RefreshTokenGrantOptions,
 } from './auth';

@@ -3,7 +3,7 @@
  */
 
 const {
-  createMoneriumClient,
+  createMoneriumApiClient,
   clientCredentialsGrant,
 } = require('../dist/index.js');
 
@@ -16,7 +16,7 @@ const {
 } = constants;
 
 test('should import without throwing', () => {
-  expect(createMoneriumClient).toBeDefined();
+  expect(createMoneriumApiClient).toBeDefined();
   expect(clientCredentialsGrant).toBeDefined();
 });
 
@@ -28,7 +28,7 @@ process.env.CI !== 'true' &&
       clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       environment: 'sandbox',
       accessToken: access_token,
     });

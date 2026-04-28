@@ -3,6 +3,8 @@ import {
   buildAuthorizationUrl,
   buildSiweAuthorizationUrl,
   clientCredentialsGrant,
+  createMoneriumAuthClient,
+  generatePKCE,
   parseAuthorizationResponse,
   refreshTokenGrant,
 } from '../src/auth';
@@ -95,6 +97,15 @@ describe('calculatePKCECodeChallenge', () => {
   });
 });
 
+describe('generatePKCE', () => {
+  test('returns verifier and challenge', () => {
+    const { codeVerifier, codeChallenge } = generatePKCE();
+    expect(typeof codeVerifier).toBe('string');
+    expect(typeof codeChallenge).toBe('string');
+    expect(calculatePKCECodeChallenge(codeVerifier)).toBe(codeChallenge);
+  });
+});
+
 // ─── buildAuthorizationUrl ────────────────────────────────────────────────────
 
 describe('buildAuthorizationUrl', () => {
@@ -145,18 +156,6 @@ describe('buildAuthorizationUrl', () => {
     expect(url).toContain('skip_kyc=true');
   });
 
-  test('includes optional address, signature and chain for wallet auto-linking', () => {
-    const url = buildAuthorizationUrl({
-      ...base,
-      address: '0xabc',
-      signature: '0xsig',
-      chain: 'ethereum',
-    });
-    expect(url).toContain('address=0xabc');
-    expect(url).toContain('signature=0xsig');
-    expect(url).toContain('chain=ethereum');
-  });
-
   test('omits undefined optional parameters', () => {
     const url = buildAuthorizationUrl(base);
     expect(url).not.toContain('state=');
@@ -174,8 +173,7 @@ describe('buildAuthorizationUrl', () => {
       ...base,
       state: undefined,
       email: undefined,
-      address: undefined,
-    });
+    } as any);
     expect(url).not.toContain('state=');
     expect(url).not.toContain('email=');
     expect(url).not.toContain('address=');
@@ -273,7 +271,7 @@ describe('parseAuthorizationResponse', () => {
   test('never throws', () => {
     expect(() => parseAuthorizationResponse('')).not.toThrow();
     expect(() => parseAuthorizationResponse('garbage')).not.toThrow();
-    expect(() => parseAuthorizationResponse({})).not.toThrow();
+    expect(() => parseAuthorizationResponse({} as any)).not.toThrow();
     expect(() =>
       parseAuthorizationResponse('https://app.example.com/no-params')
     ).not.toThrow();
@@ -538,5 +536,68 @@ describe('clientCredentialsGrant', () => {
 
     expect(requests[0].url).not.toContain('my-secret');
     expect(requests[0].body).toContain('client_secret=my-secret');
+  });
+});
+
+// ─── createMoneriumAuthClient ───────────────────────────────────────────────────────
+
+describe('createMoneriumAuthClient', () => {
+  const clientId = 'client-1';
+  const redirectUri = 'https://app.example.com/callback';
+
+  test('buildAuthorizationUrl uses encapsulated environment', () => {
+    const auth = createMoneriumAuthClient({ environment: 'production' });
+    const url = auth.buildAuthorizationUrl({
+      clientId,
+      redirectUri,
+      codeChallenge: 'challenge',
+    });
+
+    expect(url).toContain('client_id=client-1');
+    expect(url).toContain('api.monerium.app');
+  });
+
+  test('authorizationCodeGrant uses encapsulated transport', async () => {
+    const { transport, requests } = makeTransport([ok(bearerProfileFixture)]);
+    const auth = createMoneriumAuthClient({ transport });
+
+    await auth.authorizationCodeGrant({
+      clientId,
+      redirectUri,
+      code: 'auth-code',
+      codeVerifier: 'verifier',
+    });
+
+    expect(requests[0].body).toContain('client_id=client-1');
+    expect(requests[0].body).toContain('grant_type=authorization_code');
+  });
+
+  test('refreshTokenGrant uses encapsulated environment', async () => {
+    const { transport, requests } = makeTransport([ok(bearerProfileFixture)]);
+    const auth = createMoneriumAuthClient({
+      environment: 'production',
+      transport,
+    });
+
+    await auth.refreshTokenGrant({ clientId, refreshToken: 'rt' });
+
+    expect(requests[0].url).toContain('api.monerium.app');
+    expect(requests[0].body).toContain('client_id=client-1');
+  });
+
+  test('clientCredentialsGrant uses encapsulated transport', async () => {
+    const { transport, requests } = makeTransport([ok(bearerProfileFixture)]);
+    const auth = createMoneriumAuthClient({ transport });
+
+    await auth.clientCredentialsGrant({ clientId, clientSecret: 'secret' });
+
+    expect(requests[0].body).toContain('client_id=client-1');
+    expect(requests[0].body).toContain('client_secret=secret');
+  });
+
+  test('parseAuthorizationResponse is available on the client', () => {
+    const auth = createMoneriumAuthClient({});
+    const result = auth.parseAuthorizationResponse('?code=abc');
+    expect(result.code).toBe('abc');
   });
 });

@@ -1,4 +1,4 @@
-import { createMoneriumClient } from '../src/client';
+import { createMoneriumApiClient } from '../src/client';
 
 import { MoneriumApiError, MoneriumSdkError } from '../src/errors';
 
@@ -54,17 +54,17 @@ const PRODUCTION_API = 'https://api.monerium.app';
 
 // ─── Construction ─────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — construction', () => {
+describe('createMoneriumApiClient — construction', () => {
   test('defaults to sandbox environment', async () => {
     const { transport, requests } = makeTransport([ok([])]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
     await client.getTokens();
     expect(requests[0].url).toContain(SANDBOX_API);
   });
 
   test('uses production environment when specified', async () => {
     const { transport, requests } = makeTransport([ok([])]);
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       environment: 'production',
       accessToken: 'tok',
       transport,
@@ -75,7 +75,7 @@ describe('createMoneriumClient — construction', () => {
 
   test('accepts getAccessToken callback', async () => {
     const { transport, requests } = makeTransport([ok({})]);
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       getAccessToken: async () => 'callback-token',
       transport,
     });
@@ -85,7 +85,7 @@ describe('createMoneriumClient — construction', () => {
 
   test('accepts static accessToken', async () => {
     const { transport, requests } = makeTransport([ok({})]);
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       accessToken: 'static-token',
       transport,
     });
@@ -95,17 +95,17 @@ describe('createMoneriumClient — construction', () => {
 
   test('works without any token for unauthenticated endpoints', async () => {
     const { transport } = makeTransport([ok([])]);
-    const client = createMoneriumClient({ transport });
+    const client = createMoneriumApiClient({ transport });
     await expect(client.getTokens()).resolves.toBeDefined();
   });
 });
 
 // ─── Headers ──────────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — request headers', () => {
+describe('createMoneriumApiClient — request headers', () => {
   test('always sends Accept header with API version', async () => {
     const { transport, requests } = makeTransport([ok([])]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
     await client.getTokens();
     expect(requests[0].headers['Accept']).toBe(
       'application/vnd.monerium.api-v2+json'
@@ -114,7 +114,7 @@ describe('createMoneriumClient — request headers', () => {
 
   test('sends Content-Type: application/json by default', async () => {
     const { transport, requests } = makeTransport([ok([])]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
     await client.getTokens();
     expect(requests[0].headers['Content-Type']).toBe('application/json');
   });
@@ -122,7 +122,7 @@ describe('createMoneriumClient — request headers', () => {
   test('calls getAccessToken before every request', async () => {
     const getAccessToken = jest.fn().mockResolvedValue('fresh-token');
     const { transport } = makeTransport([ok({}), ok({})]);
-    const client = createMoneriumClient({ getAccessToken, transport });
+    const client = createMoneriumApiClient({ getAccessToken, transport });
 
     await client.getAuthContext();
     await client.getAuthContext();
@@ -132,7 +132,7 @@ describe('createMoneriumClient — request headers', () => {
 
   test('propagates getAccessToken error as-is to the caller', async () => {
     const error = new Error('token store unavailable');
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       getAccessToken: async () => {
         throw error;
       },
@@ -147,9 +147,9 @@ describe('createMoneriumClient — request headers', () => {
 
 // ─── Authentication ───────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — authentication', () => {
+describe('createMoneriumApiClient — authentication', () => {
   test('throws MoneriumSdkError authentication_required for authenticated endpoint with no token', async () => {
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       transport: async () => ({ status: 200, bodyText: '{}' }),
     });
 
@@ -159,7 +159,7 @@ describe('createMoneriumClient — authentication', () => {
   });
 
   test('throws MoneriumSdkError with correct type', async () => {
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       transport: async () => ({ status: 200, bodyText: '{}' }),
     });
 
@@ -173,19 +173,22 @@ describe('createMoneriumClient — authentication', () => {
 
   test('does not require token for getTokens', async () => {
     const { transport } = makeTransport([ok([])]);
-    const client = createMoneriumClient({ transport });
+    const client = createMoneriumApiClient({ transport });
     await expect(client.getTokens()).resolves.toEqual([]);
   });
 });
 
 // ─── Error handling ───────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — error handling', () => {
+describe('createMoneriumApiClient — error handling', () => {
   test('throws MoneriumApiError on 401', async () => {
     const { transport } = makeTransport([
       apiError(401, 'Unauthorized', 'Not authenticated'),
     ]);
-    const client = createMoneriumClient({ accessToken: 'expired', transport });
+    const client = createMoneriumApiClient({
+      accessToken: 'expired',
+      transport,
+    });
 
     await expect(client.getAuthContext()).rejects.toBeInstanceOf(
       MoneriumApiError
@@ -196,7 +199,10 @@ describe('createMoneriumClient — error handling', () => {
     const { transport } = makeTransport([
       apiError(401, 'Unauthorized', 'Not authenticated'),
     ]);
-    const client = createMoneriumClient({ accessToken: 'expired', transport });
+    const client = createMoneriumApiClient({
+      accessToken: 'expired',
+      transport,
+    });
 
     try {
       await client.getAuthContext();
@@ -216,7 +222,7 @@ describe('createMoneriumClient — error handling', () => {
         },
       }),
     ]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     try {
       await client.placeOrder({} as any);
@@ -232,7 +238,7 @@ describe('createMoneriumClient — error handling', () => {
     // When using a custom transport, errors are not wrapped by the SDK.
     // MoneriumSdkError('network_error') wrapping only happens in the defaultTransport.
     const cause = new TypeError('Failed to fetch');
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       accessToken: 'tok',
       transport: async () => {
         throw cause;
@@ -245,7 +251,7 @@ describe('createMoneriumClient — error handling', () => {
   test('defaultTransport wraps fetch failures in MoneriumSdkError network_error', async () => {
     // Simulate the defaultTransport behaviour by providing a transport that
     // itself wraps errors — demonstrating what defaultTransport does internally.
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       accessToken: 'tok',
       transport: async () => {
         try {
@@ -272,10 +278,10 @@ describe('createMoneriumClient — error handling', () => {
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — getAuthContext', () => {
+describe('createMoneriumApiClient — getAuthContext', () => {
   test('GET auth/context', async () => {
     const { transport, requests } = makeTransport([ok({ userId: 'u1' })]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     const result = await client.getAuthContext();
 
@@ -287,10 +293,10 @@ describe('createMoneriumClient — getAuthContext', () => {
 
 // ─── Profiles ─────────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — profiles', () => {
+describe('createMoneriumApiClient — profiles', () => {
   test('getProfile — GET profiles/:id', async () => {
     const { transport, requests } = makeTransport([ok({ id: 'p1' })]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getProfile('p1');
 
@@ -302,7 +308,7 @@ describe('createMoneriumClient — profiles', () => {
     const { transport, requests } = makeTransport([
       ok({ profiles: [], total: 0 }),
     ]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getProfiles();
 
@@ -314,7 +320,7 @@ describe('createMoneriumClient — profiles', () => {
     const { transport, requests } = makeTransport([
       ok({ profiles: [], total: 0 }),
     ]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getProfiles({ kind: 'personal' } as any);
 
@@ -324,10 +330,10 @@ describe('createMoneriumClient — profiles', () => {
 
 // ─── Addresses ────────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — addresses', () => {
+describe('createMoneriumApiClient — addresses', () => {
   test('getAddress — GET addresses/:address', async () => {
     const { transport, requests } = makeTransport([ok({ address: '0x1' })]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getAddress('0x1');
 
@@ -339,7 +345,7 @@ describe('createMoneriumClient — addresses', () => {
     const { transport, requests } = makeTransport([
       ok({ addresses: [], total: 0 }),
     ]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getAddresses();
 
@@ -349,7 +355,7 @@ describe('createMoneriumClient — addresses', () => {
 
   test('linkAddress — POST addresses with JSON body', async () => {
     const { transport, requests } = makeTransport([ok({ address: '0x1' })]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
     const payload = { address: '0x1', signature: '0xsig', chain: 'ethereum' };
 
     await client.linkAddress(payload as any);
@@ -362,10 +368,10 @@ describe('createMoneriumClient — addresses', () => {
 
 // ─── IBANs ────────────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — ibans', () => {
+describe('createMoneriumApiClient — ibans', () => {
   test('getIban — GET ibans/:iban', async () => {
     const { transport, requests } = makeTransport([ok({ iban: 'GB00...' })]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getIban('GB00...');
 
@@ -377,12 +383,13 @@ describe('createMoneriumClient — ibans', () => {
     const { transport, requests } = makeTransport([
       ok({ status: 200, statusText: 'OK' }),
     ]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
-    await client.moveIban('GB00...', {
+    await client.moveIban({
+      iban: 'GB00...',
       address: '0x1',
       chain: 'ethereum',
-    } as any);
+    });
 
     expect(requests[0].method).toBe('PATCH');
     expect(requests[0].url).toBe(`${SANDBOX_API}/ibans/GB00...`);
@@ -392,7 +399,7 @@ describe('createMoneriumClient — ibans', () => {
     const { transport, requests } = makeTransport([
       ok({ status: 201, statusText: 'Created' }),
     ]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.requestIban({ address: '0x1', chain: 'ethereum' } as any);
 
@@ -403,10 +410,10 @@ describe('createMoneriumClient — ibans', () => {
 
 // ─── Orders ───────────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — orders', () => {
+describe('createMoneriumApiClient — orders', () => {
   test('getOrder — GET orders/:id', async () => {
     const { transport, requests } = makeTransport([ok({ id: 'o1' })]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getOrder('o1');
 
@@ -418,7 +425,7 @@ describe('createMoneriumClient — orders', () => {
     const { transport, requests } = makeTransport([
       ok({ orders: [], total: 0 }),
     ]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getOrders();
 
@@ -430,7 +437,7 @@ describe('createMoneriumClient — orders', () => {
     const { transport, requests } = makeTransport([
       ok({ orders: [], total: 0 }),
     ]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
 
     await client.getOrders({ address: '0x1' } as any);
 
@@ -439,7 +446,7 @@ describe('createMoneriumClient — orders', () => {
 
   test('placeOrder — POST orders with JSON body', async () => {
     const { transport, requests } = makeTransport([ok({ id: 'o1' })]);
-    const client = createMoneriumClient({ accessToken: 'tok', transport });
+    const client = createMoneriumApiClient({ accessToken: 'tok', transport });
     const order = { amount: '10', currency: 'EUR' };
 
     await client.placeOrder(order as any);
@@ -456,10 +463,10 @@ describe('createMoneriumClient — orders', () => {
 
 // ─── Tokens ───────────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — tokens', () => {
+describe('createMoneriumApiClient — tokens', () => {
   test('getTokens — GET tokens (no auth required)', async () => {
     const { transport, requests } = makeTransport([ok([])]);
-    const client = createMoneriumClient({ transport });
+    const client = createMoneriumApiClient({ transport });
 
     await client.getTokens();
 
@@ -471,10 +478,10 @@ describe('createMoneriumClient — tokens', () => {
 
 // ─── Transport ────────────────────────────────────────────────────────────────
 
-describe('createMoneriumClient — custom transport', () => {
+describe('createMoneriumApiClient — custom transport', () => {
   test('custom transport receives pre-populated headers', async () => {
     const capturedRequests: TransportRequest[] = [];
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       accessToken: 'my-token',
       transport: async (req) => {
         capturedRequests.push(req);
@@ -492,7 +499,7 @@ describe('createMoneriumClient — custom transport', () => {
 
   test('custom transport can be used to add retry logic', async () => {
     let attempts = 0;
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       accessToken: 'tok',
       transport: async (req) => {
         attempts++;
@@ -504,7 +511,7 @@ describe('createMoneriumClient — custom transport', () => {
     });
 
     // Wrap in a retry transport at the consumer level
-    const retryingClient = createMoneriumClient({
+    const retryingClient = createMoneriumApiClient({
       accessToken: 'tok',
       transport: async (req) => {
         for (let i = 0; i < 3; i++) {

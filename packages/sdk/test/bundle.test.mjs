@@ -1,6 +1,6 @@
 import {
   clientCredentialsGrant,
-  createMoneriumClient,
+  createMoneriumApiClient,
 } from '../dist/index.mjs';
 import {
   APP_ONE_CREDENTIALS_CLIENT_ID,
@@ -9,7 +9,7 @@ import {
 } from './constants.ts';
 
 test('should import without throwing', () => {
-  expect(createMoneriumClient).toBeDefined();
+  expect(createMoneriumApiClient).toBeDefined();
   expect(clientCredentialsGrant).toBeDefined();
 });
 
@@ -21,7 +21,7 @@ process.env.CI !== 'true' &&
       clientSecret: APP_ONE_CREDENTIALS_SECRET,
     });
 
-    const client = createMoneriumClient({
+    const client = createMoneriumApiClient({
       environment: 'sandbox',
       accessToken: access_token,
     });

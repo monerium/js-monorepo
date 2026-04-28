@@ -1,4 +1,5 @@
 import { MoneriumApiError } from './errors';
+export { generatePKCE } from './helpers';
 import { queryParams } from './helpers';
 import { getEnv } from './helpers/internal.helpers';
 import type { Transport, TransportResponse } from './transport';
@@ -301,3 +302,64 @@ export const parseAuthorizationResponse = (
 
   return result;
 };
+
+// ─── Auth Client ──────────────────────────────────────────────────────────────
+
+/**
+ * @group Client
+ * @category Types
+ */
+export interface MoneriumAuthClientOptions {
+  environment?: ENV;
+  transport?: Transport;
+}
+
+/**
+ * The auth client instance returned by {@link createMoneriumAuthClient}.
+ * Provides methods for the Monerium authorization flow.
+ * @group Client
+ * @category Interface
+ */
+export interface MoneriumAuthClient {
+  buildAuthorizationUrl(
+    options: Omit<BuildAuthorizationUrlOptions, 'environment'>
+  ): string;
+  buildSiweAuthorizationUrl(
+    options: Omit<BuildSiweAuthorizationUrlOptions, 'environment'>
+  ): string;
+  authorizationCodeGrant(
+    options: Omit<AuthorizationCodeGrantOptions, 'environment' | 'transport'>
+  ): Promise<BearerProfile>;
+  refreshTokenGrant(
+    options: Omit<RefreshTokenGrantOptions, 'environment' | 'transport'>
+  ): Promise<BearerProfile>;
+  clientCredentialsGrant(
+    options: Omit<ClientCredentialsGrantOptions, 'environment' | 'transport'>
+  ): Promise<BearerProfile>;
+  parseAuthorizationResponse(input: string): ParsedAuthorizationResponse;
+}
+
+/**
+ * Creates a {@link MoneriumAuthClient} instance for managing the Monerium authorization flow.
+ * @group Client
+ * @category Functions
+ */
+export function createMoneriumAuthClient(
+  options: MoneriumAuthClientOptions
+): MoneriumAuthClient {
+  const { environment, transport } = options;
+
+  return {
+    buildAuthorizationUrl: (opts) =>
+      buildAuthorizationUrl({ ...opts, environment }),
+    buildSiweAuthorizationUrl: (opts) =>
+      buildSiweAuthorizationUrl({ ...opts, environment }),
+    authorizationCodeGrant: (opts) =>
+      authorizationCodeGrant({ ...opts, environment, transport }),
+    refreshTokenGrant: (opts) =>
+      refreshTokenGrant({ ...opts, environment, transport }),
+    clientCredentialsGrant: (opts) =>
+      clientCredentialsGrant({ ...opts, environment, transport }),
+    parseAuthorizationResponse,
+  };
+}

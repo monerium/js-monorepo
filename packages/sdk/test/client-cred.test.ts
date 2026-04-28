@@ -7,12 +7,11 @@
 
 // punkWallet: https://punkwallet.io/pk#0x30fa9f64fb85dab6b4bf045443e08315d6570d4eabce7c1363acda96042a6e1a
 
-import { clientCredentialsGrant, createMoneriumClient } from '../src/index';
+import { clientCredentialsGrant, createMoneriumApiClient } from '../src/index';
 import {
   Currency,
   Individual,
   Order,
-  PaymentStandard,
   PersonalProfileDetails,
 } from '../src/types';
 import { rfc3339 } from '../src/utils';
@@ -26,7 +25,7 @@ import {
   PUBLIC_KEY,
 } from './constants';
 
-let client: ReturnType<typeof createMoneriumClient>;
+let client: ReturnType<typeof createMoneriumApiClient>;
 
 if (process.env.CI !== 'true') {
   beforeAll(async () => {
@@ -37,7 +36,7 @@ if (process.env.CI !== 'true') {
         clientSecret: APP_ONE_CREDENTIALS_SECRET,
       });
 
-      client = createMoneriumClient({
+      client = createMoneriumApiClient({
         environment: 'sandbox',
         accessToken: access_token,
       });
@@ -48,7 +47,7 @@ if (process.env.CI !== 'true') {
 }
 
 if (process.env.CI !== 'true') {
-  describe('MoneriumClient', () => {
+  describe('MoneriumApiClient', () => {
     test('get tokens', async () => {
       const tokens = await client.getTokens();
 
@@ -113,7 +112,10 @@ if (process.env.CI !== 'true') {
       });
 
       test('get balances', async () => {
-        const balances = await client.getBalances(PUBLIC_KEY, 11155111);
+        const balances = await client.getBalances({
+          address: PUBLIC_KEY,
+          chain: 11155111,
+        });
 
         expect(balances).toEqual(
           expect.objectContaining({
@@ -154,7 +156,8 @@ if (process.env.CI !== 'true') {
         );
       });
       test('move iban with chain', async () => {
-        const res = await client.moveIban(IBAN, {
+        const res = await client.moveIban({
+          iban: IBAN,
           address: PUBLIC_KEY,
           chain: 10200,
         });
@@ -231,7 +234,7 @@ if (process.env.CI !== 'true') {
             address: PUBLIC_KEY,
             counterpart: {
               identifier: {
-                standard: PaymentStandard.iban,
+                standard: 'iban',
                 iban: 'GR1601101250000000012300695',
               },
               details: {
@@ -264,7 +267,7 @@ if (process.env.CI !== 'true') {
             address: PUBLIC_KEY,
             counterpart: {
               identifier: {
-                standard: PaymentStandard.iban,
+                standard: 'iban',
                 iban: 'GR1601101250000000012300695',
               },
               details: {
@@ -337,7 +340,7 @@ if (process.env.CI !== 'true') {
 
         // No way to do this in Sandbox since profiles can't be approved?
         await expect(
-          client.submitProfileDetails(DEFAULT_PROFILE, body)
+          client.updateProfileDetails({ profile: DEFAULT_PROFILE, ...body })
         ).rejects.toMatchObject({
           code: 400,
           status: 'Bad Request',

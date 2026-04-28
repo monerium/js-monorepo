@@ -24,3 +24,17 @@ export const randomPKCECodeVerifier = (): string => {
 export const calculatePKCECodeChallenge = (codeVerifier: string): string => {
   return encodeBase64Url.stringify(SHA256(codeVerifier as string));
 };
+
+/**
+ * Generate a new PKCE code verifier and its corresponding challenge.
+ * @group Auth
+ * @category Functions
+ */
+export const generatePKCE = (): {
+  codeVerifier: string;
+  codeChallenge: string;
+} => {
+  const codeVerifier = randomPKCECodeVerifier();
+  const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
+  return { codeVerifier, codeChallenge };
+};
