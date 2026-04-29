@@ -23,11 +23,6 @@ import {
 } from '@monerium/sdk';
 import { useAddresses, usePlaceOrder } from 'hooks/monerium';
 
-const PaymentStandard = {
-  iban: 'iban' as const,
-  chain: 'chain' as const,
-};
-
 import { getChainConfig } from 'config/chains';
 
 type Status = 'idle' | 'signing' | 'sending' | 'success' | 'error';
@@ -93,7 +88,7 @@ export default function BridgePage() {
         signature,
         counterpart: {
           identifier: {
-            standard: PaymentStandard.chain,
+            standard: 'chain',
             address: selectedParsed.address,
             chain: selectedParsed.chain,
           },

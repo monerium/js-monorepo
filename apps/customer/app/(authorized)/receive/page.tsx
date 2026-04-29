@@ -18,30 +18,24 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 
-import { Chain, shortenAddress } from '@monerium/sdk';
+import { Chain, IBANState, shortenAddress } from '@monerium/sdk';
 import { getChainConfig } from 'config/chains';
 import { useAddresses, useIBANs, useRequestIban } from 'hooks/monerium';
-
-const AccountState: any = {
-  approved: 'approved',
-  pending: 'pending',
-  rejected: 'rejected',
-  blocked: 'blocked',
-};
 
 import ChainIcon from 'components/Chains/Icon';
 
 const ibanStateColor = (
-  state: string
+  state: IBANState
 ): 'success' | 'warning' | 'info' | 'error' | 'default' => {
   switch (state) {
-    case AccountState.approved:
+    case 'approved':
       return 'success';
-    case AccountState.pending:
+    case 'closed':
+    case 'pending':
       return 'warning';
-    case AccountState.requested:
+    case 'requested':
       return 'info';
-    case AccountState.rejected:
+    case 'rejected':
       return 'error';
     default:
       return 'default';

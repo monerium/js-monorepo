@@ -1,5 +1,20 @@
 'use client';
 
+/**
+ * ARCHITECTURE NOTE:
+ *
+ * This file contains React Query hooks that wrap the Next.js Server Actions
+ * defined in `app/actions/monerium.ts`.
+ *
+ * Why this pattern?
+ * 1. Security: The Monerium SDK is initialized strictly on the server within the
+ *    Server Actions. This ensures that the `access_token` and any other secrets
+ *    remain securely on the server and are never exposed to the browser.
+ * 2. Developer Experience: We use React Query (`@tanstack/react-query`) on the
+ *    client side to call these Server Actions. This provides out-of-the-box caching,
+ *    loading states, automatic refetching, and mutation handling for a smooth UI experience.
+ */
+
 import {
   AddressesQueryParams,
   GetBalancesParams,
@@ -7,7 +22,6 @@ import {
   IbansParams,
   LinkAddressInput,
   MoveIbanInput,
-  Order,
   OrderParams,
   PlaceOrderInput,
   RequestIbanInput,
@@ -20,8 +34,8 @@ import { useEffect, useState } from 'react';
 import {
   authorizeAction,
   callbackAction,
-  getSessionAction,
-  logoutAction,
+  clearSession,
+  getSession,
   siweAuthorizeAction,
 } from '../app/actions/auth';
 import {
@@ -73,7 +87,7 @@ export function useAuth() {
     queryKey: ['session'],
     queryFn: async () => {
       console.log('Fetching session...');
-      const s = await getSessionAction();
+      const s = await getSession();
       console.log('Session fetched:', s);
       return s;
     },
@@ -109,7 +123,7 @@ export function useAuth() {
     },
     revokeAccess: async () => {
       queryClient.clear();
-      await logoutAction();
+      await clearSession();
       window.location.href = '/';
     },
   };
@@ -279,12 +293,4 @@ export function useSubmitProfileDetails(params?: { profile?: string }) {
     },
   });
   return { submitProfileDetails: mutateAsync, ...rest };
-}
-
-export function useSubscribeOrderNotification(_params?: {
-  state?: string;
-  profile?: string;
-  onMessage: (order: Order) => void;
-}) {
-  return () => {};
 }

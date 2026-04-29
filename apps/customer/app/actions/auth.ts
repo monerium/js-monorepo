@@ -1,12 +1,46 @@
 'use server';
 
-import { generatePKCE } from '@monerium/sdk';
+import { BearerProfile, generatePKCE } from '@monerium/sdk';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { getMoneriumAuthClient } from '../../lib/sdk';
-import { clearSession, getSession, setSession } from '../../lib/session';
+
+const SESSION_COOKIE_NAME = 'monerium_session';
+
+export async function setSession(profile: BearerProfile) {
+  const cookieStore = await cookies();
+  const expires = new Date(Date.now() + profile.expires_in * 1000);
+
+  cookieStore.set(SESSION_COOKIE_NAME, JSON.stringify(profile), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    expires,
+    path: '/',
+  });
+}
+
+export async function getSession(): Promise<BearerProfile | null> {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
+
+  if (!sessionCookie) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(sessionCookie.value) as BearerProfile;
+  } catch (_error) {
+    return null;
+  }
+}
+
+export async function clearSession() {
+  const cookieStore = await cookies();
+  cookieStore.delete(SESSION_COOKIE_NAME);
+}
 
 const CLIENT_ID =
   process.env.NEXT_PUBLIC_MONERIUM_CLIENT_ID ||
@@ -18,32 +52,34 @@ const REDIRECT_URI =
 const CODE_VERIFIER_COOKIE = 'monerium_code_verifier';
 const STATE_COOKIE = 'monerium_state';
 
+async function prepareAuthFlow() {
+  const { codeVerifier, codeChallenge } = generatePKCE();
+  const state = crypto.randomUUID();
+
+  const cookieStore = await cookies();
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    maxAge: 60 * 10, // 10 minutes
+    path: '/',
+  };
+
+  // Store code verifier and state in secure HTTP-only cookies
+  // so we can retrieve them in the callback action.
+  cookieStore.set(CODE_VERIFIER_COOKIE, codeVerifier, options);
+  cookieStore.set(STATE_COOKIE, state, options);
+
+  return { codeChallenge, state };
+}
+
 /**
  * Initiates the standard Monerium Authorization Flow.
  */
 export async function authorizeAction(skipKyc: boolean = true) {
   const authClient = getMoneriumAuthClient();
 
-  const { codeVerifier, codeChallenge } = generatePKCE();
-  const state = crypto.randomUUID();
-
-  // Store code verifier and state in secure HTTP-only cookies
-  // so we can retrieve them in the callback action.
-  const cookieStore = await cookies();
-  cookieStore.set(CODE_VERIFIER_COOKIE, codeVerifier, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 10, // 10 minutes
-    path: '/',
-  });
-  cookieStore.set(STATE_COOKIE, state, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 10, // 10 minutes
-    path: '/',
-  });
+  const { codeChallenge, state } = await prepareAuthFlow();
 
   const authUrl = authClient.buildAuthorizationUrl({
     clientId: CLIENT_ID,
@@ -62,24 +98,7 @@ export async function authorizeAction(skipKyc: boolean = true) {
 export async function siweAuthorizeAction(message: string, signature: string) {
   const authClient = getMoneriumAuthClient();
 
-  const { codeVerifier, codeChallenge } = generatePKCE();
-  const state = crypto.randomUUID();
-
-  const cookieStore = await cookies();
-  cookieStore.set(CODE_VERIFIER_COOKIE, codeVerifier, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 10, // 10 minutes
-    path: '/',
-  });
-  cookieStore.set(STATE_COOKIE, state, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 10, // 10 minutes
-    path: '/',
-  });
+  const { codeChallenge, state } = await prepareAuthFlow();
 
   const authUrl = authClient.buildSiweAuthorizationUrl({
     clientId: CLIENT_ID,
@@ -153,18 +172,4 @@ export async function callbackAction(url: string) {
   revalidatePath('/');
   revalidatePath('/dashboard');
   redirect('/dashboard');
-}
-
-/**
- * Logs the user out by clearing the session cookie.
- */
-export async function logoutAction() {
-  await clearSession();
-}
-
-/**
- * Returns the current session if it exists, otherwise null.
- */
-export async function getSessionAction() {
-  return await getSession();
 }

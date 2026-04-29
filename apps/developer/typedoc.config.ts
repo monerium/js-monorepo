@@ -9,8 +9,6 @@ const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
   entryPointStrategy: 'Expand',
   gitRevision: 'main',
 
-  // readme: 'none',
-
   // skipErrorChecking: true,
   expandObjects: true,
   expandParameters: true,

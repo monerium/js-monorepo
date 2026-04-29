@@ -1,13 +1,13 @@
 'use client';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Link from 'next/link';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
 
 import {
   Chain,
+  ChainId,
   Currency,
-  Order,
   placeOrderMessage,
   siweMessage,
 } from '@monerium/sdk';
@@ -28,17 +28,9 @@ import {
   useRequestIban,
   useSignatures,
   useSubmitProfileDetails,
-  useSubscribeOrderNotification,
   useTokens,
 } from 'hooks/monerium';
 
-const OrderState: any = {
-  placed: 'placed',
-  processed: 'processed',
-  rejected: 'rejected',
-};
-const PaymentStandard: any = { iban: 'iban', chain: 'chain' };
-type ChainId = any;
 const constants = {} as any;
 export default function Test() {
   // https://punkwallet.io/pk#0xc3dba5f61acf6675aee27b7141db8decf7d4e7514afafdd6b764e02138c53cac
@@ -119,24 +111,6 @@ export default function Test() {
 
   const { requestIban, error: requestIbanError } = useRequestIban();
   const { moveIban, error: moveIbanError } = useMoveIban();
-
-  const handleOrderNotification = (order: Order) => {
-    console.log(
-      '%c order notification!',
-      'color:white; padding: 30px; background-color: darkgreen',
-      order
-    );
-  };
-
-  const unsubscribe = useSubscribeOrderNotification({
-    state: OrderState.placed,
-    profile: profile?.id as string,
-    onMessage: handleOrderNotification,
-  });
-
-  useEffect(() => {
-    return () => unsubscribe();
-  }, [unsubscribe]);
 
   const Input = ({
     name,
@@ -527,7 +501,7 @@ export default function Test() {
           signature,
           counterpart: {
             identifier: {
-              standard: PaymentStandard.chain,
+              standard: 'chain',
               address: counterpartIdentifierAddress,
               chain: counterpartIdentifierChain,
             },
@@ -668,14 +642,6 @@ export default function Test() {
   return (
     <div style={{ padding: '20px' }}>
       <Link href="/dashboard">Dashboard</Link>
-      <button
-        type="submit"
-        onClick={() => {
-          unsubscribe();
-        }}
-      >
-        Close Order Notifications
-      </button>
       <div>
         <ConnectButton />
       </div>

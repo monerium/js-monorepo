@@ -1,12 +1,9 @@
 import {
-  authorizationCodeGrant,
-  buildAuthorizationUrl,
-  buildSiweAuthorizationUrl,
   createMoneriumApiClient,
+  createMoneriumAuthClient,
   ENV,
-  parseAuthorizationResponse,
 } from '@monerium/sdk';
-import { getSession } from './session';
+import { getSession } from '../app/actions/auth';
 
 const environment: ENV =
   (process.env.NEXT_PUBLIC_MONERIUM_ENV as ENV) || 'sandbox';
@@ -33,13 +30,5 @@ export function getMoneriumClient() {
  * Useful for PKCE flows, token exchanges, etc.
  */
 export function getMoneriumAuthClient() {
-  return {
-    buildAuthorizationUrl: (opts: any) =>
-      buildAuthorizationUrl({ ...opts, environment }),
-    buildSiweAuthorizationUrl: (opts: any) =>
-      buildSiweAuthorizationUrl({ ...opts, environment }),
-    authorizationCodeGrant: (opts: any) =>
-      authorizationCodeGrant({ ...opts, environment }),
-    parseAuthorizationResponse,
-  };
+  return createMoneriumAuthClient({ environment });
 }

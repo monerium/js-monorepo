@@ -17,7 +17,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 
-import { Chain } from '@monerium/sdk';
+import { Chain, ProfileState } from '@monerium/sdk';
 import {
   useAddresses,
   useAuth,
@@ -25,26 +25,21 @@ import {
   useProfile,
 } from 'hooks/monerium';
 
-const ProfileState: any = {
-  approved: 'approved',
-  pending: 'pending',
-  rejected: 'rejected',
-  blocked: 'blocked',
-};
-
 import ChainIcon from 'components/Chains/Icon';
 import { getChainConfig } from 'config/chains';
 
 const profileStateColor = (
-  state?: string
-): 'success' | 'warning' | 'error' | 'default' => {
+  state?: ProfileState
+): 'success' | 'warning' | 'error' | 'info' | 'default' => {
   switch (state) {
-    case ProfileState.approved:
+    case 'approved':
       return 'success';
-    case ProfileState.pending:
+    case 'submitted':
+    case 'created':
+      return 'info';
+    case 'incomplete':
       return 'warning';
-    case ProfileState.rejected:
-    case ProfileState.blocked:
+    case 'rejected':
       return 'error';
     default:
       return 'default';

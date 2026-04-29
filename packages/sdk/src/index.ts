@@ -44,7 +44,7 @@ export type {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-export type { Chain, ProductionChain, SandboxChain } from './chains';
+export type { Chain, ChainId, ProductionChain, SandboxChain } from './chains';
 export { default as constants } from './constants';
 export * from './types';
 export {
