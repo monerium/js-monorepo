@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/monerium/js-monorepo/compare/openapi-v2.3.0...openapi-v2.3.1) (2026-04-29)
+
+
+### Miscellaneous
+
+* **openapi:** update changelog ([1e7fe74](https://github.com/monerium/js-monorepo/commit/1e7fe74d5c1040618e1d7b3489bf92b08a1f08df))
+
 ## [2.3.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.2.0...openapi-v2.3.0) (2026-04-29)
 
 
