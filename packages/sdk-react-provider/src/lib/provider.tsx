@@ -21,6 +21,7 @@ import { MoneriumContext } from './context';
  * @param params.refreshToken - Provide the securely stored refresh token to reconnect.
  * @param params.debug - Enable debug mode.
  * @returns
+ * @deprecated This provider is obsolete and incompatible with `@monerium/sdk` v4. It is recommended to manage your own server-side token state and integrate with the new functional API directly.
  */
 export const MoneriumProvider = ({
   children,

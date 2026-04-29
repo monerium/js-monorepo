@@ -1,7 +1,15 @@
 | [Monerium.com](https://monerium.com/) | [Monerium.app](https://monerium.app/) | [Monerium Dev Docs](https://docs.monerium.com/) |
 | ------------------------------------- | ------------------------------------- | ----------------------------------------------- |
 
-# Monerium SDK React Provider.
+# ⚠️ DEPRECATED: Monerium SDK React Provider
+
+> **Note:** This package is deprecated and incompatible with `@monerium/sdk` v4.0.0 and newer.
+>
+> The Monerium SDK v4 delegates token management and API usage to your server (Node.js/server-side runtimes) rather than retaining state in the browser. Using a client-side React Provider to manage secrets is no longer recommended.
+>
+> For a reference implementation of using the v4 SDK securely with modern React (Next.js Server Actions, HTTP-only cookies, and custom React Query hooks), please see the [`apps/customer` demo application in our repository](https://github.com/monerium/js-monorepo/tree/main/apps/customer).
+
+---
 
 This package depends on the SDK, it's currently pinned to v3.5.
 

@@ -1,4 +1,6 @@
 /**
+ * @deprecated This package is deprecated and is incompatible with `@monerium/sdk` v4. Please manage authentication and data fetching on the server using `createMoneriumApiClient`. See the `apps/customer` demo application for a reference implementation.
+ *
  * @packageDocumentation
  * A library to interact with Monerium API with React hooks.
  *
@@ -45,7 +47,7 @@
  *
  */
 
-export * from './lib/provider';
 export * from './lib/context';
 export * from './lib/hooks';
+export * from './lib/provider';
 export * from './lib/types';
