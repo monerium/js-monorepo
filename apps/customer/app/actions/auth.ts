@@ -11,15 +11,22 @@ const SESSION_COOKIE_NAME = 'monerium_session';
 
 export async function setSession(profile: BearerProfile) {
   const cookieStore = await cookies();
-  const expires = new Date(Date.now() + profile.expires_in * 1000);
+  const expires_at = Date.now() + profile.expires_in * 1000;
 
-  cookieStore.set(SESSION_COOKIE_NAME, JSON.stringify(profile), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    expires,
-    path: '/',
-  });
+  // The cookie should live long enough to allow refreshing the token
+  const cookieExpires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+  cookieStore.set(
+    SESSION_COOKIE_NAME,
+    JSON.stringify({ ...profile, expires_at }),
+    {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      expires: cookieExpires,
+      path: '/',
+    }
+  );
 }
 
 export async function getSession(): Promise<BearerProfile | null> {
