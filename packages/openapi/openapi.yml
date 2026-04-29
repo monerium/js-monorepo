@@ -2555,7 +2555,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ProfileSummary'
-    Profile:
+    ProfilePersonal:
       type: object
       properties:
         id:
@@ -2563,7 +2563,9 @@ components:
           type: string
           example: 4f079ef8-6d26-11eb-9bc8-acde48001122
         kind:
-          $ref: '#/components/schemas/ProfileKind'
+          type: string
+          enum:
+            - personal
         name:
           description: The Profile name. This can be a corporate or an individual.
           type: string
@@ -2577,20 +2579,41 @@ components:
           description: Additional data section used for risk calculations.
           $ref: '#/components/schemas/ProfileSection'
         verifications:
-          description: 'Verification items required for this profile, each with its current state.'
-          type: array
-          items:
-            oneOf:
-              - title: Personal
-                properties:
-                  personal:
-                    description: Verifications for an individual
-                    $ref: '#/components/schemas/PersonalVerifications'
-              - title: Corporate
-                properties:
-                  corporate:
-                    description: Verifications for a company
-                    $ref: '#/components/schemas/CorporateVerifications'
+          description: Verifications for an individual
+          $ref: '#/components/schemas/PersonalVerifications'
+    ProfileCorporate:
+      type: object
+      properties:
+        id:
+          description: Unique identifier of the profile. The Profile ID is the main identifier used to represent ownership of other API resources
+          type: string
+          example: 4f079ef8-6d26-11eb-9bc8-acde48001122
+        kind:
+          type: string
+          enum:
+            - corporate
+        name:
+          description: The Profile name. This can be a corporate or an individual.
+          type: string
+          example: Jane Doe
+        state:
+          $ref: '#/components/schemas/ProfileState'
+        details:
+          description: KYC details section with its current state.
+          $ref: '#/components/schemas/ProfileSection'
+        form:
+          description: Additional data section used for risk calculations.
+          $ref: '#/components/schemas/ProfileSection'
+        verifications:
+          description: Verifications for a company
+          $ref: '#/components/schemas/CorporateVerifications'
+    Profile:
+      oneOf:
+        - $ref: '#/components/schemas/ProfilePersonal'
+          title: Personal
+        - $ref: '#/components/schemas/ProfileCorporate'
+          title: Corporate
+      title: Profile
     Tokens:
       type: array
       items:
