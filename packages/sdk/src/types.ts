@@ -967,3 +967,52 @@ export interface SignaturesResponse {
   /** Total number of pending signatures */
   total: number;
 }
+
+/**
+ * @group Webhooks
+ */
+export type WebhookSubscriptionState = 'active' | 'inactive';
+
+/**
+ * @group Webhooks
+ */
+export type WebhookEventType =
+  | 'iban.updated'
+  | 'order.created'
+  | 'order.updated'
+  | 'profile.updated';
+
+/**
+ * @group Webhooks
+ */
+export interface WebhookSubscription {
+  id: string;
+  url: string;
+  types: WebhookEventType[];
+  state: WebhookSubscriptionState;
+}
+
+/**
+ * @group Webhooks
+ */
+export interface WebhookSubscriptionsResponse {
+  subscriptions: WebhookSubscription[];
+}
+
+/**
+ * @group Webhooks
+ */
+export interface CreateWebhookSubscriptionInput {
+  url: string;
+  secret: string;
+  types?: WebhookEventType[];
+}
+
+/**
+ * @group Webhooks
+ */
+export interface UpdateWebhookSubscriptionInput {
+  subscription: string;
+  state?: WebhookSubscriptionState;
+  types?: WebhookEventType[];
+}
