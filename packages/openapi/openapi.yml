@@ -1148,12 +1148,12 @@ paths:
                   properties:
                     personal:
                       description: Verifications for an individual
-                      $ref: '#/components/schemas/PersonalVerifications'
+                      $ref: '#/components/schemas/UpdatePersonalVerifications'
                 - title: Corporate
                   properties:
                     corporate:
                       description: Verifications for a company
-                      $ref: '#/components/schemas/CorporateVerifications'
+                      $ref: '#/components/schemas/UpdateCorporateVerifications'
       responses:
         '202':
           description: |
@@ -2621,7 +2621,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ProfileSummary'
-    Profile:
+    ProfilePersonal:
       type: object
       properties:
         id:
@@ -2629,7 +2629,9 @@ components:
           type: string
           example: 4f079ef8-6d26-11eb-9bc8-acde48001122
         kind:
-          $ref: '#/components/schemas/ProfileKind'
+          type: string
+          enum:
+            - personal
         name:
           description: The Profile name. This can be a corporate or an individual.
           type: string
@@ -2643,10 +2645,41 @@ components:
           description: Additional data section used for risk calculations.
           $ref: '#/components/schemas/ProfileSection'
         verifications:
-          description: 'Verification items required for this profile, each with its current state.'
-          type: array
-          items:
-            $ref: '#/components/schemas/VerificationItem'
+          description: Verifications for an individual
+          $ref: '#/components/schemas/PersonalVerifications'
+    ProfileCorporate:
+      type: object
+      properties:
+        id:
+          description: Unique identifier of the profile. The Profile ID is the main identifier used to represent ownership of other API resources
+          type: string
+          example: 4f079ef8-6d26-11eb-9bc8-acde48001122
+        kind:
+          type: string
+          enum:
+            - corporate
+        name:
+          description: The Profile name. This can be a corporate or an individual.
+          type: string
+          example: Jane Doe
+        state:
+          $ref: '#/components/schemas/ProfileState'
+        details:
+          description: KYC details section with its current state.
+          $ref: '#/components/schemas/ProfileSection'
+        form:
+          description: Additional data section used for risk calculations.
+          $ref: '#/components/schemas/ProfileSection'
+        verifications:
+          description: Verifications for a company
+          $ref: '#/components/schemas/CorporateVerifications'
+    Profile:
+      oneOf:
+        - $ref: '#/components/schemas/ProfilePersonal'
+          title: Personal
+        - $ref: '#/components/schemas/ProfileCorporate'
+          title: Corporate
+      title: Profile
     Tokens:
       type: array
       items:
@@ -2803,7 +2836,6 @@ components:
                   description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
                   $ref: '#/components/schemas/CountryCode'
       required:
-        - standard
         - identifier
         - details
     CounterpartResponse:
@@ -2893,7 +2925,7 @@ components:
                   type: string
                   example: Monerium
       required:
-        - standard
+        - details
         - identifier
     Error:
       description: The generic Error object structure for API error responses.
@@ -3191,11 +3223,11 @@ components:
               - facialSimilarity
               - proofOfResidency
               - sourceOfFunds
-          fileId:
-            description: ID of a previously uploaded file associated with this verification.
-            $ref: '#/components/schemas/UUID'
+          state:
+            $ref: '#/components/schemas/SectionState'
         required:
           - kind
+          - state
     CorporateDetails:
       description: |
         Company information such as name, registration number, address, and details of representatives, final beneficiaries, and directors.
@@ -3406,11 +3438,11 @@ components:
               - dateOfRegistration
               - beneficialOwnership
               - powerOfAttorney
-          fileId:
-            description: ID of a previously uploaded file associated with this verification.
-            $ref: '#/components/schemas/UUID'
+          state:
+            $ref: '#/components/schemas/SectionState'
         required:
           - kind
+          - state
     IdDocument:
       description: Details of the ID document used to verify the person's identity.
       type: object
@@ -3450,24 +3482,6 @@ components:
       properties:
         state:
           $ref: '#/components/schemas/SectionState'
-    VerificationItem:
-      description: A single verification entry with its current state.
-      type: object
-      properties:
-        kind:
-          description: The type of verification.
-          type: string
-          example: idDocument
-          enum:
-            - idDocument
-            - facialSimilarity
-            - proofOfResidency
-            - sourceOfFunds
-        state:
-          $ref: '#/components/schemas/SectionState'
-      required:
-        - kind
-        - state
     ProfileState:
       description: |
         The state of the profile lifecycle:
@@ -3640,6 +3654,46 @@ components:
         - chain
         - address
         - createdAt
+    UpdatePersonalVerifications:
+      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).'
+      type: array
+      items:
+        type: object
+        properties:
+          kind:
+            description: The type of the verification.
+            type: string
+            enum:
+              - idDocument
+              - facialSimilarity
+              - proofOfResidency
+              - sourceOfFunds
+          fileId:
+            description: ID of a previously uploaded file associated with this verification.
+            $ref: '#/components/schemas/UUID'
+        required:
+          - kind
+    UpdateCorporateVerifications:
+      description: A list of verifications required for corporate onboarding.
+      type: array
+      items:
+        type: object
+        properties:
+          kind:
+            type: string
+            enum:
+              - sourceOfFunds
+              - corporateName
+              - corporateAddress
+              - registrationNumber
+              - dateOfRegistration
+              - beneficialOwnership
+              - powerOfAttorney
+          fileId:
+            description: ID of a previously uploaded file associated with this verification.
+            $ref: '#/components/schemas/UUID'
+        required:
+          - kind
   securitySchemes:
     BearerAuth:
       type: http

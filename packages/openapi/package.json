@@ -20,9 +20,9 @@
   },
   "scripts": {
     "dev": "redocly preview-docs ./openapi.yml",
-    "lint": "redocly lint --extends recommended openapi.yml && pnpm run sort && pnpm run format",
+    "lint": "redocly lint --extends recommended openapi.yml && pnpm run sort",
     "format": "prettier --write \"**/*.{yml,yaml}\"",
-    "sort": "openapi-format openapi.yml -o openapi.yml",
+    "sort": "openapi-format openapi.yml -o openapi.yml && pnpm run format",
     "pub:pre": "pnpm publish --no-git-checks --dry-run",
     "clean": "rm -rf dist node_modules .turbo"
   },
