@@ -90,6 +90,13 @@ paths:
                           description: You can skip the KYC onboarding steps in the Authorization Flow during testing.
                           type: boolean
                           example: true
+                        auth_mode:
+                          description: Controls which auth screen to show first when the user is not authenticated. Defaults to the start screen.
+                          type: string
+                          example: login
+                          enum:
+                            - login
+                            - signup
                       required:
                         - client_id
                         - code_challenge
@@ -116,7 +123,7 @@ paths:
                           description: The URL to redirect to after authorization. Required if more than one redirect URL is registered; must match a registered URL exactly.
                           type: string
                         message:
-                          description: An [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361) compatible SIWE message. Must include `expiration-time` and a `resources` array containing the Monerium SIWE URL and the application's privacy policy and terms of service URLs.
+                          description: "An [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361) compatible SIWE message. Must include `expiration-time` and a `resources` array containing the Monerium SIWE URL and the application's privacy policy and terms of service URLs."
                           type: string
                         signature:
                           description: Signature for the SIWE message. Must include the `0x` prefix.
@@ -210,7 +217,7 @@ paths:
     get:
       operationId: auth-context
       summary: Context
-      description: Returns details about the currently authenticated user, including their roles and accessible profiles.
+      description: 'Returns details about the currently authenticated user, including their roles and accessible profiles.'
       parameters: []
       responses:
         '200':
@@ -562,6 +569,65 @@ paths:
         - BearerAuth: []
       tags:
         - webhooks
+  /countries:
+    get:
+      operationId: get-countries
+      summary: List countries
+      description: 'Returns a list of countries with their risk tiers for [KYC](/kyc-guide-individuals) and [KYB](/kyb-guide-corporates) onboarding.'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  countries:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - name
+                        - code
+                        - nationality
+                        - residency
+                      properties:
+                        name:
+                          description: Name of the country.
+                          type: string
+                        code:
+                          description: Two-letter country code ISO 3166-1 alpha-2.
+                          type: string
+                        nationality:
+                          description: Risk category for nationality.
+                          type: string
+                          enum:
+                            - low
+                            - medium
+                            - high
+                            - restricted
+                            - prohibited
+                        residency:
+                          description: Risk category for residency.
+                          type: string
+                          enum:
+                            - low
+                            - medium
+                            - high
+                            - restricted
+                            - prohibited
+                  total:
+                    type: integer
+              example:
+                countries:
+                  - name: France
+                    code: FR
+                    nationality: low
+                    residency: low
+                total: 1
+      security: []
+      tags:
+        - profiles
   /profiles:
     post:
       operationId: create-profile
@@ -697,7 +763,7 @@ paths:
     get:
       operationId: profile
       summary: Profile
-      description: Retrieves details about a single profile, including the state of each section (`details`, `form`, `verifications`).
+      description: 'Retrieves details about a single profile, including the state of each section (`details`, `form`, `verifications`).'
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -1992,7 +2058,7 @@ paths:
     get:
       operationId: get-signatures
       summary: Get pending signatures
-      description: Returns pending signatures for the authenticated user, filterable by address, chain, and kind (`order`, `linkAddress`).
+      description: 'Returns pending signatures for the authenticated user, filterable by address, chain, and kind (`order`, `linkAddress`).'
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: address
@@ -2293,14 +2359,14 @@ components:
       example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
       pattern: '^0x[0-9a-fA-F]{130}$'
     SignatureSafeOnchain:
-      description: For Safe onchain signatures, set the value to `0x`. Monerium will verify the signature via [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) for up to 5 days.
+      description: 'For Safe onchain signatures, set the value to `0x`. Monerium will verify the signature via [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) for up to 5 days.'
       type: string
       example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
       enum:
         - 0x
       pattern: ^0x$
     SignatureSafeOffchain:
-      description: Safe [offchain signature](https://docs.safe.global/sdk/protocol-kit/guides/signatures/messages#off-chain-messages). Ensure the threshold of owner signatures is met before submitting. Verified via [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271).
+      description: 'Safe [offchain signature](https://docs.safe.global/sdk/protocol-kit/guides/signatures/messages#off-chain-messages). Ensure the threshold of owner signatures is met before submitting. Verified via [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271).'
       type: string
       example: 0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f
     AddressObject:
@@ -2977,7 +3043,7 @@ components:
         - nationality
         - birthday
     PersonalForm:
-      description: Personal form capturing occupation, profession, fund origins, and financial information for risk assessment.
+      description: 'Personal form capturing occupation, profession, fund origins, and financial information for risk assessment.'
       type: object
       properties:
         occupation:
@@ -3095,7 +3161,7 @@ components:
           description: Indicates whether the individual is subject to US tax obligations (e.g. holds a US tax identification number or is a US resident for tax purposes).
           type: boolean
         taxId:
-          description: Tax Identification Number (TIN) assigned by the individual's tax authority. Format varies by country (e.g. SSN in the US, NI number in the UK).
+          description: "Tax Identification Number (TIN) assigned by the individual's tax authority. Format varies by country (e.g. SSN in the US, NI number in the UK)."
           type: string
           example: 123-45-6789
       required:
@@ -3112,7 +3178,7 @@ components:
         - usTaxPerson
         - taxId
     PersonalVerifications:
-      description: A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).
+      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).'
       type: array
       items:
         type: object
@@ -3226,7 +3292,7 @@ components:
         - finalBeneficiaries
         - directors
     CorporateForm:
-      description: Corporate form capturing service description, legal form, purpose, activity, fund origins, and financial information for risk assessment.
+      description: 'Corporate form capturing service description, legal form, purpose, activity, fund origins, and financial information for risk assessment.'
       type: object
       properties:
         service:
@@ -3354,7 +3420,7 @@ components:
           type: string
           example: A1234566788
         kind:
-          description: The type of ID document. Must verify the person's name, birthday, and nationality.
+          description: "The type of ID document. Must verify the person's name, birthday, and nationality."
           type: string
           example: passport
           enum:
@@ -3617,6 +3683,12 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-04-28:
+      * [GET /countries](#operation/get-countries) - Added countries endpoint to fetch supported countries and their details.
+
+      ### 2026-04-27:
+      * [POST /auth](#operation/auth), [GET /auth](#operation/auth-get) - Added `auth_mode` query parameter to control initial auth screen (`login` or `signup`) when the user is not authenticated.
+
       ### 2026-04-08:
       * [POST /profiles](#operation/create-profile) - New endpoint to create a profile. Replaces `POST /auth/signup` as the entry point for partner-led onboarding. Requires `kind` (`personal` or `corporate`), which determines the body structure used in subsequent PATCH and share endpoints.
       * [POST /auth/signup](#operation/auth-signup) - Deprecated; use [POST /profiles](#operation/create-profile) instead.

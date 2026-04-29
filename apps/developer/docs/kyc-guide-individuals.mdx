@@ -6,6 +6,7 @@ id: kyc-guide-individuals
 import CountryTiers from './_partials/country-tiers.mdx';
 import ProhibitedActivities from './_partials/prohibited-activities.mdx';
 import ComplianceDisclaimer from './_partials/compliance-disclaimer.mdx';
+import CountryList from '@site/src/components/CountryList';
 
 # KYC Guide — Individuals
 
@@ -57,15 +58,15 @@ Nationality is checked independently of residency — a customer can be allowed 
 
 ### Allowed
 
-**Low-risk:** Aland Islands, Albania, American Samoa, Andorra, Anguilla, Antarctica, Antigua and Barbuda, Argentina, Armenia, Aruba, Australia, Austria, Azerbaijan, Bahamas, Bahrain, Bangladesh, Barbados, Belgium, Belize, Benin, Bermuda, Bhutan, Bonaire St Eustatius and Saba, Bosnia and Herzegovina, Botswana, Bouvet Island, Brazil, British Indian Ocean Territory, Brunei Darussalam, Burundi, Cambodia, Canada, Cape Verde, Cayman Islands, Central African Republic, Chad, Chile, China, Christmas Island, Cocos Keeling Islands, Colombia, Comoros, Cook Islands, Costa Rica, Croatia, Cuba, Curaçao, Cyprus, Czech Republic, Denmark, Djibouti, Dominica, Dominican Republic, Ecuador, Egypt, El Salvador, Equatorial Guinea, Eritrea, Estonia, Eswatini, Ethiopia, Falkland Islands, Faroe Islands, Fiji, Finland, France, French Guiana, French Polynesia, French Southern Territories, Gabon, Gambia, Georgia, Germany, Ghana, Gibraltar, Greece, Greenland, Grenada, Guadeloupe, Guam, Guatemala, Guernsey, Guinea, Guinea-Bissau, Guyana, Heard Island and McDonald Islands, Holy See, Honduras, Hong Kong, Hungary, Iceland, India, Indonesia, Ireland, Isle of Man, Israel, Italy, Japan, Jersey, Jordan, Kazakhstan, Kiribati, Kyrgyzstan, Latvia, Lesotho, Liberia, Libya, Liechtenstein, Lithuania, Luxembourg, Macao, Macedonia, Madagascar, Malawi, Malaysia, Maldives, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte, Mexico, Micronesia, Moldova, Mongolia, Montenegro, Montserrat, Morocco, Nauru, Netherlands, New Caledonia, New Zealand, Nicaragua, Niger, Niue, Norfolk Island, Northern Mariana Islands, Norway, Oman, Pakistan, Palau, Palestinian Territory, Paraguay, Peru, Philippines, Pitcairn, Poland, Portugal, Qatar, Republic of the Congo, Réunion, Romania, Rwanda, Saint Barthélemy, Saint Helena, Saint Kitts and Nevis, Saint Lucia, Saint Martin, Saint Pierre and Miquelon, Saint Vincent and the Grenadines, Samoa, San Marino, Sao Tome and Principe, Saudi Arabia, Serbia, Seychelles, Sierra Leone, Singapore, Sint Maarten, Slovakia, Slovenia, Solomon Islands, South Georgia and the South Sandwich Islands, South Korea, Spain, Sri Lanka, Sudan, Suriname, Svalbard and Jan Mayen Islands, Sweden, Switzerland, Taiwan, Tajikistan, Thailand, Timor-Leste, Togo, Tokelau, Tonga, Tunisia, Türkiye, Turkmenistan, Turks and Caicos Islands, Tuvalu, Ukraine, United Arab Emirates, United Kingdom, United States Minor Outlying Islands, Uruguay, Uzbekistan, Virgin Islands US, Zambia, Zimbabwe
+**Low-risk:** <CountryList type="nationality" tier="low" />
 
-**Medium-risk** _(must submit a valid residency permit during onboarding)_**:** Belarus, Russia
+**Medium-risk** _(must submit a valid residency permit during onboarding)_**:** <CountryList type="nationality" tier="medium" />
 
-**Restricted** _(requires source of funds and first payment in own name)_**:** Afghanistan, Algeria, Angola, Bolivia, Bulgaria, Burkina Faso, Cameroon, Cote d'Ivoire, Democratic Republic of the Congo, Haiti, Jamaica, Kenya, Kuwait, Lao PDR, Lebanon, Mali, Monaco, Mozambique, Namibia, Nepal, Nigeria, Panama, Papua New Guinea, Senegal, South Africa, South Sudan, Syria, Tanzania, Trinidad and Tobago, Uganda, Vanuatu, Vietnam, Virgin Islands UK, Yemen
+**Restricted** _(requires source of funds and first payment in own name)_**:** <CountryList type="nationality" tier="restricted" />
 
 ### Prohibited
 
-Iran, Myanmar, North Korea, Puerto Rico, United States, Venezuela
+<CountryList type="nationality" tier="prohibited" />
 
 <ProhibitedActivities />
 
@@ -93,6 +94,6 @@ Once your customer passes the pre-checks above, submit their data via the Whitel
 
 **Country reference data** — includes country names, ISO codes, and risk categories for both residency and nationality.
 
-<a href="/kyc-sharing-countries.json" download>
-  Download kyc-sharing-countries.json
+<a href="https://api.monerium.app/countries" target="_blank" rel="noopener noreferrer">
+  Download countries.json
 </a>
