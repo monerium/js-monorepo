@@ -1082,12 +1082,12 @@ paths:
                   properties:
                     personal:
                       description: Verifications for an individual
-                      $ref: '#/components/schemas/PersonalVerifications'
+                      $ref: '#/components/schemas/UpdatePersonalVerifications'
                 - title: Corporate
                   properties:
                     corporate:
                       description: Verifications for a company
-                      $ref: '#/components/schemas/CorporateVerifications'
+                      $ref: '#/components/schemas/UpdateCorporateVerifications'
       responses:
         '202':
           description: |
@@ -2770,7 +2770,6 @@ components:
                   description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
                   $ref: '#/components/schemas/CountryCode'
       required:
-        - standard
         - identifier
         - details
     CounterpartResponse:
@@ -2860,7 +2859,7 @@ components:
                   type: string
                   example: Monerium
       required:
-        - standard
+        - details
         - identifier
     Error:
       description: The generic Error object structure for API error responses.
@@ -3158,11 +3157,11 @@ components:
               - facialSimilarity
               - proofOfResidency
               - sourceOfFunds
-          fileId:
-            description: ID of a previously uploaded file associated with this verification.
-            $ref: '#/components/schemas/UUID'
+          state:
+            $ref: '#/components/schemas/SectionState'
         required:
           - kind
+          - state
     CorporateDetails:
       description: |
         Company information such as name, registration number, address, and details of representatives, final beneficiaries, and directors.
@@ -3373,11 +3372,11 @@ components:
               - dateOfRegistration
               - beneficialOwnership
               - powerOfAttorney
-          fileId:
-            description: ID of a previously uploaded file associated with this verification.
-            $ref: '#/components/schemas/UUID'
+          state:
+            $ref: '#/components/schemas/SectionState'
         required:
           - kind
+          - state
     IdDocument:
       description: Details of the ID document used to verify the person's identity.
       type: object
@@ -3589,6 +3588,46 @@ components:
         - chain
         - address
         - createdAt
+    UpdatePersonalVerifications:
+      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).'
+      type: array
+      items:
+        type: object
+        properties:
+          kind:
+            description: The type of the verification.
+            type: string
+            enum:
+              - idDocument
+              - facialSimilarity
+              - proofOfResidency
+              - sourceOfFunds
+          fileId:
+            description: ID of a previously uploaded file associated with this verification.
+            $ref: '#/components/schemas/UUID'
+        required:
+          - kind
+    UpdateCorporateVerifications:
+      description: A list of verifications required for corporate onboarding.
+      type: array
+      items:
+        type: object
+        properties:
+          kind:
+            type: string
+            enum:
+              - sourceOfFunds
+              - corporateName
+              - corporateAddress
+              - registrationNumber
+              - dateOfRegistration
+              - beneficialOwnership
+              - powerOfAttorney
+          fileId:
+            description: ID of a previously uploaded file associated with this verification.
+            $ref: '#/components/schemas/UUID'
+        required:
+          - kind
   securitySchemes:
     BearerAuth:
       type: http
