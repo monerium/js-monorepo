@@ -2032,18 +2032,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tokens'
-        '401':
-          description: UNAUTHORIZED
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauthorizedError'
-        '403':
-          description: FORBIDDEN
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenError'
       security:
         - BearerAuth: []
       tags:
