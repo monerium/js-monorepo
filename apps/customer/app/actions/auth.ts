@@ -31,7 +31,13 @@ export async function getSession(): Promise<BearerProfile | null> {
   }
 
   try {
-    return JSON.parse(sessionCookie.value) as BearerProfile;
+    const {
+      access_token: _accessToken, //omit
+      refresh_token: _refreshToken, //omit
+      ...safeProfile
+    } = JSON.parse(sessionCookie.value) as BearerProfile;
+
+    return safeProfile as BearerProfile;
   } catch (_error) {
     return null;
   }

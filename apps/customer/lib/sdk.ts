@@ -1,9 +1,10 @@
 import {
+  BearerProfile,
   createMoneriumApiClient,
   createMoneriumAuthClient,
   ENV,
 } from '@monerium/sdk';
-import { getSession } from '../app/actions/auth';
+import { cookies } from 'next/headers';
 
 const environment: ENV =
   (process.env.NEXT_PUBLIC_MONERIUM_ENV as ENV) || 'sandbox';
@@ -16,11 +17,19 @@ export function getMoneriumClient() {
   return createMoneriumApiClient({
     environment,
     getAccessToken: async () => {
-      const session = await getSession();
-      if (!session?.access_token) {
+      const cookieStore = await cookies();
+      const sessionCookie = cookieStore.get('monerium_session');
+
+      if (!sessionCookie) {
         throw new Error('No active session found.');
       }
-      return session.access_token;
+
+      try {
+        const session = JSON.parse(sessionCookie.value) as BearerProfile;
+        return session.access_token;
+      } catch (_error) {
+        throw new Error('No active session found.');
+      }
     },
   });
 }

@@ -12,15 +12,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
-
 ## Integration Reference
 
-This application demonstrates how to properly integrate the new `@monerium/sdk`:
+This application demonstrates how to properly integrate the new `@monerium/sdk`. If you are a developer looking to integrate the SDK into your own application, these are the most important files to review:
 
-- **Server-First Approach:** Leveraging Next.js Server Actions (`app/actions/monerium.ts`) for fetching data.
-- **Secure Token Management:** Managing authentication state via secure HTTP-only cookies instead of client-side state.
-- **Custom Hooks:** Creating simple wrappers to call server actions cleanly from client components.
+- 🏗️ **`lib/sdk.ts`**: Shows how to initialize `createMoneriumApiClient` securely on the server, passing a callback to read the `access_token` from an HTTP-only cookie.
+- 🔐 **`app/actions/auth.ts`**: Contains Next.js Server Actions that demonstrate the PKCE OAuth flow (and SIWE flow), exchanging codes for tokens, and securely storing the bearer profile in an HTTP-only Next.js cookie.
+- ⚡ **`app/actions/monerium.ts`**: Contains Next.js Server Actions that demonstrate how to use the server-side SDK client to fetch data (profiles, balances, orders) and handle API errors cleanly so secrets are never exposed to the browser.
+- 🪝 **`hooks/monerium.ts`**: Demonstrates how to bridge the Server Actions to your Client Components using React Query (`@tanstack/react-query`) for smooth caching and loading states.
 
 ## Deployment
 
