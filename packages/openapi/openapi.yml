@@ -3725,6 +3725,11 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-04-29:
+      * [PATCH /profiles/{profileId}/verifications](#operation/patch-profile-verifications) - Separated request schemas (`UpdatePersonalVerifications` and `UpdateCorporateVerifications`) from response schemas.
+      * `Profile` response schema now explicitly uses `oneOf` to return either a `ProfilePersonal` or `ProfileCorporate` structure based on the `kind`.
+      * Verification items in profile responses now correctly document the `state` property.
+
       ### 2026-04-28:
       * [GET /countries](#operation/get-countries) - Added countries endpoint to fetch supported countries and their details.
 
