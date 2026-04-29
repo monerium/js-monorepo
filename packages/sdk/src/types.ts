@@ -1016,3 +1016,54 @@ export interface UpdateWebhookSubscriptionInput {
   state?: WebhookSubscriptionState;
   types?: WebhookEventType[];
 }
+
+/**
+ * @category Types
+ */
+export interface BuildAuthorizationUrlOptions {
+  clientId: string;
+  redirectUri: string;
+  codeChallenge: string;
+  state?: string;
+  email?: string;
+  skipKyc?: boolean;
+  authMode?: 'login' | 'signup';
+}
+
+/**
+ * @category Types
+ */
+export interface BuildSiweAuthorizationUrlOptions {
+  clientId: string;
+  redirectUri: string;
+  codeChallenge: string;
+  message: string;
+  signature: string;
+  state?: string;
+}
+
+/**
+ * @category Types
+ */
+export interface AuthorizationCodeGrantOptions {
+  clientId: string;
+  redirectUri: string;
+  code: string;
+  codeVerifier: string;
+}
+
+/**
+ * @category Types
+ */
+export interface RefreshTokenGrantOptions {
+  clientId: string;
+  refreshToken: string;
+}
+
+/**
+ * @category Types
+ */
+export interface ClientCredentialsGrantOptions {
+  clientId: string;
+  clientSecret: string;
+}

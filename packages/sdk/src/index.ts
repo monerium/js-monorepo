@@ -1,4 +1,3 @@
-export * from './client';
 export {
   MoneriumBaseClient,
   MoneriumServerClient,
@@ -6,36 +5,16 @@ export {
   MoneriumOAuthClient,
   MoneriumWhitelabelClient,
 } from './client.class';
-export type { MoneriumApiClientOptions as MoneriumClassClientOptions } from './client.class';
-
-// ─── Auth ─────────────────────────────────────────────────────────────────────
-
-export {
-  authorizationCodeGrant,
-  buildAuthorizationUrl,
-  buildSiweAuthorizationUrl,
-  clientCredentialsGrant,
-  createMoneriumAuthClient,
-  parseAuthorizationResponse,
-  refreshTokenGrant,
-} from './auth';
+export type { MoneriumApiClientOptions } from './client.class';
 
 export {
   calculatePKCECodeChallenge,
   generatePKCE,
+  parseAuthorizationResponse,
   randomPKCECodeVerifier,
 } from './helpers/auth.helpers';
 
-export type {
-  AuthorizationCodeGrantOptions,
-  BuildAuthorizationUrlOptions,
-  BuildSiweAuthorizationUrlOptions,
-  ClientCredentialsGrantOptions,
-  MoneriumAuthClient,
-  MoneriumAuthClientOptions,
-  ParsedAuthorizationResponse,
-  RefreshTokenGrantOptions,
-} from './auth';
+export type { ParsedAuthorizationResponse } from './helpers/auth.helpers';
 
 // ─── Errors ───────────────────────────────────────────────────────────────────
 

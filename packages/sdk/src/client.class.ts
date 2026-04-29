@@ -1,14 +1,10 @@
-import {
-  AuthorizationCodeGrantOptions,
-  BuildAuthorizationUrlOptions,
-  BuildSiweAuthorizationUrlOptions,
-  parseAuthorizationResponse,
-  ParsedAuthorizationResponse,
-  RefreshTokenGrantOptions,
-} from './auth';
 import { Chain, ChainId } from './chains';
 import { MoneriumApiError, MoneriumSdkError } from './errors';
 import { queryParams, urlEncoded } from './helpers';
+import {
+  parseAuthorizationResponse,
+  ParsedAuthorizationResponse,
+} from './helpers/auth.helpers';
 import { getEnv } from './helpers/internal.helpers';
 import type { Transport } from './transport';
 import { defaultTransport } from './transport';
@@ -18,8 +14,11 @@ import type {
   AddressesQueryParams,
   AddressesResponse,
   AuthContext,
+  AuthorizationCodeGrantOptions,
   Balances,
   BearerProfile,
+  BuildAuthorizationUrlOptions,
+  BuildSiweAuthorizationUrlOptions,
   CreateProfileInput,
   CreateWebhookSubscriptionInput,
   ENV,
@@ -38,6 +37,7 @@ import type {
   PlaceOrderInput,
   Profile,
   ProfilesResponse,
+  RefreshTokenGrantOptions,
   RequestIbanInput,
   ShareProfileKYCInput,
   SignaturesParams,
