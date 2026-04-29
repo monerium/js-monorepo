@@ -1,6 +1,6 @@
 {
   "name": "@monerium/sdk-react-provider",
-  "version": "1.3.10",
+  "version": "1.3.11",
   "private": false,
   "description": "[DEPRECATED] React provider for the Monerium SDK.",
   "deprecated": "This package is deprecated. @monerium/sdk v4 removes client-side auth state in favor of server-side management. Please see the apps/customer demo in the monorepo for migration examples.",
