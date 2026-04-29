@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.3.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.2.0...openapi-v2.3.0) (2026-04-29)
+
+
+### Features
+
+* **api:** added auth_mode to oauth parameters ([#182](https://github.com/monerium/js-monorepo/issues/182)) ([0202638](https://github.com/monerium/js-monorepo/commit/02026385fc022a4188e961a06a6413c04bc26f65))
+* **api:** get countries ([#183](https://github.com/monerium/js-monorepo/issues/183)) ([da9c17d](https://github.com/monerium/js-monorepo/commit/da9c17d00f3d8e515695cf7a89c6f881decbcedc))
+
+
+### Bug Fixes
+
+* missing profile kind verification item seperation in create profile response ([#180](https://github.com/monerium/js-monorepo/issues/180)) ([35440dc](https://github.com/monerium/js-monorepo/commit/35440dc3e4e9a5e8bb117e0730d994e9afce81a1))
+* openapi run lint ([ba86b57](https://github.com/monerium/js-monorepo/commit/ba86b5706ebde323bbe3cb44cd7022a79fd59372))
+* **openapi:** lint ([55fbe05](https://github.com/monerium/js-monorepo/commit/55fbe05348f388e36aa2fd29541fca33f7436c41))
+
 ## [2.2.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.1.0...openapi-v2.2.0) (2026-04-22)
 
 

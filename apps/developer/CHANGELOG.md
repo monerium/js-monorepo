@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/monerium/js-monorepo/compare/developer-v1.2.0...developer-v1.3.0) (2026-04-29)
+
+
+### Features
+
+* **api:** get countries ([#183](https://github.com/monerium/js-monorepo/issues/183)) ([da9c17d](https://github.com/monerium/js-monorepo/commit/da9c17d00f3d8e515695cf7a89c6f881decbcedc))
+
 ## [1.2.0](https://github.com/monerium/js-monorepo/compare/developer-v1.1.3...developer-v1.2.0) (2026-04-22)
 
 

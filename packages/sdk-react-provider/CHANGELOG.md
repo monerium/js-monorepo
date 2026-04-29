@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.11](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.10...sdk-react-provider-v1.3.11) (2026-04-29)
+
+
+### Miscellaneous
+
+* sdk react provider deprecation ([0cc7f3c](https://github.com/monerium/js-monorepo/commit/0cc7f3c614234154efb18a5a5877c527d9fa716a))
+
 ## [1.3.10](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.9...sdk-react-provider-v1.3.10) (2026-04-22)
 
 
