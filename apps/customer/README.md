@@ -1,15 +1,12 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Monerium Customer App
+
+This is a [Next.js](https://nextjs.org) application serving as the reference implementation for integrating with the `@monerium/sdk` v4. It demonstrates the "bring your own infrastructure" pattern, emphasizing server-side token management, Next.js App Router, and Server Actions.
 
 ## Getting Started
 
 First, run the development server:
 
-```bash
-
-pnpm dev
-# or
-bun dev
-```
+    pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -17,21 +14,18 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
 
-## Useful
+## Integration Reference
 
-https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them
+This application demonstrates how to properly integrate the new `@monerium/sdk`:
 
-## Learn More
+- **Server-First Approach:** Leveraging Next.js Server Actions (`app/actions/monerium.ts`) for fetching data.
+- **Secure Token Management:** Managing authentication state via secure HTTP-only cookies instead of client-side state.
+- **Custom Hooks:** Creating simple wrappers to call server actions cleanly from client components.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is deployed on Netlify.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Live URL: [monerium.netlify.app](https://monerium.netlify.app)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Check out the [Netlify Next.js deployment documentation](https://docs.netlify.com/frameworks/next-js/overview/) for more details on hosting Next.js applications on Netlify.
