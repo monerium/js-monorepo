@@ -31,8 +31,8 @@ const Layout = ({
   themeMode: string;
 }) => {
   return (
-    <html lang="en" data-mui-color-scheme={themeMode}>
-      <body>
+    <html lang="en" data-mui-color-scheme={themeMode} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         {' '}
         <Providers>{children}</Providers>
       </body>

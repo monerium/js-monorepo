@@ -1,11 +1,11 @@
 'use server';
 
-import { BearerProfile, generatePKCE } from '@monerium/sdk';
+import { BearerProfile, generatePKCE, siweMessage } from '@monerium/sdk';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { getMoneriumAuthClient } from '../../lib/sdk';
+import { moneriumClient } from '../../lib/sdk';
 
 const SESSION_COOKIE_NAME = 'monerium_session';
 
@@ -15,8 +15,8 @@ export async function setSession(profile: BearerProfile) {
 
   cookieStore.set(SESSION_COOKIE_NAME, JSON.stringify(profile), {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: true,
+    sameSite: 'strict',
     expires,
     path: '/',
   });
@@ -48,12 +48,24 @@ export async function clearSession() {
   cookieStore.delete(SESSION_COOKIE_NAME);
 }
 
-const CLIENT_ID =
-  process.env.NEXT_PUBLIC_MONERIUM_CLIENT_ID ||
-  '9ee602d1-cc19-11ef-92b5-aae55502171d';
-const REDIRECT_URI =
-  process.env.NEXT_PUBLIC_MONERIUM_REDIRECT_URI ||
-  'http://localhost:5000/dashboard';
+const CLIENT_ID = process.env.MONERIUM_CLIENT_ID as string;
+const REDIRECT_URI = process.env.MONERIUM_REDIRECT_URI as string;
+const APP_DOMAIN = process.env.MONERIUM_APP_DOMAIN as string;
+const APP_NAME = process.env.MONERIUM_APP_NAME as string;
+const PRIVACY_POLICY_URL = process.env.MONERIUM_PRIVACY_POLICY_URL as string;
+const TOS_URL = process.env.MONERIUM_TOS_URL as string;
+
+if (!CLIENT_ID) {
+  throw new Error(
+    'MONERIUM_CLIENT_ID environment variable is missing. Please create an application in the Monerium sandbox and add it to your .env.local file.'
+  );
+}
+
+if (!REDIRECT_URI) {
+  throw new Error(
+    'MONERIUM_REDIRECT_URI environment variable is missing. Please add it to your .env.local file (e.g., http://localhost:5001/dashboard).'
+  );
+}
 
 const CODE_VERIFIER_COOKIE = 'monerium_code_verifier';
 const STATE_COOKIE = 'monerium_state';
@@ -65,7 +77,7 @@ async function prepareAuthFlow() {
   const cookieStore = await cookies();
   const options = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     sameSite: 'lax' as const,
     maxAge: 60 * 10, // 10 minutes
     path: '/',
@@ -83,11 +95,9 @@ async function prepareAuthFlow() {
  * Initiates the standard Monerium Authorization Flow.
  */
 export async function authorizeAction(skipKyc: boolean = true) {
-  const authClient = getMoneriumAuthClient();
-
   const { codeChallenge, state } = await prepareAuthFlow();
 
-  const authUrl = authClient.buildAuthorizationUrl({
+  const authUrl = moneriumClient.buildAuthorizationUrl({
     clientId: CLIENT_ID,
     redirectUri: REDIRECT_URI,
     codeChallenge,
@@ -99,14 +109,29 @@ export async function authorizeAction(skipKyc: boolean = true) {
 }
 
 /**
+ * Generates the SIWE message using environment variables
+ */
+export async function getSiweMessageAction(address: string, chainId: number) {
+  return siweMessage({
+    domain: APP_DOMAIN || 'localhost:5001',
+    address,
+    appName: APP_NAME || 'SDK TEST APP',
+    redirectUri: REDIRECT_URI,
+    chainId,
+    privacyPolicyUrl:
+      PRIVACY_POLICY_URL || 'https://monerium.com/policies/privacy-policy',
+    termsOfServiceUrl:
+      TOS_URL || 'https://monerium.com/policies/personal-terms-of-service',
+  });
+}
+
+/**
  * Initiates the SIWE (Sign In With Ethereum) Authorization Flow.
  */
 export async function siweAuthorizeAction(message: string, signature: string) {
-  const authClient = getMoneriumAuthClient();
-
   const { codeChallenge, state } = await prepareAuthFlow();
 
-  const authUrl = authClient.buildSiweAuthorizationUrl({
+  const authUrl = moneriumClient.buildSiweAuthorizationUrl({
     clientId: CLIENT_ID,
     redirectUri: REDIRECT_URI,
     codeChallenge,
@@ -124,9 +149,12 @@ export async function siweAuthorizeAction(message: string, signature: string) {
  */
 export async function callbackAction(url: string) {
   console.log('Callback action invoked with URL:', url);
-  const authClient = getMoneriumAuthClient();
-  const { code, state, error, errorDescription } =
-    authClient.parseAuthorizationResponse(url);
+  const {
+    code,
+    state: returnedState,
+    error,
+    errorDescription,
+  } = moneriumClient.parseAuthorizationResponse(url);
 
   if (error) {
     console.error('Authorization failed:', error, errorDescription);
@@ -142,15 +170,20 @@ export async function callbackAction(url: string) {
   const storedState = cookieStore.get(STATE_COOKIE)?.value;
   const codeVerifier = cookieStore.get(CODE_VERIFIER_COOKIE)?.value;
 
-  console.log('Comparing state:', state, 'with stored state:', storedState);
+  console.log(
+    'Comparing state:',
+    returnedState,
+    'with stored state:',
+    storedState
+  );
 
   if (!storedState || !codeVerifier) {
     console.error('Missing code verifier or state cookie.');
     throw new Error('Missing code verifier or state cookie.');
   }
 
-  if (state !== storedState) {
-    console.error('State mismatch.', { state, storedState });
+  if (returnedState !== storedState) {
+    console.error('State mismatch.', { returnedState, storedState });
     throw new Error('State mismatch.');
   }
 
@@ -160,7 +193,7 @@ export async function callbackAction(url: string) {
 
   try {
     console.log('Exchanging code for token...');
-    const profile = await authClient.authorizationCodeGrant({
+    const profile = await moneriumClient.authorizationCodeGrant({
       clientId: CLIENT_ID,
       redirectUri: REDIRECT_URI,
       code,

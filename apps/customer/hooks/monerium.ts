@@ -26,7 +26,6 @@ import {
   PlaceOrderInput,
   RequestIbanInput,
   SignaturesParams,
-  UpdateProfileDetailsInput,
 } from '@monerium/sdk';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -55,7 +54,6 @@ import {
   moveIbanAction,
   placeOrderAction,
   requestIbanAction,
-  updateProfileDetailsAction,
 } from '../app/actions/monerium';
 
 export function useAuth() {
@@ -278,19 +276,4 @@ export function useMoveIban() {
     },
   });
   return { moveIban: mutateAsync, ...rest };
-}
-
-export function useSubmitProfileDetails(params?: { profile?: string }) {
-  const queryClient = useQueryClient();
-  const { mutateAsync, ...rest } = useMutation({
-    mutationFn: (payload: Omit<UpdateProfileDetailsInput, 'profile'>) =>
-      updateProfileDetailsAction({
-        profile: params?.profile as string,
-        ...payload,
-      } as UpdateProfileDetailsInput),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
-    },
-  });
-  return { submitProfileDetails: mutateAsync, ...rest };
 }

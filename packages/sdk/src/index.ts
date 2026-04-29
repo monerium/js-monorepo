@@ -1,4 +1,12 @@
 export * from './client';
+export {
+  MoneriumBaseClient,
+  MoneriumServerClient,
+  MoneriumPrivateClient,
+  MoneriumOAuthClient,
+  MoneriumWhitelabelClient,
+} from './client.class';
+export type { MoneriumApiClientOptions as MoneriumClassClientOptions } from './client.class';
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 

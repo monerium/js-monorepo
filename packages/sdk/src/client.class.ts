@@ -17,6 +17,7 @@ import type {
   Address,
   AddressesQueryParams,
   AddressesResponse,
+  AuthContext,
   Balances,
   BearerProfile,
   CreateProfileInput,
@@ -184,9 +185,17 @@ export abstract class MoneriumBaseClient {
   }
 
   /**
+   * Get the current auth context.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/auth/operation/auth-context | API Documentation}
+   */
+  public async getAuthContext(): Promise<AuthContext> {
+    return this.request<AuthContext>('GET', 'auth/context');
+  }
+
+  /**
    * Get a profile by its id.
    *
-   * @group Profiles
    * @param profileId - The id of the profile to fetch.
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile | API Documentation}
    */
@@ -197,7 +206,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Get all profiles.
    *
-   * @group Profiles
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profiles | API Documentation}
    */
   public async getProfiles(
@@ -213,7 +221,6 @@ export abstract class MoneriumBaseClient {
    * Get details for a single address after it has been linked to Monerium.
    * @param address - The public key of the blockchain account.
    *
-   * @group Addresses
    * @see {@link https://docs.monerium.com/api#tag/addresses/operation/address | API Documentation}
    */
   public async getAddress(address: string): Promise<Address> {
@@ -223,7 +230,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Get a list of all addresses linked to the profile.
    *
-   * @group Addresses
    * @see {@link https://docs.monerium.com/api#tag/addresses/operation/addresses | API Documentation}
    */
   public async getAddresses(
@@ -241,7 +247,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Add a new address to the profile.
    *
-   * @group Addresses
    * @see {@link https://docs.monerium.com/api#tag/addresses/operation/link-address | API Documentation}
    * @returns {LinkAddressResponse | AcceptedResponse} - The address was linked successfully or an accepted response if the address is being processed asynchronously.
    */
@@ -258,7 +263,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Get the balances for a given address on a specific chain.
    *
-   * @group Addresses
    * @see {@link https://docs.monerium.com/api#tag/addresses/operation/balances | API Documentation}
    */
   public async getBalances(params: GetBalancesParams): Promise<Balances> {
@@ -274,7 +278,6 @@ export abstract class MoneriumBaseClient {
    * Fetch details about a single IBAN.
    * @param iban - The IBAN to fetch.
    *
-   * @group IBANs
    * @see {@link https://docs.monerium.com/api#tag/ibans/operation/iban | API Documentation}
    */
   public async getIban(iban: string): Promise<IBAN> {
@@ -284,7 +287,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Fetch all IBANs for the profile.
    *
-   * @group IBANs
    * @see {@link https://docs.monerium.com/api#tag/ibans/operation/ibans | API Documentation}
    */
   public async getIbans(params?: IbansParams): Promise<IBANsResponse> {
@@ -297,7 +299,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Request an IBAN for the profile.
    *
-   * @group IBANs
    * @see {@link https://docs.monerium.com/api#tag/ibans/operation/request-iban | API Documentation}
    */
   public async requestIban(input: RequestIbanInput): Promise<AcceptedResponse> {
@@ -311,7 +312,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Move an IBAN to a different address and chain.
    *
-   * @group IBANs
    * @see {@link https://docs.monerium.com/api#tag/ibans/operation/move-iban | API Documentation}
    */
   public async moveIban(input: MoveIbanInput): Promise<AcceptedResponse> {
@@ -324,7 +324,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Get an order by its ID.
    *
-   * @group Orders
    * @see {@link https://docs.monerium.com/api/#tag/orders/operation/order | API Documentation}
    */
   public async getOrder(orderId: string): Promise<Order> {
@@ -334,7 +333,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Get a list of orders.
    *
-   * @group Orders
    * @see {@link https://docs.monerium.com/api/#tag/orders/operation/orders | API Documentation}
    */
   public async getOrders(params?: OrderParams): Promise<OrdersResponse> {
@@ -348,7 +346,6 @@ export abstract class MoneriumBaseClient {
    * with `{ status: 202, statusText: "Accepted" }` instead of the full Order object.
    *
    * @returns `Order` for regular orders; `AcceptedResponse` for multi-sig orders.
-   * @group Orders
    * @see {@link https://docs.monerium.com/api#tag/orders/operation/post-orders | API Documentation}
    */
   public async placeOrder(
@@ -372,7 +369,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Get Monerium tokens with contract addresses and chain details.
    *
-   * @group Tokens
    * @see {@link https://docs.monerium.com/api#tag/tokens | API Documentation}
    */
   public async getTokens(): Promise<Token[]> {
@@ -382,7 +378,6 @@ export abstract class MoneriumBaseClient {
   /**
    * Get pending signatures for the authenticated user.
    *
-   * @group Signatures
    * @see {@link https://docs.monerium.com/api#tag/signatures/operation/get-signatures | API Documentation}
    */
   public async getSignatures(
@@ -410,7 +405,6 @@ export abstract class MoneriumBaseClient {
    * @remarks
    * This method constructs a {@link FormData} payload internally and sends it to the `POST /files` endpoint.
    * Consumers do not need to manually create or manage multipart form data.
-   * @group Files
    */
   public async uploadSupportingDocument(
     file: Blob | Uint8Array | ArrayBuffer,
@@ -436,8 +430,6 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
    * Get an access token using client credentials. Server-side only.
    * clientSecret must never be used in a browser context.
    *
-   * @group Auth
-   * @category Functions
    */
   public async clientCredentialsGrant(
     clientId: string,
@@ -460,7 +452,6 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
   /**
    * List all webhook subscriptions for the authenticated user.
    *
-   * @group Webhooks
    * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/list-subscriptions | API Documentation}
    */
   public async getSubscriptions(): Promise<WebhookSubscriptionsResponse> {
@@ -470,7 +461,6 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
   /**
    * Create webhook subscription.
    *
-   * @group Webhooks
    * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/create-subscription | API Documentation}
    */
   public async createSubscription(
@@ -482,7 +472,6 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
   /**
    * Update an existing webhook subscription.
    *
-   * @group Webhooks
    * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/update-subscription | API Documentation}
    */
   public async updateSubscription(
@@ -506,8 +495,6 @@ export class MoneriumOAuthClient extends MoneriumBaseClient {
    * Build the authorization redirect URL.
    * Returns a URL string — the caller navigates to it.
    * The SDK does not redirect.
-   * @group Auth
-   * @category Functions
    */
   public buildAuthorizationUrl(
     options: Omit<BuildAuthorizationUrlOptions, 'environment'>
@@ -531,8 +518,6 @@ export class MoneriumOAuthClient extends MoneriumBaseClient {
    * Returns a URL string — the caller navigates to it.
    * The SDK does not redirect.
    *
-   * @group Auth
-   * @category Functions
    */
   public buildSiweAuthorizationUrl(
     options: Omit<BuildSiweAuthorizationUrlOptions, 'environment'>
@@ -554,8 +539,6 @@ export class MoneriumOAuthClient extends MoneriumBaseClient {
    * Exchange an authorization code for tokens.
    * The caller stores the returned BearerProfile — the SDK does not write to any storage.
    *
-   * @group Auth
-   * @category Functions
    */
   public async authorizationCodeGrant(
     options: Omit<AuthorizationCodeGrantOptions, 'environment' | 'transport'>
@@ -579,8 +562,6 @@ export class MoneriumOAuthClient extends MoneriumBaseClient {
   /**
    * Get a new access token using a refresh token.
    * The caller stores the returned BearerProfile — the SDK does not write to any storage.
-   * @group Auth
-   * @category Functions
    */
   public async refreshTokenGrant(
     options: Omit<RefreshTokenGrantOptions, 'environment' | 'transport'>
@@ -609,8 +590,6 @@ export class MoneriumOAuthClient extends MoneriumBaseClient {
    * @example
    * const { code, error } = client.parseAuthorizationResponse(req.url);
    * const { code, error } = client.parseAuthorizationResponse('?code=abc&state=xyz');
-   * @group Auth
-   * @category Functions
    */
   public parseAuthorizationResponse(
     input: string
@@ -623,7 +602,6 @@ export class MoneriumWhitelabelClient extends MoneriumServerClient {
   /**
    * Creates a new profile.
    *
-   * @group Profiles
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/create-profile | API Documentation}
    */
   public async createProfile(input: CreateProfileInput): Promise<Profile> {
@@ -633,7 +611,6 @@ export class MoneriumWhitelabelClient extends MoneriumServerClient {
   /**
    * Share KYC data
    *
-   * @group Profiles
    * @returns {Promise<AcceptedResponse>} The KYC data import has been initiated. Subscribe to `profile.update` webhook to monitor the progress.
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/share-profile-kyc | API Documentation}
    *
@@ -655,7 +632,6 @@ export class MoneriumWhitelabelClient extends MoneriumServerClient {
    *
    * > **KYC reliance model only.** Most integrations should use `shareProfileKYC()` to populate details via Sumsub instead.
    *
-   * @group Profiles
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
    * @returns {Promise<AcceptedResponse>} The applicant details have been received and will be processed by Monerium.
    */
@@ -673,7 +649,6 @@ export class MoneriumWhitelabelClient extends MoneriumServerClient {
   /**
    * Submit additional data for a profile used for risk calculations (e.g. purpose of account, source of funds). Updates only the `form` section without affecting other sections.
    *
-   * @group Profiles
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-form | API Documentation}
    * @returns {Promise<AcceptedResponse>} The profile form has been received and will be processed by Monerium.
    */
@@ -691,7 +666,6 @@ export class MoneriumWhitelabelClient extends MoneriumServerClient {
   /**
    * Submit verifications for a profile. Only the verifications provided are updated. `sourceOfFunds` is submitted here by all partners when required; other verification kinds are populated automatically when using the Sumsub share flow.
    *
-   * @group Profiles
    * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-verifications | API Documentation}
    * @returns {Promise<AcceptedResponse>} The verification data has been received and will be processed by Monerium.
    */

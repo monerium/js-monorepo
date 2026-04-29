@@ -13,7 +13,7 @@
  *    without worrying about token management or authentication headers.
  */
 
-import {
+import type {
   AddressesQueryParams,
   GetBalancesParams,
   GetProfilesParams,
@@ -24,10 +24,9 @@ import {
   PlaceOrderInput,
   RequestIbanInput,
   SignaturesParams,
-  UpdateProfileDetailsInput,
 } from '@monerium/sdk';
 
-import { getMoneriumClient } from '../../lib/sdk';
+import { moneriumClient } from '../../lib/sdk';
 
 /**
  * Helper to safely execute API calls and serialize errors.
@@ -38,11 +37,17 @@ import { getMoneriumClient } from '../../lib/sdk';
 async function executeApiCall<T>(apiCall: () => Promise<T>): Promise<T> {
   try {
     return await apiCall();
-  } catch (error: any) {
+  } catch (err: unknown) {
+    // Safely cast to access typical API error shapes
+    const error = err as {
+      response?: { data?: { message?: string } };
+      message?: string;
+    };
+
     // Log the full error details securely on the server console
     console.error(
       'Monerium API Action Error:',
-      error?.response?.data || error?.message || error
+      error?.response?.data || error?.message || err
     );
 
     // Throw a standard Error with the message to cross the Server Action boundary back to the client
@@ -59,7 +64,7 @@ async function executeApiCall<T>(apiCall: () => Promise<T>): Promise<T> {
  * Why? Next.js Server Actions have strict serialization rules for network boundaries.
  * Sending explicit `undefined` values can cause serialization errors or unnecessary payload bloat.
  */
-function cleanParams(params: any) {
+function cleanParams<T extends object>(params?: T): T | undefined {
   if (!params) return undefined;
   const clean = { ...params };
   for (const key in clean) {
@@ -69,86 +74,68 @@ function cleanParams(params: any) {
 }
 
 export async function getAuthContextAction() {
-  return executeApiCall(() => getMoneriumClient().getAuthContext());
+  return executeApiCall(() => moneriumClient.getAuthContext());
 }
 
 export async function getProfileAction(profileId: string) {
-  return executeApiCall(() => getMoneriumClient().getProfile(profileId));
+  return executeApiCall(() => moneriumClient.getProfile(profileId));
 }
 
 export async function getProfilesAction(params?: GetProfilesParams) {
-  return executeApiCall(() =>
-    getMoneriumClient().getProfiles(cleanParams(params))
-  );
+  return executeApiCall(() => moneriumClient.getProfiles(cleanParams(params)));
 }
 
 export async function getAddressesAction(params?: AddressesQueryParams) {
-  return executeApiCall(() =>
-    getMoneriumClient().getAddresses(cleanParams(params))
-  );
+  return executeApiCall(() => moneriumClient.getAddresses(cleanParams(params)));
 }
 
 export async function getBalancesAction(params?: GetBalancesParams) {
   if (!params?.address || !params?.chain) return { balances: [] };
-  return executeApiCall(() =>
-    getMoneriumClient().getBalances(params as GetBalancesParams)
-  );
+  return executeApiCall(() => moneriumClient.getBalances(params));
 }
 
 export async function getTokensAction() {
-  return executeApiCall(() => getMoneriumClient().getTokens());
+  return executeApiCall(() => moneriumClient.getTokens());
 }
 
 export async function getOrdersAction(params?: OrderParams) {
-  return executeApiCall(() =>
-    getMoneriumClient().getOrders(cleanParams(params))
-  );
+  return executeApiCall(() => moneriumClient.getOrders(cleanParams(params)));
 }
 
 export async function placeOrderAction(order: PlaceOrderInput) {
-  return executeApiCall(() => getMoneriumClient().placeOrder(order));
+  return executeApiCall(() => moneriumClient.placeOrder(order));
 }
 
 export async function getIbansAction(params?: IbansParams) {
-  return executeApiCall(() =>
-    getMoneriumClient().getIbans(cleanParams(params))
-  );
+  return executeApiCall(() => moneriumClient.getIbans(cleanParams(params)));
 }
 
 export async function requestIbanAction(payload: RequestIbanInput) {
-  return executeApiCall(() => getMoneriumClient().requestIban(payload));
+  return executeApiCall(() => moneriumClient.requestIban(payload));
 }
 
 export async function linkAddressAction(payload: LinkAddressInput) {
-  return executeApiCall(() => getMoneriumClient().linkAddress(payload));
+  return executeApiCall(() => moneriumClient.linkAddress(payload));
 }
 
 export async function getAddressAction(address: string) {
-  return executeApiCall(() => getMoneriumClient().getAddress(address));
+  return executeApiCall(() => moneriumClient.getAddress(address));
 }
 
 export async function getOrderAction(orderId: string) {
-  return executeApiCall(() => getMoneriumClient().getOrder(orderId));
+  return executeApiCall(() => moneriumClient.getOrder(orderId));
 }
 
 export async function getIbanAction(iban: string) {
-  return executeApiCall(() => getMoneriumClient().getIban(iban));
+  return executeApiCall(() => moneriumClient.getIban(iban));
 }
 
 export async function getSignaturesAction(params?: SignaturesParams) {
   return executeApiCall(() =>
-    getMoneriumClient().getSignatures(cleanParams(params))
+    moneriumClient.getSignatures(cleanParams(params))
   );
 }
 
 export async function moveIbanAction(payload: MoveIbanInput) {
-  return executeApiCall(() => getMoneriumClient().moveIban(payload));
-}
-
-export async function updateProfileDetailsAction(
-  payload: UpdateProfileDetailsInput
-) {
-  return executeApiCall(() =>
-    getMoneriumClient().updateProfileDetails(payload)
-  );
+  return executeApiCall(() => moneriumClient.moveIban(payload));
 }
