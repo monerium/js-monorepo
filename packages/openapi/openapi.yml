@@ -3417,24 +3417,6 @@ components:
       properties:
         state:
           $ref: '#/components/schemas/SectionState'
-    VerificationItem:
-      description: A single verification entry with its current state.
-      type: object
-      properties:
-        kind:
-          description: The type of verification.
-          type: string
-          example: idDocument
-          enum:
-            - idDocument
-            - facialSimilarity
-            - proofOfResidency
-            - sourceOfFunds
-        state:
-          $ref: '#/components/schemas/SectionState'
-      required:
-        - kind
-        - state
     ProfileState:
       description: |
         The state of the profile lifecycle:
