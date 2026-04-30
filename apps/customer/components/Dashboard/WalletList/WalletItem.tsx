@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 
 import { Currency, shortenAddress } from '@monerium/sdk';
-import { useBalances } from '@monerium/sdk-react-provider';
+import { useBalances } from 'hooks/monerium';
 
 import ChainIcon from 'components/Chains/Icon';
 import { getChainConfig } from 'config/chains';
@@ -25,7 +25,7 @@ const WalletItem = ({
 }) => {
   const { data } = useBalances({
     address,
-    chain,
+    chain: chain as any,
     currencies: [currency],
   });
 
@@ -60,7 +60,7 @@ const WalletItem = ({
               mt: 0.25,
             }}
           >
-            <ChainIcon chain={chain} size={14} />
+            <ChainIcon chain={chain as any} size={14} />
             <Typography variant="caption" color="text.secondary">
               {chainName}
             </Typography>

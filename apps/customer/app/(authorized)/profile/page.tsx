@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
@@ -16,6 +15,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
 
 import { Chain, ProfileState } from '@monerium/sdk';
 import {
@@ -23,21 +23,23 @@ import {
   useAuth,
   useAuthContext,
   useProfile,
-} from '@monerium/sdk-react-provider';
+} from 'hooks/monerium';
 
 import ChainIcon from 'components/Chains/Icon';
 import { getChainConfig } from 'config/chains';
 
 const profileStateColor = (
   state?: ProfileState
-): 'success' | 'warning' | 'error' | 'default' => {
+): 'success' | 'warning' | 'error' | 'info' | 'default' => {
   switch (state) {
-    case ProfileState.approved:
+    case 'approved':
       return 'success';
-    case ProfileState.pending:
+    case 'submitted':
+    case 'created':
+      return 'info';
+    case 'incomplete':
       return 'warning';
-    case ProfileState.rejected:
-    case ProfileState.blocked:
+    case 'rejected':
       return 'error';
     default:
       return 'default';
@@ -55,7 +57,6 @@ export default function ProfilePage() {
   const addresses = addressesData?.addresses ?? [];
 
   const handleLogout = () => {
-    window.localStorage.removeItem('monerium.insecurely_store_refresh_token');
     revokeAccess();
     router.push('/');
   };

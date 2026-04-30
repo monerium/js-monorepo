@@ -3,7 +3,7 @@
   "version": "0.9.2",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo -p 5000",
+    "dev": "next dev --turbo -p 5001",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -14,8 +14,7 @@
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@monerium/sdk": "3.5.0",
-    "@monerium/sdk-react-provider": "workspace:latest",
+    "@monerium/sdk": "workspace:latest",
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
     "@mui/material-nextjs": "^5.15.11",

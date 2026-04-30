@@ -1,8 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { useChainId, useSignMessage } from 'wagmi';
-import { useAccount } from 'wagmi';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,17 +11,14 @@ import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import { useAccount, useChainId, useSignMessage } from 'wagmi';
 
-import {
-  Currency,
-  Order,
-  PaymentStandard,
-  placeOrderMessage,
-} from '@monerium/sdk';
-import { useBalances, usePlaceOrder } from '@monerium/sdk-react-provider';
+import { Currency, Order, placeOrderMessage } from '@monerium/sdk';
+import { useBalances, usePlaceOrder } from 'hooks/monerium';
 
-import Image from 'next/image';
 import { getChainConfigById } from 'config/chains';
+import Image from 'next/image';
 
 type Status = 'idle' | 'signing' | 'sending' | 'success' | 'error';
 
@@ -74,7 +68,7 @@ export default function SendPage() {
         signature,
         counterpart: {
           identifier: {
-            standard: PaymentStandard.iban,
+            standard: 'iban',
             iban,
           },
           details: {

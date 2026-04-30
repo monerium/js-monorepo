@@ -1,19 +1,18 @@
 'use client';
-import React from 'react';
-import Image from 'next/image';
-import { useChainId, useSignMessage } from 'wagmi';
-import { useAccount } from 'wagmi';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Image from 'next/image';
+import React from 'react';
+import { useAccount, useChainId, useSignMessage } from 'wagmi';
 
-import { siweMessage } from '@monerium/sdk';
-import { useAuth } from '@monerium/sdk-react-provider';
+import { getSiweMessageAction } from 'app/actions/auth';
+import { useAuth } from 'hooks/monerium';
 
 export const MoneriumConnect = () => {
   const { address } = useAccount();
@@ -30,18 +29,9 @@ export const MoneriumConnect = () => {
     setOpen(false);
   };
 
-  const message = siweMessage({
-    domain: 'localhost:5000',
-    address: `${address}`,
-    appName: 'SDK TEST APP',
-    redirectUri: 'http://localhost:5000/dashboard',
-    chainId: chainId,
-    privacyPolicyUrl: 'https://monerium.com/policies/privacy-policy',
-    termsOfServiceUrl:
-      'https://monerium.com/policies/personal-terms-of-service',
-  });
-
-  const signInWithEthereum = () => {
+  const signInWithEthereum = async () => {
+    if (!address) return;
+    const message = await getSiweMessageAction(address, chainId);
     signMessageAsync({ message }).then((signature) => {
       siwe({ message, signature });
     });

@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { useAuth } from '@monerium/sdk-react-provider';
+import { useAuth } from 'hooks/monerium';
 
 import { MoneriumConnect } from 'components/MoneriumConnect/MoneriumConnect';
 import { LoadingScreen } from 'src/components/LoadingScreen';

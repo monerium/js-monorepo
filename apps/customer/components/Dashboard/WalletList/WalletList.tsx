@@ -5,7 +5,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 
 import { Currency } from '@monerium/sdk';
-import { useAddresses } from '@monerium/sdk-react-provider';
+import { useAddresses } from 'hooks/monerium';
 
 import { ChainSelection } from '../types';
 import WalletItem from './WalletItem';

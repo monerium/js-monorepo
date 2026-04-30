@@ -46,3 +46,6 @@ apps/developer/docs/packages/sdk/
 apps/developer/docs/packages/SDK React Provider/
 apps/developer/docs/packages/sdk-react-provider/
 apps/developer/docs/packages/typedoc-sidebar.cjs
+
+# Local Netlify folder
+.netlify

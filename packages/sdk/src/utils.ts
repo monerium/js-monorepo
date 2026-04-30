@@ -1,24 +1,20 @@
 import {
+  Chain,
+  ChainId,
   chainIdToName,
+  EvmChainId,
   productionToSandbox,
   validEvmChainNames,
 } from './chains';
-import { generateRandomString } from './helpers';
-import {
-  Balances,
-  Chain,
-  ChainId,
-  Currency,
-  Environment,
-  EvmChainId,
-} from './types';
+import { randomPKCECodeVerifier } from './helpers/auth.helpers';
+import { Balances, Currency, Environment } from './types';
 
 /**
- *
  * @param d Date to be formatted
  * @returns RFC3339 date format.
  * @example 2023-04-30T12:00:00+01:00
  * @example 2023-04-30T02:08:15Z
+ * @group Utilities
  */
 export const rfc3339 = (d: Date) => {
   if (d.toString() === 'Invalid Date') {
@@ -72,6 +68,7 @@ const isValidEvmName = (chain: string): boolean =>
  * This will resolve the chainId number to the corresponding chain name.
  * @param chain The chainId of the network
  * @returns chain name, 'ethereum', 'polygon', 'gnosis', etc.
+ * @group Utilities
  */
 export const parseChain = (chain: Chain | ChainId): Chain => {
   if (typeof chain === 'number') {
@@ -117,6 +114,7 @@ export const parseChainBackwardsCompatible = (
  * @example `Send EUR 1 to 0x1234123412341234123412341234123412341234 on ethereum at 2023-04-30T12:00:00+01:00`
  *
  * @example `Send EUR 1 to IS1234123412341234 at 2023-04-30T12:00:00+01:00`
+ * @group Utilities
  */
 export const placeOrderMessage = (
   amount: string | number,
@@ -135,7 +133,9 @@ export const placeOrderMessage = (
   return `Send ${curr} ${amount} to ${receiver} at ${rfc3339(new Date())}`;
 };
 /**
- * https://monerium.com/siwe
+ * Construct an EIP-4361 SIWE message for use with {@link buildSiweAuthorizationUrl}.
+ * @see https://monerium.com/siwe
+ * @group Utilities
  */
 export const siweMessage = ({
   domain,
@@ -166,36 +166,15 @@ Allow ${appName} to access my data on Monerium
 URI: ${redirectUri}
 Version: 1
 Chain ID: ${chainId}
-Nonce: ${generateRandomString().slice(0, 16)}
+Nonce: ${randomPKCECodeVerifier()
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .slice(0, 16)}
 Issued At: ${issuedAt}
 Expiration Time: ${expiryAt}
 Resources:
 - https://monerium.com/siwe
 - ${privacyPolicyUrl}
 - ${termsOfServiceUrl}`;
-};
-
-/**
- * Replacement for URLSearchParams, Metamask snaps do not include node globals.
- * We remove empty strings, URLSearchParams includes it. `foo=1bar=`
- * It will not handle all special characters the same way as URLSearchParams, but it will be good enough for our use case.
- * @param body a json format of the body to be encoded
- * @returns 'application/x-www-form-urlencoded' compatible string
- */
-export const urlEncoded = (
-  body: Record<string, string | boolean | number | undefined>
-): string | undefined => {
-  return body && Object.entries(body)?.length > 0
-    ? Object.entries(body)
-        .filter(
-          ([_, value]) => value !== '' && value !== undefined && value !== null
-        ) // Filter out empty, undefined, or null
-        .map(
-          ([key, value]) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(value as string | boolean | number)}`
-        )
-        .join('&')
-    : '';
 };
 
 /**
@@ -213,6 +192,7 @@ export const urlEncoded = (
  * getChain(137) // 'polygon'
  * getChain(80002) // 'amoy'
  * ```
+ * @group Utilities
  */
 export const getChain = (chainId: number): Chain => {
   const name = chainIdToName.get(chainId);
@@ -220,6 +200,10 @@ export const getChain = (chainId: number): Chain => {
   return name as Chain;
 };
 
+/**
+ * Shorten an IBAN for display: `GB29...2917`
+ * @group Utilities
+ */
 export const shortenIban = (iban?: string) => {
   if (typeof iban !== 'string' || !iban?.length) return iban;
   const ns = iban.replace(/\s/g, ''); // remove spaces
@@ -228,6 +212,10 @@ export const shortenIban = (iban?: string) => {
     : iban;
 };
 
+/**
+ * Shorten a blockchain address for display: `0x1234...abcd`
+ * @group Utilities
+ */
 export const shortenAddress = (address?: string) => {
   if (typeof address !== 'string' || !address?.length) return address;
   return address?.length > 11
@@ -257,7 +245,7 @@ const chainNameBackwardsCompatibility = (
   env: Environment['name']
 ) => {
   if (env === 'sandbox' && typeof chain === 'string') {
-    return productionToSandbox.get(chain) ?? chain;
+    return (productionToSandbox.get(chain) as Chain) ?? chain;
   }
   return chain;
 };

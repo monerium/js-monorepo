@@ -1,38 +1,54 @@
+import { Chain, ChainId } from './chains';
 import { MoneriumApiError, MoneriumSdkError } from './errors';
-import { queryParams } from './helpers';
+import { queryParams, urlEncoded } from './helpers';
+import {
+  parseAuthorizationResponse,
+  ParsedAuthorizationResponse,
+} from './helpers/auth.helpers';
 import { getEnv } from './helpers/internal.helpers';
 import type { Transport } from './transport';
 import { defaultTransport } from './transport';
 import type {
+  AcceptedResponse,
   Address,
   AddressesQueryParams,
   AddressesResponse,
   AuthContext,
+  AuthorizationCodeGrantOptions,
   Balances,
-  Chain,
-  ChainId,
-  Currency,
+  BearerProfile,
+  BuildAuthorizationUrlOptions,
+  BuildSiweAuthorizationUrlOptions,
+  CreateProfileInput,
+  CreateWebhookSubscriptionInput,
   ENV,
+  FilesResponse,
+  GetBalancesParams,
+  GetProfilesParams,
   IBAN,
-  IbansQueryParams,
+  IbansParams,
   IBANsResponse,
-  LinkAddress,
-  LinkedAddress,
-  MoveIbanPayload,
-  NewOrder,
+  LinkAddressInput,
+  LinkAddressResponse,
+  MoveIbanInput,
   Order,
-  OrderFilter,
+  OrderParams,
   OrdersResponse,
+  PlaceOrderInput,
   Profile,
-  ProfilesQueryParams,
   ProfilesResponse,
-  RequestIbanPayload,
-  ResponseStatus,
-  SignaturesQueryParams,
+  RefreshTokenGrantOptions,
+  RequestIbanInput,
+  ShareProfileKYCInput,
+  SignaturesParams,
   SignaturesResponse,
-  SubmitProfileDetailsPayload,
-  SupportingDoc,
   Token,
+  UpdateProfileDetailsInput,
+  UpdateProfileFormInput,
+  UpdateProfileVerificationsInput,
+  UpdateWebhookSubscriptionInput,
+  WebhookSubscription,
+  WebhookSubscriptionsResponse,
 } from './types';
 import { parseChain } from './utils';
 
@@ -44,119 +60,65 @@ function resolveChain<T extends Record<string, unknown>>(obj: T): T {
   return obj;
 }
 
-// ─── Client options ───────────────────────────────────────────────────────────
-
-export type MoneriumClientOptions =
-  | {
-      environment?: ENV;
-      getAccessToken: () => string | Promise<string>;
-      accessToken?: never;
-      transport?: Transport;
-    }
-  | {
-      environment?: ENV;
-      accessToken: string;
-      getAccessToken?: never;
-      transport?: Transport;
-    }
-  | {
-      environment?: ENV;
-      accessToken?: never;
-      getAccessToken?: never;
-      transport?: Transport;
-    };
-
-// ─── Factory ──────────────────────────────────────────────────────────────────
+export interface MoneriumApiClientOptions {
+  environment?: ENV;
+  getAccessToken: () => Promise<string | undefined> | string | undefined;
+  transport?: Transport;
+}
 
 /**
- * Creates a Monerium client instance.
- * @beta
- * @group v4
- * @category v4 - Client instance.
+ * Base abstract client containing the shared configuration and request logic.
  */
-export function createMoneriumClient(options: MoneriumClientOptions) {
-  const env = getEnv(options.environment);
-  const transport = options.transport ?? defaultTransport;
+export abstract class MoneriumBaseClient {
+  protected options: MoneriumApiClientOptions;
+  protected env: ReturnType<typeof getEnv>;
+  protected transport: Transport;
 
-  async function getToken(): Promise<string | null> {
-    if ('getAccessToken' in options && options.getAccessToken) {
-      return options.getAccessToken();
-    }
-    if ('accessToken' in options && options.accessToken) {
-      return options.accessToken;
-    }
-    return null;
+  constructor(options: MoneriumApiClientOptions) {
+    this.options = options;
+    this.env = getEnv(options.environment);
+    this.transport = options.transport ?? defaultTransport;
   }
 
-  async function requestFormData<T>(
-    method: string,
-    path: string,
-    form: FormData
-  ): Promise<T> {
-    const token = await getToken();
-    const headers: Record<string, string> = {
-      Accept: 'application/vnd.monerium.api-v2+json',
-      // Content-Type intentionally omitted — fetch sets multipart/form-data + boundary
-    };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-
-    const { status, bodyText } = await transport({
-      method: method.toUpperCase(),
-      url: `${env.api}/${path}`,
-      headers,
-      body: form as unknown as BodyInit,
-    });
-
-    if (!bodyText) return { status } as unknown as T;
-
-    let json: unknown;
-    try {
-      json = JSON.parse(bodyText);
-    } catch {
-      throw new MoneriumApiError({
-        code: status,
-        status: 'Parse Error',
-        message: bodyText,
-      });
-    }
-    if (status < 200 || status >= 300) {
-      throw new MoneriumApiError(
-        json as { code: number; status: string; message: string }
-      );
-    }
-    return json as T;
+  protected async getToken(): Promise<string | undefined> {
+    return this.options.getAccessToken();
   }
 
-  async function request<T>(
+  protected async request<T>(
     method: string,
     path: string,
-    body?: unknown
+    body?: unknown,
+    contentType = 'application/json'
   ): Promise<T> {
-    const token = await getToken();
+    const isUnauthenticatedEndpoint =
+      path.startsWith('tokens') || path.startsWith('auth/token');
+    const token = isUnauthenticatedEndpoint ? null : await this.getToken();
 
     const headers: Record<string, string> = {
       Accept: 'application/vnd.monerium.api-v2+json',
-      'Content-Type': 'application/json',
+      'Content-Type': contentType,
     };
 
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
-    } else if (path !== 'tokens') {
-      // tokens is the only unauthenticated endpoint
+    } else if (!isUnauthenticatedEndpoint) {
       throw new MoneriumSdkError(
         'authentication_required',
         'No access token provided for authenticated endpoint'
       );
     }
 
-    const { status, bodyText } = await transport({
+    const { status, bodyText } = await this.transport({
       method: method.toUpperCase(),
-      url: `${env.api}/${path}`,
+      url: `${this.env.api}/${path}`,
       headers,
-      body: body ? JSON.stringify(body) : undefined,
+      body: body
+        ? contentType === 'application/json'
+          ? JSON.stringify(body)
+          : (body as string)
+        : undefined,
     });
 
-    // Empty body — return a minimal status response (e.g. 201, 202)
     if (!bodyText) {
       return { status } as unknown as T;
     }
@@ -181,256 +143,540 @@ export function createMoneriumClient(options: MoneriumClientOptions) {
     return json as T;
   }
 
-  return {
-    // ─── Auth ──────────────────────────────────────────────────────────────
+  protected async requestFormData<T>(
+    method: string,
+    path: string,
+    form: FormData
+  ): Promise<T> {
+    const token = await this.getToken();
+    const headers: Record<string, string> = {
+      Accept: 'application/vnd.monerium.api-v2+json',
+    };
 
-    /**
-     * @group Authentication
-     * @see {@link https://docs.monerium.com/api#tag/auth/operation/auth-context | API Documentation}
-     */
-    getAuthContext: (): Promise<AuthContext> =>
-      request<AuthContext>('GET', 'auth/context'),
+    if (token) headers['Authorization'] = `Bearer ${token}`;
 
-    // ─── Profiles ──────────────────────────────────────────────────────────
+    const { status, bodyText } = await this.transport({
+      method: method.toUpperCase(),
+      url: `${this.env.api}/${path}`,
+      headers,
+      body: form as unknown as BodyInit,
+    });
 
-    /**
-     * @group Profiles
-     * @param {string} profile - the id of the profile to fetch.
-     * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile | API Documentation}
-     */
-    getProfile: (id: string): Promise<Profile> =>
-      request<Profile>('GET', `profiles/${id}`),
+    if (!bodyText) return { status } as unknown as T;
 
-    /**
-     * @group Profiles
-     * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profiles | API Documentation}
-     */
-    getProfiles: (params?: ProfilesQueryParams): Promise<ProfilesResponse> =>
-      request<ProfilesResponse>('GET', `profiles${queryParams(params)}`),
+    let json: unknown;
+    try {
+      json = JSON.parse(bodyText);
+    } catch {
+      throw new MoneriumApiError({
+        code: status,
+        status: 'Parse Error',
+        message: bodyText,
+      });
+    }
 
-    /**
-     * @group Profiles
-     * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
-     */
-    submitProfileDetails: (
-      profileId: string,
-      body: SubmitProfileDetailsPayload
-    ): Promise<ResponseStatus> =>
-      request<ResponseStatus>('PATCH', `profiles/${profileId}/details`, body),
-
-    // ─── Addresses ─────────────────────────────────────────────────────────
-
-    /**
-     * Get details for a single address by using the address public key after the
-     * address has been successfully linked to Monerium.
-     *
-     * @group Addresses
-     * @param {string} address - The public key of the blockchain account.
-     * @see {@link https://docs.monerium.com/api#tag/addresses/operation/address | API Documentation}
-     */
-    getAddress: (address: string): Promise<Address> =>
-      request<Address>('GET', `addresses/${address}`),
-
-    /**
-     * @group Addresses
-     * @param {AddressesQueryParams} [params] - No required parameters.
-     * @see {@link https://docs.monerium.com/api#tag/addresses/operation/addresses | API Documentation}
-     */
-    getAddresses: (params?: AddressesQueryParams): Promise<AddressesResponse> =>
-      request<AddressesResponse>(
-        'GET',
-        `addresses${queryParams(params ? resolveChain(params as Record<string, unknown>) : undefined)}`
-      ),
-
-    /**
-     * @group Addresses
-     * @see {@link https://docs.monerium.com/api#tag/addresses/operation/balances | API Documentation}
-     */
-    getBalances: (
-      address: string,
-      chain: Chain | ChainId,
-      currencies?: Currency | Currency[]
-    ): Promise<Balances> => {
-      const resolvedChain = parseChain(chain);
-      const currencyParams = Array.isArray(currencies)
-        ? currencies.map((c) => `currency=${c}`).join('&')
-        : currencies
-          ? `currency=${currencies}`
-          : '';
-
-      return request<Balances>(
-        'GET',
-        `balances/${resolvedChain}/${address}${currencyParams ? `?${currencyParams}` : ''}`
+    if (status < 200 || status >= 300) {
+      throw new MoneriumApiError(
+        json as { code: number; status: string; message: string }
       );
-    },
+    }
 
-    /**
-     * Add a new address to the profile.
-     *
-     * @group Addresses
-     * @see {@link https://docs.monerium.com/api#tag/addresses/operation/link-address | API Documentation}
-     */
-    linkAddress: (payload: LinkAddress): Promise<LinkedAddress> =>
-      request<LinkedAddress>(
-        'POST',
-        'addresses',
-        resolveChain(payload as unknown as Record<string, unknown>)
-      ),
+    return json as T;
+  }
 
-    // ─── IBANs ─────────────────────────────────────────────────────────────
+  /**
+   * Get the current auth context.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/auth/operation/auth-context | API Documentation}
+   */
+  public async getAuthContext(): Promise<AuthContext> {
+    return this.request<AuthContext>('GET', 'auth/context');
+  }
 
-    /**
-     * Fetch details about a single IBAN.
-     *
-     * @group IBANs
-     * @param {string} iban - the IBAN to fetch.
-     * @see {@link https://docs.monerium.com/api#tag/ibans/operation/iban | API Documentation}
-     */
-    getIban: (iban: string): Promise<IBAN> =>
-      request<IBAN>('GET', `ibans/${encodeURI(iban)}`),
+  /**
+   * Get a profile by its id.
+   *
+   * @param profileId - The id of the profile to fetch.
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profile | API Documentation}
+   */
+  public async getProfile(profileId: string): Promise<Profile> {
+    return this.request<Profile>('GET', `profiles/${profileId}`);
+  }
 
-    /**
-     * Fetch all IBANs for the profile.
-     *
-     * @group IBANs
-     * @see {@link https://docs.monerium.com/api#tag/ibans/operation/ibans | API Documentation}
-     */
-    getIbans: (params?: IbansQueryParams): Promise<IBANsResponse> => {
-      const resolved = params
-        ? resolveChain(params as unknown as Record<string, unknown>)
-        : undefined;
-      return request<IBANsResponse>('GET', `ibans${queryParams(resolved)}`);
-    },
+  /**
+   * Get all profiles.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/profiles | API Documentation}
+   */
+  public async getProfiles(
+    params?: GetProfilesParams
+  ): Promise<ProfilesResponse> {
+    return this.request<ProfilesResponse>(
+      'GET',
+      `profiles${queryParams(params)}`
+    );
+  }
 
-    /**
-     * @group IBANs
-     * @param {RequestIbanPayload} payload
-     * @see {@link https://docs.monerium.com/api#tag/ibans/operation/request-iban | API Documentation}
-     */
-    requestIban: ({
-      address,
-      chain,
-      emailNotifications = true,
-    }: RequestIbanPayload): Promise<ResponseStatus> =>
-      request<ResponseStatus>('POST', 'ibans', {
-        address,
-        chain: parseChain(chain),
-        emailNotifications,
+  /**
+   * Get details for a single address after it has been linked to Monerium.
+   * @param address - The public key of the blockchain account.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/addresses/operation/address | API Documentation}
+   */
+  public async getAddress(address: string): Promise<Address> {
+    return this.request<Address>('GET', `addresses/${address}`);
+  }
+
+  /**
+   * Get a list of all addresses linked to the profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/addresses/operation/addresses | API Documentation}
+   */
+  public async getAddresses(
+    params?: AddressesQueryParams
+  ): Promise<AddressesResponse> {
+    const resolvedParams = params
+      ? resolveChain(params as Record<string, unknown>)
+      : undefined;
+    return this.request<AddressesResponse>(
+      'GET',
+      `addresses${queryParams(resolvedParams)}`
+    );
+  }
+
+  /**
+   * Add a new address to the profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/addresses/operation/link-address | API Documentation}
+   * @returns {LinkAddressResponse | AcceptedResponse} - The address was linked successfully or an accepted response if the address is being processed asynchronously.
+   */
+  public async linkAddress(
+    body: LinkAddressInput
+  ): Promise<LinkAddressResponse | AcceptedResponse> {
+    return this.request<LinkAddressResponse | AcceptedResponse>(
+      'POST',
+      'addresses',
+      resolveChain(body as unknown as Record<string, unknown>)
+    );
+  }
+
+  /**
+   * Get the balances for a given address on a specific chain.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/addresses/operation/balances | API Documentation}
+   */
+  public async getBalances(params: GetBalancesParams): Promise<Balances> {
+    const { address, chain, currencies } = params;
+    const resolvedChain = parseChain(chain);
+    return this.request<Balances>(
+      'GET',
+      `balances/${resolvedChain}/${address}${queryParams({ currency: currencies })}`
+    );
+  }
+
+  /**
+   * Fetch details about a single IBAN.
+   * @param iban - The IBAN to fetch.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/iban | API Documentation}
+   */
+  public async getIban(iban: string): Promise<IBAN> {
+    return this.request<IBAN>('GET', `ibans/${encodeURIComponent(iban)}`);
+  }
+
+  /**
+   * Fetch all IBANs for the profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/ibans | API Documentation}
+   */
+  public async getIbans(params?: IbansParams): Promise<IBANsResponse> {
+    const resolved = params
+      ? resolveChain(params as unknown as Record<string, unknown>)
+      : undefined;
+    return this.request<IBANsResponse>('GET', `ibans${queryParams(resolved)}`);
+  }
+
+  /**
+   * Request an IBAN for the profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/request-iban | API Documentation}
+   */
+  public async requestIban(input: RequestIbanInput): Promise<AcceptedResponse> {
+    return this.request<AcceptedResponse>('POST', 'ibans', {
+      address: input.address,
+      chain: parseChain(input.chain),
+      emailNotifications: input.emailNotifications ?? true,
+    });
+  }
+
+  /**
+   * Move an IBAN to a different address and chain.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/ibans/operation/move-iban | API Documentation}
+   */
+  public async moveIban(input: MoveIbanInput): Promise<AcceptedResponse> {
+    return this.request<AcceptedResponse>('PATCH', `ibans/${input.iban}`, {
+      address: input.address,
+      chain: parseChain(input.chain),
+    });
+  }
+
+  /**
+   * Get an order by its ID.
+   *
+   * @see {@link https://docs.monerium.com/api/#tag/orders/operation/order | API Documentation}
+   */
+  public async getOrder(orderId: string): Promise<Order> {
+    return this.request<Order>('GET', `orders/${orderId}`);
+  }
+
+  /**
+   * Get a list of orders.
+   *
+   * @see {@link https://docs.monerium.com/api/#tag/orders/operation/orders | API Documentation}
+   */
+  public async getOrders(params?: OrderParams): Promise<OrdersResponse> {
+    return this.request<OrdersResponse>('GET', `orders${queryParams(params)}`);
+  }
+
+  /**
+   * Place a new order.
+   *
+   * **Note:** For multi-signature orders, the API returns a 202 Accepted response
+   * with `{ status: 202, statusText: "Accepted" }` instead of the full Order object.
+   *
+   * @returns `Order` for regular orders; `AcceptedResponse` for multi-sig orders.
+   * @see {@link https://docs.monerium.com/api#tag/orders/operation/post-orders | API Documentation}
+   */
+  public async placeOrder(
+    input: PlaceOrderInput
+  ): Promise<Order | AcceptedResponse> {
+    const body = {
+      kind: 'redeem',
+      ...resolveChain(input as unknown as Record<string, unknown>),
+      ...(input.counterpart && {
+        counterpart: {
+          ...input.counterpart,
+          identifier: resolveChain(
+            input.counterpart.identifier as unknown as Record<string, unknown>
+          ),
+        },
       }),
+    };
+    return this.request<Order | AcceptedResponse>('POST', 'orders', body);
+  }
 
-    /**
-     * @group IBANs
-     * @param {string} iban - the IBAN to move.
-     * @param {MoveIbanPayload} payload - the payload to move the IBAN.
-     * @see {@link https://docs.monerium.com/api#tag/ibans/operation/move-iban | API Documentation}
-     */
-    moveIban: (
-      iban: string,
-      { address, chain }: MoveIbanPayload
-    ): Promise<ResponseStatus> =>
-      request<ResponseStatus>('PATCH', `ibans/${iban}`, {
-        address,
-        chain: parseChain(chain),
-      }),
+  /**
+   * Get Monerium tokens with contract addresses and chain details.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/tokens | API Documentation}
+   */
+  public async getTokens(): Promise<Token[]> {
+    return this.request<Token[]>('GET', 'tokens');
+  }
 
-    // ─── Orders ────────────────────────────────────────────────────────────
+  /**
+   * Get pending signatures for the authenticated user.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/signatures/operation/get-signatures | API Documentation}
+   */
+  public async getSignatures(
+    params?: SignaturesParams
+  ): Promise<SignaturesResponse> {
+    const resolved = params
+      ? resolveChain(params as Record<string, unknown>)
+      : undefined;
+    return this.request<SignaturesResponse>(
+      'GET',
+      `signatures${queryParams(resolved)}`
+    );
+  }
 
-    /**
-     * @group Orders
-     * @see {@link https://docs.monerium.com/api/#tag/orders/operation/order | API Documentation}
-     */
-    getOrder: (orderId: string): Promise<Order> =>
-      request<Order>('GET', `orders/${orderId}`),
+  /**
+   * Upload a supporting document for KYC onboarding or order support using `multipart/form-data`.
+   *
+   * Accepts binary data in multiple formats and normalizes it to a {@link Blob}
+   * internally before sending the request.
+   *
+   * @param file - The document to upload. Can be a {@link Blob}, {@link Uint8Array}, or {@link ArrayBuffer}.
+   * @param filename - Optional filename to associate with the uploaded file.
+   * If not provided, a default name will be inferred when possible, otherwise `"document"` is used.
+   * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
+   * @remarks
+   * This method constructs a {@link FormData} payload internally and sends it to the `POST /files` endpoint.
+   * Consumers do not need to manually create or manage multipart form data.
+   */
+  public async uploadSupportingDocument(
+    file: Blob | Uint8Array | ArrayBuffer,
+    filename?: string
+  ): Promise<FilesResponse> {
+    const blob = file instanceof Blob ? file : new Blob([file as BlobPart]);
+    const formData = new FormData();
+    formData.append(
+      'file',
+      blob,
+      filename ?? ('name' in file ? String(file.name) : 'document')
+    );
+    return this.requestFormData<FilesResponse>('POST', 'files', formData);
+  }
+}
 
-    /**
-     * @group Orders
-     * @see {@link https://docs.monerium.com/api/#tag/orders/operation/orders | API Documentation}
-     */
-    getOrders: (filter?: OrderFilter): Promise<OrdersResponse> =>
-      request<OrdersResponse>('GET', `orders${queryParams(filter)}`),
+/**
+ * Server-side client containing operations that require client secrets.
+ * Must never be used in a browser context.
+ */
+export abstract class MoneriumServerClient extends MoneriumBaseClient {
+  /**
+   * Get an access token using client credentials. Server-side only.
+   * clientSecret must never be used in a browser context.
+   *
+   */
+  public async clientCredentialsGrant(
+    clientId: string,
+    clientSecret: string
+  ): Promise<BearerProfile> {
+    const encoded = urlEncoded({
+      grant_type: 'client_credentials',
+      client_id: clientId,
+      client_secret: clientSecret,
+    });
 
-    /**
-     * Place a new order.
-     *
-     * **Note:** For multi-signature orders, the API returns a 202 Accepted response
-     * with `{status: 202, statusText: "Accepted"}` instead of the full Order object.
-     *
-     * @returns Promise that resolves to either:
-     * - `Order` - Full order object for regular orders
-     * - `ResponseStatus` - Status object for multi-sig orders
-     *
-     * @group Orders
-     * @see {@link https://docs.monerium.com/api#tag/orders/operation/post-orders | API Documentation}
-     */
-    placeOrder: (order: NewOrder): Promise<Order | ResponseStatus> => {
-      const body = {
-        kind: 'redeem' as const,
-        ...resolveChain(order as unknown as Record<string, unknown>),
-        ...(order.counterpart && {
-          counterpart: {
-            ...order.counterpart,
-            identifier: resolveChain(
-              order.counterpart.identifier as unknown as Record<string, unknown>
-            ),
-          },
-        }),
-      };
-      return request<Order | ResponseStatus>('POST', 'orders', body);
-    },
+    return this.request<BearerProfile>(
+      'POST',
+      'auth/token',
+      encoded,
+      'application/x-www-form-urlencoded'
+    );
+  }
 
-    // ─── Tokens ────────────────────────────────────────────────────────────
+  /**
+   * List all webhook subscriptions for the authenticated user.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/list-subscriptions | API Documentation}
+   */
+  public async getSubscriptions(): Promise<WebhookSubscriptionsResponse> {
+    return this.request<WebhookSubscriptionsResponse>('GET', 'webhooks');
+  }
 
-    /**
-     * @group Tokens
-     * @see {@link https://docs.monerium.com/api#tag/tokens | API Documentation}
-     */
-    getTokens: (): Promise<Token[]> => request<Token[]>('GET', 'tokens'),
+  /**
+   * Create webhook subscription.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/create-subscription | API Documentation}
+   */
+  public async createSubscription(
+    input: CreateWebhookSubscriptionInput
+  ): Promise<WebhookSubscription> {
+    return this.request<WebhookSubscription>('POST', 'webhooks', input);
+  }
 
-    // ─── Signatures ────────────────────────────────────────────────────────
+  /**
+   * Update an existing webhook subscription.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/update-subscription | API Documentation}
+   */
+  public async updateSubscription(
+    input: UpdateWebhookSubscriptionInput
+  ): Promise<WebhookSubscription> {
+    const { subscription, ...body } = input;
+    return this.request<WebhookSubscription>(
+      'PATCH',
+      `webhooks/${subscription}`,
+      body
+    );
+  }
+}
 
-    /**
-     * Get pending signatures for the authenticated user.
-     *
-     * @group Signatures
-     * @param {SignaturesQueryParams} [params] - Optional query parameters to filter signatures.
-     * @see {@link https://docs.monerium.com/api#tag/signatures/operation/get-signatures | API Documentation}
-     */
-    getSignatures: (
-      params?: SignaturesQueryParams
-    ): Promise<SignaturesResponse> => {
-      const resolved = params
-        ? resolveChain(params as unknown as Record<string, unknown>)
-        : undefined;
-      return request<SignaturesResponse>(
-        'GET',
-        `signatures${queryParams(resolved)}`
-      );
-    },
+export class MoneriumPrivateClient extends MoneriumServerClient {
+  // To be populated
+}
 
-    // ─── KYC ───────────────────────────────────────────────────────────────
+export class MoneriumOAuthClient extends MoneriumBaseClient {
+  /**
+   * Build the authorization redirect URL.
+   * Returns a URL string — the caller navigates to it.
+   * The SDK does not redirect.
+   */
+  public buildAuthorizationUrl(
+    options: Omit<BuildAuthorizationUrlOptions, 'environment'>
+  ): string {
+    const params = queryParams({
+      client_id: options.clientId,
+      redirect_uri: options.redirectUri,
+      code_challenge: options.codeChallenge,
+      code_challenge_method: 'S256',
+      response_type: 'code',
+      state: options.state,
+      skip_kyc: options.skipKyc,
+      email: options.email,
+      auth_mode: options.authMode,
+    });
+    return `${this.env.api}/auth${params}`;
+  }
 
-    /**
-     * @group Files
-     * @see {@link https://docs.monerium.com/api/#tag/files | API Documentation}
-     */
-    /**
-     * Upload a supporting document for KYC onboarding or order support.
-     *
-     * Requires `Blob` and `FormData` support — available in Node.js 18+,
-     * browsers, and Cloudflare Workers. Not available in all environments.
-     *
-     * @param document - File content as a `Blob`, `Uint8Array`, or `ArrayBuffer`.
-     *   Node.js `Buffer` is a `Uint8Array` and works directly.
-     * @param filename - Optional filename sent to the API (e.g. `'kyc.pdf'`).
-     */
-    uploadSupportingDocument: (
-      document: Blob | Uint8Array | ArrayBuffer,
-      filename?: string
-    ): Promise<SupportingDoc> => {
-      const blob = document instanceof Blob ? document : new Blob([document]);
-      const formData = new FormData();
-      formData.append('file', blob, filename);
-      return requestFormData<SupportingDoc>('POST', 'files', formData);
-    },
-  };
+  /**
+   * Build the SIWE authorization redirect URL.
+   * Returns a URL string — the caller navigates to it.
+   * The SDK does not redirect.
+   *
+   */
+  public buildSiweAuthorizationUrl(
+    options: Omit<BuildSiweAuthorizationUrlOptions, 'environment'>
+  ): string {
+    const params = queryParams({
+      client_id: options.clientId,
+      redirect_uri: options.redirectUri,
+      message: options.message,
+      signature: options.signature,
+      code_challenge: options.codeChallenge,
+      code_challenge_method: 'S256',
+      authentication_method: 'siwe',
+      state: options.state,
+    });
+    return `${this.env.api}/auth${params}`;
+  }
+
+  /**
+   * Exchange an authorization code for tokens.
+   * The caller stores the returned BearerProfile — the SDK does not write to any storage.
+   *
+   */
+  public async authorizationCodeGrant(
+    options: Omit<AuthorizationCodeGrantOptions, 'environment' | 'transport'>
+  ): Promise<BearerProfile> {
+    const encoded = urlEncoded({
+      grant_type: 'authorization_code',
+      client_id: options.clientId,
+      redirect_uri: options.redirectUri,
+      code: options.code,
+      code_verifier: options.codeVerifier,
+    });
+
+    return this.request<BearerProfile>(
+      'POST',
+      'auth/token',
+      encoded,
+      'application/x-www-form-urlencoded'
+    );
+  }
+
+  /**
+   * Get a new access token using a refresh token.
+   * The caller stores the returned BearerProfile — the SDK does not write to any storage.
+   */
+  public async refreshTokenGrant(
+    options: Omit<RefreshTokenGrantOptions, 'environment' | 'transport'>
+  ): Promise<BearerProfile> {
+    const encoded = urlEncoded({
+      grant_type: 'refresh_token',
+      client_id: options.clientId,
+      refresh_token: options.refreshToken,
+    });
+
+    return this.request<BearerProfile>(
+      'POST',
+      'auth/token',
+      encoded,
+      'application/x-www-form-urlencoded'
+    );
+  }
+
+  /**
+   * Parse a callback URL or query string into structured fields.
+   *
+   * - Returns an empty object if none of the expected parameters are present.
+   * - Check for the presence of `code` or `error` to determine if the URL
+   *   contains an OAuth2 authorization response.
+   *
+   * @example
+   * const { code, error } = client.parseAuthorizationResponse(req.url);
+   * const { code, error } = client.parseAuthorizationResponse('?code=abc&state=xyz');
+   */
+  public parseAuthorizationResponse(
+    input: string
+  ): ParsedAuthorizationResponse {
+    return parseAuthorizationResponse(input);
+  }
+}
+
+export class MoneriumWhitelabelClient extends MoneriumServerClient {
+  /**
+   * Creates a new profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/create-profile | API Documentation}
+   */
+  public async createProfile(input: CreateProfileInput): Promise<Profile> {
+    return this.request<Profile>('POST', 'profiles', input);
+  }
+
+  /**
+   * Share KYC data
+   *
+   * @returns {Promise<AcceptedResponse>} The KYC data import has been initiated. Subscribe to `profile.update` webhook to monitor the progress.
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/share-profile-kyc | API Documentation}
+   *
+   * @ignore NOT YET LIVE
+   */
+  public async shareProfileKYC(
+    input: ShareProfileKYCInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'POST',
+      `profiles/${profile}/share`,
+      body
+    );
+  }
+
+  /**
+   * Submit the compliance details for a profile. Updates only the `details` section without affecting other sections.
+   *
+   * > **KYC reliance model only.** Most integrations should use `shareProfileKYC()` to populate details via Sumsub instead.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
+   * @returns {Promise<AcceptedResponse>} The applicant details have been received and will be processed by Monerium.
+   */
+  public async updateProfileDetails(
+    input: UpdateProfileDetailsInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/details`,
+      body
+    );
+  }
+
+  /**
+   * Submit additional data for a profile used for risk calculations (e.g. purpose of account, source of funds). Updates only the `form` section without affecting other sections.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-form | API Documentation}
+   * @returns {Promise<AcceptedResponse>} The profile form has been received and will be processed by Monerium.
+   */
+  public async updateProfileForm(
+    input: UpdateProfileFormInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/form`,
+      body
+    );
+  }
+
+  /**
+   * Submit verifications for a profile. Only the verifications provided are updated. `sourceOfFunds` is submitted here by all partners when required; other verification kinds are populated automatically when using the Sumsub share flow.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-verifications | API Documentation}
+   * @returns {Promise<AcceptedResponse>} The verification data has been received and will be processed by Monerium.
+   */
+  public async updateProfileVerifications(
+    input: UpdateProfileVerificationsInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/verifications`,
+      body
+    );
+  }
 }

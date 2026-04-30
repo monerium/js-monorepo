@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Alert from '@mui/material/Alert';
@@ -17,28 +16,26 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
 
-import { AccountState, Chain, shortenAddress } from '@monerium/sdk';
+import { Chain, IBANState, shortenAddress } from '@monerium/sdk';
 import { getChainConfig } from 'config/chains';
-import {
-  useAddresses,
-  useIBANs,
-  useRequestIban,
-} from '@monerium/sdk-react-provider';
+import { useAddresses, useIBANs, useRequestIban } from 'hooks/monerium';
 
 import ChainIcon from 'components/Chains/Icon';
 
 const ibanStateColor = (
-  state: AccountState
+  state: IBANState
 ): 'success' | 'warning' | 'info' | 'error' | 'default' => {
   switch (state) {
-    case AccountState.approved:
+    case 'approved':
       return 'success';
-    case AccountState.pending:
+    case 'closed':
+    case 'pending':
       return 'warning';
-    case AccountState.requested:
+    case 'requested':
       return 'info';
-    case AccountState.rejected:
+    case 'rejected':
       return 'error';
     default:
       return 'default';

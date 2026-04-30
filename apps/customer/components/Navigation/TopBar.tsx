@@ -1,13 +1,13 @@
 'use client';
-import { useRouter } from 'next/navigation';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
 
-import { ThemeModeToggle } from 'components/ThemeModeToggle/ThemeModeToggle';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ThemeModeToggle } from 'components/ThemeModeToggle/ThemeModeToggle';
 
 export const TopBar = () => {
   const router = useRouter();
@@ -27,9 +27,9 @@ export const TopBar = () => {
           Monerium
         </Typography>
         <ConnectButton chainStatus="icon" />
-        <IconButton>
-          <ThemeModeToggle />
-        </IconButton>
+        {/*<IconButton>*/}
+        <ThemeModeToggle />
+        {/*</IconButton>*/}
         <IconButton
           onClick={() => router.push('/profile')}
           aria-label="Profile"

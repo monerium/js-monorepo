@@ -82,11 +82,8 @@ importers:
         specifier: ^11.11.5
         version: 11.14.1(@emotion/react@11.14.0(@types/react@18.3.28)(react@18.3.1))(@types/react@18.3.28)(react@18.3.1)
       '@monerium/sdk':
-        specifier: 3.5.0
-        version: 3.5.0
-      '@monerium/sdk-react-provider':
         specifier: workspace:latest
-        version: link:../../packages/sdk-react-provider
+        version: link:../../packages/sdk
       '@mui/icons-material':
         specifier: ^5.15.19
         version: 5.18.0(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@18.3.28)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.28)(react@18.3.1))(@types/react@18.3.28)(react@18.3.1))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.28)(react@18.3.1)
@@ -294,9 +291,6 @@ importers:
       jest-fetch-mock:
         specifier: ^3.0.3
         version: 3.0.3
-      jest-localstorage-mock:
-        specifier: ^2.4.26
-        version: 2.4.26
       timezone-mock:
         specifier: ^1.3.6
         version: 1.4.2
@@ -7745,10 +7739,6 @@ packages:
   jest-leak-detector@29.7.0:
     resolution: {integrity: sha512-kYA8IJcSYtST2BY9I+SMC32nDpBT3J2NvWJx8+JCuCdl/CR1I4EKUJROiP8XtCcxqgTTBGJNdbB1A8XRKbTetw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-
-  jest-localstorage-mock@2.4.26:
-    resolution: {integrity: sha512-owAJrYnjulVlMIXOYQIPRCCn3MmqI3GzgfZCXdD3/pmwrIvFMXcKVWZ+aMc44IzaASapg0Z4SEFxR+v5qxDA2w==}
-    engines: {node: '>=6.16.0'}
 
   jest-matcher-utils@29.7.0:
     resolution: {integrity: sha512-sBkD+Xi9DtcChsI3L3u0+N0opgPYnCRPtGcQYrgXmR+hmt/fYfWAL0xRXYU8eWOdfuLgBe0YCW3AFtnRLagq/g==}
@@ -21942,8 +21932,6 @@ snapshots:
     dependencies:
       jest-get-type: 29.6.3
       pretty-format: 29.7.0
-
-  jest-localstorage-mock@2.4.26: {}
 
   jest-matcher-utils@29.7.0:
     dependencies:

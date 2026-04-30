@@ -5,27 +5,27 @@
 
   <a href="https://docs.monerium.com">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7"></source>
-      <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge"></img>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/Developer_portal-2c6ca7"/>
+      <img src="https://img.shields.io/badge/Developer_portal-2c6ca7" alt="Static Badge"/>
     </picture>
   </a>
   <a href="https://docs.monerium.com/api">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7"></source>
-      <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge"></img>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/API_documentation-2c6ca7"/>
+      <img src="https://img.shields.io/badge/API_documentation-2c6ca7" alt="Static Badge"/>
     </picture>
   </a>
-  <br></br>
+  <br/><br/>
     <a href="https://www.npmjs.com/package/@monerium/sdk">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=2c6ca7&colorB=21262d"></source>
-      <img src="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=f6f8fa&colorB=f6f8fa" alt="Version"></img>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=2c6ca7&colorB=21262d"/>
+      <img src="https://img.shields.io/npm/v/%40monerium%2Fsdk?colorA=f6f8fa&colorB=f6f8fa" alt="Version"/>
     </picture>
   </a>
   <a href="https://github.com/monerium/js-monorepo/issues">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d"></source>
-      <img src="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d" alt="Version"></img>
+      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d"/>
+      <img src="https://img.shields.io/github/issues/monerium/js-monorepo?colorA=2c6ca7&colorB=21262d" alt="Version"/>
     </picture>
   </a>
 
@@ -36,408 +36,396 @@ All incoming euro payments are automatically minted as EURe tokens to your walle
 Sending EURe to traditional bank accounts is just as easy.
 With a single signature from your wallet, your EURe is burned and sent as Euros to any bank account.
 
-## Documentation
-
-- [Documentation](../../apps/developer/docs/packages/SDK/index.md)
-- [Documentation - MoneriumClient](../../apps/developer/docs/packages/SDK/classes/MoneriumClient.md)
-
-## Table of Contents
-
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage Examples](#usage-examples)
-- [API Reference](#api-reference)
-- [Contributing](#contributing)
-- [FAQs](#faqs)
-- [Support](#support)
-- [Release Notes](#release-notes)
-- [License](#license)
-
 ## Installation
 
-### Prerequisites
-
-Node v16.15 or higher is required.
-
 ```sh
-yarn add @monerium/sdk
+pnpm add @monerium/sdk
 ```
 
-## Configuration
+## Usage Patterns
 
-### Environments - URLs
+This section demonstrates how to use the plan-specific client classes (`MoneriumPrivateClient`, `MoneriumWhitelabelClient`, and `MoneriumOAuthClient`) for the integration flows.
 
-| Environment | Web                          | API                      |
-| ----------- | ---------------------------- | ------------------------ |
-| sandbox     | https://sandbox.monerium.app | https://api.monerium.dev |
-| production  | https://monerium.app         | https://api.monerium.app |
+### 1. Private Plan
 
-### Environments - Networks
+[Read the Private Integration Guide](https://docs.monerium.com/private)
 
-| Environment | Chain    | Name     |
-| ----------- | -------- | -------- |
-| sandbox     | ethereum | sepolia  |
-|             | polygon  | mumbai   |
-|             | gnosis   | chiado   |
-|             | linea    | sepolia  |
-|             | scroll   | sepolia  |
-|             | camino   | columbus |
-| production  | ethereum | mainnet  |
-|             | polygon  | mainnet  |
-|             | gnosis   | mainnet  |
-|             | linea    | mainnet  |
-|             | scroll   | mainnet  |
-|             | camino   | mainnet  |
+The Private plan gives you direct API access to your own Monerium account. 
+You use `MoneriumPrivateClient` for Server-to-Server communication.
 
-## Usage Examples
+Instead of manually passing static access tokens, the recommended approach is to provide a `getAccessToken` callback. This allows the client to dynamically retrieve, cache, and refresh tokens seamlessly across all requests using a single global client instance.
 
-We recommend starting in the [Developer Portal](https://docs.monerium.com). There, you will learn more about `client_id`'s and ways of authenticating.
+```typescript
+import { MoneriumPrivateClient, Currency } from '@monerium/sdk';
 
-#### Initialize and authenticate using Client Credentials
-
-> Client Credentials is used when there's no need for user interaction, and the system-to-system interaction requires authentication.
-
-```ts
-// Current version - Deprecated in v4
-import { MoneriumClient } from '@monerium/sdk';
-// Initialize the client with credentials
-const monerium = new MoneriumClient({
-  environment: 'sandbox',
-  clientId: 'your_client_credentials_uuid', // replace with your client ID
-  clientSecret: 'your_client_secret', // replace with your client secret
-});
-
-await monerium.getAccess();
-
-// Retrieve profiles the client has access to.
-await monerium.getProfiles();
-
-// Access tokens are now available for use.
-const { access_token, refresh_token } = monerium.bearerProfile as BearerProfile;
-
-// Use refresh token to get a new access token
-await monerium.getAccess(refresh_token);
-
-/*
- * Upcoming v4 - factory function
- */
-
-import {
-  randomPKCECodeVerifier,
-  calculatePKCECodeChallenge,
-  buildAuthorizationUrl,
-  authorizationCodeGrant,
-  refreshTokenGrant,
-  createMoneriumClient,
-} from '@monerium/sdk';
-
-// --- Initiate login ---
-const codeVerifier = randomPKCECodeVerifier();
-const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
-session.set('pkce_verifier', codeVerifier); // server-side session
-
-const url = buildAuthorizationUrl({
-  environment: 'sandbox',
-  clientId: 'your-client-id',
-  redirectUri: 'https://your-app.com/callback',
-  codeChallenge,
-});
-res.redirect(url);
-
-// --- On the callback page ---
-const { code } = parseAuthorizationResponse(
-  new URL(req.url, 'https://your-app.com')
-);
-const codeVerifier = session.get('pkce_verifier');
-session.delete('pkce_verifier');
-
-const bearerProfile = await authorizationCodeGrant({
-  environment: 'sandbox',
-  clientId: 'your-client-id',
-  redirectUri: 'https://your-app.com/callback',
-  code,
-  codeVerifier,
-});
-
-req.session.accessToken = bearerProfile.access_token;
-req.session.refreshToken = bearerProfile.refresh_token;
-req.session.accessExpiry = Date.now() + bearerProfile.expires_in * 1000;
-
-// --- Use the API ---
-const client = createMoneriumClient({
+// 1. Initialize the client ONCE globally
+const client: MoneriumPrivateClient = new MoneriumPrivateClient({
   environment: 'sandbox',
   getAccessToken: async () => {
-    if (Date.now() > session.accessExpiry) {
-      const newProfile = await refreshTokenGrant({
-        environment: 'sandbox',
-        clientId: 'your-client-id',
-        refreshToken: session.refreshToken,
-      });
-      session.accessToken = newProfile.access_token;
-      session.accessExpiry = Date.now() + newProfile.expires_in * 1000;
-      return newProfile.access_token;
+    // a. Check in-memory cache
+    let token = memoryCache.get('monerium_token');
+    
+    // b. Fallback to Database
+    if (!token) {
+      token = await db.getToken();
+      if (token) memoryCache.set('monerium_token', token);
     }
-    return session.accessToken;
-  },
+
+    // c. If token is missing or expired, fetch a new one
+    if (!token || isExpired(token)) {
+      // clientCredentialsGrant does not require authentication
+      const auth = await client.clientCredentialsGrant('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
+      token = auth.access_token;
+      
+      memoryCache.set('monerium_token', token);
+      await db.saveToken(token);
+    }
+    
+    return token;
+  }
 });
 
-const profiles = await client.getProfiles();
-```
-
-API documentation:
-
-- [/auth/token](https://docs.monerium.com/api#operation/auth-token)
-
-#### Initialize and authenticate using Authorization Code Flow with PKCE
-
-> Authorization Code Flow with PKCE is used for apps where direct user interaction is involved, and the application is running on an environment where the confidentiality of a secret cannot be safely maintained. It allows the application to authorize users without handling their passwords and mitigates the additional risk involved in this sort of delegation.
-
-First, you have to navigate the user to the Monerium authentication flow. This can be done by generating a URL and redirecting the user to it. After the user has authenticated, Monerium will redirect back to your specified URI with a code. You can then finalize the authentication process by exchanging the code for access and refresh tokens.
-
-```ts
-import { MoneriumClient } from '@monerium/sdk';
-
-export function App() {
-  const [profiles, setProfiles] = useState<Profile[] | null>(null);
-  const [monerium, setMonerium] = useState<MoneriumClient>();
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
-
-  useEffect(() => {
-    const sdk = new MoneriumClient({
-      environment: 'sandbox',
-      clientId: 'f99e629b-6dca-11ee-8aa6-5273f65ed05b',
-      redirectUri: 'http://localhost:4200',
+// 2. Set up Webhooks (One-off initialization)
+async function setupWebhooks() {
+  const { subscriptions } = await client.getSubscriptions();
+  const webhookUrl = 'https://your-app.com/webhooks/monerium';
+  
+  if (!subscriptions.some(sub => sub.url === webhookUrl)) {
+    await client.createSubscription({
+      url: webhookUrl,
+      secret: 'whsec_YOUR_BASE64_ENCODED_SECRET',
+      types: ['order.created', 'order.updated']
     });
-    setMonerium(sdk);
-  }, []);
+  }
+}
 
-  useEffect(() => {
-    const connect = async () => {
-      if (monerium) {
-        setIsAuthorized(await monerium.getAccess());
-      }
-    };
+async function runPrivateFlow() {
+  // 3. Link a Wallet
+  const { addresses } = await client.getAddresses();
+  if (!addresses.some(a => a.address === '0xYourAddress...')) {
+    await client.linkAddress({
+      address: '0xYourAddress...',
+      message: 'I hereby declare that I am the address owner.',
+      signature: '0xYourSignature...',
+      chain: 'ethereum'
+    });
+  }
 
-    connect();
-
-    return () => {
-      if (monerium) {
-        monerium.disconnect();
-      }
-    };
-  }, [monerium]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (monerium && isAuthorized) {
-        try {
-          const { profiles } = await monerium.getProfiles();
-          setProfiles(profiles);
-        } catch (err) {
-          console.error('Error fetching data:', err);
+  // 4. Send payments (Place an Order)
+  // Check if profile and IBAN are approved before placing an order
+  const profiles = await client.getProfiles();
+  const defaultProfile = profiles.profiles[0];
+  const { ibans } = await client.getIbans();
+  const activeIban = ibans.find(i => i.state === 'approved');
+  
+  if (defaultProfile?.state === 'approved' && activeIban) {
+    await client.placeOrder({
+      address: '0xYourAddress...',
+      chain: 'ethereum',
+      amount: '100.00',
+      signature: '0xYourSignature...',
+      currency: Currency.eur,
+      counterpart: {
+        identifier: {
+          standard: 'iban',
+          iban: 'YOUR_IBAN',
+          bic: 'YOUR_BIC'
+        },
+        details: {
+          firstName: 'John',
+          lastName: 'Doe',
+          country: 'IS'
         }
+      },
+      message: 'Payment for services'
+    });
+  }
+}
+
+// 5. Handle Webhooks (e.g., in your Express route)
+async function handleMoneriumWebhook(event: any) {
+  // Automatically provision IBAN when the profile is approved
+  if (event.type === 'profile.updated' && event.meta?.state === 'approved') {
+    const { ibans } = await client.getIbans();
+
+    if (ibans.length > 0) {
+      if (!ibans.some(i => i.address === '0xYourAddress...' && i.chain === 'ethereum')) {
+        await client.moveIban({
+          iban: ibans[0].iban,
+          address: '0xYourAddress...',
+          chain: 'ethereum'
+        });
       }
-    };
-    fetchData();
-  }, [monerium, isAuthorized]);
+    } else {
+      await client.requestIban({
+        address: '0xYourAddress...',
+        chain: 'ethereum'
+      });
+    }
+  }
 
-  return (
-    <div>
-      {!isAuthorized && <button onClick={() => monerium?.authorize()}>Connect</button>}
-
-      <p>{profiles[0]?.name}</p>
-    </div>
-  );
+  if (event.type === 'order.updated') {
+    console.log('Order status changed:', event.meta?.state);
+  }
 }
 ```
 
-API documentation:
+### 2. Whitelabel Plan
 
-- [/auth](https://docs.monerium.com/api#operation/auth)
-- [/auth/token](https://docs.monerium.com/api#operation/auth-token)
+[Read the Whitelabel Integration Guide](https://docs.monerium.com/whitelabel)
 
-#### Get account information
+Embed regulated euro accounts and SEPA payments in your product under your own brand. 
+You use `MoneriumWhitelabelClient` to manage profiles on behalf of your customers.
 
-```ts
-// Get all profiles
-const { profiles }: Profile[] = await monerium.getProfiles();
+Similar to the Private plan, use the `getAccessToken` pattern for efficient, secure server-to-server authentication.
 
-// Fetching all accounts for a specific profile
-const { id: profileId, accounts }: Profile = await monerium.getProfile(
-  profiles[0].id
-);
+```typescript
+import { MoneriumWhitelabelClient } from '@monerium/sdk';
 
-// Fetching all balances for a specific profile
-const balances: Balances = await monerium.getBalances();
-```
+// 1. Initialize the client ONCE globally
+const client: MoneriumWhitelabelClient = new MoneriumWhitelabelClient({
+  environment: 'sandbox',
+  getAccessToken: async () => {
+    let token = memoryCache.get('monerium_token');
+    
+    if (!token) {
+      token = await db.getToken();
+      if (token) memoryCache.set('monerium_token', token);
+    }
 
-API documentation:
-
-- [/profile](https://docs.monerium.com/api#operation/profile)
-- [/profile/&#123;profileId&#123;/balances](https://docs.monerium.com/api#operation/profile-balances)
-
-#### Get token information
-
-Get the contract addresses of EURe tokens.
-
-```ts
-const tokens: Token[] = await monerium.getTokens();
-```
-
-API documentation:
-
-- [/tokens](https://docs.monerium.com/api#operation/tokens)
-
-#### Link a new address to Monerium
-
-It's important to understand when interacting with a blockchain, the user needs to provide a signature in their wallet.
-This signature is used to verify that the user is the owner of the wallet address.
-
-We recommend Viem as an Ethereum interface, see: https://viem.sh/docs/actions/wallet/signMessage.html
-
-```ts
-
-import { constants } from '@monerium/sdk';
-import { walletClient } from '...' // See Viem documentation
-
-const { LINK_MESSAGE } = constants; // "I hereby declare that I am the address owner."
-
-// Send a signature request to the wallet.
-const signature = await walletClient.signMessage({
-  message: LINK_MESSAGE,
-})
-
-// Link a new address to Monerium and create accounts for ethereum and gnosis.
-await monerium.linkAddress({
-  profile: 'your-profile-id',
-  address: '0xUserAddress72413Fa92980B889A1eCE84dD', // user wallet address
-  message: LINK_MESSAGE
-  signature,
-  chain: 'ethereum',
-} as LinkAddress);
-```
-
-API documentation:
-
-- [/profile/&#123;profileId&#123;/addresses](https://docs.monerium.com/api#operation/profile-addresses)
-
-#### Get and place orders
-
-```ts
-// Get orders for a specific profile
-const orders: Order[] = await monerium.getOrders(profileId);
-```
-
-```ts
-// Place a redeem order
-import { placeOrderMessage } from '@monerium/sdk';
-import { walletClient } from '...'; // See Viem documentation
-
-const amount = '100'; // replace with the amount in EUR
-const iban = 'EE12341234123412341234'; // replace with requested IBAN
-
-// First you have to form the message that will be signed by the user
-const message = placeOrderMessage(amount, 'eur', iban);
-
-// The message should look like this, with the current date and time in RFC3339 format:
-// Send EUR 100 to EE12341234123412341234 at Thu, 29 Dec 2022 14:58:29Z
-
-// Send a signature request to the wallet.
-const signature = await walletClient.signMessage({
-  message: message,
+    if (!token || isExpired(token)) {
+      const auth = await client.clientCredentialsGrant('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
+      token = auth.access_token;
+      
+      memoryCache.set('monerium_token', token);
+      await db.saveToken(token);
+    }
+    
+    return token;
+  }
 });
 
-// Place the order
-const order = await monerium.placeOrder({
-  amount,
-  signature,
-  currency: 'eur',
-  address: '0xUserAddress72413Fa92980B889A1eCE84dD', // user wallet address
-  counterpart: {
-    identifier: {
-      standard: 'iban', // PaymentStandard.iban,
-      iban,
-    },
-    details: {
-      firstName: 'User',
-      lastName: 'Userson',
-      county: 'IS',
-    },
+// 2. Set up Webhooks (One-off initialization, listen for profile approvals)
+async function setupWebhooks() {
+  const { subscriptions } = await client.getSubscriptions();
+  const webhookUrl = 'https://your-app.com/webhooks/monerium';
+  
+  if (!subscriptions.some(sub => sub.url === webhookUrl)) {
+    await client.createSubscription({
+      url: webhookUrl,
+      secret: 'whsec_YOUR_BASE64_ENCODED_SECRET',
+      types: ['profile.updated', 'iban.updated', 'order.created', 'order.updated']
+    });
+  }
+}
+
+async function runWhitelabelFlow() {
+  // 3. Onboard the customer (Create a Profile)
+  const profile = await client.createProfile({
+    kind: 'personal'
+  });
+
+  // 4. Submit identity data (e.g., via Sumsub integration)
+  // await client.shareProfileKYC({ ... });
+
+  // 5. Link a Wallet
+  const { addresses } = await client.getAddresses({ profile: profile.id });
+  if (!addresses.some(a => a.address === '0xCustomerAddress...')) {
+    await client.linkAddress({
+      profile: profile.id,
+      address: '0xCustomerAddress...',
+      message: 'I hereby declare that I am the address owner.',
+      signature: '0xCustomerSignature...',
+      chain: 'polygon'
+    });
+  }
+
+  // 6. Send/Receive Payments
+  // Check if profile and IBAN are approved before interacting
+  const currentProfile = await client.getProfile(profile.id);
+  const { ibans } = await client.getIbans({ profile: profile.id });
+  const activeIban = ibans.find(i => i.state === 'approved');
+
+  if (currentProfile.state === 'approved' && activeIban) {
+    // Monerium handles incoming SEPA payments automatically once the IBAN is active.
+    // You can also place outgoing orders here using client.placeOrder()
+  }
+}
+
+// 7. Handle Webhooks (e.g., in your Express route)
+async function handleMoneriumWebhook(event: any) {
+  // Automatically provision IBAN when the profile is approved
+  if (event.type === 'profile.updated' && event.meta?.state === 'approved') {
+    const profileId = event.meta?.profile;
+    const { ibans } = await client.getIbans({ profile: profileId });
+
+    if (ibans.length > 0) {
+      if (!ibans.some(i => i.address === '0xCustomerAddress...' && i.chain === 'polygon')) {
+        await client.moveIban({
+          iban: ibans[0].iban,
+          address: '0xCustomerAddress...',
+          chain: 'polygon'
+        });
+      }
+    } else {
+      await client.requestIban({
+        address: '0xCustomerAddress...',
+        chain: 'polygon'
+      });
+    }
+  }
+
+  if (event.type === 'iban.updated') {
+    console.log('IBAN state changed for profile:', event.meta?.profile);
+  }
+}
+```
+
+### 3. OAuth Plan
+
+[Read the OAuth Integration Guide](https://docs.monerium.com/oauth)
+
+The OAuth flow lets users authorize your application to access their Monerium account. 
+You use `MoneriumOAuthClient` as it is safe for both browser and server environments (it does not contain `clientCredentialsGrant`).
+
+When managing multiple users, you can also use `getAccessToken` to fetch the specific user's token from your database and refresh it automatically via `refreshTokenGrant` if it expires.
+
+```typescript
+import { MoneriumOAuthClient, generatePKCE } from '@monerium/sdk';
+
+// 1. Initialize the client (Browser or Server)
+const client: MoneriumOAuthClient = new MoneriumOAuthClient({
+  environment: 'sandbox',
+  getAccessToken: async () => {
+    // Fetch the authenticated user's access token from your database/session
+    let { accessToken, refreshToken, expiresAt } = await db.getUserTokens(userId);
+
+    // If expired, refresh it automatically using the OAuth client
+    if (Date.now() >= expiresAt) {
+      const auth = await client.refreshTokenGrant({
+        clientId: 'YOUR_CLIENT_ID',
+        refreshToken: refreshToken
+      });
+
+      accessToken = auth.access_token;
+      await db.saveUserTokens(userId, auth);
+    }
+
+    return accessToken;
+  }
+});
+
+// --- Server or Client: Initiate login ---
+async function initiateAuth() {
+  const { codeChallenge, codeVerifier } = generatePKCE();
+  // Store `codeVerifier` in a secure, server-side session or cookie
+  // session.set('pkce_verifier', codeVerifier);
+
+  const authUrl = client.buildAuthorizationUrl({
+    clientId: 'YOUR_CLIENT_ID',
+    redirectUri: 'https://your-app.com/callback',
+    codeChallenge: codeChallenge,
+    state: 'random_state_string'
+  });
+  
+  // Redirect user to the returned URL...
+  // (e.g., `window.location.assign(authUrl)` on the client, or `redirect(authUrl)` on the server)
+}
+
+// --- Server: Handle Callback ---
+// Exchanging the code requires a secure backend endpoint
+async function handleAuthCallback(requestUrl: string) {
+  // 1. Parse Authorization Response
+  const { code } = client.parseAuthorizationResponse(requestUrl);
+
+  // 2. Retrieve the stored verifier
+  // const storedVerifier = session.get('pkce_verifier');
+
+  // 3. Exchange code for tokens
+  const tokens = await client.authorizationCodeGrant({
+    clientId: 'YOUR_CLIENT_ID',
+    redirectUri: 'https://your-app.com/callback',
+    code: code!,
+    codeVerifier: 'STORED_CODE_VERIFIER'
+  });
+
+  // 4. Save `tokens` to your database associated with the user
+  await db.saveUserTokens(userId, tokens);
+}
+
+async function runOAuthUserFlow() {
+  // 5. Link a Wallet
+  const { addresses } = await client.getAddresses();
+  if (!addresses.some(a => a.address === '0xUserAddress...')) {
+    await client.linkAddress({
+      address: '0xUserAddress...',
+      message: 'I hereby declare that I am the address owner.',
+      signature: '0xUserSignature...',
+      chain: 'arbitrum'
+    });
+  }
+
+  // 6. Check if Profile & IBAN are approved
+  const profiles = await client.getProfiles();
+  const defaultProfile = profiles.profiles[0];
+  const { ibans } = await client.getIbans();
+  const activeIban = ibans.find(i => i.state === 'approved');
+  
+  if (defaultProfile?.state === 'approved' && activeIban) {
+    // 7. Get user's balances
+    const balances = await client.getBalances({
+      address: '0xUserAddress...',
+      chain: 'arbitrum'
+    });
+    
+    console.log(balances);
+
+    // You can also place orders here safely!
+  } else if (defaultProfile?.state === 'approved' && !activeIban) {
+    // Automatically issue/move the IBAN if the profile is approved but the IBAN is not ready
+    if (ibans.length > 0) {
+      if (!ibans.some(i => i.address === '0xUserAddress...' && i.chain === 'arbitrum')) {
+        await client.moveIban({
+          iban: ibans[0].iban,
+          address: '0xUserAddress...',
+          chain: 'arbitrum'
+        });
+      }
+    } else {
+      await client.requestIban({
+        address: '0xUserAddress...',
+        chain: 'arbitrum'
+      });
+    }
+  }
+}
+```
+
+### 4. Custom Transport
+
+_Inject custom logic (retries, logging, proxies) by replacing the default fetch implementation._
+
+```ts
+import { MoneriumOAuthClient } from '@monerium/sdk';
+
+const api = new MoneriumOAuthClient({
+  environment: 'sandbox',
+  getAccessToken: async () => '...',
+  transport: async ({ method, url, headers, body }) => {
+    console.log(`Calling ${method} ${url}`);
+    const res = await fetch(url, { method, headers, body });
+    return { status: res.status, bodyText: await res.text() };
   },
-  message,
-  memo: 'Powered by Monerium SDK',
-  chain: 'ethereum',
-  network: 'sepolia',
-  // supportingDocumentId, see below
 });
-```
-
-API documentation:
-
-- [GET /orders](https://docs.monerium.com/api#operation/orders)
-- [POST /orders](https://docs.monerium.com/api#operation/post-orders)
-
-#### Add supporting documents
-
-When placing orders with payouts above 15,000 EUR, a supporting document is required. The document must be uploaded to Monerium before the order can be placed. Supporting documents can be an invoice or an agreement.
-
-```ts
-// Upload a supporting document
-const supportingDocumentId: SupportingDoc =
-  await uploadSupportingDocument(document);
-```
-
-API documentation:
-
-- [/files](https://docs.monerium.com/api#operation/supporting-document)
-
-#### Subscribe to order events
-
-```ts
-import { OrderState } from '@monerium/sdk';
-const [orderState, setOrderState] = useState<OrderState>();
-
-// Subscribe to all order events
-monerium.subscribeOrderNotifications();
-
-// Subscribe to specific order events
-monerium.subscribeOrderNotifications({ 
-  filter: {
-    state: OrderState.pending,
-    profile: 'my-profile-id',
-  },
-  // optional callback functions
-  onMessage: (order) => console.log(order)
-  onError: (error) => console.error(error)
-});
-
-// Unsubscribe from specific order events
-monerium.unsubscribeOrderNotifications({ 
-  state: OrderState.pending,
-  profile: 'my-profile-id'
-});
-// Unsubscribe from all order events
-monerium.unsubscribeOrderNotifications();
-
 ```
 
 ## API Reference
 
-[API Documentation](https://docs.monerium.com//api)
+[API Documentation](https://docs.monerium.com/api)
 
 ## Contributing
 
-We are using [commitlint](https://github.com/conventional-changelog/commitlint/tree/master/@commitlint/config-conventional) to enforce that developers format the commit messages according to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) guidelines.
-
-We are using PNPM as a package manager.
-
-#### Development mode
-
-```
-pnpm dev
-```
-
-While in development mode, TypeScript declaration maps (`.d.ts.map`) are generated. TypeScript declaration maps are mainly used to quickly jump to type definitions in the context of a monorepo.
+We are using PNPM as a package manager and [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard.
 
 #### Build
 
@@ -445,26 +433,12 @@ While in development mode, TypeScript declaration maps (`.d.ts.map`) are generat
 pnpm build
 ```
 
-### Documentation
+#### Test
 
-Refer to [Typedocs](https://typedoc.org/) syntaxes to use for this [documentation](https://monerium.github.io/js-monorepo/).
-
-#### Publishing
-
-When changes are merged to the `main` branch that follows the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) standard, [release-please](https://github.com/googleapis/release-please) workflow creates a pull request, preparing for the next release. If kept open, the following commits will also be added to the PR. Merging that PR will create a new release, a workflow will publish it on NPM and tag it on Github.
-
-## FAQs
-
-Common questions developers have regarding the SDK.
+```
+pnpm test
+```
 
 ## Support
 
-[Support](https://monerium.app/help)
-
-[Telegram](https://t.me/+lGtM1gY9zWthNGE8)
-
-[Github Issues](https://github.com/monerium/js-monorepo/issues)
-
-## Release Notes
-
-https://github.com/monerium/js-monorepo/releases
+[Support](https://monerium.app/help) | [Github Issues](https://github.com/monerium/js-monorepo/issues)

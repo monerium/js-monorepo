@@ -44,22 +44,42 @@ export const EVM_CHAIN_PAIRS = [
   },
 ] as const;
 
-// Cosmos chains don't have numeric chain IDs so they are tracked separately.
-// noble→noble is intentional in sandbox (see chainNameBackwardsCompatibility in utils.ts).
-
 // ── Derived types ─────────────────────────────────────────────────────────────
 
+/**
+ * All supported production chain names.
+ * @group Primitives
+ */
 export type ProductionChain =
-  | (typeof EVM_CHAIN_PAIRS)[number]['production']['id']
+  | 'ethereum'
+  | 'gnosis'
+  | 'polygon'
+  | 'arbitrum'
+  | 'linea'
+  | 'scroll'
+  | 'base'
+  | 'camino'
   | 'noble';
 
+/**
+ * All supported sandbox chain names.
+ * @group Primitives
+ */
 export type SandboxChain =
-  | (typeof EVM_CHAIN_PAIRS)[number]['sandbox']['id']
+  | 'sepolia'
+  | 'chiado'
+  | 'amoy'
+  | 'arbitrumsepolia'
+  | 'lineasepolia'
+  | 'scrollsepolia'
+  | 'basesepolia'
+  | 'columbus'
   | 'grand';
 
 /**
  * All known EVM chain IDs. The union extends `number` for backwards
  * compatibility — known values are listed in EVM_CHAIN_PAIRS above.
+ * @group Primitives
  */
 export type EvmChainId =
   | number
@@ -90,3 +110,18 @@ export const validEvmChainNames = new Set<string>(
 export const productionToSandbox = new Map<string, string>(
   EVM_CHAIN_PAIRS.map(({ production, sandbox }) => [production.id, sandbox.id])
 );
+
+/**
+ * @group Primitives
+ */
+export type Chain = ProductionChain | SandboxChain;
+
+/**
+ * @group Primitives
+ */
+export type ChainId = EvmChainId | CosmosChainId;
+
+/**
+ * @group Primitives
+ */
+export type CosmosChainId = 'noble-1' | 'grand-1' | 'florin-1';

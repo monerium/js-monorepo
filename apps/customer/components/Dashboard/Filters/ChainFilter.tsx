@@ -3,7 +3,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
 import { Chain } from '@monerium/sdk';
-import { useTokens } from '@monerium/sdk-react-provider';
+import { useTokens } from 'hooks/monerium';
 
 import { getChainConfig } from 'config/chains';
 import { ChainSelection } from '../types';
