@@ -84,9 +84,6 @@ importers:
       '@monerium/sdk':
         specifier: workspace:latest
         version: link:../../packages/sdk
-      '@monerium/sdk-react-provider':
-        specifier: workspace:latest
-        version: link:../../packages/sdk-react-provider
       '@mui/icons-material':
         specifier: ^5.15.19
         version: 5.18.0(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@18.3.28)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.28)(react@18.3.1))(@types/react@18.3.28)(react@18.3.1))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.28)(react@18.3.1)
