@@ -29,7 +29,7 @@ Note: use `pnpm dev --log-order stream` for a more traditional log output. Or se
 
 - Developer portal: http://localhost:3333/
 - OpenAPI standalone: http://localhost:8080/
-- Demo app: http://localhost:5000
+- Demo app: http://localhost:5001
 
 ### Build
 
