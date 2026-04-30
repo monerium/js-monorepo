@@ -48,15 +48,9 @@ export async function clearSession() {
   cookieStore.delete(SESSION_COOKIE_NAME);
 }
 
-const isDeployment = !!process.env.NETLIFY;
-
 const CLIENT_ID = process.env.MONERIUM_CLIENT_ID as string;
-const REDIRECT_URI = isDeployment
-  ? process.env.DEPLOY_URL + '/dashboard'
-  : (process.env.MONERIUM_REDIRECT_URI as string);
-const APP_DOMAIN = isDeployment
-  ? process.env.DEPLOY_URL
-  : (process.env.MONERIUM_APP_DOMAIN as string);
+const REDIRECT_URI = process.env.MONERIUM_REDIRECT_URI as string;
+const APP_DOMAIN = process.env.MONERIUM_APP_DOMAIN as string;
 const APP_NAME = process.env.MONERIUM_APP_NAME as string;
 const PRIVACY_POLICY_URL = process.env.MONERIUM_PRIVACY_POLICY_URL as string;
 const TOS_URL = process.env.MONERIUM_TOS_URL as string;
@@ -217,11 +211,4 @@ export async function callbackAction(url: string) {
   revalidatePath('/');
   revalidatePath('/dashboard');
   redirect('/dashboard');
-}
-
-export async function getDebugEnvVarsAction() {
-  const text = `${APP_DOMAIN},${REDIRECT_URI},${CLIENT_ID},${isDeployment}`;
-  return {
-    text,
-  };
 }

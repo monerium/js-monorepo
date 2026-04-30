@@ -34,7 +34,6 @@ import {
   authorizeAction,
   callbackAction,
   clearSession,
-  getDebugEnvVarsAction,
   getSession,
   siweAuthorizeAction,
 } from '../app/actions/auth';
@@ -285,11 +284,4 @@ export function useMoveIban() {
     },
   });
   return { moveIban: mutateAsync, ...rest };
-}
-
-export function useDebugEnvVars() {
-  return useQuery({
-    queryKey: ['debugEnvVars'],
-    queryFn: () => getDebugEnvVarsAction(),
-  });
 }

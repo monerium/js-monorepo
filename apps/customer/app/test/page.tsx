@@ -906,32 +906,6 @@
 //   );
 // }
 
-'use client';
-
-import { useDebugEnvVars } from '../../hooks/monerium';
-
 export default function Page() {
-  const { data, isLoading, error } = useDebugEnvVars();
-
-  return (
-    <div style={{ padding: '40px' }}>
-      <h1>Debug Environment Variables</h1>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p style={{ color: 'red' }}>Error: {error.message}</p>
-      ) : (
-        <pre
-          style={{
-            backgroundColor: '#222',
-            color: '#0f0',
-            padding: '20px',
-            borderRadius: '5px',
-          }}
-        >
-          {data?.text}
-        </pre>
-      )}
-    </div>
-  );
+  return null;
 }
