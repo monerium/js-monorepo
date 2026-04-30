@@ -1,6 +1,6 @@
 {
   "name": "developer",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "TYPEDOC_WATCH=true docusaurus start --port 3333 --poll 5000",

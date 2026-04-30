@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.10.0](https://github.com/monerium/js-monorepo/compare/customer-v0.9.2...customer-v0.10.0) (2026-04-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* sdk v4 ([#178](https://github.com/monerium/js-monorepo/issues/178))
+
+### Features
+
+* sdk v4 ([#178](https://github.com/monerium/js-monorepo/issues/178)) ([27788e5](https://github.com/monerium/js-monorepo/commit/27788e5f61c5dd1ffc7501a02b980fa8026ed065))
+
 ## [0.9.2](https://github.com/monerium/js-monorepo/compare/customer-v0.9.1...customer-v0.9.2) (2026-04-22)
 
 
