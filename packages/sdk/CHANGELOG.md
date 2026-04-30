@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.5.0...sdk-v4.0.0) (2026-04-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* sdk v4 ([#178](https://github.com/monerium/js-monorepo/issues/178))
+
+### Features
+
+* sdk v4 ([#178](https://github.com/monerium/js-monorepo/issues/178)) ([27788e5](https://github.com/monerium/js-monorepo/commit/27788e5f61c5dd1ffc7501a02b980fa8026ed065))
+
 ## [3.5.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.4.11...sdk-v3.5.0) (2026-04-22)
 
 
