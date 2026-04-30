@@ -220,10 +220,8 @@ export async function callbackAction(url: string) {
 }
 
 export async function getDebugEnvVarsAction() {
+  const text = `${APP_DOMAIN},${REDIRECT_URI},${CLIENT_ID},${isDeployment}`;
   return {
-    APP_DOMAIN,
-    REDIRECT_URI,
-    CLIENT_ID,
-    isDeployment,
+    text,
   };
 }

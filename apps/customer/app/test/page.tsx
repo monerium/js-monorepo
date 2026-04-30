@@ -929,7 +929,7 @@ export default function Page() {
             borderRadius: '5px',
           }}
         >
-          {JSON.stringify(data, null, 2)}
+          {data?.text}
         </pre>
       )}
     </div>
