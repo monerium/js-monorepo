@@ -1,4 +1,4 @@
-import { MoneriumPrivateClient } from '../src/client.class';
+import { MoneriumPrivateClient } from '../src/client';
 import { BearerProfile, Currency } from '../src/types';
 
 describe('Monerium Client Classes with dynamic getAccessToken', () => {

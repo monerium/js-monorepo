@@ -1,7 +1,4 @@
-import {
-  MoneriumOAuthClient,
-  MoneriumPrivateClient,
-} from '../src/client.class';
+import { MoneriumOAuthClient, MoneriumPrivateClient } from '../src/client';
 import { MoneriumApiError, MoneriumSdkError } from '../src/errors';
 import {
   randomPKCECodeVerifier,

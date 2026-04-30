@@ -4,8 +4,8 @@ export {
   MoneriumPrivateClient,
   MoneriumOAuthClient,
   MoneriumWhitelabelClient,
-} from './client.class';
-export type { MoneriumApiClientOptions } from './client.class';
+} from './client';
+export type { MoneriumApiClientOptions } from './client';
 
 export {
   calculatePKCECodeChallenge,
