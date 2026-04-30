@@ -51,9 +51,6 @@ function Dashboard() {
           size="large"
           variant="outlined"
           onClick={() => {
-            window.localStorage.removeItem(
-              'monerium.insecurely_store_refresh_token'
-            );
             revokeAccess();
           }}
         >

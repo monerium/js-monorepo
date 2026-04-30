@@ -57,7 +57,6 @@ export default function ProfilePage() {
   const addresses = addressesData?.addresses ?? [];
 
   const handleLogout = () => {
-    window.localStorage.removeItem('monerium.insecurely_store_refresh_token');
     revokeAccess();
     router.push('/');
   };
