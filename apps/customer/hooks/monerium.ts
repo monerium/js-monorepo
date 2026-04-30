@@ -34,6 +34,7 @@ import {
   authorizeAction,
   callbackAction,
   clearSession,
+  getDebugEnvVarsAction,
   getSession,
   siweAuthorizeAction,
 } from '../app/actions/auth';
@@ -68,6 +69,14 @@ export function useAuth() {
       setTimeout(() => setIsProcessingCode(true), 0);
       callbackAction(window.location.href).catch((err) => {
         console.error('Callback action error (could be redirect):', err);
+        if (err.message && err.message.includes('NEXT_REDIRECT')) {
+          return;
+        }
+        const url = new URL(window.location.href);
+        url.searchParams.delete('code');
+        url.searchParams.delete('state');
+        window.history.replaceState({}, document.title, url.toString());
+        setTimeout(() => setIsProcessingCode(false), 0);
       });
     } else if (!code && isProcessingCode) {
       setTimeout(() => {
@@ -276,4 +285,11 @@ export function useMoveIban() {
     },
   });
   return { moveIban: mutateAsync, ...rest };
+}
+
+export function useDebugEnvVars() {
+  return useQuery({
+    queryKey: ['debugEnvVars'],
+    queryFn: () => getDebugEnvVarsAction(),
+  });
 }

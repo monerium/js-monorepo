@@ -218,3 +218,12 @@ export async function callbackAction(url: string) {
   revalidatePath('/dashboard');
   redirect('/dashboard');
 }
+
+export async function getDebugEnvVarsAction() {
+  return {
+    APP_DOMAIN,
+    REDIRECT_URI,
+    CLIENT_ID,
+    isDeployment,
+  };
+}

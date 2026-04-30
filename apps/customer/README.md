@@ -37,3 +37,16 @@ This project is deployed on Netlify.
 Live URL: [monerium.netlify.app](https://monerium.netlify.app)
 
 Check out the [Netlify Next.js deployment documentation](https://docs.netlify.com/frameworks/next-js/overview/) for more details on hosting Next.js applications on Netlify.
+
+### Test your functions locally with Netlify Dev
+
+Bring the power of Netlify directly to your local machine. Build, test, and debug your functions locally before you deploy. Run the commands in your terminal from the root of your linked repository.
+
+Learn more in the docs
+Step 1: Install Netlify CLI
+
+`npm install netlify-cli -g`
+
+Step 2: Start local development server in repo directory
+
+`netlify dev`
