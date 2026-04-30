@@ -11,7 +11,7 @@ import Image from 'next/image';
 import React from 'react';
 import { useAccount, useChainId, useSignMessage } from 'wagmi';
 
-import { siweMessage } from '@monerium/sdk';
+import { getSiweMessageAction } from 'app/actions/auth';
 import { useAuth } from 'hooks/monerium';
 
 export const MoneriumConnect = () => {
@@ -29,18 +29,9 @@ export const MoneriumConnect = () => {
     setOpen(false);
   };
 
-  const message = siweMessage({
-    domain: 'localhost:5000',
-    address: `${address}`,
-    appName: 'SDK TEST APP',
-    redirectUri: 'http://localhost:5000/dashboard',
-    chainId: chainId,
-    privacyPolicyUrl: 'https://monerium.com/policies/privacy-policy',
-    termsOfServiceUrl:
-      'https://monerium.com/policies/personal-terms-of-service',
-  });
-
-  const signInWithEthereum = () => {
+  const signInWithEthereum = async () => {
+    if (!address) return;
+    const message = await getSiweMessageAction(address, chainId);
     signMessageAsync({ message }).then((signature) => {
       siwe({ message, signature });
     });

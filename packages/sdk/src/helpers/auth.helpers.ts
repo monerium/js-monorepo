@@ -38,3 +38,53 @@ export const generatePKCE = (): {
   const codeChallenge = calculatePKCECodeChallenge(codeVerifier);
   return { codeVerifier, codeChallenge };
 };
+
+export interface ParsedAuthorizationResponse {
+  code?: string;
+  state?: string;
+  error?: string;
+  errorDescription?: string;
+}
+
+/**
+ * Parse a callback URL or query string into structured fields.
+ *
+ * - Returns an empty object if none of the expected parameters are present.
+ * - Check for the presence of `code` or `error` to determine if the URL
+ *   contains an OAuth2 authorization response.
+ *
+ * @example
+ * const { code, error } = parseAuthorizationResponse(req.url);
+ * const { code, error } = parseAuthorizationResponse('?code=abc&state=xyz');
+ * @group Auth
+ * @category Functions
+ */
+export const parseAuthorizationResponse = (
+  input: string
+): ParsedAuthorizationResponse => {
+  if (typeof input !== 'string') return {};
+  const str = input;
+
+  const queryString = str.includes('?') ? str.split('?')[1] : str;
+  if (!queryString) return {};
+
+  const map: Record<string, string> = {};
+  for (const pair of queryString.split('&')) {
+    const eqIndex = pair.indexOf('=');
+    if (eqIndex === -1) continue;
+    const key = decodeURIComponent(pair.slice(0, eqIndex));
+    const value = decodeURIComponent(
+      pair.slice(eqIndex + 1).replace(/\+/g, ' ')
+    );
+    map[key] = value;
+  }
+
+  const result: ParsedAuthorizationResponse = {};
+  if (map['code']) result.code = map['code'];
+  if (map['state']) result.state = map['state'];
+  if (map['error']) result.error = map['error'];
+  if (map['error_description'])
+    result.errorDescription = map['error_description'];
+
+  return result;
+};

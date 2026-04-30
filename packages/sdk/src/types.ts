@@ -967,3 +967,103 @@ export interface SignaturesResponse {
   /** Total number of pending signatures */
   total: number;
 }
+
+/**
+ * @group Webhooks
+ */
+export type WebhookSubscriptionState = 'active' | 'inactive';
+
+/**
+ * @group Webhooks
+ */
+export type WebhookEventType =
+  | 'iban.updated'
+  | 'order.created'
+  | 'order.updated'
+  | 'profile.updated';
+
+/**
+ * @group Webhooks
+ */
+export interface WebhookSubscription {
+  id: string;
+  url: string;
+  types: WebhookEventType[];
+  state: WebhookSubscriptionState;
+}
+
+/**
+ * @group Webhooks
+ */
+export interface WebhookSubscriptionsResponse {
+  subscriptions: WebhookSubscription[];
+}
+
+/**
+ * @group Webhooks
+ */
+export interface CreateWebhookSubscriptionInput {
+  url: string;
+  secret: string;
+  types?: WebhookEventType[];
+}
+
+/**
+ * @group Webhooks
+ */
+export interface UpdateWebhookSubscriptionInput {
+  subscription: string;
+  state?: WebhookSubscriptionState;
+  types?: WebhookEventType[];
+}
+
+/**
+ * @category Types
+ */
+export interface BuildAuthorizationUrlOptions {
+  clientId: string;
+  redirectUri: string;
+  codeChallenge: string;
+  state?: string;
+  email?: string;
+  skipKyc?: boolean;
+  authMode?: 'login' | 'signup';
+}
+
+/**
+ * @category Types
+ */
+export interface BuildSiweAuthorizationUrlOptions {
+  clientId: string;
+  redirectUri: string;
+  codeChallenge: string;
+  message: string;
+  signature: string;
+  state?: string;
+}
+
+/**
+ * @category Types
+ */
+export interface AuthorizationCodeGrantOptions {
+  clientId: string;
+  redirectUri: string;
+  code: string;
+  codeVerifier: string;
+}
+
+/**
+ * @category Types
+ */
+export interface RefreshTokenGrantOptions {
+  clientId: string;
+  refreshToken: string;
+}
+
+/**
+ * @category Types
+ */
+export interface ClientCredentialsGrantOptions {
+  clientId: string;
+  clientSecret: string;
+}

@@ -7,7 +7,7 @@
 
 // punkWallet: https://punkwallet.io/pk#0x30fa9f64fb85dab6b4bf045443e08315d6570d4eabce7c1363acda96042a6e1a
 
-import { clientCredentialsGrant, createMoneriumApiClient } from '../src/index';
+import { MoneriumWhitelabelClient } from '../src/index';
 import {
   Currency,
   Individual,
@@ -25,20 +25,24 @@ import {
   PUBLIC_KEY,
 } from './constants';
 
-let client: ReturnType<typeof createMoneriumApiClient>;
+let client: MoneriumWhitelabelClient;
 
 if (process.env.CI !== 'true') {
   beforeAll(async () => {
     try {
-      const { access_token } = await clientCredentialsGrant({
+      client = new MoneriumWhitelabelClient({
         environment: 'sandbox',
-        clientId: APP_ONE_CREDENTIALS_CLIENT_ID,
-        clientSecret: APP_ONE_CREDENTIALS_SECRET,
+        getAccessToken: async () => undefined, // Dummy initial
       });
 
-      client = createMoneriumApiClient({
+      const { access_token } = await client.clientCredentialsGrant(
+        APP_ONE_CREDENTIALS_CLIENT_ID,
+        APP_ONE_CREDENTIALS_SECRET
+      );
+
+      client = new MoneriumWhitelabelClient({
         environment: 'sandbox',
-        accessToken: access_token,
+        getAccessToken: async () => access_token,
       });
     } catch (_error) {
       console.error('Error, could not authenticate');
