@@ -68,6 +68,10 @@ export interface MoneriumApiClientOptions {
 
 /**
  * Base abstract client containing the shared configuration and request logic.
+ *
+ * @abstract
+ * @internal
+ * @ignore
  */
 export abstract class MoneriumBaseClient {
   protected options: MoneriumApiClientOptions;
@@ -452,6 +456,8 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
   /**
    * List all webhook subscriptions for the authenticated user.
    *
+   * @group Webhooks
+   *
    * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/list-subscriptions | API Documentation}
    */
   public async getSubscriptions(): Promise<WebhookSubscriptionsResponse> {
@@ -460,6 +466,8 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
 
   /**
    * Create webhook subscription.
+   *
+   * @group Webhooks
    *
    * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/create-subscription | API Documentation}
    */
@@ -471,6 +479,8 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
 
   /**
    * Update an existing webhook subscription.
+   *
+   * @group Webhooks
    *
    * @see {@link https://docs.monerium.com/api#tag/webhooks/operation/update-subscription | API Documentation}
    */

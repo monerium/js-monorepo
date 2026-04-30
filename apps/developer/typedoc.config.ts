@@ -42,6 +42,7 @@ const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
     'EnumMember',
   ],
   groupOrder: [
+    'Classes',
     'Provider',
     'Hooks',
     'Constructors',
@@ -60,7 +61,6 @@ const typedocConfig: PluginOptions | Partial<TypeDocOptions> = {
     'Primitives',
     'Helpers',
     'Errors',
-    'Classes',
     'Constants',
     'Functions',
     'Variables',

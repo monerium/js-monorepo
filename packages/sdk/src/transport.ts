@@ -3,7 +3,7 @@ import { MoneriumSdkError } from './errors';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 /**
- * @group Client
+ * @group Transport
  * @category Types
  */
 export type TransportRequest = {
@@ -15,7 +15,7 @@ export type TransportRequest = {
 };
 
 /**
- * @group Client
+ * @group Transport
  * @category Types
  */
 export type TransportResponse = {
@@ -29,7 +29,7 @@ export type TransportResponse = {
  * `Accept`) are pre-populated. Must return a `Promise` resolving with the raw
  * response `status` and `bodyText`. Throw on network-level failures.
  * The SDK owns JSON parsing and error normalisation.
- * @group Client
+ * @group Transport
  * @category Types
  */
 export type Transport = (

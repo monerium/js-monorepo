@@ -1018,6 +1018,7 @@ export interface UpdateWebhookSubscriptionInput {
 }
 
 /**
+ * @group Auth
  * @category Types
  */
 export interface BuildAuthorizationUrlOptions {
@@ -1031,6 +1032,7 @@ export interface BuildAuthorizationUrlOptions {
 }
 
 /**
+ * @group Auth
  * @category Types
  */
 export interface BuildSiweAuthorizationUrlOptions {
@@ -1043,6 +1045,7 @@ export interface BuildSiweAuthorizationUrlOptions {
 }
 
 /**
+ * @group Auth
  * @category Types
  */
 export interface AuthorizationCodeGrantOptions {
