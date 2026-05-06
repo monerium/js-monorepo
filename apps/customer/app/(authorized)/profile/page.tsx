@@ -34,7 +34,7 @@ const profileStateColor = (
   switch (state) {
     case 'approved':
       return 'success';
-    case 'submitted':
+    case 'pending':
     case 'created':
       return 'info';
     case 'incomplete':

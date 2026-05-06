@@ -101,7 +101,7 @@ export type Permission = 'read' | 'write';
 export type ProfileState =
   | 'created'
   | 'incomplete'
-  | 'submitted'
+  | 'pending'
   | 'approved'
   | 'rejected';
 

@@ -322,7 +322,7 @@ Content-Type: application/json
 
 ### Profile states
 
-`created` -> `incomplete` -> `submitted` -> `approved` or `rejected`
+`created` -> `incomplete` -> `pending` -> `approved` or `rejected`
 
 Monitor via `profile.updated` webhook. The event payload includes the current `state`.
 
