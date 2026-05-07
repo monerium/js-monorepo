@@ -828,7 +828,7 @@ paths:
 
         Monerium uses the supplied token to fetch data from the provider and updates the
         relevant sections. Each section that receives sufficient data transitions to
-        `submitted`; any that remain incomplete stay `incomplete`.
+        `pending`; any that remain incomplete stay `incomplete`.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -3454,14 +3454,14 @@ components:
         The state of a profile section:
 
         * `incomplete`: The partner can still submit or update this section.
-        * `submitted`: All required information has been provided; awaiting review.
+        * `pending`: All required information has been provided; awaiting review.
         * `approved`: The section has been approved.
         * `rejected`: Final rejection; no resubmission possible.
       type: string
       example: incomplete
       enum:
         - incomplete
-        - submitted
+        - pending
         - approved
         - rejected
     ProfileSection:
@@ -3476,7 +3476,7 @@ components:
 
         * `created`: The profile has been created but no data has been submitted yet.
         * `incomplete`: One or more sections still require information. The partner can submit or update data.
-        * `submitted`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`.
+        * `pending`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`.
         * `approved`: The profile is active and all Monerium services are available.
         * `rejected`: Final rejection — the applicant details did not meet compliance requirements.
       type: string
@@ -3484,7 +3484,7 @@ components:
       enum:
         - created
         - incomplete
-        - submitted
+        - pending
         - approved
         - rejected
     ProfileKind:
@@ -3725,6 +3725,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-05-06:
+      * [GET /profiles](#operation/profiles), [GET /profiles/{profile}](#operation/profile), [POST /profiles](#operation/create-profile), [GET /auth/context](#operation/auth-context), [Webhook profile.updated](#operation/webhook-profile-updated) - `ProfileState` and `SectionState`: renamed `submitted` to `pending`.
+
       ### 2026-04-29:
       * [PATCH /profiles/{profileId}/verifications](#operation/patch-profile-verifications) - Separated request schemas (`UpdatePersonalVerifications` and `UpdateCorporateVerifications`) from response schemas.
       * `Profile` response schema now explicitly uses `oneOf` to return either a `ProfilePersonal` or `ProfileCorporate` structure based on the `kind`.
