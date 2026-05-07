@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/monerium/js-monorepo/compare/customer-v0.10.0...customer-v0.11.0) (2026-05-07)
+
+
+### Features
+
+* **kyc:** rename profile state submitted to pending ([#190](https://github.com/monerium/js-monorepo/issues/190)) ([b94549c](https://github.com/monerium/js-monorepo/commit/b94549c58fe6727999ceb9e93fc92d855107deee))
+
 ## [0.10.0](https://github.com/monerium/js-monorepo/compare/customer-v0.9.2...customer-v0.10.0) (2026-04-30)
 
 

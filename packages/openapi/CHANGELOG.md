@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.4.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.3.1...openapi-v2.4.0) (2026-05-07)
+
+
+### Features
+
+* **kyc:** rename profile state submitted to pending ([#190](https://github.com/monerium/js-monorepo/issues/190)) ([b94549c](https://github.com/monerium/js-monorepo/commit/b94549c58fe6727999ceb9e93fc92d855107deee))
+* **kyc:** tax fields ([#191](https://github.com/monerium/js-monorepo/issues/191)) ([13dbc70](https://github.com/monerium/js-monorepo/commit/13dbc70602d86842d8a13f0cf9e8faa5d2ac84d4))
+
 ## [2.3.1](https://github.com/monerium/js-monorepo/compare/openapi-v2.3.0...openapi-v2.3.1) (2026-04-29)
 
 
