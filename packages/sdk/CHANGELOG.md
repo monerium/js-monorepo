@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.1.0](https://github.com/monerium/js-monorepo/compare/sdk-v4.0.0...sdk-v4.1.0) (2026-05-07)
+
+
+### Features
+
+* **kyc:** rename profile state submitted to pending ([#190](https://github.com/monerium/js-monorepo/issues/190)) ([b94549c](https://github.com/monerium/js-monorepo/commit/b94549c58fe6727999ceb9e93fc92d855107deee))
+
+
+### Documentation
+
+* grouping improvements ([58147eb](https://github.com/monerium/js-monorepo/commit/58147eb31de5e4d6ac5469dfc7a63377d976370b))
+
 ## [4.0.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.5.0...sdk-v4.0.0) (2026-04-30)
 
 
