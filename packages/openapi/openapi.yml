@@ -3731,7 +3731,7 @@ tags:
     x-displayName: Changelog
     description: |
       ### 2026-05-07:
-      * `PersonalForm`: renamed `taxId` to `tin` and added `taxResidenceCountry` as a required field.
+      *  [PATCH /profiles/{profile}/form](#operation/patch-profile-form) - `PersonalForm`: renamed `taxId` to `tin` and added `taxResidenceCountry` as a required field.
 
       ### 2026-05-06:
       * [GET /profiles](#operation/profiles), [GET /profiles/{profile}](#operation/profile), [POST /profiles](#operation/create-profile), [GET /auth/context](#operation/auth-context), [Webhook profile.updated](#operation/webhook-profile-updated) - `ProfileState` and `SectionState`: renamed `submitted` to `pending`.
