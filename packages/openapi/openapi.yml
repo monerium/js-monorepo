@@ -3180,10 +3180,14 @@ components:
         usTaxPerson:
           description: Indicates whether the individual is subject to US tax obligations (e.g. holds a US tax identification number or is a US resident for tax purposes).
           type: boolean
-        taxId:
+        tin:
           description: "Tax Identification Number (TIN) assigned by the individual's tax authority. Format varies by country (e.g. SSN in the US, NI number in the UK)."
           type: string
           example: 123-45-6789
+        taxResidenceCountry:
+          description: 'Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) for the tax residency.'
+          example: GB
+          $ref: '#/components/schemas/CountryCode'
       required:
         - occupation
         - profession
@@ -3196,7 +3200,8 @@ components:
         - fundOwner
         - usCitizen
         - usTaxPerson
-        - taxId
+        - tin
+        - taxResidenceCountry
     PersonalVerifications:
       description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).'
       type: array
@@ -3725,6 +3730,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-05-07:
+      * `PersonalForm`: renamed `taxId` to `tin` and added `taxResidenceCountry` as a required field.
+
       ### 2026-05-06:
       * [GET /profiles](#operation/profiles), [GET /profiles/{profile}](#operation/profile), [POST /profiles](#operation/create-profile), [GET /auth/context](#operation/auth-context), [Webhook profile.updated](#operation/webhook-profile-updated) - `ProfileState` and `SectionState`: renamed `submitted` to `pending`.
 
