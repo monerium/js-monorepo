@@ -1220,7 +1220,12 @@ paths:
               "personal": [
                 {
                   "kind": "sourceOfFunds",
-                  "fileId": "a1b2c3d4-0000-0000-0000-000000000001"
+                  "documents": [
+                    {
+                      "kind": "sourceOfFunds",
+                      "fileId": "a1b2c3d4-0000-0000-0000-000000000001"
+                    }
+                  ]
                 }
               ]
             }'
@@ -3203,7 +3208,7 @@ components:
         - tin
         - taxResidenceCountry
     PersonalVerifications:
-      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).'
+      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarityMotion`, `proofOfResidency` (KYC reliance model only).'
       type: array
       items:
         type: object
@@ -3213,7 +3218,7 @@ components:
             type: string
             enum:
               - idDocument
-              - facialSimilarity
+              - facialSimilarityMotion
               - proofOfResidency
               - sourceOfFunds
           state:
@@ -3647,8 +3652,35 @@ components:
         - chain
         - address
         - createdAt
+    VerificationDocument:
+      description: A document attached to a verification.
+      type: object
+      properties:
+        kind:
+          description: The kind of document.
+          type: string
+          enum:
+            - passport
+            - nationalIdentityCard
+            - drivingLicense
+            - residencePermit
+            - proofOfResidency
+            - sourceOfFunds
+            - companyFilePDF
+            - other
+        fileId:
+          description: ID of a previously uploaded file.
+          $ref: '#/components/schemas/UUID'
+        side:
+          description: The side of the document. Required for identity cards and similar two-sided documents.
+          type: string
+          enum:
+            - front
+            - back
+      required:
+        - fileId
     UpdatePersonalVerifications:
-      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).'
+      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarityMotion`, `proofOfResidency` (KYC reliance model only).'
       type: array
       items:
         type: object
@@ -3658,16 +3690,18 @@ components:
             type: string
             enum:
               - idDocument
-              - facialSimilarity
+              - facialSimilarityMotion
               - proofOfResidency
               - sourceOfFunds
-          fileId:
-            description: ID of a previously uploaded file associated with this verification.
-            $ref: '#/components/schemas/UUID'
+          documents:
+            description: Documents to attach to this verification.
+            type: array
+            items:
+              $ref: '#/components/schemas/VerificationDocument'
         required:
           - kind
     UpdateCorporateVerifications:
-      description: A list of verifications required for corporate onboarding.
+      description: 'A list of verifications required for corporate onboarding. Profile-level verifications (company documents) omit `personId`. Person-scoped verifications (for representatives, directors, or beneficial owners) include a `personId` obtained from the profile response.'
       type: array
       items:
         type: object
@@ -3682,9 +3716,16 @@ components:
               - dateOfRegistration
               - beneficialOwnership
               - powerOfAttorney
-          fileId:
-            description: ID of a previously uploaded file associated with this verification.
+              - idDocument
+              - proofOfResidency
+          personId:
+            description: 'Person ID for person-scoped verifications (representatives, directors, beneficial owners). Omit for profile-level company document verifications.'
             $ref: '#/components/schemas/UUID'
+          documents:
+            description: Documents to attach to this verification.
+            type: array
+            items:
+              $ref: '#/components/schemas/VerificationDocument'
         required:
           - kind
   securitySchemes:
@@ -3730,6 +3771,10 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-05-08:
+      * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Each verification item now takes a `documents` array instead of a single `fileId`. Each document has `kind`, `fileId`, and an optional `side`. Corporate verifications support a `personId` field to submit documents for a specific person (representative, director, or beneficial owner).
+      * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Updated verification type `facialSimilarity` to `facialSimilarityMotion` for better alignment with the wire value.
+
       ### 2026-05-07:
       *  [PATCH /profiles/{profile}/form](#operation/patch-profile-form) - `PersonalForm`: renamed `taxId` to `tin` and added `taxResidenceCountry` as a required field.
 
