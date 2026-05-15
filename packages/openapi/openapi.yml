@@ -3084,37 +3084,37 @@ components:
         profession:
           description: The profession code representing the individual's professional field.
           type: string
-          example: PROF_ACCOUNTANCY
+          example: PROFESSION_ACCOUNTANCY
           enum:
-            - PROF_ACCOUNTANCY
-            - PROF_ADMINISTRATIVE
-            - PROF_AGRICULTURE
-            - PROF_ARTS_MEDIA
-            - PROF_BROKER_DEALER
-            - PROF_CATERING_HOSPITALITY
-            - PROF_CHARITY
-            - PROF_CONSTRUCTION_REAL_ESTATE
-            - PROF_DEALER_HIGH_VALUE_GOODS
-            - PROF_DEALER_PRECIOUS_METALS
-            - PROF_EDUCATION
-            - PROF_EMERGENCY_SERVICES
-            - PROF_EXTRACTIVE_INDUSTRY
-            - PROF_FIN_SERVICES_BANKING
-            - PROF_FIN_SERVICES_INSURANCE
-            - PROF_FIN_SERVICES_OTHER
-            - PROF_FIN_SERVICES_PRIVATE_BANKING
-            - PROF_GAMBLING
-            - PROF_GOVERNMENT
-            - PROF_HEALTHCARE_MEDICAL
-            - PROF_INFORMATION_TECHNOLOGY
-            - PROF_LEGAL
-            - PROF_MANUFACTURING
-            - PROF_MARKETING
-            - PROF_MILITARY_DEFENCE
-            - PROF_MONEY_SERVICE_BUSINESS
-            - PROF_PENSIONER
-            - PROF_PUBLIC_PROCUREMENT
-            - PROF_RETAIL_SALES
+            - PROFESSION_ACCOUNTANCY
+            - PROFESSION_ADMINISTRATIVE
+            - PROFESSION_AGRICULTURE
+            - PROFESSION_ARTS_ENTERTAINMENT_MEDIA
+            - PROFESSION_BROKER_DEALER
+            - PROFESSION_CATERING_HOSPITALITY_TOURISM
+            - PROFESSION_CHARITY
+            - PROFESSION_CONSTRUCTION_REAL_ESTATE
+            - PROFESSION_DEALER_HIGH_VALUE_GOODS
+            - PROFESSION_DEALER_PRECIOUS_METALS
+            - PROFESSION_EDUCATION
+            - PROFESSION_EMERGENCY_SERVICES
+            - PROFESSION_EXTRACTIVE_INDUSTRY
+            - PROFESSION_FINANCIAL_SERVICES_BANKING
+            - PROFESSION_FINANCIAL_SERVICES_INSURANCE
+            - PROFESSION_FINANCIAL_SERVICES_OTHER
+            - PROFESSION_FINANCIAL_SERVICES_PRIVATE_BANKING
+            - PROFESSION_GAMBLING
+            - PROFESSION_GOVERNMENT
+            - PROFESSION_HEALTH_CARE
+            - PROFESSION_INFORMATION_TECHNOLOGY
+            - PROFESSION_LEGAL
+            - PROFESSION_MANUFACTURING
+            - PROFESSION_MARKETING
+            - PROFESSION_MILITARY
+            - PROFESSION_MONEY_SERVICE_BUSINESS
+            - PROFESSION_PENSIONER
+            - PROFESSION_PUBLIC_PROCUREMENT
+            - PROFESSION_RETAIL_SALES
         fundOrigin:
           description: The code representing the origins of the individual's funds.
           type: string
@@ -3135,10 +3135,10 @@ components:
           example: ANNUAL_INCOME_UNDER_10K
           enum:
             - ANNUAL_INCOME_UNDER_10K
-            - ANNUAL_INCOME_10K_TO_50K
-            - ANNUAL_INCOME_50K_TO_150K
-            - ANNUAL_INCOME_150K_TO_300K
-            - ANNUAL_INCOME_OVER_300K
+            - ANNUAL_INCOME_FROM_10K_TO_50K
+            - ANNUAL_INCOME_FROM_50K_TO_150K
+            - ANNUAL_INCOME_FROM_150K_TO_300K
+            - ANNUAL_INCOME_MORE_THAN_300K
         monthlyTurnover:
           description: The code representing the individual's monthly turnover range.
           type: string
@@ -3148,17 +3148,17 @@ components:
             - TURNOVER_10K_TO_50K
             - TURNOVER_50K_TO_150K
             - TURNOVER_150K_TO_500K
-            - TURNOVER_OVER_500K
+            - TURNOVER_MORE_THAN_500K
         monthlyTransactionCount:
           description: The code representing the number of transactions the individual makes each month.
           type: string
-          example: TRANSACTION_COUNT_LESS_THAN_5
+          example: TRANSACTION_COUNT_UNDER_5
           enum:
-            - TRANSACTION_COUNT_LESS_THAN_5
+            - TRANSACTION_COUNT_UNDER_5
             - TRANSACTION_COUNT_5_TO_50
             - TRANSACTION_COUNT_50_TO_100
             - TRANSACTION_COUNT_100_TO_200
-            - TRANSACTION_COUNT_OVER_200
+            - TRANSACTION_COUNT_MORE_THAN_200
         activities:
           description: List of codes representing the individual's financial activities.
           type: array
@@ -3344,11 +3344,11 @@ components:
         purpose:
           description: The code representing the primary purpose of the company.
           type: string
-          example: PURPOSE_COLLECT_PAYMENTS
+          example: PURPOSE_COLLECTING_PAYMENTS
           enum:
-            - PURPOSE_COLLECT_PAYMENTS
-            - PURPOSE_PAY_FOR_SERVICES
-            - PURPOSE_BUY_SELL_CRYPTO
+            - PURPOSE_COLLECTING_PAYMENTS
+            - PURPOSE_PAYING_FOR_GOODS
+            - PURPOSE_BUY_SELL_CRYPTO_CURRENCIES
             - PURPOSE_ENGAGE_IN_DEFI
             - PURPOSE_OTHER
         activity:
@@ -3359,9 +3359,9 @@ components:
             - ACTIVITY_ACCOMMODATION_FOOD_TRAVEL
             - ACTIVITY_ACCOUNTING_LEGAL_CONSULTANCY
             - ACTIVITY_ADULT_ENTERTAINMENT
-            - ACTIVITY_ADVERTISING_MARKETING
-            - ACTIVITY_AGRICULTURE_FORESTRY_FISHING
-            - ACTIVITY_ARTS_ENTERTAINMENT_RECREATION
+            - ACTIVITY_ADVERTISING
+            - ACTIVITY_AGRICULTURE
+            - ACTIVITY_ARTS_ENTERTAINMENT
             - ACTIVITY_CHARITY
             - ACTIVITY_CONSTRUCTION
             - ACTIVITY_DEALER_HIGH_VALUE_GOODS
@@ -3372,16 +3372,16 @@ components:
             - ACTIVITY_HEALTH_SERVICES
             - ACTIVITY_MANUFACTURING
             - ACTIVITY_MARKETPLACE
-            - ACTIVITY_MEDIA_PUBLISHING
+            - ACTIVITY_MEDIA
             - ACTIVITY_MULTI_LEVEL_MARKETING
             - ACTIVITY_PERSONAL_INVESTMENT
             - ACTIVITY_PUBLIC_SECTOR
             - ACTIVITY_REAL_ESTATE
-            - ACTIVITY_RETAIL_WHOLESALE
+            - ACTIVITY_RETAIL
             - ACTIVITY_SOCIAL_WORK
             - ACTIVITY_SOFTWARE_TECHNOLOGY
             - ACTIVITY_TELECOM
-            - ACTIVITY_TRANSPORT_STORAGE
+            - ACTIVITY_TRANSPORTATION
             - ACTIVITY_UTILITIES
             - ACTIVITY_CRYPTO_SERVICES
             - ACTIVITY_FINANCIAL_INSTITUTION
@@ -3389,14 +3389,14 @@ components:
         fundOrigin:
           description: The code representing the origins of the company's funds.
           type: string
-          example: FUND_ORIGIN_REVENUE_OPERATIONS
+          example: FUND_ORIGIN_REVENUE
           enum:
-            - FUND_ORIGIN_REVENUE_OPERATIONS
+            - FUND_ORIGIN_REVENUE
             - FUND_ORIGIN_PROFIT_DIVIDENDS
             - FUND_ORIGIN_LOAN
-            - FUND_ORIGIN_INVESTMENTS_SHAREHOLDERS
+            - FUND_ORIGIN_INVESTMENTS
             - FUND_ORIGIN_CUSTOMER_FUNDS
-            - FUND_ORIGIN_THIRD_PARTY_FUNDS
+            - FUND_ORIGIN_THIRD_PARTIES_FUNDS
         monthlyTurnover:
           description: The code representing the company's monthly turnover range.
           type: string
@@ -3404,7 +3404,7 @@ components:
           enum:
             - TURNOVER_UNDER_100K
             - TURNOVER_100K_TO_250K
-            - TURNOVER_OVER_250K
+            - TURNOVER_MORE_THAN_250K
         monthlyTransactionCount:
           description: The code representing the number of transactions the company typically makes each month.
           type: string
@@ -3412,7 +3412,7 @@ components:
           enum:
             - TRANSACTION_COUNT_UNDER_100
             - TRANSACTION_COUNT_100_TO_250
-            - TRANSACTION_COUNT_OVER_250
+            - TRANSACTION_COUNT_MORE_THAN_250
       required:
         - service
         - purpose
@@ -3771,6 +3771,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-05-15:
+      * Updated identity enums to match the `@monerium/identity` package: `ProfessionCode`, `PersonalActivityCode`, `CorporateActivityCode`, `FundOriginCode`, `CorporateFundOriginCode`, `MonthlyTurnoverCode`, `CorporateMonthlyTurnoverCode`, `MonthlyTransactionCountCode`, `CorporateMonthlyTransactionCountCode`, and `CorporatePurposeCode`.
+
       ### 2026-05-08:
       * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Each verification item now takes a `documents` array instead of a single `fileId`. Each document has `kind`, `fileId`, and an optional `side`. Corporate verifications support a `personId` field to submit documents for a specific person (representative, director, or beneficial owner).
       * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Updated verification type `facialSimilarity` to `facialSimilarityMotion` for better alignment with the wire value.
