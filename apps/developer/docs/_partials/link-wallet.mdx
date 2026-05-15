@@ -105,8 +105,9 @@ import Safe, {
 } from '@safe-global/protocol-kit';
 import { OperationType } from '@safe-global/safe-core-sdk-types';
 
-const message = 'I hereby declare that I am the address owner.';
-const hash = hashSafeMessage(message);
+const rawMessage = 'I hereby declare that I am the address owner.';
+// Safe signMessage expects the Safe/EIP-191 personal-sign hash. See SafeProtocolKit documentation.
+const messageHash = hashSafeMessage(rawMessage);
 
 // Build the signMessage transaction
 let kit = await Safe.init({ provider, signer: ownerPrivateKey1, safeAddress });
@@ -120,7 +121,7 @@ let tx = await kit.createTransaction({
     {
       to: await signMessageLib.getAddress(),
       value: '0',
-      data: signMessageLib.encode('signMessage', [hash]),
+      data: signMessageLib.encode('signMessage', [messageHash]),
       operation: OperationType.DelegateCall,
     },
   ],
