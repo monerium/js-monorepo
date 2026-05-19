@@ -9,6 +9,10 @@ import { Endpoint } from '@site/src/components/Endpoint';
 
 Swap lets a client exchange USDC and EURe directly on-chain using a short-lived quote signed by Monerium. The feature is currently in preview and available only in the sandbox environment on Arbitrum Sepolia.
 
+:::warning Preview feature
+Swap is currently in preview and available only in the sandbox environment on Arbitrum Sepolia. The API is subject to change before general availability. Check this page again before integrating or updating your implementation.
+:::
+
 ## How it works
 
 The client asks Monerium for a quote, commits that quote to get a signature, approves the settlement contract to spend the taker token, then executes the signed swap on-chain.
@@ -73,6 +77,8 @@ The response includes `takerAmount`, `makerAmount`, `price`, `priceImpact`, `tak
 />
 
 Commit with the same quote input, plus the taker wallet address and chain ID. Monerium checks liquidity, checks token balances, and returns a signed quote.
+
+A successful quote does not reserve liquidity or guarantee that commit will succeed. Treat `/swap/commit` as the authoritative check before asking the wallet to approve or execute the swap.
 
 ```js
 const response = await fetch('https://api.monerium.dev/swap/commit', {

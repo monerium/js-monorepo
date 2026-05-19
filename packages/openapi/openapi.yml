@@ -2052,7 +2052,7 @@ paths:
       operationId: create-swap-quote
       summary: Swap quote
       description: |
-        Preview endpoint for getting a USDC/EURe swap quote. Currently available only in the sandbox environment on Arbitrum Sepolia.
+        Preview endpoint for getting a USDC/EURe swap quote. Currently available only in the sandbox environment on Arbitrum Sepolia. The API is subject to change before general availability; check the Swap guide before integrating or updating your implementation.
 
         Provide `takerAmount` to quote a sell amount, or `makerAmount` to quote a buy amount. Exactly one amount field is required.
       parameters:
@@ -2109,7 +2109,7 @@ paths:
       operationId: commit-swap-quote
       summary: Commit swap quote
       description: |
-        Preview endpoint for committing a swap quote. Monerium checks liquidity and balances, then returns a signed quote that can be executed on the settlement contract.
+        Preview endpoint for committing a swap quote. Monerium checks liquidity and balances, then returns a signed quote that can be executed on the settlement contract. The API is subject to change before general availability; check the Swap guide before integrating or updating your implementation.
 
         The signed quote is short-lived and can only be executed on the `chainId` returned in the response.
       parameters:
