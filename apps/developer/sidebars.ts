@@ -52,7 +52,7 @@ const sidebars: SidebarsConfig = {
         type: 'doc',
         id: 'tokens',
       },
-      items: ['token-integration', 'contracts-v2'],
+      items: ['token-integration', 'swap', 'contracts-v2'],
     },
     {
       type: 'link',

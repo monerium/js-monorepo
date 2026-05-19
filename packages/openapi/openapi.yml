@@ -2047,6 +2047,128 @@ paths:
           source: |-
             curl https://api.monerium.dev/tokens \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+  /swap:
+    post:
+      operationId: create-swap-quote
+      summary: Swap quote
+      description: |
+        Preview endpoint for getting a USDC/EURe swap quote. Currently available only in the sandbox environment on Arbitrum Sepolia. The API is subject to change before general availability; check the Swap guide before integrating or updating your implementation.
+
+        Provide `takerAmount` to quote a sell amount, or `makerAmount` to quote a buy amount. Exactly one amount field is required.
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwapQuoteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwapQuote'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+      security:
+        - BearerAuth: []
+      tags:
+        - swap
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/swap' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "takerToken": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
+              "makerToken": "0x1DfA293078Cfb70c7AB85fa451b5A7687e50da3B",
+              "takerAmount": "10.00"
+            }'
+  /swap/commit:
+    post:
+      operationId: commit-swap-quote
+      summary: Commit swap quote
+      description: |
+        Preview endpoint for committing a swap quote. Monerium checks liquidity and balances, then returns a signed quote that can be executed on the settlement contract. The API is subject to change before general availability; check the Swap guide before integrating or updating your implementation.
+
+        The signed quote is short-lived and can only be executed on the `chainId` returned in the response.
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwapCommitQuoteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwapCommittedQuote'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '503':
+          description: SERVICE UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - BearerAuth: []
+      tags:
+        - swap
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X POST 'https://api.monerium.dev/swap/commit' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "chainId": 421614,
+              "taker": "0x59cFC408d310697f9D3598e1BE75B0157a072407",
+              "takerToken": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
+              "makerToken": "0x1DfA293078Cfb70c7AB85fa451b5A7687e50da3B",
+              "takerAmount": "10.00"
+            }'
   /signatures:
     get:
       operationId: get-signatures
@@ -2752,6 +2874,122 @@ components:
           chain: polygon
           address: '0x64E97c1a6535afD4a313eF46F88A64a34250B719'
           decimals: 18
+    SwapAmount:
+      description: 'Decimal token amount as a string. The API accepts decimal strings, while contract calls use raw token units.'
+      type: string
+      example: '10.00'
+    SwapQuoteRequest:
+      type: object
+      properties:
+        takerToken:
+          description: Token the taker sells.
+          $ref: '#/components/schemas/Address'
+        makerToken:
+          description: Token the taker receives.
+          $ref: '#/components/schemas/Address'
+        takerAmount:
+          description: Amount of taker token to sell. Mutually exclusive with `makerAmount`.
+          $ref: '#/components/schemas/SwapAmount'
+        makerAmount:
+          description: Amount of maker token to buy. Mutually exclusive with `takerAmount`.
+          $ref: '#/components/schemas/SwapAmount'
+      oneOf:
+        - required:
+            - takerAmount
+        - required:
+            - makerAmount
+      required:
+        - takerToken
+        - makerToken
+    SwapCommitQuoteRequest:
+      allOf:
+        - $ref: '#/components/schemas/SwapQuoteRequest'
+        - type: object
+          properties:
+            chainId:
+              description: EVM chain ID where the quote will be executed.
+              type: integer
+              format: int64
+              example: 421614
+            taker:
+              description: Wallet address that will execute the settlement contract call.
+              $ref: '#/components/schemas/Address'
+          required:
+            - chainId
+            - taker
+    SwapQuote:
+      type: object
+      properties:
+        takerToken:
+          description: Token the taker sells.
+          $ref: '#/components/schemas/Address'
+        makerToken:
+          description: Token the taker receives.
+          $ref: '#/components/schemas/Address'
+        takerAmount:
+          $ref: '#/components/schemas/SwapAmount'
+        makerAmount:
+          $ref: '#/components/schemas/SwapAmount'
+        price:
+          description: Maker amount divided by taker amount.
+          $ref: '#/components/schemas/SwapAmount'
+        priceImpact:
+          description: Price impact percentage.
+          type: string
+          example: '0.12'
+        takerAmountUsd:
+          description: Estimated USD value of the taker amount.
+          $ref: '#/components/schemas/SwapAmount'
+        makerAmountUsd:
+          description: Estimated USD value of the maker amount.
+          $ref: '#/components/schemas/SwapAmount'
+      required:
+        - takerToken
+        - makerToken
+        - takerAmount
+        - makerAmount
+        - price
+        - priceImpact
+        - takerAmountUsd
+        - makerAmountUsd
+    SwapSignature:
+      description: Monerium signature used by the settlement contract to verify the committed quote.
+      type: string
+      example: '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1b'
+      pattern: '^0x[0-9a-fA-F]{130}$'
+    SwapCommittedQuote:
+      allOf:
+        - $ref: '#/components/schemas/SwapQuote'
+        - type: object
+          properties:
+            id:
+              description: Quote ID. Convert the UUID to `bytes16` by removing hyphens before calling the settlement contract.
+              type: string
+              format: uuid
+              example: b48f7ca4-e51f-11ed-9e13-cacb9390199c
+            chainId:
+              description: EVM chain ID where the quote was signed.
+              type: integer
+              format: int64
+              example: 421614
+            nonce:
+              description: Settlement nonce. Can only be used once.
+              type: integer
+              format: int64
+              example: 42
+            expiry:
+              description: Unix timestamp when the signed quote expires.
+              type: integer
+              format: int64
+              example: 1779175954
+            signature:
+              $ref: '#/components/schemas/SwapSignature'
+          required:
+            - id
+            - chainId
+            - nonce
+            - expiry
+            - signature
     Counterpart:
       description: 'The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country.'
       type: object
@@ -3768,9 +4006,15 @@ tags:
   - name: tokens
     x-displayName: Tokens
     description: 'Supported e-money tokens with contract addresses and chain details. For icons, integration examples, and supported standards, see the [Tokens](/tokens) section in the developer docs.'
+  - name: swap
+    x-displayName: Swap
+    description: 'Preview USDC/EURe swap endpoints for sandbox on Arbitrum Sepolia. See the [Swap](/swap) guide for the full client flow.'
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-05-19:
+      * [POST /swap](#operation/create-swap-quote), [POST /swap/commit](#operation/commit-swap-quote) - Added preview endpoints for quoting and committing USDC/EURe swaps in sandbox on Arbitrum Sepolia.
+
       ### 2026-05-15:
       * Updated identity enums to match the `@monerium/identity` package: `ProfessionCode`, `PersonalActivityCode`, `CorporateActivityCode`, `FundOriginCode`, `CorporateFundOriginCode`, `MonthlyTurnoverCode`, `CorporateMonthlyTurnoverCode`, `MonthlyTransactionCountCode`, `CorporateMonthlyTransactionCountCode`, and `CorporatePurposeCode`.
 
