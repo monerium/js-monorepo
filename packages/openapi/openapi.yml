@@ -2102,7 +2102,7 @@ paths:
             --data-raw '{
               "takerToken": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
               "makerToken": "0x1DfA293078Cfb70c7AB85fa451b5A7687e50da3B",
-              "takerAmount": "100.00"
+              "takerAmount": "10.00"
             }'
   /swap/commit:
     post:
@@ -2167,7 +2167,7 @@ paths:
               "taker": "0x59cFC408d310697f9D3598e1BE75B0157a072407",
               "takerToken": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
               "makerToken": "0x1DfA293078Cfb70c7AB85fa451b5A7687e50da3B",
-              "takerAmount": "100.00"
+              "takerAmount": "10.00"
             }'
   /signatures:
     get:
@@ -2877,7 +2877,7 @@ components:
     SwapAmount:
       description: 'Decimal token amount as a string. The API accepts decimal strings, while contract calls use raw token units.'
       type: string
-      example: '100.00'
+      example: '10.00'
     SwapQuoteRequest:
       type: object
       properties:
