@@ -696,6 +696,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ForbiddenPartnerError'
+        '409':
+          description: |
+            Conflict
+
+            This error occurs when a profile with the specified ID already exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 409
+                  status:
+                    type: string
+                    enum:
+                      - Conflict
+                  message:
+                    type: string
+                    enum:
+                      - Profile already exists
       security:
         - BearerAuth: []
       tags:
@@ -4013,6 +4036,7 @@ tags:
     x-displayName: Changelog
     description: |
       ### 2026-05-20:
+      * [POST /profiles](#operation/create-profile) - Documented 409 Conflict response when a profile with the specified ID already exists.
       * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Reverted verification type `facialSimilarityMotion` back to `facialSimilarity` to match the wire value.
 
       ### 2026-05-19:
