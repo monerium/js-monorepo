@@ -3469,7 +3469,7 @@ components:
         - tin
         - taxResidenceCountry
     PersonalVerifications:
-      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarityMotion`, `proofOfResidency` (KYC reliance model only).'
+      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).'
       type: array
       items:
         type: object
@@ -3479,7 +3479,7 @@ components:
             type: string
             enum:
               - idDocument
-              - facialSimilarityMotion
+              - facialSimilarity
               - proofOfResidency
               - sourceOfFunds
           state:
@@ -3941,7 +3941,7 @@ components:
       required:
         - fileId
     UpdatePersonalVerifications:
-      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarityMotion`, `proofOfResidency` (KYC reliance model only).'
+      description: 'A list of verifications for personal onboarding. Available kinds are `sourceOfFunds` (all partners), and `idDocument`, `facialSimilarity`, `proofOfResidency` (KYC reliance model only).'
       type: array
       items:
         type: object
@@ -3951,7 +3951,7 @@ components:
             type: string
             enum:
               - idDocument
-              - facialSimilarityMotion
+              - facialSimilarity
               - proofOfResidency
               - sourceOfFunds
           documents:
@@ -4037,6 +4037,7 @@ tags:
     description: |
       ### 2026-05-20:
       * [POST /profiles](#operation/create-profile) - Documented 409 Conflict response when a profile with the specified ID already exists.
+      * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Reverted verification type `facialSimilarityMotion` back to `facialSimilarity` to match the wire value.
 
       ### 2026-05-19:
       * [POST /swap](#operation/create-swap-quote), [POST /swap/commit](#operation/commit-swap-quote) - Added preview endpoints for quoting and committing USDC/EURe swaps in sandbox on Arbitrum Sepolia.
