@@ -2263,7 +2263,8 @@ paths:
                           details:
                             name: John Doe
                         currency: eur
-                        createdAt: '2024-01-15T10:30:00Z'
+                        message: 'Send EUR 69 to EE12...2602 at 2026-06-19T09:27:42Z'
+                        createdAt: '2026-06-19T09:28:00Z'
                     total: 1
                 linkAddressSignature:
                   summary: Link address signature example
@@ -3905,6 +3906,9 @@ components:
         currency:
           description: Currency code (only present for order kind signatures)
           $ref: '#/components/schemas/Currency'
+        message:
+          description: Signed message (only present for order kind signatures)
+          type: string
         createdAt:
           description: Timestamp when the signature request was created
           $ref: '#/components/schemas/TimeStamp'
@@ -4035,6 +4039,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-06-19:
+      * [GET /signatures](#operation/get-signatures) - Added "message" to the pending order signatures response.
+
       ### 2026-05-20:
       * [POST /profiles](#operation/create-profile) - Documented 409 Conflict response when a profile with the specified ID already exists.
       * [PATCH /profiles/{profile}/verifications](#operation/patch-profile-verifications) - Reverted verification type `facialSimilarityMotion` back to `facialSimilarity` to match the wire value.
