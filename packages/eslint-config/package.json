@@ -13,14 +13,14 @@
     "./node-package": "./node-package.mjs"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-turbo": "^2.0.0",
-    "eslint-plugin-jest": "^28.6.0",
-    "eslint-plugin-only-warn": "^1.1.0",
-    "eslint-plugin-simple-import-sort": "^12.1.0",
-    "typescript-eslint": "^8.56.0"
+    "@eslint/js": "9.39.2",
+    "@typescript-eslint/eslint-plugin": "8.56.0",
+    "@typescript-eslint/parser": "8.56.0",
+    "eslint-config-prettier": "9.1.2",
+    "eslint-config-turbo": "2.8.10",
+    "eslint-plugin-jest": "28.14.0",
+    "eslint-plugin-only-warn": "1.1.0",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "typescript-eslint": "8.56.0"
   }
 }
