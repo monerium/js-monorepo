@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.1.0](https://github.com/monerium/js-monorepo/compare/developer-v2.0.0...developer-v2.1.0) (2026-06-29)
+
+
+### Features
+
+* **kyc:** rename profile state submitted to pending ([#190](https://github.com/monerium/js-monorepo/issues/190)) ([b94549c](https://github.com/monerium/js-monorepo/commit/b94549c58fe6727999ceb9e93fc92d855107deee))
+* **swap:** direct swap docs ([#193](https://github.com/monerium/js-monorepo/issues/193)) ([abc13d4](https://github.com/monerium/js-monorepo/commit/abc13d408a2d1c72c6618d99966cbec8b2a321c1))
+
+
+### Documentation
+
+* grouping improvements ([58147eb](https://github.com/monerium/js-monorepo/commit/58147eb31de5e4d6ac5469dfc7a63377d976370b))
+
+
+### Miscellaneous
+
+* disable docasaurus auto open in browser ([46e4852](https://github.com/monerium/js-monorepo/commit/46e4852b189102135faa8174f6b25a4f1fe9f4a0))
+* lock all packages ([66acbdc](https://github.com/monerium/js-monorepo/commit/66acbdc00a53e40fab4f08f63416787807c14d78))
+* user reported instuctions unclear with messsage hashing for safes ([630f6bd](https://github.com/monerium/js-monorepo/commit/630f6bd56d50ad57996b77d91100bf2403215516))
+
 ## [2.0.0](https://github.com/monerium/js-monorepo/compare/developer-v1.3.0...developer-v2.0.0) (2026-04-30)
 
 
