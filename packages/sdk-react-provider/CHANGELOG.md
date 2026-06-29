@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.12](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.11...sdk-react-provider-v1.3.12) (2026-06-29)
+
+
+### Miscellaneous
+
+* lock all packages ([66acbdc](https://github.com/monerium/js-monorepo/commit/66acbdc00a53e40fab4f08f63416787807c14d78))
+
 ## [1.3.11](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.10...sdk-react-provider-v1.3.11) (2026-04-29)
 
 

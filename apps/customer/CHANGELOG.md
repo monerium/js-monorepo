@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.11.0](https://github.com/monerium/js-monorepo/compare/customer-v0.10.0...customer-v0.11.0) (2026-06-29)
+
+
+### Features
+
+* **kyc:** rename profile state submitted to pending ([#190](https://github.com/monerium/js-monorepo/issues/190)) ([b94549c](https://github.com/monerium/js-monorepo/commit/b94549c58fe6727999ceb9e93fc92d855107deee))
+
+
+### Miscellaneous
+
+* disable nextjs telemetry ([29679da](https://github.com/monerium/js-monorepo/commit/29679dac85a6ba2eedd4e21220ab9ba4bafdf6be))
+* lock all packages ([66acbdc](https://github.com/monerium/js-monorepo/commit/66acbdc00a53e40fab4f08f63416787807c14d78))
+
 ## [0.10.0](https://github.com/monerium/js-monorepo/compare/customer-v0.9.2...customer-v0.10.0) (2026-04-30)
 
 
