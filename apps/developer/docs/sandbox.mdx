@@ -26,3 +26,24 @@ Your wallet needs gas to send on-chain transactions. Use the faucets below to ge
 - [Sepolia faucet](https://sepolia-faucet.pk910.de) — sepETH for Ethereum Sepolia
 - [Chiado faucet](https://faucet.chiadochain.net/) — test xDAI for Gnosis Chiado
 - [Amoy faucet](https://faucet.polygon.technology/) or [Alchemy's faucet](https://www.alchemy.com/faucets/polygon-amoy) — test MATIC for Polygon Amoy
+
+## Checklist
+
+1. **Create an application** — get your Client ID and Secret from the [Developers](https://sandbox.monerium.dev/developers) page.
+2. **Authenticate** — obtain an access token via client credentials.
+3. **Set up webhooks** — register an endpoint to receive sandbox events.
+4. **Onboard a profile** — create and approve a test profile (KYC).
+5. **Link a wallet** — associate a blockchain address with the profile.
+6. **Get an IBAN** — request a dedicated IBAN for the profile.
+7. **Get test EURe** — simulate a bank transfer to mint test EURe.
+8. **Get test gas** — use faucets to fund the wallet for on-chain transactions.
+9. **Fund your whitelabel profiles** — move test EURe from your regular profile to whitelabel profiles.
+10. **Place a test order** — send or receive a payment to verify the full flow.
+
+## Funding whitelabel profiles
+
+To test whitelabel integrations end-to-end, you need EURe on the whitelabel profiles rather than just on your personal sandbox account. Use your regular sandbox profile as the source:
+
+1. Go to your regular sandbox profile and follow the steps above to get an IBAN.
+2. Simulate a bank transfer under **Receive → Simulate bank transfer** to mint test EURe.
+3. Transfer the minted EURe on-chain to the wallet addresses linked to your whitelabel profiles.
