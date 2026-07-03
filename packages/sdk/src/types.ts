@@ -418,7 +418,10 @@ export type PersonalProfileForm = {
   usTaxPerson: boolean;
 
   /** Tax Identification Number (TIN) assigned by the individual's tax authority. Format varies by country (e.g. SSN in the US, NI number in the UK). */
-  taxId: string;
+  tin: string;
+
+  /** Two-letter country code ISO 3166-1 alpha-2 for the tax residency. */
+  taxResidenceCountry: string;
 };
 
 /**
