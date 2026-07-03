@@ -3321,6 +3321,15 @@ components:
           format: date
           example: '1990-05-15'
           pattern: '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|1\d|2\d|3[01])$'
+        phone:
+          description: The person's phone number.
+          type: string
+          example: '+3548888888'
+        email:
+          description: The person's email address.
+          type: string
+          format: email
+          example: jane.doe@example.com
       required:
         - firstName
         - lastName
@@ -3330,6 +3339,8 @@ components:
         - country
         - nationality
         - birthday
+        - phone
+        - email
     PersonalForm:
       description: 'Personal form capturing occupation, profession, fund origins, and financial information for risk assessment.'
       type: object
@@ -4041,6 +4052,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-07-03:
+      * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - Added `phone` and `email` parameters to `PersonalDetails` request body schema.
+
       ### 2026-06-19:
       * [GET /signatures](#operation/get-signatures) - Added "message" to the pending order signatures response.
 
