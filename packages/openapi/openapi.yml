@@ -3337,6 +3337,8 @@ components:
         - country
         - nationality
         - birthday
+        - phone
+        - email
     PersonalForm:
       description: 'Personal form capturing occupation, profession, fund origins, and financial information for risk assessment.'
       type: object
@@ -4044,6 +4046,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-05-28:
+      * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - Made `phone` and `email` parameters required in the `PersonalDetails` request body schema.
+
       ### 2026-05-27:
       * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - Added `phone` and `email` parameters to `PersonalDetails` request body schema.
 

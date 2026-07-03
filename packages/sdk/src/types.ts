@@ -254,6 +254,10 @@ export interface PersonalProfileDetails {
   nationality: string;
   /** The person's date of birth in `YYYY-MM-DD format. */
   birthday: string;
+  /** The person's phone number. */
+  phone: string;
+  /** The person's email address. */
+  email: string;
 }
 
 /**

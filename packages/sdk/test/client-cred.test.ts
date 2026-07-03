@@ -364,16 +364,19 @@ if (process.env.CI !== 'true') {
             countryState: 'SDKTest',
             nationality: 'FR',
             birthday: '1990-05-15',
+            phone: '+3548888888',
+            email: 'jane.doe@example.com',
           } as PersonalProfileDetails,
         };
 
         // No way to do this in Sandbox since profiles can't be approved?
-        await expect(
-          client.updateProfileDetails({ profile: DEFAULT_PROFILE, ...body })
-        ).rejects.toMatchObject({
-          code: 400,
-          status: 'Bad Request',
-        });
+        const res = (await client.updateProfileDetails({
+          profile: DEFAULT_PROFILE,
+          ...body,
+        })) as any;
+        expect(res).toBeDefined();
+        expect(res.id).toBeDefined();
+        expect(res.details.state).toBe('pending');
       });
     });
   });
