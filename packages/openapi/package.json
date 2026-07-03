@@ -27,8 +27,8 @@
     "clean": "rm -rf dist node_modules .turbo"
   },
   "devDependencies": {
-    "@redocly/cli": "^1.25.0",
-    "openapi-format": "^1.18.0"
+    "@redocly/cli": "1.34.7",
+    "openapi-format": "1.29.3"
   },
   "engines": {
     "node": ">=18"
