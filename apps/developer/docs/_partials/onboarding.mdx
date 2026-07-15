@@ -94,6 +94,8 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
       country: 'GB',
       nationality: 'GB',
       birthday: '1990-05-15',
+      phone: '+3548888888',
+      email: 'jane.doe@example.com',
     },
   }),
 });
@@ -140,6 +142,8 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
           country: 'GB',
           nationality: 'GB',
           birthday: '1990-05-15',
+          phone: '+3548888888',
+          email: 'jane.doe@example.com',
           idDocument: { number: 'A1234567', kind: 'passport' },
         },
       ],
@@ -153,6 +157,8 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
           country: 'GB',
           nationality: 'GB',
           birthday: '1990-05-15',
+          phone: '+3548888888',
+          email: 'jane.doe@example.com',
           ownershipPercentage: '100',
         },
       ],
@@ -166,6 +172,8 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
           country: 'GB',
           nationality: 'GB',
           birthday: '1990-05-15',
+          phone: '+3548888888',
+          email: 'jane.doe@example.com',
         },
       ],
     },
@@ -196,11 +204,11 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/form`, {
   body: JSON.stringify({
     personal: {
       occupation: 'OCCUPATION_EMPLOYED',
-      profession: 'PROF_FINANCIAL_SERVICES_OTHER',
+      profession: 'PROFESSION_FINANCIAL_SERVICES_OTHER',
       fundOrigin: 'FUND_ORIGIN_SALARY',
-      annualIncome: 'INCOME_50K_100K',
-      monthlyTurnover: 'TURNOVER_1K_10K',
-      monthlyTransactionCount: 'TX_COUNT_1_10',
+      annualIncome: 'ANNUAL_INCOME_FROM_50K_TO_150K',
+      monthlyTurnover: 'TURNOVER_UNDER_10K',
+      monthlyTransactionCount: 'TRANSACTION_COUNT_UNDER_5',
       activities: ['ACTIVITY_INVESTING_CRYPTO'],
       publicFunction: false,
       fundOwner: true,
@@ -226,10 +234,11 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/form`, {
   },
   body: JSON.stringify({
     corporate: {
-      service: 'LEGAL_FORM_PRIVATE_LIMITED',
+      service: 'E-commerce platform connecting buyers and sellers across the EU',
+      legalForm: 'LEGAL_FORM_PRIVATE_LIMITED',
       purpose: 'PURPOSE_COLLECTING_PAYMENTS',
       activity: 'ACTIVITY_FINANCIAL_INSTITUTION',
-      fundOrigin: 'FUND_ORIGIN_REVENUE_OPERATIONS',
+      fundOrigin: 'FUND_ORIGIN_REVENUE',
       monthlyTurnover: 'TURNOVER_100K_TO_250K',
       monthlyTransactionCount: 'TRANSACTION_COUNT_UNDER_100',
     },
@@ -249,7 +258,7 @@ Upload documents via `POST /files` first to obtain a `fileId`, then submit them 
 <Tabs>
   <TabItem value="personal-sharing" label="Personal — KYC Sharing">
 
-`idDocument`, `facialSimilarity`, and `proofOfResidency` are populated automatically from SumSub. You only need this step if source of funds is required — either identified upfront (restricted residency, restricted nationality, or PEP) or triggered by a `profile.updated` webhook with `sourceOfFunds: incomplete`.
+`idDocument`, `facialSimilarity`, and `proofOfResidency` are populated automatically from SumSub. You only need this step if source of funds is required — either identified upfront (restricted residency, restricted nationality, or PEP) or triggered by a `profile.updated` webhook with the `sourceOfFunds` verification in `incomplete` state.
 
 ```js
 const { id: fileId } = await uploadFile(sofDocument); // POST /files
@@ -262,7 +271,9 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
     Accept: 'application/vnd.monerium.api-v2+json',
   },
   body: JSON.stringify({
-    personal: [{ kind: 'sourceOfFunds', fileId }],
+    personal: [
+      { kind: 'sourceOfFunds', documents: [{ kind: 'sourceOfFunds', fileId }] },
+    ],
   }),
 });
 ```
@@ -270,7 +281,7 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
   </TabItem>
   <TabItem value="personal-reliance" label="Personal — KYC Reliance">
 
-Submit the full set: `idDocument`, `facialSimilarity`, `proofOfResidency`, and `sourceOfFunds` if required.
+Submit the full set: `idDocument`, `facialSimilarity`, `proofOfResidency`, and `sourceOfFunds` if required. Each verification carries a `documents` array; each document needs a `kind` and a `fileId` from `POST /files`, plus `side: 'front' | 'back'` for two-sided ID cards.
 
 ```js
 // Upload each document via POST /files to get fileIds, then:
@@ -283,10 +294,10 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
   },
   body: JSON.stringify({
     personal: [
-      { kind: 'idDocument', fileId: idDocumentFileId },
-      { kind: 'facialSimilarity', fileId: selfieFileId },
-      { kind: 'proofOfResidency', fileId: proofOfResidencyFileId },
-      // { kind: 'sourceOfFunds', fileId: sofFileId }, // if required
+      { kind: 'idDocument', documents: [{ kind: 'passport', fileId: idDocumentFileId }] },
+      { kind: 'facialSimilarity', documents: [{ kind: 'other', fileId: selfieFileId }] },
+      { kind: 'proofOfResidency', documents: [{ kind: 'proofOfResidency', fileId: proofOfResidencyFileId }] },
+      // { kind: 'sourceOfFunds', documents: [{ kind: 'sourceOfFunds', fileId: sofFileId }] }, // if required
     ],
   }),
 });
@@ -295,7 +306,7 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
   </TabItem>
   <TabItem value="corporate-reliance" label="Corporate — KYC Reliance">
 
-Submit corporate verification documents. `sourceOfFunds` is included if required.
+Submit corporate verification documents. Profile-level (company) documents omit `personId`. Person-scoped verifications — `idDocument` and `proofOfResidency` for representatives, directors, and beneficial owners — include a `personId` obtained from the profile response. `sourceOfFunds` is included if required.
 
 ```js
 // Upload each document via POST /files to get fileIds, then:
@@ -308,13 +319,17 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
   },
   body: JSON.stringify({
     corporate: [
-      { kind: 'corporateName', fileId: corporateNameFileId },
-      { kind: 'corporateAddress', fileId: corporateAddressFileId },
-      { kind: 'registrationNumber', fileId: registrationNumberFileId },
-      { kind: 'dateOfRegistration', fileId: dateOfRegistrationFileId },
-      { kind: 'beneficialOwnership', fileId: beneficialOwnershipFileId },
-      { kind: 'powerOfAttorney', fileId: powerOfAttorneyFileId },
-      // { kind: 'sourceOfFunds', fileId: sofFileId }, // if required
+      // Profile-level (company) documents
+      { kind: 'corporateName', documents: [{ kind: 'companyFilePDF', fileId: corporateNameFileId }] },
+      { kind: 'corporateAddress', documents: [{ kind: 'companyFilePDF', fileId: corporateAddressFileId }] },
+      { kind: 'registrationNumber', documents: [{ kind: 'companyFilePDF', fileId: registrationNumberFileId }] },
+      { kind: 'dateOfRegistration', documents: [{ kind: 'companyFilePDF', fileId: dateOfRegistrationFileId }] },
+      { kind: 'beneficialOwnership', documents: [{ kind: 'companyFilePDF', fileId: beneficialOwnershipFileId }] },
+      { kind: 'powerOfAttorney', documents: [{ kind: 'companyFilePDF', fileId: powerOfAttorneyFileId }] },
+      // Person-scoped verifications (representative / director / beneficial owner)
+      { personId: representativeId, kind: 'idDocument', documents: [{ kind: 'passport', fileId: representativeIdFileId }] },
+      { personId: representativeId, kind: 'proofOfResidency', documents: [{ kind: 'proofOfResidency', fileId: representativePorFileId }] },
+      // { kind: 'sourceOfFunds', documents: [{ kind: 'sourceOfFunds', fileId: sofFileId }] }, // if required
     ],
   }),
 });
@@ -335,7 +350,7 @@ app.post('/webhooks/monerium', express.raw({ type: 'application/json' }), async 
   res.sendStatus(200);
 
   const event = JSON.parse(req.body);
-  if (event.meta.type !== 'profile.updated') return;
+  if (event.type !== 'profile.updated') return;
 
   const { state, verifications } = event.data;
 
@@ -343,11 +358,19 @@ app.post('/webhooks/monerium', express.raw({ type: 'application/json' }), async 
     // Profile is approved — proceed to provision an IBAN
   }
 
+  if (state === 'pending') {
+    // Submissions are blocked until the profile transitions to approved, rejected, or back to incomplete
+  }
+
   if (state === 'incomplete') {
     const sofVerification = verifications?.find(v => v.kind === 'sourceOfFunds');
     if (sofVerification?.state === 'incomplete') {
       // Source of funds required — collect and submit via PATCH /verifications
     }
+  }
+
+  if (state === 'rejected') {
+    // Final rejection — the applicant did not meet compliance requirements
   }
 });
 ```
