@@ -68,7 +68,7 @@ EURe is burned from the wallet and a SEPA transfer is sent from the customer's I
 
 | Field             | SEPA field                          | Format                                                    | Purpose                                                                                                                                                                      |
 | :---------------- | :---------------------------------- | :-------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `memo`            | Unstructured remittance information | Free text, max 140 chars                                  | Human-readable note visible on the recipient's bank statement. Use for payment descriptions, invoice notes, or any context for the recipient.                                |
+| `memo`            | Unstructured remittance information | Free text, 5–140 chars                                 | Human-readable note visible on the recipient's bank statement. Use for payment descriptions, invoice notes, or any context for the recipient.                                |
 | `referenceNumber` | RF Creditor Reference (ISO 11649)   | Max 35 chars, typically `RF` + 2 check digits + reference | Machine-readable structured reference for automated payment reconciliation. Use when the recipient's system needs to match the payment to an invoice or order automatically. |
 
 Use `memo` when you want a readable label on the bank statement. Use `referenceNumber` when the recipient processes payments programmatically and needs a structured reference.
@@ -211,7 +211,7 @@ Accept: 'application/vnd.monerium.api-v2+json',
 const orders = await response.json();
 const order = orders[0];
 // order.kind: 'issue' | 'redeem'
-// order.state: 'pending' | 'processed' | 'rejected'
+// order.state: 'placed' | 'pending' | 'processed' | 'rejected'
 });`}</CodeBlock>
 
 <p>
