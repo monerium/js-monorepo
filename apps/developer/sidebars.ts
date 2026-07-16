@@ -24,7 +24,7 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'Whitelabel',
           link: { type: 'doc', id: 'whitelabel' },
-          items: ['kyc-guide-individuals', 'kyb-guide-corporates'],
+          items: ['kyc-guide-individuals', 'kyb-guide-corporates', 'sumsub'],
         },
         'oauth',
         'private',
