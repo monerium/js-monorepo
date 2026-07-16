@@ -1,0 +1,44 @@
+---
+title: Sumsub Integration
+id: sumsub
+---
+
+# Sumsub Integration
+
+If you use Sumsub for identity verification, you can share the verified applicant data directly with Monerium using the KYC Sharing flow. This automates the retrieval of verified customer details and documents, accelerating your user onboarding.
+
+To share applicant data, you must first configure Monerium as a recipient partner in your Sumsub dashboard.
+
+---
+
+## 1. Configure Monerium as a Recipient
+
+To enable KYC sharing, you need to add Monerium as a partner using our share token:
+
+1. Log in to your **Sumsub Dashboard**.
+2. From the left sidebar, navigate to **Reusable Identity** ➔ **Partners** ➔ **Recipients**.
+3. Click on **Add Recipient**.
+4. Enter the **Share Token** (which is environment-agnostic and used for both Sandbox and Production):
+
+```text
+sbx_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtb25lcml1bS5jb20iLCJqdGkiOiJzYW5kYm94LXNoYXJlLXRva2VuLWV4YW1wbGUiLCJjbGllbnROYW1lIjoiTW9uZXJpdW0ifQ.gibberishSignatureHereOnlyAnExampleTokenDoNotUseDirectly
+```
+
+---
+
+## 2. Sandbox Testing with Sumsub Templates
+
+When testing your integration in the sandbox environment, we highly recommend creating test applicants in Sumsub using Sumsub's official document templates.
+
+In particular, **German document templates** work exceptionally well for verification and simulate a real user onboarding experience successfully.
+
+* Refer to the [Sumsub Verification Document Templates](https://docs.sumsub.com/docs/verification-document-templates) guide to download sample documents (such as IDs, Passports, and Proof of Address).
+* Upload these template documents when creating test applicants in your Sumsub sandbox dashboard to easily trigger successful verifications.
+
+---
+
+## 3. Sharing Applicant Data via API
+
+Once Monerium is configured as a recipient partner, you can share applicant details via the API using the `/profiles/{profileId}/share` endpoint.
+
+For a full step-by-step walkthrough of the Whitelabel onboarding flow and how to call this endpoint, please see the [Whitelabel Onboarding Guide](./whitelabel#onboarding).
