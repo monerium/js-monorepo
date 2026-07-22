@@ -2077,7 +2077,7 @@ paths:
       description: |
         Preview endpoint for getting a USDC/EURe swap quote. Currently available only in the sandbox environment on Arbitrum Sepolia. The API is subject to change before general availability; check the Swap guide before integrating or updating your implementation.
 
-        Provide `sellAmount` to quote a sell amount, or `buyAmount` to quote a buy amount. Exactly one amount field is required. The quote is bound to `walletAddress` and expires at the timestamp returned in the response.
+        Provide `sellAmount` to quote a sell amount, or `buyAmount` to quote a buy amount. Exactly one amount field is required, and it must be at least 1 token. The quote is bound to `walletAddress` and expires at the timestamp returned in the response.
       parameters:
         - name: chain
           in: path
@@ -2105,13 +2105,13 @@ paths:
             $ref: '#/components/schemas/Address'
         - name: sellAmount
           in: query
-          description: Decimal amount of `sellToken` to sell. Mutually exclusive with `buyAmount`.
+          description: Decimal amount of `sellToken` to sell. Must be at least 1 and is mutually exclusive with `buyAmount`.
           required: false
           schema:
             $ref: '#/components/schemas/SwapRequestAmount'
         - name: buyAmount
           in: query
-          description: Decimal amount of `buyToken` to buy. Mutually exclusive with `sellAmount`.
+          description: Decimal amount of `buyToken` to buy. Must be at least 1 and is mutually exclusive with `sellAmount`.
           required: false
           schema:
             $ref: '#/components/schemas/SwapRequestAmount'
@@ -2947,10 +2947,10 @@ components:
       example: '10.00'
       pattern: '^(?:[1-9][0-9]*(?:\.[0-9]+)?|0\.[0-9]*[1-9][0-9]*)$'
     SwapRequestAmount:
-      description: 'Positive decimal token amount as a string. Use no more decimal places than the token supports: 6 for USDC and 18 for EURe. Additional precision may be rounded down when settlement calldata is encoded.'
+      description: 'Decimal token amount of at least 1, encoded as a string. Use no more decimal places than the token supports: 6 for USDC and 18 for EURe. Returned base-unit amounts are authoritative for settlement.'
       type: string
       example: '10.00'
-      pattern: '^(?:[1-9][0-9]*(?:\.[0-9]+)?|0\.[0-9]*[1-9][0-9]*)$'
+      pattern: '^[1-9][0-9]*(?:\.[0-9]+)?$'
     SwapChain:
       description: Chain name accepted by the preview swap API.
       type: string
@@ -2973,6 +2973,16 @@ components:
       format: uuid
       example: a78d8ff2-e51f-11ed-9e13-cacb9390199c
       pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+    SwapBaseUnits:
+      description: 'Unsigned token amount in base units, encoded as a base-10 integer string for `uint256` compatibility.'
+      type: string
+      example: '10000000'
+      pattern: '^[1-9][0-9]*$'
+    SwapTokenDecimals:
+      description: Number of decimal places used by the token contract.
+      type: integer
+      example: 6
+      minimum: 0
     SwapQuote:
       type: object
       properties:
@@ -3001,10 +3011,23 @@ components:
         buyTokenAddress:
           description: Contract address of `buyToken` on the selected chain.
           $ref: '#/components/schemas/Address'
+        sellTokenDecimals:
+          $ref: '#/components/schemas/SwapTokenDecimals'
+        buyTokenDecimals:
+          $ref: '#/components/schemas/SwapTokenDecimals'
         sellAmount:
           $ref: '#/components/schemas/SwapAmount'
         buyAmount:
           $ref: '#/components/schemas/SwapAmount'
+        sellAmountBaseUnits:
+          description: '`sellAmount` converted to token base units. This is the amount signed into settlement calldata.'
+          $ref: '#/components/schemas/SwapBaseUnits'
+        buyAmountBaseUnits:
+          description: '`buyAmount` converted to token base units. This is the amount signed into settlement calldata.'
+          $ref: '#/components/schemas/SwapBaseUnits'
+        requiredAllowanceBaseUnits:
+          description: 'Minimum sell-token allowance required by the settlement contract, in base units.'
+          $ref: '#/components/schemas/SwapBaseUnits'
         price:
           description: Buy amount divided by sell amount.
           $ref: '#/components/schemas/SwapAmount'
@@ -3027,8 +3050,13 @@ components:
         - buyToken
         - sellTokenAddress
         - buyTokenAddress
+        - sellTokenDecimals
+        - buyTokenDecimals
         - sellAmount
         - buyAmount
+        - sellAmountBaseUnits
+        - buyAmountBaseUnits
+        - requiredAllowanceBaseUnits
         - price
         - priceImpact
         - sellAmountUsd
@@ -4123,7 +4151,7 @@ tags:
     x-displayName: Changelog
     description: |
       ### 2026-07-21:
-      * [GET /swap/{chain}/{sellToken}/{buyToken}](#operation/create-swap-quote), [POST /swap/accept](#operation/accept-swap-quote) - Replaced the preview swap request-body and commit flow with wallet-bound path/query quotes, `X-Quote-Token` acceptance, sell/buy terminology, and response-provided settlement calldata.
+      * [GET /swap/{chain}/{sellToken}/{buyToken}](#operation/create-swap-quote), [POST /swap/accept](#operation/accept-swap-quote) - Replaced the preview swap request-body and commit flow with wallet-bound path/query quotes, `X-Quote-Token` acceptance, sell/buy terminology, a minimum quote amount of 1 token, response-provided settlement calldata, token decimals, base-unit amounts, and required allowance.
 
       ### 2026-07-03:
       * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - Added `phone` and `email` parameters to `PersonalDetails` request body schema.

@@ -36,7 +36,7 @@ Use these values in sandbox while swap is in preview:
 Token and settlement contract addresses are resolved by Monerium for the requested chain and returned by the API. Use the returned addresses rather than hard-coding them.
 
 :::note Amounts
-The API accepts positive decimal strings such as `10.00`. Use no more than 6 decimal places for USDC or 18 for EURe. Additional precision may be rounded down when settlement calldata is encoded.
+The API accepts decimal strings of at least `1` token, such as `1` or `10.00`. Display amounts remain decimal strings. Base-unit amounts are returned separately as integer strings and are authoritative for on-chain operations.
 :::
 
 ## Get a quote
@@ -47,7 +47,7 @@ The API accepts positive decimal strings such as `10.00`. Use no more than 6 dec
   href="https://docs.monerium.com/api/#tag/swap/operation/create-swap-quote"
 />
 
-Pass the chain and token symbols in the path. Pass the wallet address and exactly one amount in the query string. `sellAmount` means "sell this amount". `buyAmount` means "buy this amount".
+Pass the chain and token symbols in the path. Pass the wallet address and exactly one amount of at least `1` token in the query string. `sellAmount` means "sell this amount". `buyAmount` means "buy this amount".
 
 ```js
 const url = new URL(
@@ -74,17 +74,20 @@ const quote = await response.json();
 
 The response includes:
 
-| Field                                 | Description                                     |
-| :------------------------------------ | :---------------------------------------------- |
-| `id`                                  | Quote UUID used for reconciliation.             |
-| `chain`                               | Chain name used for settlement.                 |
-| `walletAddress`                       | Wallet bound to the quote.                      |
-| `sellToken`, `buyToken`               | Normalized token symbols.                       |
-| `sellTokenAddress`, `buyTokenAddress` | Token contract addresses on the selected chain. |
-| `sellAmount`, `buyAmount`             | Quoted decimal token amounts.                   |
-| `sellAmountUsd`, `buyAmountUsd`       | Quoted USD values.                              |
-| `price`, `priceImpact`                | Quoted price and percentage price impact.       |
-| `expiry`                              | Unix timestamp when the quote expires.          |
+| Field                                       | Description                                     |
+| :------------------------------------------ | :---------------------------------------------- |
+| `id`                                        | Quote UUID used for reconciliation.             |
+| `chain`                                     | Chain name used for settlement.                 |
+| `walletAddress`                             | Wallet bound to the quote.                      |
+| `sellToken`, `buyToken`                     | Normalized token symbols.                       |
+| `sellTokenAddress`, `buyTokenAddress`       | Token contract addresses on the selected chain. |
+| `sellTokenDecimals`, `buyTokenDecimals`     | Token decimals on the selected chain.           |
+| `sellAmount`, `buyAmount`                   | Quoted decimal token amounts.                   |
+| `sellAmountBaseUnits`, `buyAmountBaseUnits` | Quoted amounts in token base units.             |
+| `requiredAllowanceBaseUnits`                | Minimum sell-token allowance in base units.     |
+| `sellAmountUsd`, `buyAmountUsd`             | Quoted USD values.                              |
+| `price`, `priceImpact`                      | Quoted price and percentage price impact.       |
+| `expiry`                                    | Unix timestamp when the quote expires.          |
 
 The `X-Quote-Token` header is opaque. Store it only long enough to accept this quote, and do not modify it.
 
@@ -146,18 +149,15 @@ The caller must be `walletAddress`, must be connected to `chainId`, and must exe
 Submit the returned `calldata` unchanged to `settlementAddress`:
 
 ```js
-import { maxUint256, parseAbi, parseUnits } from 'viem';
+import { maxUint256, parseAbi } from 'viem';
 
 const erc20Abi = parseAbi([
   'function allowance(address owner, address spender) view returns (uint256)',
   'function approve(address spender, uint256 amount) returns (bool)',
 ]);
 
-const sellTokenDecimals = acceptedQuote.sellToken === 'USDC' ? 6 : 18;
-const [whole, fraction = ''] = acceptedQuote.sellAmount.split('.');
-const sellAmount = parseUnits(
-  `${whole}.${fraction.slice(0, sellTokenDecimals)}`,
-  sellTokenDecimals,
+const requiredAllowance = BigInt(
+  acceptedQuote.requiredAllowanceBaseUnits,
 );
 
 const allowance = await publicClient.readContract({
@@ -167,7 +167,7 @@ const allowance = await publicClient.readContract({
   args: [walletAddress, acceptedQuote.settlementAddress],
 });
 
-if (allowance < sellAmount) {
+if (allowance < requiredAllowance) {
   const { request } = await publicClient.simulateContract({
     account: walletAddress,
     address: acceptedQuote.sellTokenAddress,
@@ -189,7 +189,7 @@ const receipt = await publicClient.waitForTransactionReceipt({ hash: swapHash })
 ```
 
 :::tip Approval amount
-Approving `maxUint256` avoids repeated approval transactions. If your product prefers tighter allowances, approve the exact `sellAmount` instead.
+Approving `maxUint256` avoids repeated approval transactions. If your product prefers tighter allowances, approve `requiredAllowance` instead.
 :::
 
 ## Monitor completion
