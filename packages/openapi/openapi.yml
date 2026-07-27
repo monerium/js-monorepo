@@ -3263,6 +3263,10 @@ components:
                   description: The sender name. This can be a corporate or an individual.
                   type: string
                   example: Monerium
+                address:
+                  description: "The sender's postal address, if requested by the sender's bank."
+                  type: string
+                  example: Street 123
       required:
         - details
         - identifier
