@@ -1,5 +1,35 @@
 # Changelog
 
+## [2.1.0](https://github.com/monerium/js-monorepo/compare/developer-v2.0.0...developer-v2.1.0) (2026-07-28)
+
+
+### Features
+
+* **kyc:** rename profile state submitted to pending ([#190](https://github.com/monerium/js-monorepo/issues/190)) ([b94549c](https://github.com/monerium/js-monorepo/commit/b94549c58fe6727999ceb9e93fc92d855107deee))
+* **sandbox:** add checklist ([#200](https://github.com/monerium/js-monorepo/issues/200)) ([64c2050](https://github.com/monerium/js-monorepo/commit/64c2050b28841362db6d4418b76a60dceb9603b4))
+* **swap:** direct swap docs ([#193](https://github.com/monerium/js-monorepo/issues/193)) ([abc13d4](https://github.com/monerium/js-monorepo/commit/abc13d408a2d1c72c6618d99966cbec8b2a321c1))
+* **swap:** update docs to buy/sell terminology ([#204](https://github.com/monerium/js-monorepo/issues/204)) ([00d5f43](https://github.com/monerium/js-monorepo/commit/00d5f43ec4bf003b6360f751ec649413de92fc6b))
+* **whitelabel:** update whitelabel docs with tax fields ([#199](https://github.com/monerium/js-monorepo/issues/199)) ([1d39a81](https://github.com/monerium/js-monorepo/commit/1d39a816cafd864b0b70838ed661140f33d2c88f))
+
+
+### Bug Fixes
+
+* **whitelabel:** align onboarding and orders guides with openapi ([#201](https://github.com/monerium/js-monorepo/issues/201)) ([053aaae](https://github.com/monerium/js-monorepo/commit/053aaae331f0783d935b3ea0fc4280b9209336ff))
+
+
+### Documentation
+
+* grouping improvements ([58147eb](https://github.com/monerium/js-monorepo/commit/58147eb31de5e4d6ac5469dfc7a63377d976370b))
+* **whitelabel:** add sumsub integration guide ([#202](https://github.com/monerium/js-monorepo/issues/202)) ([c76a469](https://github.com/monerium/js-monorepo/commit/c76a469c710d1690fe11380eb8f4959f125dee6e))
+* **whitelabel:** remove example placeholder sumsub share token ([#203](https://github.com/monerium/js-monorepo/issues/203)) ([f188a2b](https://github.com/monerium/js-monorepo/commit/f188a2b15579fd28476bfd96766cd89224360483))
+
+
+### Miscellaneous
+
+* disable docasaurus auto open in browser ([46e4852](https://github.com/monerium/js-monorepo/commit/46e4852b189102135faa8174f6b25a4f1fe9f4a0))
+* lock all packages ([66acbdc](https://github.com/monerium/js-monorepo/commit/66acbdc00a53e40fab4f08f63416787807c14d78))
+* user reported instuctions unclear with messsage hashing for safes ([630f6bd](https://github.com/monerium/js-monorepo/commit/630f6bd56d50ad57996b77d91100bf2403215516))
+
 ## [2.0.0](https://github.com/monerium/js-monorepo/compare/developer-v1.3.0...developer-v2.0.0) (2026-04-30)
 
 
