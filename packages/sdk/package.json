@@ -1,6 +1,6 @@
 {
   "name": "@monerium/sdk",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Essential tools to interact with the Monerium API, an electronic money issuer. Node.js and server-side runtimes first.",
   "repository": {
     "type": "git",

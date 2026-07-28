@@ -1,5 +1,24 @@
 # Changelog
 
+## [4.1.0](https://github.com/monerium/js-monorepo/compare/sdk-v4.0.0...sdk-v4.1.0) (2026-07-28)
+
+
+### Features
+
+* **docs:** add phone and email to the documentation for personal details ([#198](https://github.com/monerium/js-monorepo/issues/198)) ([e5063a4](https://github.com/monerium/js-monorepo/commit/e5063a4aca6e4faaad5350476bf861b7c19cb8d9))
+* **kyc:** rename profile state submitted to pending ([#190](https://github.com/monerium/js-monorepo/issues/190)) ([b94549c](https://github.com/monerium/js-monorepo/commit/b94549c58fe6727999ceb9e93fc92d855107deee))
+* **whitelabel:** update whitelabel docs with tax fields ([#199](https://github.com/monerium/js-monorepo/issues/199)) ([1d39a81](https://github.com/monerium/js-monorepo/commit/1d39a816cafd864b0b70838ed661140f33d2c88f))
+
+
+### Documentation
+
+* grouping improvements ([58147eb](https://github.com/monerium/js-monorepo/commit/58147eb31de5e4d6ac5469dfc7a63377d976370b))
+
+
+### Miscellaneous
+
+* remove crypto-js ([eb0307d](https://github.com/monerium/js-monorepo/commit/eb0307d730464131e6c226c1e610e03c7416a53f))
+
 ## [4.0.0](https://github.com/monerium/js-monorepo/compare/sdk-v3.5.0...sdk-v4.0.0) (2026-04-30)
 
 

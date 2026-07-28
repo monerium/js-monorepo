@@ -1,5 +1,35 @@
 # Changelog
 
+## [2.4.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.3.1...openapi-v2.4.0) (2026-07-28)
+
+
+### Features
+
+* **docs:** add phone and email to the documentation for personal details ([#198](https://github.com/monerium/js-monorepo/issues/198)) ([e5063a4](https://github.com/monerium/js-monorepo/commit/e5063a4aca6e4faaad5350476bf861b7c19cb8d9))
+* **kyc:** add documents to verifications, align facialSimilarityMotion kind with internal value ([46f1bfd](https://github.com/monerium/js-monorepo/commit/46f1bfd60fb110bbd8211f38d7dc5c774eacfef0))
+* **kyc:** rename profile state submitted to pending ([#190](https://github.com/monerium/js-monorepo/issues/190)) ([b94549c](https://github.com/monerium/js-monorepo/commit/b94549c58fe6727999ceb9e93fc92d855107deee))
+* **kyc:** tax fields ([#191](https://github.com/monerium/js-monorepo/issues/191)) ([13dbc70](https://github.com/monerium/js-monorepo/commit/13dbc70602d86842d8a13f0cf9e8faa5d2ac84d4))
+* **swap:** direct swap docs ([#193](https://github.com/monerium/js-monorepo/issues/193)) ([abc13d4](https://github.com/monerium/js-monorepo/commit/abc13d408a2d1c72c6618d99966cbec8b2a321c1))
+* **swap:** update docs to buy/sell terminology ([#204](https://github.com/monerium/js-monorepo/issues/204)) ([00d5f43](https://github.com/monerium/js-monorepo/commit/00d5f43ec4bf003b6360f751ec649413de92fc6b))
+
+
+### Bug Fixes
+
+* add address to issue order counterpart.details ([d950d8c](https://github.com/monerium/js-monorepo/commit/d950d8c750fc32a342c6376cb6c8346c10c22617))
+* **openapi:** revert facialSimilarity enum and update changelog ([#194](https://github.com/monerium/js-monorepo/issues/194)) ([03ad1fe](https://github.com/monerium/js-monorepo/commit/03ad1fe2585a1f58ed0f59f095e8db78cdcd15eb))
+
+
+### Documentation
+
+* pending signatures message field ([a9ccd67](https://github.com/monerium/js-monorepo/commit/a9ccd679c9b83eb822029a62c18087e91465d034))
+
+
+### Miscellaneous
+
+* added address maximum length to openapi spec ([878d6ce](https://github.com/monerium/js-monorepo/commit/878d6ceded278fc8f18bb2a963ab8163f04c1933))
+* document 409 Conflict for POST /profiles ([#195](https://github.com/monerium/js-monorepo/issues/195)) ([669a3f2](https://github.com/monerium/js-monorepo/commit/669a3f2cd547b44cca3709aee677c1db201b4064))
+* lock all packages ([66acbdc](https://github.com/monerium/js-monorepo/commit/66acbdc00a53e40fab4f08f63416787807c14d78))
+
 ## [2.3.1](https://github.com/monerium/js-monorepo/compare/openapi-v2.3.0...openapi-v2.3.1) (2026-04-29)
 
 
