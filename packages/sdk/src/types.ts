@@ -747,6 +747,84 @@ export interface OrdersResponse {
 }
 
 /**
+ * The direction of a payment relative to the order.
+ *
+ * @group Orders
+ */
+export type PaymentDirection = 'in' | 'out';
+
+/**
+ * The state of a payment:
+ *
+ * - `recorded`: The payment has been submitted and waits further processing.
+ * - `review`: The payment is under review.
+ * - `initiated`: The payment is guaranteed to have an associated order but the provider has not been called yet.
+ * - `pending`: The provider has been called to process the payment.
+ * - `declined`: The payment has been rejected by the payment provider or rejected for incoming payments.
+ * - `processed`: The payment is fully processed.
+ *
+ * @group Orders
+ */
+export type PaymentState =
+  | 'recorded'
+  | 'review'
+  | 'initiated'
+  | 'pending'
+  | 'declined'
+  | 'processed';
+
+/**
+ * @group Orders
+ */
+export interface PaymentMetadata {
+  /** The payment provider handling the payment. */
+  provider: string;
+  state: PaymentState;
+  /** When the payment was processed. Only present once the payment has been processed. */
+  processedAt?: string;
+}
+
+/**
+ * Payment provider-specific details, such as identifiers used in the
+ * provider's payment instruction format.
+ *
+ * @group Orders
+ */
+export interface PaymentProviderDetails {
+  paymentType?: string;
+  UETR?: string;
+  InstructionId?: string;
+}
+
+/**
+ * A payment processed by the payment provider for an order.
+ *
+ * @group Orders
+ */
+export interface Payment {
+  id: string;
+  orderId: string;
+  direction: PaymentDirection;
+  currency: Currency;
+  amount: string;
+  counterpart: Counterpart;
+  details?: PaymentProviderDetails;
+  memo: string;
+  reference?: string;
+  meta: PaymentMetadata;
+}
+
+/**
+ * Response shape of {@link MoneriumApiClient.getOrderPayments}.
+ *
+ * @group Orders
+ */
+export interface OrderPaymentsResponse {
+  payments: Payment[];
+  total: number;
+}
+
+/**
  * @group Orders
  */
 export interface PlaceOrderInput {

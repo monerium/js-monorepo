@@ -33,6 +33,7 @@ import type {
   MoveIbanInput,
   Order,
   OrderParams,
+  OrderPaymentsResponse,
   OrdersResponse,
   PlaceOrderInput,
   Profile,
@@ -332,6 +333,20 @@ export abstract class MoneriumBaseClient {
    */
   public async getOrder(orderId: string): Promise<Order> {
     return this.request<Order>('GET', `orders/${orderId}`);
+  }
+
+  /**
+   * Get the payments processed by the payment provider for a given order.
+   *
+   * @see {@link https://docs.monerium.com/api/#tag/orders/operation/order-payments | API Documentation}
+   */
+  public async getOrderPayments(
+    orderId: string
+  ): Promise<OrderPaymentsResponse> {
+    return this.request<OrderPaymentsResponse>(
+      'GET',
+      `orders/${orderId}/payments`
+    );
   }
 
   /**
