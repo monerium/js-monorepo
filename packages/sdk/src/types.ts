@@ -792,8 +792,8 @@ export interface PaymentMetadata {
  */
 export interface PaymentProviderDetails {
   paymentType?: string;
-  UETR?: string;
-  InstructionId?: string;
+  uetr?: string;
+  instructionId?: string;
 }
 
 /**
@@ -810,7 +810,17 @@ export interface Payment {
   counterpart: Counterpart;
   details?: PaymentProviderDetails;
   memo: string;
+  /** Structured SEPA reference (max 35 characters). */
+  referenceNumber?: string;
+  /**
+   * Bank-assigned transaction reference. Populated by the payment provider for
+   * incoming payments, e.g. the Account Servicer Reference (`AcctSvcrRef`) from
+   * LHV transaction notifications. See the
+   * [LHV account reports](https://docs.lhv.com/home/connect/services/account-reports/transaction-notification).
+   */
   reference?: string;
+  /** Reason the payment was declined. Only present when `meta.state` is `declined`. */
+  declinedReason?: string;
   meta: PaymentMetadata;
 }
 

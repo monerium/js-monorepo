@@ -2882,8 +2882,17 @@ components:
           $ref: '#/components/schemas/PaymentDetails'
         memo:
           $ref: '#/components/schemas/Memo'
-        reference:
+        referenceNumber:
+          description: Structured SEPA reference (max 35 characters).
           $ref: '#/components/schemas/ReferenceNumber'
+        reference:
+          description: 'Bank-assigned transaction reference. Populated by the payment provider for incoming payments, e.g. the Account Servicer Reference (`AcctSvcrRef`) from LHV transaction notifications. See the [LHV account reports](https://docs.lhv.com/home/connect/services/account-reports/transaction-notification) reference.'
+          type: string
+          example: 3DA2AF392E26EE11911E00155DBDB493
+        declinedReason:
+          description: Reason the payment was declined. Only visible when the payment has been declined.
+          type: string
+          example: Declined due to insufficient funds.
         meta:
           type: object
           properties:
@@ -2934,11 +2943,11 @@ components:
           description: 'The payment scheme/type. See the [LHV payment schemes](https://docs.lhv.com/home/connect/overview/code-reference-tables/payment-schemes) reference table.'
           type: string
           example: ''
-        UETR:
+        uetr:
           description: 'Unique End-to-End Transaction Reference (UETR). See the [LHV pain.001.001.09](https://docs.lhv.com/home/connect/services/payments/pain.001.001.09-format) format.'
           type: string
           example: ''
-        InstructionId:
+        instructionId:
           description: 'Instruction ID (InstrId). See the [LHV pain.001.001.09](https://docs.lhv.com/home/connect/services/payments/pain.001.001.09-format) format.'
           type: string
           example: ''

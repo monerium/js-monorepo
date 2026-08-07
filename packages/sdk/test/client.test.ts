@@ -172,10 +172,11 @@ describe('MoneriumPrivateClient.getOrderPayments', () => {
           },
           details: {
             paymentType: '',
-            UETR: '',
-            InstructionId: '',
+            uetr: '',
+            instructionId: '',
           },
           memo: 'Powered by Monerium',
+          referenceNumber: '',
           reference: '',
           meta: {
             provider: 'fake',
