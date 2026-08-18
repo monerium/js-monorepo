@@ -64,8 +64,8 @@ importers:
         specifier: 0.27.6
         version: 0.27.6(typescript@5.7.3)
       typedoc-plugin-markdown:
-        specifier: 4.4.0
-        version: 4.4.0(typedoc@0.27.6(typescript@5.7.3))
+        specifier: 4.8.0
+        version: 4.8.0(typedoc@0.27.6(typescript@5.7.3))
       typescript:
         specifier: 5.7.3
         version: 5.7.3
@@ -98,7 +98,7 @@ importers:
         version: 5.18.0(@emotion/react@11.14.0(@types/react@18.3.28)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.28)(react@18.3.1))(@types/react@18.3.28)(react@18.3.1))(@types/react@18.3.28)(react@18.3.1)
       '@rainbow-me/rainbowkit':
         specifier: 2.2.10
-        version: 2.2.10(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))
+        version: 2.2.10(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))(wagmi@2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))(zod@4.3.6))
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -116,10 +116,10 @@ importers:
         version: 18.3.1(react@18.3.1)
       viem:
         specifier: 2.46.2
-        version: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+        version: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       wagmi:
         specifier: 2.19.5
-        version: 2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76)
+        version: 2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))(zod@4.3.6)
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -157,30 +157,12 @@ importers:
       js-cookie:
         specifier: 3.0.5
         version: 3.0.5
-      pixrem:
-        specifier: 5.0.0
-        version: 5.0.0
-      pleeease-filters:
-        specifier: 4.0.0
-        version: 4.0.0
       postcss:
         specifier: 8.5.6
         version: 8.5.6
-      postcss-calc:
-        specifier: 10.1.1
-        version: 10.1.1(postcss@8.5.6)
-      postcss-flexbugs-fixes:
-        specifier: 5.0.2
-        version: 5.0.2(postcss@8.5.6)
-      postcss-preset-env:
-        specifier: 9.6.0
-        version: 9.6.0(postcss@8.5.6)
       react-transition-state:
         specifier: 2.3.3
         version: 2.3.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      rfs:
-        specifier: 10.0.0
-        version: 10.0.0
       sass:
         specifier: 1.97.3
         version: 1.97.3
@@ -232,7 +214,7 @@ importers:
         version: 3.7.0(esbuild@0.27.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       docusaurus-plugin-typedoc:
         specifier: 1.4.2
-        version: 1.4.2(typedoc-plugin-markdown@4.4.0(typedoc@0.27.6(typescript@5.7.3)))
+        version: 1.4.2(typedoc-plugin-markdown@4.8.0(typedoc@0.27.6(typescript@5.7.3)))
       redocusaurus:
         specifier: 2.2.1
         version: 2.2.1(@docusaurus/theme-common@3.7.0(@docusaurus/plugin-content-docs@3.7.0(@mdx-js/react@3.1.1(@types/react@18.3.28)(react@18.3.1))(bufferutil@4.1.0)(esbuild@0.27.7)(eslint@9.39.2(jiti@2.6.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10))(esbuild@0.27.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@docusaurus/utils@3.7.0(esbuild@0.27.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(core-js@3.48.0)(enzyme@3.11.0)(mobx@6.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.3.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(webpack@5.105.2(esbuild@0.27.7))
@@ -277,7 +259,7 @@ importers:
         version: 1.29.3
 
   packages/postcss-config:
-    devDependencies:
+    dependencies:
       pixrem:
         specifier: 5.0.0
         version: 5.0.0
@@ -11502,11 +11484,11 @@ packages:
     peerDependencies:
       typedoc-plugin-markdown: '>=4.8.0'
 
-  typedoc-plugin-markdown@4.4.0:
-    resolution: {integrity: sha512-4207DYcxJGWQRrEVTza7XkIo7ldhuEzJBaZO6dX5ogUGlvWeRTo4uiN+R1F11ttJGh4toLtxrpoi2wTTP+nEwA==}
+  typedoc-plugin-markdown@4.8.0:
+    resolution: {integrity: sha512-BQqXnT9PETe6WEFf8bcsvvGEGQHbwTo/BFyY+RUIsSB05Y0Wn56iF+fK1PY2OKJJIhV4kp4dp7osaP9Bm5a0Zw==}
     engines: {node: '>= 18'}
     peerDependencies:
-      typedoc: 0.27.x
+      typedoc: 0.28.x
 
   typedoc@0.27.6:
     resolution: {integrity: sha512-oBFRoh2Px6jFx366db0lLlihcalq/JzyCVp7Vaq1yphL/tbgx2e+bkpkCgJPunaPvPwoTOXSwasfklWHm7GfAw==}
@@ -13230,16 +13212,16 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@base-org/account@2.4.0(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@base-org/account@2.4.0(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@coinbase/cdp-sdk': 1.51.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@noble/hashes': 1.4.0
       clsx: 1.2.1
       eventemitter3: 5.0.1
       idb-keyval: 6.2.1
-      ox: 0.6.9(typescript@5.7.3)(zod@3.25.76)
+      ox: 0.6.9(typescript@5.7.3)(zod@4.3.6)
       preact: 10.24.2
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       zustand: 5.0.3(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     transitivePeerDependencies:
       - '@types/react'
@@ -13313,15 +13295,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@coinbase/wallet-sdk@4.3.6(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@coinbase/wallet-sdk@4.3.6(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@noble/hashes': 1.4.0
       clsx: 1.2.1
       eventemitter3: 5.0.1
       idb-keyval: 6.2.1
-      ox: 0.6.9(typescript@5.7.3)(zod@3.25.76)
+      ox: 0.6.9(typescript@5.7.3)(zod@4.3.6)
       preact: 10.24.2
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       zustand: 5.0.3(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     transitivePeerDependencies:
       - '@types/react'
@@ -13527,12 +13509,6 @@ snapshots:
       postcss: 8.5.23
       postcss-selector-parser: 6.1.2
 
-  '@csstools/postcss-cascade-layers@4.0.6(postcss@8.5.6)':
-    dependencies:
-      '@csstools/selector-specificity': 3.1.1(postcss-selector-parser@6.1.2)
-      postcss: 8.5.6
-      postcss-selector-parser: 6.1.2
-
   '@csstools/postcss-cascade-layers@5.0.2(postcss@8.5.6)':
     dependencies:
       '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.1)
@@ -13557,15 +13533,6 @@ snapshots:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
 
-  '@csstools/postcss-color-function@3.0.19(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-
   '@csstools/postcss-color-function@4.0.12(postcss@8.5.6)':
     dependencies:
       '@csstools/css-color-parser': 3.1.0(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -13583,15 +13550,6 @@ snapshots:
       '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.23)
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-
-  '@csstools/postcss-color-mix-function@2.0.19(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
 
   '@csstools/postcss-color-mix-function@3.0.12(postcss@8.5.6)':
     dependencies:
@@ -13619,14 +13577,6 @@ snapshots:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
 
-  '@csstools/postcss-content-alt-text@1.0.0(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-
   '@csstools/postcss-content-alt-text@2.0.8(postcss@8.5.6)':
     dependencies:
       '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
@@ -13651,13 +13601,6 @@ snapshots:
       '@csstools/css-tokenizer': 2.4.1
       postcss: 8.5.23
 
-  '@csstools/postcss-exponential-functions@1.0.9(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-calc': 1.2.4(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      postcss: 8.5.6
-
   '@csstools/postcss-exponential-functions@2.0.9(postcss@8.5.6)':
     dependencies:
       '@csstools/css-calc': 2.1.4(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -13669,12 +13612,6 @@ snapshots:
     dependencies:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  '@csstools/postcss-font-format-keywords@3.0.2(postcss@8.5.6)':
-    dependencies:
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   '@csstools/postcss-font-format-keywords@4.0.0(postcss@8.5.6)':
@@ -13689,13 +13626,6 @@ snapshots:
       '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
       '@csstools/css-tokenizer': 2.4.1
       postcss: 8.5.23
-
-  '@csstools/postcss-gamut-mapping@1.0.11(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      postcss: 8.5.6
 
   '@csstools/postcss-gamut-mapping@2.0.11(postcss@8.5.6)':
     dependencies:
@@ -13712,15 +13642,6 @@ snapshots:
       '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.23)
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-
-  '@csstools/postcss-gradients-interpolation-method@4.0.20(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
 
   '@csstools/postcss-gradients-interpolation-method@5.0.12(postcss@8.5.6)':
     dependencies:
@@ -13740,15 +13661,6 @@ snapshots:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
 
-  '@csstools/postcss-hwb-function@3.0.18(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-
   '@csstools/postcss-hwb-function@4.0.12(postcss@8.5.6)':
     dependencies:
       '@csstools/css-color-parser': 3.1.0(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -13765,13 +13677,6 @@ snapshots:
       postcss: 8.5.23
       postcss-value-parser: 4.2.0
 
-  '@csstools/postcss-ic-unit@3.0.7(postcss@8.5.6)':
-    dependencies:
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-      postcss-value-parser: 4.2.0
-
   '@csstools/postcss-ic-unit@4.0.4(postcss@8.5.6)':
     dependencies:
       '@csstools/postcss-progressive-custom-properties': 4.2.1(postcss@8.5.6)
@@ -13783,10 +13688,6 @@ snapshots:
     dependencies:
       postcss: 8.5.23
 
-  '@csstools/postcss-initial@1.0.1(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
-
   '@csstools/postcss-initial@2.0.1(postcss@8.5.6)':
     dependencies:
       postcss: 8.5.6
@@ -13795,12 +13696,6 @@ snapshots:
     dependencies:
       '@csstools/selector-specificity': 3.1.1(postcss-selector-parser@6.1.2)
       postcss: 8.5.23
-      postcss-selector-parser: 6.1.2
-
-  '@csstools/postcss-is-pseudo-class@4.0.8(postcss@8.5.6)':
-    dependencies:
-      '@csstools/selector-specificity': 3.1.1(postcss-selector-parser@6.1.2)
-      postcss: 8.5.6
       postcss-selector-parser: 6.1.2
 
   '@csstools/postcss-is-pseudo-class@5.0.3(postcss@8.5.6)':
@@ -13817,14 +13712,6 @@ snapshots:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
 
-  '@csstools/postcss-light-dark-function@1.0.8(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-
   '@csstools/postcss-light-dark-function@2.0.11(postcss@8.5.6)':
     dependencies:
       '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
@@ -13837,10 +13724,6 @@ snapshots:
     dependencies:
       postcss: 8.5.23
 
-  '@csstools/postcss-logical-float-and-clear@2.0.1(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
-
   '@csstools/postcss-logical-float-and-clear@3.0.0(postcss@8.5.6)':
     dependencies:
       postcss: 8.5.6
@@ -13848,10 +13731,6 @@ snapshots:
   '@csstools/postcss-logical-overflow@1.0.1(postcss@8.5.23)':
     dependencies:
       postcss: 8.5.23
-
-  '@csstools/postcss-logical-overflow@1.0.1(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
 
   '@csstools/postcss-logical-overflow@2.0.0(postcss@8.5.6)':
     dependencies:
@@ -13861,10 +13740,6 @@ snapshots:
     dependencies:
       postcss: 8.5.23
 
-  '@csstools/postcss-logical-overscroll-behavior@1.0.1(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
-
   '@csstools/postcss-logical-overscroll-behavior@2.0.0(postcss@8.5.6)':
     dependencies:
       postcss: 8.5.6
@@ -13872,11 +13747,6 @@ snapshots:
   '@csstools/postcss-logical-resize@2.0.1(postcss@8.5.23)':
     dependencies:
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  '@csstools/postcss-logical-resize@2.0.1(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   '@csstools/postcss-logical-resize@3.0.0(postcss@8.5.6)':
@@ -13889,12 +13759,6 @@ snapshots:
       '@csstools/css-tokenizer': 2.4.1
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-
-  '@csstools/postcss-logical-viewport-units@2.0.11(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
 
   '@csstools/postcss-logical-viewport-units@3.0.4(postcss@8.5.6)':
     dependencies:
@@ -13909,14 +13773,6 @@ snapshots:
       '@csstools/css-tokenizer': 2.4.1
       '@csstools/media-query-list-parser': 2.1.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
       postcss: 8.5.23
-
-  '@csstools/postcss-media-minmax@1.1.8(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-calc': 1.2.4(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/media-query-list-parser': 2.1.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      postcss: 8.5.6
 
   '@csstools/postcss-media-minmax@2.0.9(postcss@8.5.6)':
     dependencies:
@@ -13933,13 +13789,6 @@ snapshots:
       '@csstools/media-query-list-parser': 2.1.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
       postcss: 8.5.23
 
-  '@csstools/postcss-media-queries-aspect-ratio-number-values@2.0.11(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/media-query-list-parser': 2.1.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      postcss: 8.5.6
-
   '@csstools/postcss-media-queries-aspect-ratio-number-values@3.0.5(postcss@8.5.6)':
     dependencies:
       '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
@@ -13953,12 +13802,6 @@ snapshots:
       postcss: 8.5.23
       postcss-value-parser: 4.2.0
 
-  '@csstools/postcss-nested-calc@3.0.2(postcss@8.5.6)':
-    dependencies:
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-      postcss-value-parser: 4.2.0
-
   '@csstools/postcss-nested-calc@4.0.0(postcss@8.5.6)':
     dependencies:
       '@csstools/utilities': 2.0.0(postcss@8.5.6)
@@ -13968,11 +13811,6 @@ snapshots:
   '@csstools/postcss-normalize-display-values@3.0.2(postcss@8.5.23)':
     dependencies:
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  '@csstools/postcss-normalize-display-values@3.0.2(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   '@csstools/postcss-normalize-display-values@4.0.1(postcss@8.5.6)':
@@ -13988,15 +13826,6 @@ snapshots:
       '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.23)
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-
-  '@csstools/postcss-oklab-function@3.0.19(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
 
   '@csstools/postcss-oklab-function@4.0.12(postcss@8.5.6)':
     dependencies:
@@ -14014,11 +13843,6 @@ snapshots:
   '@csstools/postcss-progressive-custom-properties@3.3.0(postcss@8.5.23)':
     dependencies:
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  '@csstools/postcss-progressive-custom-properties@3.3.0(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   '@csstools/postcss-progressive-custom-properties@4.2.1(postcss@8.5.6)':
@@ -14048,15 +13872,6 @@ snapshots:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
 
-  '@csstools/postcss-relative-color-syntax@2.0.19(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-
   '@csstools/postcss-relative-color-syntax@3.0.12(postcss@8.5.6)':
     dependencies:
       '@csstools/css-color-parser': 3.1.0(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -14069,11 +13884,6 @@ snapshots:
   '@csstools/postcss-scope-pseudo-class@3.0.1(postcss@8.5.23)':
     dependencies:
       postcss: 8.5.23
-      postcss-selector-parser: 6.1.2
-
-  '@csstools/postcss-scope-pseudo-class@3.0.1(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
       postcss-selector-parser: 6.1.2
 
   '@csstools/postcss-scope-pseudo-class@4.0.1(postcss@8.5.6)':
@@ -14094,13 +13904,6 @@ snapshots:
       '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
       '@csstools/css-tokenizer': 2.4.1
       postcss: 8.5.23
-
-  '@csstools/postcss-stepped-value-functions@3.0.10(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-calc': 1.2.4(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      postcss: 8.5.6
 
   '@csstools/postcss-stepped-value-functions@4.0.9(postcss@8.5.6)':
     dependencies:
@@ -14126,12 +13929,6 @@ snapshots:
       postcss: 8.5.23
       postcss-value-parser: 4.2.0
 
-  '@csstools/postcss-text-decoration-shorthand@3.0.7(postcss@8.5.6)':
-    dependencies:
-      '@csstools/color-helpers': 4.2.1
-      postcss: 8.5.6
-      postcss-value-parser: 4.2.0
-
   '@csstools/postcss-text-decoration-shorthand@4.0.3(postcss@8.5.6)':
     dependencies:
       '@csstools/color-helpers': 5.1.0
@@ -14145,13 +13942,6 @@ snapshots:
       '@csstools/css-tokenizer': 2.4.1
       postcss: 8.5.23
 
-  '@csstools/postcss-trigonometric-functions@3.0.10(postcss@8.5.6)':
-    dependencies:
-      '@csstools/css-calc': 1.2.4(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      postcss: 8.5.6
-
   '@csstools/postcss-trigonometric-functions@4.0.9(postcss@8.5.6)':
     dependencies:
       '@csstools/css-calc': 2.1.4(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -14162,10 +13952,6 @@ snapshots:
   '@csstools/postcss-unset-value@3.0.1(postcss@8.5.23)':
     dependencies:
       postcss: 8.5.23
-
-  '@csstools/postcss-unset-value@3.0.1(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
 
   '@csstools/postcss-unset-value@4.0.0(postcss@8.5.6)':
     dependencies:
@@ -14190,10 +13976,6 @@ snapshots:
   '@csstools/utilities@1.0.0(postcss@8.5.23)':
     dependencies:
       postcss: 8.5.23
-
-  '@csstools/utilities@1.0.0(postcss@8.5.6)':
-    dependencies:
-      postcss: 8.5.6
 
   '@csstools/utilities@2.0.0(postcss@8.5.6)':
     dependencies:
@@ -15271,11 +15053,11 @@ snapshots:
 
   '@faker-js/faker@7.6.0': {}
 
-  '@gemini-wallet/core@0.3.2(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
+  '@gemini-wallet/core@0.3.2(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))':
     dependencies:
       '@metamask/rpc-errors': 7.0.2
       eventemitter3: 5.0.1
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -16307,7 +16089,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.1': {}
 
-  '@rainbow-me/rainbowkit@2.2.10(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))':
+  '@rainbow-me/rainbowkit@2.2.10(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))(wagmi@2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))(zod@4.3.6))':
     dependencies:
       '@tanstack/react-query': 5.90.21(react@18.3.1)
       '@vanilla-extract/css': 1.17.3(babel-plugin-macros@3.1.0)
@@ -16319,8 +16101,8 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       react-remove-scroll: 2.6.2(@types/react@18.3.28)(react@18.3.1)
       ua-parser-js: 1.0.41
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      wagmi: 2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      wagmi: 2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))(zod@4.3.6)
     transitivePeerDependencies:
       - '@types/react'
       - babel-plugin-macros
@@ -16527,24 +16309,24 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-common@1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@reown/appkit-common@1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       big.js: 6.2.2
       dayjs: 1.11.13
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     transitivePeerDependencies:
       - bufferutil
       - typescript
       - utf-8-validate
       - zod
 
-  '@reown/appkit-controllers@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@reown/appkit-controllers@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
-      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@reown/appkit-wallet': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)
-      '@walletconnect/universal-provider': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/universal-provider': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       valtio: 1.13.2(@types/react@18.3.28)(react@18.3.1)
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -16573,12 +16355,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-pay@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@reown/appkit-pay@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
-      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-ui': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-utils': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@3.25.76)
+      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-ui': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-utils': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@4.3.6)
       lit: 3.3.0
       valtio: 1.13.2(@types/react@18.3.28)(react@18.3.1)
     transitivePeerDependencies:
@@ -16613,12 +16395,12 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@reown/appkit-scaffold-ui@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@3.25.76)':
+  '@reown/appkit-scaffold-ui@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@4.3.6)':
     dependencies:
-      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-ui': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-utils': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@3.25.76)
+      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-ui': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-utils': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@4.3.6)
       '@reown/appkit-wallet': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)
       lit: 3.3.0
     transitivePeerDependencies:
@@ -16650,10 +16432,10 @@ snapshots:
       - valtio
       - zod
 
-  '@reown/appkit-ui@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@reown/appkit-ui@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
-      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@reown/appkit-wallet': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)
       lit: 3.3.0
       qrcode: 1.5.3
@@ -16685,16 +16467,16 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@reown/appkit-utils@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@3.25.76)':
+  '@reown/appkit-utils@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@4.3.6)':
     dependencies:
-      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@reown/appkit-polyfills': 1.7.8
       '@reown/appkit-wallet': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@walletconnect/logger': 2.1.2
-      '@walletconnect/universal-provider': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/universal-provider': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       valtio: 1.13.2(@types/react@18.3.28)(react@18.3.1)
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -16734,21 +16516,21 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@reown/appkit@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@reown/appkit@1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
-      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-pay': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-controllers': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-pay': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@reown/appkit-polyfills': 1.7.8
-      '@reown/appkit-scaffold-ui': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@3.25.76)
-      '@reown/appkit-ui': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@reown/appkit-utils': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@3.25.76)
+      '@reown/appkit-scaffold-ui': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@4.3.6)
+      '@reown/appkit-ui': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@reown/appkit-utils': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@18.3.28)(react@18.3.1))(zod@4.3.6)
       '@reown/appkit-wallet': 1.7.8(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@walletconnect/types': 2.21.0
-      '@walletconnect/universal-provider': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/universal-provider': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       bs58: 6.0.0
       valtio: 1.13.2(@types/react@18.3.28)(react@18.3.1)
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -16854,9 +16636,9 @@ snapshots:
 
   '@rtsao/scc@1.1.0': {}
 
-  '@safe-global/safe-apps-provider@0.18.6(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@safe-global/safe-apps-provider@0.18.6(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
-      '@safe-global/safe-apps-sdk': 9.1.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@safe-global/safe-apps-sdk': 9.1.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       events: 3.3.0
     transitivePeerDependencies:
       - bufferutil
@@ -16864,10 +16646,10 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@safe-global/safe-apps-sdk@9.1.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@safe-global/safe-apps-sdk@9.1.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@safe-global/safe-gateway-typescript-sdk': 3.23.1
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -18062,19 +17844,19 @@ snapshots:
     dependencies:
       '@vanilla-extract/css': 1.17.3(babel-plugin-macros@3.1.0)
 
-  '@wagmi/connectors@6.2.0(55b5714a2c69042a0683bb8b9c3b32f1)':
+  '@wagmi/connectors@6.2.0(b0a6e4dc1e988bfd454e8564615de6f3)':
     dependencies:
-      '@base-org/account': 2.4.0(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@coinbase/wallet-sdk': 4.3.6(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@gemini-wallet/core': 0.3.2(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@base-org/account': 2.4.0(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@coinbase/wallet-sdk': 4.3.6(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@gemini-wallet/core': 0.3.2(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))
       '@metamask/sdk': 0.33.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      '@safe-global/safe-apps-provider': 0.18.6(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@safe-global/safe-apps-sdk': 9.1.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@wagmi/core': 2.22.1(@tanstack/query-core@5.90.20)(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))
-      '@walletconnect/ethereum-provider': 2.21.1(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@safe-global/safe-apps-provider': 0.18.6(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@safe-global/safe-apps-sdk': 9.1.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@wagmi/core': 2.22.1(@tanstack/query-core@5.90.20)(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))
+      '@walletconnect/ethereum-provider': 2.21.1(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       cbw-sdk: '@coinbase/wallet-sdk@3.9.3'
-      porto: 0.2.35(96b207632feeacae087938ef800bf470)
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      porto: 0.2.35(98ccca2ab50739e091e99661c373f853)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     optionalDependencies:
       typescript: 5.7.3
     transitivePeerDependencies:
@@ -18115,11 +17897,11 @@ snapshots:
       - wagmi
       - zod
 
-  '@wagmi/core@2.22.1(@tanstack/query-core@5.90.20)(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))':
+  '@wagmi/core@2.22.1(@tanstack/query-core@5.90.20)(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))':
     dependencies:
       eventemitter3: 5.0.1
       mipd: 0.0.7(typescript@5.7.3)
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       zustand: 5.0.0(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     optionalDependencies:
       '@tanstack/query-core': 5.90.20
@@ -18130,7 +17912,7 @@ snapshots:
       - react
       - use-sync-external-store
 
-  '@walletconnect/core@2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/core@2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-provider': 1.0.14
@@ -18144,7 +17926,7 @@ snapshots:
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.21.0
-      '@walletconnect/utils': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/utils': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@walletconnect/window-getters': 1.0.1
       es-toolkit: 1.33.0
       events: 3.3.0
@@ -18174,7 +17956,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/core@2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/core@2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-provider': 1.0.14
@@ -18188,7 +17970,7 @@ snapshots:
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.21.1
-      '@walletconnect/utils': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/utils': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@walletconnect/window-getters': 1.0.1
       es-toolkit: 1.33.0
       events: 3.3.0
@@ -18222,18 +18004,18 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/ethereum-provider@2.21.1(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/ethereum-provider@2.21.1(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
-      '@reown/appkit': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@reown/appkit': 1.7.8(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@walletconnect/jsonrpc-http-connection': 1.0.8
       '@walletconnect/jsonrpc-provider': 1.0.14
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/keyvaluestorage': 1.1.1
-      '@walletconnect/sign-client': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/sign-client': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@walletconnect/types': 2.21.1
-      '@walletconnect/universal-provider': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
-      '@walletconnect/utils': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/universal-provider': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
+      '@walletconnect/utils': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -18356,16 +18138,16 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/sign-client@2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/sign-client@2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
-      '@walletconnect/core': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/core': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/logger': 2.1.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.21.0
-      '@walletconnect/utils': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/utils': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -18392,16 +18174,16 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/sign-client@2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/sign-client@2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
-      '@walletconnect/core': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/core': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/logger': 2.1.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.21.1
-      '@walletconnect/utils': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/utils': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -18490,7 +18272,7 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@walletconnect/universal-provider@2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/universal-provider@2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@walletconnect/events': 1.0.1
       '@walletconnect/jsonrpc-http-connection': 1.0.8
@@ -18499,9 +18281,9 @@ snapshots:
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/keyvaluestorage': 1.1.1
       '@walletconnect/logger': 2.1.2
-      '@walletconnect/sign-client': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/sign-client': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@walletconnect/types': 2.21.0
-      '@walletconnect/utils': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/utils': 2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       es-toolkit: 1.33.0
       events: 3.3.0
     transitivePeerDependencies:
@@ -18530,7 +18312,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/universal-provider@2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/universal-provider@2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@walletconnect/events': 1.0.1
       '@walletconnect/jsonrpc-http-connection': 1.0.8
@@ -18539,9 +18321,9 @@ snapshots:
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/keyvaluestorage': 1.1.1
       '@walletconnect/logger': 2.1.2
-      '@walletconnect/sign-client': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/sign-client': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       '@walletconnect/types': 2.21.1
-      '@walletconnect/utils': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@walletconnect/utils': 2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       es-toolkit: 1.33.0
       events: 3.3.0
     transitivePeerDependencies:
@@ -18570,7 +18352,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/utils@2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/utils@2.21.0(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@noble/ciphers': 1.2.1
       '@noble/curves': 1.8.1
@@ -18588,7 +18370,7 @@ snapshots:
       detect-browser: 5.3.0
       query-string: 7.1.3
       uint8arrays: 3.1.0
-      viem: 2.23.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.23.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -18614,7 +18396,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@walletconnect/utils@2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)':
+  '@walletconnect/utils@2.21.1(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)':
     dependencies:
       '@noble/ciphers': 1.2.1
       '@noble/curves': 1.8.1
@@ -18632,7 +18414,7 @@ snapshots:
       detect-browser: 5.3.0
       query-string: 7.1.3
       uint8arrays: 3.1.0
-      viem: 2.23.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.23.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -18759,10 +18541,10 @@ snapshots:
       typescript: 5.7.3
       zod: 3.25.76
 
-  abitype@1.0.8(typescript@5.7.3)(zod@3.25.76):
+  abitype@1.0.8(typescript@5.7.3)(zod@4.3.6):
     optionalDependencies:
       typescript: 5.7.3
-      zod: 3.25.76
+      zod: 4.3.6
 
   abitype@1.2.3(typescript@5.7.3)(zod@3.22.4):
     optionalDependencies:
@@ -19887,11 +19669,6 @@ snapshots:
       postcss: 8.5.23
       postcss-selector-parser: 6.1.2
 
-  css-blank-pseudo@6.0.2(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
-      postcss-selector-parser: 6.1.2
-
   css-blank-pseudo@7.0.1(postcss@8.5.6):
     dependencies:
       postcss: 8.5.6
@@ -19909,13 +19686,6 @@ snapshots:
     dependencies:
       '@csstools/selector-specificity': 3.1.1(postcss-selector-parser@6.1.2)
       postcss: 8.5.23
-      postcss-selector-parser: 6.1.2
-      postcss-value-parser: 4.2.0
-
-  css-has-pseudo@6.0.5(postcss@8.5.6):
-    dependencies:
-      '@csstools/selector-specificity': 3.1.1(postcss-selector-parser@6.1.2)
-      postcss: 8.5.6
       postcss-selector-parser: 6.1.2
       postcss-value-parser: 4.2.0
 
@@ -19959,10 +19729,6 @@ snapshots:
   css-prefers-color-scheme@9.0.1(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-
-  css-prefers-color-scheme@9.0.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
 
   css-select@4.3.0:
     dependencies:
@@ -20314,10 +20080,10 @@ snapshots:
       - styled-components
       - supports-color
 
-  docusaurus-plugin-typedoc@1.4.2(typedoc-plugin-markdown@4.4.0(typedoc@0.27.6(typescript@5.7.3))):
+  docusaurus-plugin-typedoc@1.4.2(typedoc-plugin-markdown@4.8.0(typedoc@0.27.6(typescript@5.7.3))):
     dependencies:
-      typedoc-docusaurus-theme: 1.4.2(typedoc-plugin-markdown@4.4.0(typedoc@0.27.6(typescript@5.7.3)))
-      typedoc-plugin-markdown: 4.4.0(typedoc@0.27.6(typescript@5.7.3))
+      typedoc-docusaurus-theme: 1.4.2(typedoc-plugin-markdown@4.8.0(typedoc@0.27.6(typescript@5.7.3)))
+      typedoc-plugin-markdown: 4.8.0(typedoc@0.27.6(typescript@5.7.3))
 
   docusaurus-theme-redoc@2.2.1(@docusaurus/theme-common@3.7.0(@docusaurus/plugin-content-docs@3.7.0(@mdx-js/react@3.1.1(@types/react@18.3.28)(react@18.3.1))(bufferutil@4.1.0)(esbuild@0.27.7)(eslint@9.39.2(jiti@2.6.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10))(esbuild@0.27.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(core-js@3.48.0)(enzyme@3.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(webpack@5.105.2(esbuild@0.27.7)):
     dependencies:
@@ -23055,7 +22821,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.4
+      semver: 7.8.5
 
   make-error@1.3.6: {}
 
@@ -24304,7 +24070,7 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  ox@0.12.4(typescript@5.7.3)(zod@3.25.76):
+  ox@0.12.4(typescript@5.7.3)(zod@4.3.6):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
@@ -24312,7 +24078,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.7.3)(zod@3.25.76)
+      abitype: 1.2.3(typescript@5.7.3)(zod@4.3.6)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.7.3
@@ -24334,28 +24100,28 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  ox@0.6.7(typescript@5.7.3)(zod@3.25.76):
+  ox@0.6.7(typescript@5.7.3)(zod@4.3.6):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.7.3)(zod@3.25.76)
+      abitype: 1.2.3(typescript@5.7.3)(zod@4.3.6)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.7.3
     transitivePeerDependencies:
       - zod
 
-  ox@0.6.9(typescript@5.7.3)(zod@3.25.76):
+  ox@0.6.9(typescript@5.7.3)(zod@4.3.6):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.7.3)(zod@3.25.76)
+      abitype: 1.2.3(typescript@5.7.3)(zod@4.3.6)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.7.3
@@ -24618,14 +24384,14 @@ snapshots:
 
   pony-cause@2.1.11: {}
 
-  porto@0.2.35(96b207632feeacae087938ef800bf470):
+  porto@0.2.35(98ccca2ab50739e091e99661c373f853):
     dependencies:
-      '@wagmi/core': 2.22.1(@tanstack/query-core@5.90.20)(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@wagmi/core': 2.22.1(@tanstack/query-core@5.90.20)(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))
       hono: 4.12.26
       idb-keyval: 6.2.2
       mipd: 0.0.7(typescript@5.7.3)
       ox: 0.9.17(typescript@5.7.3)(zod@4.3.6)
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
       zod: 4.3.6
       zustand: 5.0.14(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     optionalDependencies:
@@ -24633,7 +24399,7 @@ snapshots:
       react: 18.3.1
       react-native: 0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10)
       typescript: 5.7.3
-      wagmi: 2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76)
+      wagmi: 2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))(zod@4.3.6)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -24646,11 +24412,6 @@ snapshots:
       postcss: 8.5.23
       postcss-selector-parser: 6.1.2
 
-  postcss-attribute-case-insensitive@6.0.3(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
-      postcss-selector-parser: 6.1.2
-
   postcss-attribute-case-insensitive@7.0.1(postcss@8.5.6):
     dependencies:
       postcss: 8.5.6
@@ -24659,12 +24420,6 @@ snapshots:
   postcss-calc@10.1.1(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-      postcss-selector-parser: 7.1.1
-      postcss-value-parser: 4.2.0
-
-  postcss-calc@10.1.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
 
@@ -24693,15 +24448,6 @@ snapshots:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
 
-  postcss-color-functional-notation@6.0.14(postcss@8.5.6):
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-
   postcss-color-functional-notation@7.0.12(postcss@8.5.6):
     dependencies:
       '@csstools/css-color-parser': 3.1.0(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -24723,12 +24469,6 @@ snapshots:
       postcss: 8.5.23
       postcss-value-parser: 4.2.0
 
-  postcss-color-hex-alpha@9.0.4(postcss@8.5.6):
-    dependencies:
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-      postcss-value-parser: 4.2.0
-
   postcss-color-rebeccapurple@10.0.0(postcss@8.5.6):
     dependencies:
       '@csstools/utilities': 2.0.0(postcss@8.5.6)
@@ -24739,12 +24479,6 @@ snapshots:
     dependencies:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  postcss-color-rebeccapurple@9.0.3(postcss@8.5.6):
-    dependencies:
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   postcss-colormin@6.1.0(postcss@8.5.6):
@@ -24769,14 +24503,6 @@ snapshots:
       '@csstools/media-query-list-parser': 2.1.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
       postcss: 8.5.23
 
-  postcss-custom-media@10.0.8(postcss@8.5.6):
-    dependencies:
-      '@csstools/cascade-layer-name-parser': 1.0.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/media-query-list-parser': 2.1.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      postcss: 8.5.6
-
   postcss-custom-media@11.0.6(postcss@8.5.6):
     dependencies:
       '@csstools/cascade-layer-name-parser': 2.0.5(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -24792,15 +24518,6 @@ snapshots:
       '@csstools/css-tokenizer': 2.4.1
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  postcss-custom-properties@13.3.12(postcss@8.5.6):
-    dependencies:
-      '@csstools/cascade-layer-name-parser': 1.0.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   postcss-custom-properties@14.0.6(postcss@8.5.6):
@@ -24820,14 +24537,6 @@ snapshots:
       postcss: 8.5.23
       postcss-selector-parser: 6.1.2
 
-  postcss-custom-selectors@7.1.12(postcss@8.5.6):
-    dependencies:
-      '@csstools/cascade-layer-name-parser': 1.0.13(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      postcss: 8.5.6
-      postcss-selector-parser: 6.1.2
-
   postcss-custom-selectors@8.0.5(postcss@8.5.6):
     dependencies:
       '@csstools/cascade-layer-name-parser': 2.0.5(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
@@ -24839,11 +24548,6 @@ snapshots:
   postcss-dir-pseudo-class@8.0.1(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-      postcss-selector-parser: 6.1.2
-
-  postcss-dir-pseudo-class@8.0.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-selector-parser: 6.1.2
 
   postcss-dir-pseudo-class@9.0.1(postcss@8.5.6):
@@ -24879,13 +24583,6 @@ snapshots:
       postcss: 8.5.23
       postcss-value-parser: 4.2.0
 
-  postcss-double-position-gradients@5.0.7(postcss@8.5.6):
-    dependencies:
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
-      postcss-value-parser: 4.2.0
-
   postcss-double-position-gradients@6.0.4(postcss@8.5.6):
     dependencies:
       '@csstools/postcss-progressive-custom-properties': 4.2.1(postcss@8.5.6)
@@ -24897,10 +24594,6 @@ snapshots:
     dependencies:
       postcss: 8.5.23
 
-  postcss-flexbugs-fixes@5.0.2(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
-
   postcss-focus-visible@10.0.1(postcss@8.5.6):
     dependencies:
       postcss: 8.5.6
@@ -24911,19 +24604,9 @@ snapshots:
       postcss: 8.5.23
       postcss-selector-parser: 6.1.2
 
-  postcss-focus-visible@9.0.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
-      postcss-selector-parser: 6.1.2
-
   postcss-focus-within@8.0.1(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-      postcss-selector-parser: 6.1.2
-
-  postcss-focus-within@8.0.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-selector-parser: 6.1.2
 
   postcss-focus-within@9.0.1(postcss@8.5.6):
@@ -24943,10 +24626,6 @@ snapshots:
     dependencies:
       postcss: 8.5.23
 
-  postcss-gap-properties@5.0.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
-
   postcss-gap-properties@6.0.0(postcss@8.5.6):
     dependencies:
       postcss: 8.5.6
@@ -24955,12 +24634,6 @@ snapshots:
     dependencies:
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  postcss-image-set-function@6.0.3(postcss@8.5.6):
-    dependencies:
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   postcss-image-set-function@7.0.0(postcss@8.5.6):
@@ -24977,15 +24650,6 @@ snapshots:
       '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.23)
       '@csstools/utilities': 1.0.0(postcss@8.5.23)
       postcss: 8.5.23
-
-  postcss-lab-function@6.0.19(postcss@8.5.6):
-    dependencies:
-      '@csstools/css-color-parser': 2.0.5(@csstools/css-parser-algorithms@2.7.1(@csstools/css-tokenizer@2.4.1))(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-parser-algorithms': 2.7.1(@csstools/css-tokenizer@2.4.1)
-      '@csstools/css-tokenizer': 2.4.1
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/utilities': 1.0.0(postcss@8.5.6)
-      postcss: 8.5.6
 
   postcss-lab-function@7.0.12(postcss@8.5.6):
     dependencies:
@@ -25017,11 +24681,6 @@ snapshots:
   postcss-logical@7.0.1(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  postcss-logical@7.0.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   postcss-logical@8.1.0(postcss@8.5.6):
@@ -25103,13 +24762,6 @@ snapshots:
       postcss: 8.5.23
       postcss-selector-parser: 6.1.2
 
-  postcss-nesting@12.1.5(postcss@8.5.6):
-    dependencies:
-      '@csstools/selector-resolve-nested': 1.1.0(postcss-selector-parser@6.1.2)
-      '@csstools/selector-specificity': 3.1.1(postcss-selector-parser@6.1.2)
-      postcss: 8.5.6
-      postcss-selector-parser: 6.1.2
-
   postcss-nesting@13.0.2(postcss@8.5.6):
     dependencies:
       '@csstools/selector-resolve-nested': 3.1.0(postcss-selector-parser@7.1.1)
@@ -25166,10 +24818,6 @@ snapshots:
     dependencies:
       postcss: 8.5.23
 
-  postcss-opacity-percentage@2.0.0(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
-
   postcss-opacity-percentage@3.0.0(postcss@8.5.6):
     dependencies:
       postcss: 8.5.6
@@ -25183,11 +24831,6 @@ snapshots:
   postcss-overflow-shorthand@5.0.1(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  postcss-overflow-shorthand@5.0.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   postcss-overflow-shorthand@6.0.0(postcss@8.5.6):
@@ -25211,11 +24854,6 @@ snapshots:
   postcss-place@9.0.1(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-      postcss-value-parser: 4.2.0
-
-  postcss-place@9.0.1(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
   postcss-prefix-selector@1.16.1(postcss@8.5.6):
@@ -25362,71 +25000,6 @@ snapshots:
       postcss-replace-overflow-wrap: 4.0.0(postcss@8.5.23)
       postcss-selector-not: 7.0.2(postcss@8.5.23)
 
-  postcss-preset-env@9.6.0(postcss@8.5.6):
-    dependencies:
-      '@csstools/postcss-cascade-layers': 4.0.6(postcss@8.5.6)
-      '@csstools/postcss-color-function': 3.0.19(postcss@8.5.6)
-      '@csstools/postcss-color-mix-function': 2.0.19(postcss@8.5.6)
-      '@csstools/postcss-content-alt-text': 1.0.0(postcss@8.5.6)
-      '@csstools/postcss-exponential-functions': 1.0.9(postcss@8.5.6)
-      '@csstools/postcss-font-format-keywords': 3.0.2(postcss@8.5.6)
-      '@csstools/postcss-gamut-mapping': 1.0.11(postcss@8.5.6)
-      '@csstools/postcss-gradients-interpolation-method': 4.0.20(postcss@8.5.6)
-      '@csstools/postcss-hwb-function': 3.0.18(postcss@8.5.6)
-      '@csstools/postcss-ic-unit': 3.0.7(postcss@8.5.6)
-      '@csstools/postcss-initial': 1.0.1(postcss@8.5.6)
-      '@csstools/postcss-is-pseudo-class': 4.0.8(postcss@8.5.6)
-      '@csstools/postcss-light-dark-function': 1.0.8(postcss@8.5.6)
-      '@csstools/postcss-logical-float-and-clear': 2.0.1(postcss@8.5.6)
-      '@csstools/postcss-logical-overflow': 1.0.1(postcss@8.5.6)
-      '@csstools/postcss-logical-overscroll-behavior': 1.0.1(postcss@8.5.6)
-      '@csstools/postcss-logical-resize': 2.0.1(postcss@8.5.6)
-      '@csstools/postcss-logical-viewport-units': 2.0.11(postcss@8.5.6)
-      '@csstools/postcss-media-minmax': 1.1.8(postcss@8.5.6)
-      '@csstools/postcss-media-queries-aspect-ratio-number-values': 2.0.11(postcss@8.5.6)
-      '@csstools/postcss-nested-calc': 3.0.2(postcss@8.5.6)
-      '@csstools/postcss-normalize-display-values': 3.0.2(postcss@8.5.6)
-      '@csstools/postcss-oklab-function': 3.0.19(postcss@8.5.6)
-      '@csstools/postcss-progressive-custom-properties': 3.3.0(postcss@8.5.6)
-      '@csstools/postcss-relative-color-syntax': 2.0.19(postcss@8.5.6)
-      '@csstools/postcss-scope-pseudo-class': 3.0.1(postcss@8.5.6)
-      '@csstools/postcss-stepped-value-functions': 3.0.10(postcss@8.5.6)
-      '@csstools/postcss-text-decoration-shorthand': 3.0.7(postcss@8.5.6)
-      '@csstools/postcss-trigonometric-functions': 3.0.10(postcss@8.5.6)
-      '@csstools/postcss-unset-value': 3.0.1(postcss@8.5.6)
-      autoprefixer: 10.4.24(postcss@8.5.6)
-      browserslist: 4.28.1
-      css-blank-pseudo: 6.0.2(postcss@8.5.6)
-      css-has-pseudo: 6.0.5(postcss@8.5.6)
-      css-prefers-color-scheme: 9.0.1(postcss@8.5.6)
-      cssdb: 8.7.1
-      postcss: 8.5.6
-      postcss-attribute-case-insensitive: 6.0.3(postcss@8.5.6)
-      postcss-clamp: 4.1.0(postcss@8.5.6)
-      postcss-color-functional-notation: 6.0.14(postcss@8.5.6)
-      postcss-color-hex-alpha: 9.0.4(postcss@8.5.6)
-      postcss-color-rebeccapurple: 9.0.3(postcss@8.5.6)
-      postcss-custom-media: 10.0.8(postcss@8.5.6)
-      postcss-custom-properties: 13.3.12(postcss@8.5.6)
-      postcss-custom-selectors: 7.1.12(postcss@8.5.6)
-      postcss-dir-pseudo-class: 8.0.1(postcss@8.5.6)
-      postcss-double-position-gradients: 5.0.7(postcss@8.5.6)
-      postcss-focus-visible: 9.0.1(postcss@8.5.6)
-      postcss-focus-within: 8.0.1(postcss@8.5.6)
-      postcss-font-variant: 5.0.0(postcss@8.5.6)
-      postcss-gap-properties: 5.0.1(postcss@8.5.6)
-      postcss-image-set-function: 6.0.3(postcss@8.5.6)
-      postcss-lab-function: 6.0.19(postcss@8.5.6)
-      postcss-logical: 7.0.1(postcss@8.5.6)
-      postcss-nesting: 12.1.5(postcss@8.5.6)
-      postcss-opacity-percentage: 2.0.0(postcss@8.5.6)
-      postcss-overflow-shorthand: 5.0.1(postcss@8.5.6)
-      postcss-page-break: 3.0.4(postcss@8.5.6)
-      postcss-place: 9.0.1(postcss@8.5.6)
-      postcss-pseudo-class-any-link: 9.0.2(postcss@8.5.6)
-      postcss-replace-overflow-wrap: 4.0.0(postcss@8.5.6)
-      postcss-selector-not: 7.0.2(postcss@8.5.6)
-
   postcss-pseudo-class-any-link@10.0.1(postcss@8.5.6):
     dependencies:
       postcss: 8.5.6
@@ -25435,11 +25008,6 @@ snapshots:
   postcss-pseudo-class-any-link@9.0.2(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-      postcss-selector-parser: 6.1.2
-
-  postcss-pseudo-class-any-link@9.0.2(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-selector-parser: 6.1.2
 
   postcss-reduce-idents@6.0.3(postcss@8.5.6):
@@ -25479,11 +25047,6 @@ snapshots:
   postcss-selector-not@7.0.2(postcss@8.5.23):
     dependencies:
       postcss: 8.5.23
-      postcss-selector-parser: 6.1.2
-
-  postcss-selector-not@7.0.2(postcss@8.5.6):
-    dependencies:
-      postcss: 8.5.6
       postcss-selector-parser: 6.1.2
 
   postcss-selector-not@8.0.1(postcss@8.5.6):
@@ -27518,11 +27081,11 @@ snapshots:
 
   typedarray@0.0.6: {}
 
-  typedoc-docusaurus-theme@1.4.2(typedoc-plugin-markdown@4.4.0(typedoc@0.27.6(typescript@5.7.3))):
+  typedoc-docusaurus-theme@1.4.2(typedoc-plugin-markdown@4.8.0(typedoc@0.27.6(typescript@5.7.3))):
     dependencies:
-      typedoc-plugin-markdown: 4.4.0(typedoc@0.27.6(typescript@5.7.3))
+      typedoc-plugin-markdown: 4.8.0(typedoc@0.27.6(typescript@5.7.3))
 
-  typedoc-plugin-markdown@4.4.0(typedoc@0.27.6(typescript@5.7.3)):
+  typedoc-plugin-markdown@4.8.0(typedoc@0.27.6(typescript@5.7.3)):
     dependencies:
       typedoc: 0.27.6(typescript@5.7.3)
 
@@ -27827,15 +27390,15 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  viem@2.23.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76):
+  viem@2.23.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6):
     dependencies:
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.7.3)(zod@3.25.76)
+      abitype: 1.0.8(typescript@5.7.3)(zod@4.3.6)
       isows: 1.0.6(ws@8.18.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))
-      ox: 0.6.7(typescript@5.7.3)(zod@3.25.76)
+      ox: 0.6.7(typescript@5.7.3)(zod@4.3.6)
       ws: 8.18.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)
     optionalDependencies:
       typescript: 5.7.3
@@ -27861,15 +27424,15 @@ snapshots:
       - utf-8-validate
       - zod
 
-  viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76):
+  viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.7.3)(zod@3.25.76)
+      abitype: 1.2.3(typescript@5.7.3)(zod@4.3.6)
       isows: 1.0.7(ws@8.18.3(bufferutil@4.1.0)(utf-8-validate@5.0.10))
-      ox: 0.12.4(typescript@5.7.3)(zod@3.25.76)
+      ox: 0.12.4(typescript@5.7.3)(zod@4.3.6)
       ws: 8.18.3(bufferutil@4.1.0)(utf-8-validate@5.0.10)
     optionalDependencies:
       typescript: 5.7.3
@@ -27902,14 +27465,14 @@ snapshots:
     dependencies:
       xml-name-validator: 4.0.0
 
-  wagmi@2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76):
+  wagmi@2.19.5(@tanstack/query-core@5.90.20)(@tanstack/react-query@5.90.21(react@18.3.1))(@types/react@18.3.28)(bufferutil@4.1.0)(immer@9.0.21)(react-native@0.86.0(@babel/core@7.29.0)(@types/react@18.3.28)(bufferutil@4.1.0)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))(zod@4.3.6):
     dependencies:
       '@tanstack/react-query': 5.90.21(react@18.3.1)
-      '@wagmi/connectors': 6.2.0(55b5714a2c69042a0683bb8b9c3b32f1)
-      '@wagmi/core': 2.22.1(@tanstack/query-core@5.90.20)(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76))
+      '@wagmi/connectors': 6.2.0(b0a6e4dc1e988bfd454e8564615de6f3)
+      '@wagmi/core': 2.22.1(@tanstack/query-core@5.90.20)(@types/react@18.3.28)(immer@9.0.21)(react@18.3.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6))
       react: 18.3.1
       use-sync-external-store: 1.4.0(react@18.3.1)
-      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      viem: 2.46.2(bufferutil@4.1.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@4.3.6)
     optionalDependencies:
       typescript: 5.7.3
     transitivePeerDependencies:
