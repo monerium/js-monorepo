@@ -4445,7 +4445,7 @@ webhooks:
   profile.error:
     post:
       operationId: webhook-profile-error
-      summary: Profile data ingestion error
+      summary: Profile error
       description: |-
         Sent when profile data received from a KYC provider is rejected as invalid and
         skipped during ingestion (for example an address over the maximum allowed length).
