@@ -122,11 +122,6 @@ const config: Config = {
         },
         { to: '/api', label: 'API', position: 'left' },
         { to: '/packages/sdk', label: 'SDK', position: 'left' },
-        // {
-        //   to: '/packages/sdk-react-provider',
-        //   label: 'React',
-        //   position: 'left',
-        // },
         {
           'aria-label': 'Discord Invite',
           className: 'navbar--discord-link',
