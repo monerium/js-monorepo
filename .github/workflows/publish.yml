@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       package:
-        description: 'Package to publish (all, sdk, sdk-react-provider, openapi)'
+        description: 'Package to publish (all, sdk, openapi)'
         type: string
         required: true
       dry_run:
@@ -59,10 +59,6 @@ jobs:
       - name: Dry-run SDK
         if: inputs.dry_run == true && (inputs.package == 'all' || inputs.package == 'sdk')
         run: pnpm --filter @monerium/sdk pub:pre
-
-      - name: Dry-run React Provider
-        if: inputs.dry_run == true && (inputs.package == 'all' || inputs.package == 'sdk-react-provider')
-        run: pnpm --filter @monerium/sdk-react-provider pub:pre
 
       - name: Dry-run OpenAPI
         if: inputs.dry_run == true && (inputs.package == 'all' || inputs.package == 'openapi')
