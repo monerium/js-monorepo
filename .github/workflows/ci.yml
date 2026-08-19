@@ -12,7 +12,6 @@ on:
         type: choice
         options:
           - sdk
-          - sdk-react-provider
           - openapi
       dry_run:
         description: 'Dry-run only (no actual publish)'
@@ -28,7 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release_created_sdk: ${{ steps.release.outputs['packages/sdk--release_created'] }}
-      release_created_sdk_react_provider: ${{ steps.release.outputs['packages/sdk-react-provider--release_created'] }}
       release_created_openapi: ${{ steps.release.outputs['packages/openapi--release_created'] }}
       release_created_developer: ${{ steps.release.outputs['apps/developer--release_created'] }}
       release_created: ${{ steps.release.outputs.release_created }}
@@ -47,7 +45,6 @@ jobs:
       - name: echo values
         run: |
           echo "Release created SDK: ${{ steps.release.outputs['packages/sdk--release_created']  }}"
-          echo "Release created React Provider: ${{ steps.release.outputs['packages/sdk-react-provider--release_created'] }}"
           echo "Release created Developer: ${{ steps.release.outputs['apps/developer--release_created'] }}"
           echo "Releases created: ${{ steps.release.outputs.releases_created }}"
           echo "PR created: ${{ steps.release.outputs.prs_created }}"
@@ -59,6 +56,7 @@ jobs:
     if: github.event_name == 'push'
     env:
       CI: 'true'
+      TURBO_TELEMETRY_DISABLED: '1'
     needs: [release-please]
     name: Build, Test and Lint
     timeout-minutes: 15
@@ -109,25 +107,6 @@ jobs:
     secrets: inherit
     with:
       package: sdk
-      dry_run: ${{ inputs.dry_run == true }}
-      skip_checks: ${{ github.event_name == 'push' }}
-
-  publish-sdk-react-provider:
-    needs: [release-please, build]
-    if: |
-      always() &&
-      needs.build.result != 'failure' &&
-      (
-        needs.release-please.outputs.release_created_sdk_react_provider == 'true' ||
-        (github.event_name == 'workflow_dispatch' && inputs.package == 'sdk-react-provider')
-      )
-    permissions:
-      id-token: write
-      contents: read
-    uses: ./.github/workflows/publish.yml
-    secrets: inherit
-    with:
-      package: sdk-react-provider
       dry_run: ${{ inputs.dry_run == true }}
       skip_checks: ${{ github.event_name == 'push' }}
 

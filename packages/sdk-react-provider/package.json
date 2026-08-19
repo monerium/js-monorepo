@@ -29,15 +29,15 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "typedoc": "typedoc",
-    "lint": "eslint . --fix",
-    "pub:pre": "pnpm publish --no-git-checks --dry-run",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "type-map": "tsc --emitDeclarationOnly --declaration",
-    "clean": "rm -rf dist node_modules .turbo"
+    "disable-build": "tsup",
+    "disable-dev": "tsup --watch",
+    "disable-typedoc": "typedoc",
+    "disable-lint": "eslint . --fix",
+    "disable-pub:pre": "pnpm publish --no-git-checks --dry-run",
+    "disable-test": "jest",
+    "disable-test:watch": "jest --watch",
+    "disable-type-map": "tsc --emitDeclarationOnly --declaration",
+    "disable-clean": "rm -rf dist node_modules .turbo"
   },
   "dependencies": {
     "@monerium/sdk": "3.5.0"
