@@ -5,3 +5,9 @@ packages:
 
 publicHoistPattern:
   - '*'
+
+overrides:
+  '@docusaurus/core': '3.7.0'
+  '@docusaurus/plugin-content-docs': '3.7.0'
+  '@docusaurus/theme-common': '3.7.0'
+  webpack: '5.97.1'
