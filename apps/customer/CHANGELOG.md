@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.11.1](https://github.com/monerium/js-monorepo/compare/customer-v0.11.0...customer-v0.11.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* bind docasaurus and webpack version ([d1e064c](https://github.com/monerium/js-monorepo/commit/d1e064c447aa184546b9987978ec4c2772cd9474))
+
+
+### Miscellaneous
+
+* rollback depency updates ([#211](https://github.com/monerium/js-monorepo/issues/211)) ([617a114](https://github.com/monerium/js-monorepo/commit/617a11451aae3aae2d626288b5c10e94b1a47634))
+* update dependencies ([#209](https://github.com/monerium/js-monorepo/issues/209)) ([d69c273](https://github.com/monerium/js-monorepo/commit/d69c273cbee73ad2a627efa1095c94061911f43b))
+* update next ([#207](https://github.com/monerium/js-monorepo/issues/207)) ([5c606cf](https://github.com/monerium/js-monorepo/commit/5c606cfabebd0be33439c29df88347579db688dd))
+
 ## [0.11.0](https://github.com/monerium/js-monorepo/compare/customer-v0.10.0...customer-v0.11.0) (2026-07-28)
 
 

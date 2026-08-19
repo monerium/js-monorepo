@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.5.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.4.0...openapi-v2.5.0) (2026-08-19)
+
+
+### Features
+
+* payments for order endpoint ([#205](https://github.com/monerium/js-monorepo/issues/205)) ([4715d6b](https://github.com/monerium/js-monorepo/commit/4715d6b3778ee91e26ee2cab858eae26ad4f3ee0))
+
+
+### Documentation
+
+* **openapi:** document profile.error webhook ([#206](https://github.com/monerium/js-monorepo/issues/206)) ([f53c91b](https://github.com/monerium/js-monorepo/commit/f53c91b8f3816f6155ceb397b55987c4363e85ab))
+* **openapi:** fix profile.error webhook summary title ([#212](https://github.com/monerium/js-monorepo/issues/212)) ([28e0b2d](https://github.com/monerium/js-monorepo/commit/28e0b2de5630b3a7ab02b0346ab5728a092df9c5))
+
 ## [2.4.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.3.1...openapi-v2.4.0) (2026-07-28)
 
 

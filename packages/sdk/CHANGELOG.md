@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.0](https://github.com/monerium/js-monorepo/compare/sdk-v4.1.0...sdk-v4.2.0) (2026-08-19)
+
+
+### Features
+
+* payments for order endpoint ([#205](https://github.com/monerium/js-monorepo/issues/205)) ([4715d6b](https://github.com/monerium/js-monorepo/commit/4715d6b3778ee91e26ee2cab858eae26ad4f3ee0))
+
 ## [4.1.0](https://github.com/monerium/js-monorepo/compare/sdk-v4.0.0...sdk-v4.1.0) (2026-07-28)
 
 
