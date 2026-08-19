@@ -452,6 +452,8 @@ paths:
                     Default event types:
                     - `iban.updated`
                     - `profile.updated`
+
+                    `profile.error` is opt-in and must be enabled explicitly.
                   type: array
                   items:
                     type: string
@@ -459,6 +461,7 @@ paths:
                       - iban.updated
                       - order.created
                       - order.updated
+                      - profile.error
                       - profile.updated
                   example:
                     - iban.updated
@@ -539,6 +542,8 @@ paths:
                     Default event types:
                     - `iban.updated`
                     - `profile.updated`
+
+                    `profile.error` is opt-in and must be enabled explicitly.
                   type: array
                   items:
                     type: string
@@ -546,6 +551,7 @@ paths:
                       - iban.updated
                       - order.created
                       - order.updated
+                      - profile.error
                       - profile.updated
                   example:
                     - iban.updated
@@ -4154,6 +4160,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-08-17:
+      * [Webhook profile.error](#operation/webhook-profile-error) - New opt-in webhook event fired when profile data received from a KYC provider is rejected as invalid and skipped during ingestion (e.g. an address over the maximum allowed length). The profile stays `incomplete` until the listed fields are corrected and resubmitted. Payload includes the rejected `field`(s) and `reason`.
+
       ### 2026-07-21:
       * [GET /swap/{chain}/{sellToken}/{buyToken}](#operation/create-swap-quote), [POST /swap/accept](#operation/accept-swap-quote) - Replaced the preview swap request-body and commit flow with wallet-bound path/query quotes, `X-Quote-Token` acceptance, sell/buy terminology, a minimum quote amount of 1 token, response-provided settlement calldata, token decimals, base-unit amounts, and required allowance.
 
@@ -4431,6 +4440,90 @@ webhooks:
                 "kind": "personal",
                 "name": "Jane Doe",
                 "state": "pending"
+              }
+            }'
+  profile.error:
+    post:
+      operationId: webhook-profile-error
+      summary: Profile data ingestion error
+      description: |-
+        Sent when profile data received from a KYC provider is rejected as invalid and
+        skipped during ingestion (for example an address over the maximum allowed length).
+        The profile stays `incomplete`; the listed fields must be corrected and resubmitted.
+        Your endpoint must respond with `200 OK`; failed deliveries are retried with
+        exponential backoff up to 10 times over 12 hours.
+
+        This event is opt-in: subscribe to `profile.error` explicitly via `POST /webhooks`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  description: The type of the event.
+                  type: string
+                  example: profile.error
+                  enum:
+                    - profile.error
+                timestamp:
+                  $ref: '#/components/schemas/TimeStamp'
+                data:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/UUID'
+                    kind:
+                      $ref: '#/components/schemas/ProfileKind'
+                    errors:
+                      description: List of profile fields that were rejected as invalid and skipped.
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          field:
+                            description: The name of the field that failed validation.
+                            type: string
+                            example: address
+                          reason:
+                            description: Why the field was rejected.
+                            type: string
+                            example: address exceeds 70 characters
+                      example:
+                        - field: address
+                          reason: address exceeds 70 characters
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      security: []
+      tags:
+        - webhooks
+      x-codeSamples:
+        - lang: curl4
+          label: CURL
+          source: |
+            curl -X POST "https://your-webhook-url.com/webhooks" \
+            -H "Content-Type: application/json" \
+            -H "webhook-id: 3f3d820e-d01c-4c56-8be4-b20053225679" \
+            -H "webhook-timestamp: 1723207444" \
+            -H "webhook-signature: v1,K5oZfzN95Z9UVu1EsfQmfVNQhnkZ2pj9o9NDN/H/pI4=" \
+            -d '{
+              "type": "profile.error",
+              "timestamp": "2024-08-09T12:44:04.777884Z",
+              "data": {
+                "id": "4f079ef8-6d26-11eb-9bc8-acde48001122",
+                "kind": "personal",
+                "errors": [
+                  {
+                    "field": "address",
+                    "reason": "address exceeds 70 characters"
+                  }
+                ]
               }
             }'
   iban.updated:
