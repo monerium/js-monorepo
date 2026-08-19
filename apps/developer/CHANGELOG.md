@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.1](https://github.com/monerium/js-monorepo/compare/developer-v2.1.0...developer-v2.1.1) (2026-08-19)
+
+
+### Documentation
+
+* **openapi:** document profile.error webhook ([#206](https://github.com/monerium/js-monorepo/issues/206)) ([f53c91b](https://github.com/monerium/js-monorepo/commit/f53c91b8f3816f6155ceb397b55987c4363e85ab))
+
+
+### Miscellaneous
+
+* rollback depency updates ([#211](https://github.com/monerium/js-monorepo/issues/211)) ([617a114](https://github.com/monerium/js-monorepo/commit/617a11451aae3aae2d626288b5c10e94b1a47634))
+* update dependencies ([#209](https://github.com/monerium/js-monorepo/issues/209)) ([d69c273](https://github.com/monerium/js-monorepo/commit/d69c273cbee73ad2a627efa1095c94061911f43b))
+
 ## [2.1.0](https://github.com/monerium/js-monorepo/compare/developer-v2.0.0...developer-v2.1.0) (2026-07-28)
 
 

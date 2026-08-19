@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.13](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.12...sdk-react-provider-v1.3.13) (2026-08-19)
+
+
+### Miscellaneous
+
+* rollback depency updates ([#211](https://github.com/monerium/js-monorepo/issues/211)) ([617a114](https://github.com/monerium/js-monorepo/commit/617a11451aae3aae2d626288b5c10e94b1a47634))
+* update dependencies ([#209](https://github.com/monerium/js-monorepo/issues/209)) ([d69c273](https://github.com/monerium/js-monorepo/commit/d69c273cbee73ad2a627efa1095c94061911f43b))
+
 ## [1.3.12](https://github.com/monerium/js-monorepo/compare/sdk-react-provider-v1.3.11...sdk-react-provider-v1.3.12) (2026-07-28)
 
 
