@@ -23,10 +23,10 @@
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "5.90.21",
     "next": "16.3.1",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "viem": "2.55.7",
-    "wagmi": "3.7.6"
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "viem": "2.46.2",
+    "wagmi": "2.19.5"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -35,8 +35,8 @@
     "@repo/typescript-config": "workspace:*",
     "@tanstack/react-query-devtools": "5.91.3",
     "@types/js-cookie": "3.0.6",
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4",
+    "@types/react": "18.3.28",
+    "@types/react-dom": "18.3.7",
     "autoprefixer": "10.4.24",
     "classnames": "2.5.1",
     "eslint-config-next": "16.3.1",

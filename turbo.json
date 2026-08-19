@@ -14,11 +14,18 @@
     },
     "developer#build": {
       "cache": false,
-      "dependsOn": ["@monerium/sdk#build", "@monerium/openapi#build"],
+      "dependsOn": [
+        "@monerium/sdk#build",
+        "@monerium/sdk-react-provider#build",
+        "@monerium/openapi#build"
+      ],
       "outputs": ["docs/packages/**"]
     },
     "clean": {
       "cache": false
+    },
+    "@monerium/sdk-react-provider#dev": {
+      "dependsOn": ["@monerium/sdk#build"]
     },
     "lint": {},
     "lint:style": {},

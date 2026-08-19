@@ -1,7 +1,6 @@
 packages:
   - 'apps/*'
   - 'packages/*'
-  - '!packages/sdk-react-provider'
 
 publicHoistPattern:
   - '*'
