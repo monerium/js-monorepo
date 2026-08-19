@@ -46,18 +46,18 @@ const config: Config = {
         watch: process?.env?.TYPEDOC_WATCH === 'true',
       },
     ],
-    [
-      'docusaurus-plugin-typedoc',
-      {
-        ...typedocConfig,
-        id: '@monerium/sdk-react-provider',
-        entryPoints: ['../../packages/sdk-react-provider/src/index.ts'],
-        tsconfig: '../../packages/sdk-react-provider/tsconfig.json',
-        out: 'docs/packages/sdk-react-provider',
-        publicPath: '/packages/sdk-react-provider',
-        watch: process?.env?.TYPEDOC_WATCH === 'true',
-      },
-    ],
+    // [
+    //   'docusaurus-plugin-typedoc',
+    //   {
+    //     ...typedocConfig,
+    //     id: '@monerium/sdk-react-provider',
+    //     entryPoints: ['../../packages/sdk-react-provider/src/index.ts'],
+    //     tsconfig: '../../packages/sdk-react-provider/tsconfig.json',
+    //     out: 'docs/packages/sdk-react-provider',
+    //     publicPath: '/packages/sdk-react-provider',
+    //     watch: process?.env?.TYPEDOC_WATCH === 'true',
+    //   },
+    // ],
   ],
   // The TypeDoc (sdk and sdk-react-provider) publicPath is hardcoded and creates broken links when baseUrl changes.
   // Docusaurus leaves pathname protocol links as is, so for example when linking to API docs,
@@ -114,14 +114,19 @@ const config: Config = {
         src: 'img/logo.png',
       },
       items: [
-        { to: '/', label: 'Docs', position: 'left', activeBaseRegex: '^/(?!api$|packages/)' },
+        {
+          to: '/',
+          label: 'Docs',
+          position: 'left',
+          activeBaseRegex: '^/(?!api$|packages/)',
+        },
         { to: '/api', label: 'API', position: 'left' },
         { to: '/packages/sdk', label: 'SDK', position: 'left' },
-        {
-          to: '/packages/sdk-react-provider',
-          label: 'React',
-          position: 'left',
-        },
+        // {
+        //   to: '/packages/sdk-react-provider',
+        //   label: 'React',
+        //   position: 'left',
+        // },
         {
           'aria-label': 'Discord Invite',
           className: 'navbar--discord-link',
@@ -172,10 +177,10 @@ const config: Config = {
               label: '@monerium/sdk',
               href: 'https://www.npmjs.com/package/@monerium/sdk',
             },
-            {
-              label: '@monerium/sdk-react-provider',
-              href: 'https://www.npmjs.com/package/@monerium/sdk-react-provider',
-            },
+            // {
+            //   label: '@monerium/sdk-react-provider',
+            //   href: 'https://www.npmjs.com/package/@monerium/sdk-react-provider',
+            // },
           ],
         },
       ],
