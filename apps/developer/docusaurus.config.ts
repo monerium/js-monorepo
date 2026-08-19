@@ -172,10 +172,10 @@ const config: Config = {
               label: '@monerium/sdk',
               href: 'https://www.npmjs.com/package/@monerium/sdk',
             },
-            {
-              label: '@monerium/sdk-react-provider',
-              href: 'https://www.npmjs.com/package/@monerium/sdk-react-provider',
-            },
+            // {
+            //   label: '@monerium/sdk-react-provider',
+            //   href: 'https://www.npmjs.com/package/@monerium/sdk-react-provider',
+            // },
           ],
         },
       ],
