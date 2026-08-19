@@ -8,7 +8,6 @@
       "persistent": true
     },
     "build": {
-      "cache": false,
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "env": ["STANDALONE"]

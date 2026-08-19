@@ -1,16 +1,26 @@
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import { ColorModeProvider } from '@docusaurus/theme-common/internal';
 import OriginalRedoc from '@theme-original/Redoc';
 
 /**
  * redocusaurus' Redoc component calls `useColorMode()` (via useSpecOptions)
- * unconditionally during render. On Docusaurus 3.10's static site generation
- * pass this throws "Hook useColorMode is called outside the <ColorModeProvider>"
- * because the redoc layout renders outside the classic theme's provider.
+ * during render, but its /api/ page renders outside the classic theme's
+ * ColorModeProvider. On Docusaurus 3.10 this throws
+ * "Hook useColorMode is called outside the <ColorModeProvider>":
+ *  - during static site generation (the build), and
+ *  - at runtime in the browser.
  *
- * Rendering the Redoc client-side only means `useColorMode` is never invoked
- * during SSG — the page shell (Layout) is still statically generated and the
- * spec renders once the browser hydrates.
+ * Rendering client-side only skips the SSG crash, and wrapping in
+ * ColorModeProvider gives the runtime render the provider it needs.
  */
 export default function Redoc(props) {
-  return <BrowserOnly>{() => <OriginalRedoc {...props} />}</BrowserOnly>;
+  return (
+    <BrowserOnly>
+      {() => (
+        <ColorModeProvider>
+          <OriginalRedoc {...props} />
+        </ColorModeProvider>
+      )}
+    </BrowserOnly>
+  );
 }
