@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/monerium/js-monorepo/compare/openapi-v2.5.0...openapi-v2.5.1) (2026-08-20)
+
+
+### Miscellaneous
+
+* revert order payments ([2cbe531](https://github.com/monerium/js-monorepo/commit/2cbe5311aabfdd7946a1e470ddad0fdd815231fc))
+
 ## [2.5.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.4.0...openapi-v2.5.0) (2026-08-19)
 
 

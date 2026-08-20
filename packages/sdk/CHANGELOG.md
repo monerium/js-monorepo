@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.1](https://github.com/monerium/js-monorepo/compare/sdk-v4.2.0...sdk-v4.2.1) (2026-08-20)
+
+
+### Miscellaneous
+
+* revert order payments ([2cbe531](https://github.com/monerium/js-monorepo/commit/2cbe5311aabfdd7946a1e470ddad0fdd815231fc))
+
 ## [4.2.0](https://github.com/monerium/js-monorepo/compare/sdk-v4.1.0...sdk-v4.2.0) (2026-08-19)
 
 
