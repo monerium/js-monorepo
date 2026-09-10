@@ -1876,18 +1876,9 @@ paths:
             $ref: '#/components/schemas/Memo'
         - name: state
           in: query
-          description: |
-            Get all orders in a particular state:
-
-            - `pending`: The order is being processed (e.g., review, minting/burning tokens, or sending/receiving SEPA payment).
-            - `processed`: The order has been completed successfully.
-            - `rejected`: The order was rejected, possibly due to compliance reasons or insufficient funds.
+          description: Get all orders in a particular state.
           schema:
-            type: string
-            enum:
-              - pending
-              - processed
-              - rejected
+            $ref: '#/components/schemas/OrderState'
       responses:
         '200':
           description: OK
@@ -2690,6 +2681,21 @@ components:
         - signature
         - message
         - counterpart
+    OrderState:
+      description: |
+        The state of the order:
+
+        - `placed`: The order has been created but not yet processed.
+        - `pending`: The order is awaiting fulfillment (e.g., review, minting/burning tokens, or sending/receiving SEPA payment).
+        - `processed`: The order has been completed successfully.
+        - `rejected`: The order was rejected, possibly due to compliance reasons or insufficient funds.
+      type: string
+      example: placed
+      enum:
+        - placed
+        - pending
+        - processed
+        - rejected
     Order:
       type: object
       properties:
@@ -2729,20 +2735,7 @@ components:
         referenceNumber:
           $ref: '#/components/schemas/ReferenceNumber'
         state:
-          description: |
-            The state of the order:
-
-            - `placed`: The order has been created but not yet processed.
-            - `pending`: The order is awaiting fulfillment (e.g., review, minting/burning tokens, or sending/receiving SEPA payment).
-            - `processed`: The order has been completed successfully.
-            - `rejected`: The order was rejected, possibly due to compliance reasons or insufficient funds.
-          type: string
-          example: rejected
-          enum:
-            - placed
-            - pending
-            - processed
-            - rejected
+          $ref: '#/components/schemas/OrderState'
         meta:
           type: object
           properties:
@@ -4334,9 +4327,7 @@ webhooks:
       operationId: webhook-order-created
       summary: Order created
       description: |
-        This notification represents an order creation.
-
-        It's send as a POST request to the endpoint specified during [subscription creation](#operation/create-subscription).
+        This notification represents an placed/created order.
       requestBody:
         required: true
         content:
