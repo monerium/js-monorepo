@@ -307,6 +307,7 @@ export abstract class MoneriumBaseClient {
    */
   public async requestIban(input: RequestIbanInput): Promise<AcceptedResponse> {
     return this.request<AcceptedResponse>('POST', 'ibans', {
+      ...(input.profile && { profile: input.profile }),
       address: input.address,
       chain: parseChain(input.chain),
       emailNotifications: input.emailNotifications ?? true,
@@ -497,7 +498,78 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
 }
 
 export class MoneriumPrivateClient extends MoneriumServerClient {
-  // To be populated
+  /**
+   * Creates a new whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/create-profile | API Documentation}
+   */
+  public async createProfile(input: CreateProfileInput): Promise<Profile> {
+    return this.request<Profile>('POST', 'profiles', input);
+  }
+
+  /**
+   * Submit compliance details for a whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
+   */
+  public async updateProfileDetails(
+    input: UpdateProfileDetailsInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/details`,
+      body
+    );
+  }
+
+  /**
+   * Share KYC data from a supported third-party provider for a whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/share-profile-kyc | API Documentation}
+   */
+  public async shareProfileKYC(
+    input: ShareProfileKYCInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'POST',
+      `profiles/${profile}/share`,
+      body
+    );
+  }
+
+  /**
+   * Submit additional data for a whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-form | API Documentation}
+   */
+  public async updateProfileForm(
+    input: UpdateProfileFormInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/form`,
+      body
+    );
+  }
+
+  /**
+   * Submit verifications for a whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-verifications | API Documentation}
+   */
+  public async updateProfileVerifications(
+    input: UpdateProfileVerificationsInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/verifications`,
+      body
+    );
+  }
 }
 
 export class MoneriumOAuthClient extends MoneriumBaseClient {

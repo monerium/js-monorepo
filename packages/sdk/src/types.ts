@@ -146,7 +146,9 @@ export type CorporateVerificationKind =
   | 'registrationNumber'
   | 'dateOfRegistration'
   | 'beneficialOwnership'
-  | 'powerOfAttorney';
+  | 'powerOfAttorney'
+  | 'idDocument'
+  | 'proofOfResidency';
 
 /**
  * Verification items required for this profile, each with its current state.
@@ -326,87 +328,180 @@ export type UpdateProfileDetailsInput =
 /**
  * @group Profiles
  */
+export type OccupationCode =
+  | 'OCCUPATION_STUDENT'
+  | 'OCCUPATION_EMPLOYED'
+  | 'OCCUPATION_SELF_EMPLOYED'
+  | 'OCCUPATION_UNEMPLOYED'
+  | 'OCCUPATION_RETIRED';
+
+/** @group Profiles */
+export type ProfessionCode =
+  | 'PROFESSION_ACCOUNTANCY'
+  | 'PROFESSION_ADMINISTRATIVE'
+  | 'PROFESSION_AGRICULTURE'
+  | 'PROFESSION_ARTS_ENTERTAINMENT_MEDIA'
+  | 'PROFESSION_BROKER_DEALER'
+  | 'PROFESSION_CATERING_HOSPITALITY_TOURISM'
+  | 'PROFESSION_CHARITY'
+  | 'PROFESSION_CONSTRUCTION_REAL_ESTATE'
+  | 'PROFESSION_DEALER_HIGH_VALUE_GOODS'
+  | 'PROFESSION_DEALER_PRECIOUS_METALS'
+  | 'PROFESSION_EDUCATION'
+  | 'PROFESSION_EMERGENCY_SERVICES'
+  | 'PROFESSION_EXTRACTIVE_INDUSTRY'
+  | 'PROFESSION_FINANCIAL_SERVICES_BANKING'
+  | 'PROFESSION_FINANCIAL_SERVICES_INSURANCE'
+  | 'PROFESSION_FINANCIAL_SERVICES_OTHER'
+  | 'PROFESSION_FINANCIAL_SERVICES_PRIVATE_BANKING'
+  | 'PROFESSION_GAMBLING'
+  | 'PROFESSION_GOVERNMENT'
+  | 'PROFESSION_HEALTH_CARE'
+  | 'PROFESSION_INFORMATION_TECHNOLOGY'
+  | 'PROFESSION_LEGAL'
+  | 'PROFESSION_MANUFACTURING'
+  | 'PROFESSION_MARKETING'
+  | 'PROFESSION_MILITARY'
+  | 'PROFESSION_MONEY_SERVICE_BUSINESS'
+  | 'PROFESSION_PENSIONER'
+  | 'PROFESSION_PUBLIC_PROCUREMENT'
+  | 'PROFESSION_RETAIL_SALES';
+
+/** @group Profiles */
+export type PersonalFundOriginCode =
+  | 'FUND_ORIGIN_SALARY'
+  | 'FUND_ORIGIN_DIVIDENDS'
+  | 'FUND_ORIGIN_INHERITANCE'
+  | 'FUND_ORIGIN_SAVINGS'
+  | 'FUND_ORIGIN_INVESTMENT'
+  | 'FUND_ORIGIN_GIFT'
+  | 'FUND_ORIGIN_MINING'
+  | 'FUND_ORIGIN_REAL_ESTATE'
+  | 'FUND_ORIGIN_LOAN';
+
+/** @group Profiles */
+export type AnnualIncomeCode =
+  | 'ANNUAL_INCOME_UNDER_10K'
+  | 'ANNUAL_INCOME_FROM_10K_TO_50K'
+  | 'ANNUAL_INCOME_FROM_50K_TO_150K'
+  | 'ANNUAL_INCOME_FROM_150K_TO_300K'
+  | 'ANNUAL_INCOME_MORE_THAN_300K';
+
+/** @group Profiles */
+export type PersonalMonthlyTurnoverCode =
+  | 'TURNOVER_UNDER_10K'
+  | 'TURNOVER_10K_TO_50K'
+  | 'TURNOVER_50K_TO_150K'
+  | 'TURNOVER_150K_TO_500K'
+  | 'TURNOVER_MORE_THAN_500K';
+
+/** @group Profiles */
+export type PersonalMonthlyTransactionCountCode =
+  | 'TRANSACTION_COUNT_UNDER_5'
+  | 'TRANSACTION_COUNT_5_TO_50'
+  | 'TRANSACTION_COUNT_50_TO_100'
+  | 'TRANSACTION_COUNT_100_TO_200'
+  | 'TRANSACTION_COUNT_MORE_THAN_200';
+
+/** @group Profiles */
+export type PersonalActivityCode =
+  | 'ACTIVITY_COMMERCE_SELLING'
+  | 'ACTIVITY_COMMERCE_BUYING'
+  | 'ACTIVITY_INVESTING_CRYPTO'
+  | 'ACTIVITY_OTHER';
+
+/** @group Profiles */
+export type CorporateLegalFormCode =
+  | 'LEGAL_FORM_PUBLIC_LIMITED'
+  | 'LEGAL_FORM_PRIVATE_LIMITED'
+  | 'LEGAL_FORM_PARTNERSHIPS'
+  | 'LEGAL_FORM_SOLE_TRADERS_PROPRIETORSHIPS'
+  | 'LEGAL_FORM_PUBLIC_AUTHORITIES'
+  | 'LEGAL_FORM_NON_PROFIT'
+  | 'LEGAL_FORM_BRANCHES'
+  | 'LEGAL_FORM_OTHER';
+
+/** @group Profiles */
+export type CorporatePurposeCode =
+  | 'PURPOSE_COLLECTING_PAYMENTS'
+  | 'PURPOSE_PAYING_FOR_GOODS'
+  | 'PURPOSE_BUY_SELL_CRYPTO_CURRENCIES'
+  | 'PURPOSE_ENGAGE_IN_DEFI'
+  | 'PURPOSE_OTHER';
+
+/** @group Profiles */
+export type CorporateActivityCode =
+  | 'ACTIVITY_ACCOMMODATION_FOOD_TRAVEL'
+  | 'ACTIVITY_ACCOUNTING_LEGAL_CONSULTANCY'
+  | 'ACTIVITY_ADULT_ENTERTAINMENT'
+  | 'ACTIVITY_ADVERTISING'
+  | 'ACTIVITY_AGRICULTURE'
+  | 'ACTIVITY_ARTS_ENTERTAINMENT'
+  | 'ACTIVITY_CHARITY'
+  | 'ACTIVITY_CONSTRUCTION'
+  | 'ACTIVITY_DEALER_HIGH_VALUE_GOODS'
+  | 'ACTIVITY_ECOMMERCE'
+  | 'ACTIVITY_EDUCATION'
+  | 'ACTIVITY_EXTRACTIVE_INDUSTRY'
+  | 'ACTIVITY_GAMBLING'
+  | 'ACTIVITY_HEALTH_SERVICES'
+  | 'ACTIVITY_MANUFACTURING'
+  | 'ACTIVITY_MARKETPLACE'
+  | 'ACTIVITY_MEDIA'
+  | 'ACTIVITY_MULTI_LEVEL_MARKETING'
+  | 'ACTIVITY_PERSONAL_INVESTMENT'
+  | 'ACTIVITY_PUBLIC_SECTOR'
+  | 'ACTIVITY_REAL_ESTATE'
+  | 'ACTIVITY_RETAIL'
+  | 'ACTIVITY_SOCIAL_WORK'
+  | 'ACTIVITY_SOFTWARE_TECHNOLOGY'
+  | 'ACTIVITY_TELECOM'
+  | 'ACTIVITY_TRANSPORTATION'
+  | 'ACTIVITY_UTILITIES'
+  | 'ACTIVITY_CRYPTO_SERVICES'
+  | 'ACTIVITY_FINANCIAL_INSTITUTION'
+  | 'ACTIVITY_OTHER';
+
+/** @group Profiles */
+export type CorporateFundOriginCode =
+  | 'FUND_ORIGIN_REVENUE'
+  | 'FUND_ORIGIN_PROFIT_DIVIDENDS'
+  | 'FUND_ORIGIN_LOAN'
+  | 'FUND_ORIGIN_INVESTMENTS'
+  | 'FUND_ORIGIN_CUSTOMER_FUNDS'
+  | 'FUND_ORIGIN_THIRD_PARTIES_FUNDS';
+
+/** @group Profiles */
+export type CorporateMonthlyTurnoverCode =
+  | 'TURNOVER_UNDER_100K'
+  | 'TURNOVER_100K_TO_250K'
+  | 'TURNOVER_MORE_THAN_250K';
+
+/** @group Profiles */
+export type CorporateMonthlyTransactionCountCode =
+  | 'TRANSACTION_COUNT_UNDER_100'
+  | 'TRANSACTION_COUNT_100_TO_250'
+  | 'TRANSACTION_COUNT_MORE_THAN_250';
+
+/** @group Profiles */
 export type PersonalProfileForm = {
   /** The occupation code representing the individual's current employment status. */
-  occupation:
-    | 'OCCUPATION_STUDENT'
-    | 'OCCUPATION_EMPLOYED'
-    | 'OCCUPATION_SELF_EMPLOYED'
-    | 'OCCUPATION_UNEMPLOYED'
-    | 'OCCUPATION_RETIRED';
+  occupation: OccupationCode;
   /** The profession code representing the individual's professional field. */
-  profession:
-    | 'PROF_ACCOUNTANCY'
-    | 'PROF_ADMINISTRATIVE'
-    | 'PROF_AGRICULTURE'
-    | 'PROF_ARTS_MEDIA'
-    | 'PROF_BROKER_DEALER'
-    | 'PROF_CATERING_HOSPITALITY'
-    | 'PROF_CHARITY'
-    | 'PROF_CONSTRUCTION_REAL_ESTATE'
-    | 'PROF_DEALER_HIGH_VALUE_GOODS'
-    | 'PROF_DEALER_PRECIOUS_METALS'
-    | 'PROF_EDUCATION'
-    | 'PROF_EMERGENCY_SERVICES'
-    | 'PROF_EXTRACTIVE_INDUSTRY'
-    | 'PROF_FIN_SERVICES_BANKING'
-    | 'PROF_FIN_SERVICES_INSURANCE'
-    | 'PROF_FIN_SERVICES_OTHER'
-    | 'PROF_FIN_SERVICES_PRIVATE_BANKING'
-    | 'PROF_GAMBLING'
-    | 'PROF_GOVERNMENT'
-    | 'PROF_HEALTHCARE_MEDICAL'
-    | 'PROF_INFORMATION_TECHNOLOGY'
-    | 'PROF_LEGAL'
-    | 'PROF_MANUFACTURING'
-    | 'PROF_MARKETING'
-    | 'PROF_MILITARY_DEFENCE'
-    | 'PROF_MONEY_SERVICE_BUSINESS'
-    | 'PROF_PENSIONER'
-    | 'PROF_PUBLIC_PROCUREMENT'
-    | 'PROF_RETAIL_SALES';
+  profession: ProfessionCode;
   /** The origin of the fund code representing the source of the individual's funds. */
-  fundOrigin:
-    | 'FUND_ORIGIN_SALARY'
-    | 'FUND_ORIGIN_DIVIDENDS'
-    | 'FUND_ORIGIN_INHERITANCE'
-    | 'FUND_ORIGIN_SAVINGS'
-    | 'FUND_ORIGIN_INVESTMENT'
-    | 'FUND_ORIGIN_GIFT'
-    | 'FUND_ORIGIN_MINING'
-    | 'FUND_ORIGIN_REAL_ESTATE'
-    | 'FUND_ORIGIN_LOAN';
+  fundOrigin: PersonalFundOriginCode;
   /** The code representing the individual's annual income range. */
-  annualIncome:
-    | 'ANNUAL_INCOME_UNDER_10K'
-    | 'ANNUAL_INCOME_10K_TO_50K'
-    | 'ANNUAL_INCOME_50K_TO_150K'
-    | 'ANNUAL_INCOME_150K_TO_300K'
-    | 'ANNUAL_INCOME_OVER_300K';
+  annualIncome: AnnualIncomeCode;
 
   /** The code representing the individual's monthly turnover range. */
-  monthlyTurnover:
-    | 'TURNOVER_UNDER_10K'
-    | 'TURNOVER_10K_TO_50K'
-    | 'TURNOVER_50K_TO_150K'
-    | 'TURNOVER_150K_TO_500K'
-    | 'TURNOVER_OVER_500K';
+  monthlyTurnover: PersonalMonthlyTurnoverCode;
 
   /** The code representing the number of transactions the individual makes each month. */
-  monthlyTransactionCount:
-    | 'TRANSACTION_COUNT_LESS_THAN_5'
-    | 'TRANSACTION_COUNT_5_TO_50'
-    | 'TRANSACTION_COUNT_50_TO_100'
-    | 'TRANSACTION_COUNT_100_TO_200'
-    | 'TRANSACTION_COUNT_OVER_200';
+  monthlyTransactionCount: PersonalMonthlyTransactionCountCode;
 
   /** List of codes representing the individual's financial activities. */
-  activities: (
-    | 'ACTIVITY_COMMERCE_SELLING'
-    | 'ACTIVITY_COMMERCE_BUYING'
-    | 'ACTIVITY_INVESTING_CRYPTO'
-    | 'ACTIVITY_OTHER'
-  )[];
+  activities: PersonalActivityCode[];
   /** A description of the other activity if the code `ACTIVITY_OTHER` is chosen. */
   activityOther?: string;
   /** Indicates whether the individual holds a politically exposed person (PEP) status. */
@@ -435,6 +530,18 @@ export type PersonalProfileForm = {
 export type CorporateProfileForm = {
   /** A brief description of the company's services. */
   service: string;
+  /** The legal form of the company. */
+  legalForm: CorporateLegalFormCode;
+  /** The primary purpose of the company. */
+  purpose: CorporatePurposeCode;
+  /** The company's main activity. */
+  activity: CorporateActivityCode;
+  /** The origins of the company's funds. */
+  fundOrigin: CorporateFundOriginCode;
+  /** The company's monthly turnover range. */
+  monthlyTurnover: CorporateMonthlyTurnoverCode;
+  /** The number of transactions the company typically makes each month. */
+  monthlyTransactionCount: CorporateMonthlyTransactionCountCode;
 };
 
 /**
@@ -488,17 +595,33 @@ export interface ShareProfileKYCInput {
 export interface PersonalProfileVerification {
   /** The type of the verification. */
   kind: PersonalVerificationKind;
-  /** ID of a previously uploaded file associated with this verification. */
-  fileId: string;
+  /** Documents to attach to this verification. */
+  documents: VerificationDocument[];
 }
+
+/**
+ * A document attached to a profile verification.
+ * @group Profiles
+ */
+export interface VerificationDocument {
+  /** The type of the document. */
+  kind: string;
+  /** ID of a previously uploaded file. */
+  fileId: string;
+  /** Optional side of a two-sided document. */
+  side?: 'front' | 'back';
+}
+
 /**
  * @group Profiles
  */
 export interface CorporateProfileVerification {
   /** The type of the verification. */
   kind: CorporateVerificationKind;
-  /** ID of a previously uploaded file associated with this verification. */
-  fileId: string;
+  /** Documents to attach to this verification. */
+  documents: VerificationDocument[];
+  /** Profile person ID when the verification belongs to a representative, director, or beneficial owner. */
+  personId?: string;
 }
 
 /**
@@ -841,6 +964,8 @@ export type IBANState =
  * @group IBANs
  */
 export interface RequestIbanInput {
+  /** Optional customer profile ID when acting on behalf of a customer in a whitelabel integration. */
+  profile?: string;
   /** the address to request the IBAN. */
   address: string;
   /** the chain to request the IBAN. */
