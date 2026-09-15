@@ -3841,6 +3841,7 @@ components:
 
         * `incomplete`: The partner can still submit or update this section.
         * `pending`: All required information has been provided; awaiting review.
+        * `review`: The section has been sent to manual review by Monerium.
         * `approved`: The section has been approved.
         * `rejected`: Final rejection; no resubmission possible.
       type: string
@@ -3848,6 +3849,7 @@ components:
       enum:
         - incomplete
         - pending
+        - review
         - approved
         - rejected
     ProfileSection:
@@ -3863,6 +3865,7 @@ components:
         * `created`: The profile has been created but no data has been submitted yet.
         * `incomplete`: One or more sections still require information. The partner can submit or update data.
         * `pending`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`.
+        * `review`: The profile has been sent to manual review by Monerium. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`.
         * `approved`: The profile is active and all Monerium services are available.
         * `rejected`: Final rejection — the applicant details did not meet compliance requirements.
       type: string
@@ -3871,6 +3874,7 @@ components:
         - created
         - incomplete
         - pending
+        - review
         - approved
         - rejected
     ProfileKind:
@@ -4153,6 +4157,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-09-15:
+      * [GET /profiles](#operation/profiles), [GET /profiles/{profile}](#operation/profile), [GET /auth/context](#operation/auth-context), [Webhook profile.updated](#operation/webhook-profile-updated) - `ProfileState` and `SectionState`: added `review`. Profiles, sections, and verifications can now be sent to manual review by Monerium; the state resolves back into the regular flow (`approved`, `rejected`, or `incomplete`).
+
       ### 2026-08-17:
       * [Webhook profile.error](#operation/webhook-profile-error) - New opt-in webhook event fired when profile data received from a KYC provider is rejected as invalid and skipped during ingestion (e.g. an address over the maximum allowed length). The profile stays `incomplete` until the listed fields are corrected and resubmitted. Payload includes the rejected `field`(s) and `reason`.
 

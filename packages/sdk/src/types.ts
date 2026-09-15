@@ -102,6 +102,7 @@ export type ProfileState =
   | 'created'
   | 'incomplete'
   | 'pending'
+  | 'review'
   | 'approved'
   | 'rejected';
 
