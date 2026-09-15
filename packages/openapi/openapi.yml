@@ -4565,7 +4565,6 @@ webhooks:
                 "state": "rejected",
                 "meta": {
                   "reason": "The applicant details did not meet compliance requirements.",
-                  "reasonCode": "compliance"
                 }
               }
             }'
