@@ -2849,6 +2849,7 @@ components:
         - meta
       title: Order
     Payment:
+      description: Payment details provided when an order results in a payment processed by the payment provider. Cross-chain orders and transfers between Monerium accounts do not have an associated payment.
       type: object
       properties:
         id:
@@ -2895,7 +2896,6 @@ components:
             The payment scheme or type assigned by the payment provider:
 
             - `INTERNAL`: Payment between accounts held at the same financial institution.
-            - `BETWEEN_OWN`: Payment between the customer's own accounts at the same financial institution.
             - `INST`: SEPA Instant Credit Transfer. Used to initiate instant payments through RT1 or TIPS.
             - `TIPS`: TARGET Instant Payment. Used to identify payments processed through TIPS; payment initiation uses `INST`.
             - `SEPA`: Standard SEPA Credit Transfer (SCT).
@@ -2909,6 +2909,12 @@ components:
             - TIPS
             - SEPA
             - SWIFT
+            # Other possbile codes, but not exisiting in our current context, keeping for reference.-
+            # - BETWEEN_OWN: Payment between the customer's own accounts at the same financial institution.-
+            # - FAST: Payment sent using the UK Faster Payments Service (FPS)..
+            # - GROUP: Payment between LHV Group entities, such as LHV Bank (UK) and LHV Pank (Estonia).
+            # - BACS: UK BACS Credit payment.
+            # - BACSDD: UK BACS Direct Debit Payment.
         uetr:
           description: A Unique End-to-end Transaction Reference  is a 36-character tracking code used to follow international wire transfers across the SWIFT payment network.
           type: string
