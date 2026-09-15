@@ -362,6 +362,10 @@ app.post('/webhooks/monerium', express.raw({ type: 'application/json' }), async 
     // Profile is approved — proceed to provision an IBAN
   }
 
+  if (state === 'review') {
+    // Profile is on hold pending manual review by Monerium compliance
+  }
+
   if (state === 'pending') {
     // Submissions are blocked until the profile transitions to approved, rejected, or back to incomplete
   }
