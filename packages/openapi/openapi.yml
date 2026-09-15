@@ -2891,38 +2891,33 @@ components:
           description: Bank-assigned transaction reference. This value is provided by the payment provider and is primarily available for incoming payments.
           type: string
           example: 3DA2AF392E26EE11911E00155DBDB493
-        paymentType:
+        type:
           description: |
             The payment scheme or type assigned by the payment provider:
 
             - `INTERNAL`: Payment between accounts held at the same financial institution.
-            - `INST`: SEPA Instant Credit Transfer. Used to initiate instant payments through RT1 or TIPS.
-            - `TIPS`: TARGET Instant Payment. Used to identify payments processed through TIPS; payment initiation uses `INST`.
-            - `SEPA`: Standard SEPA Credit Transfer (SCT).
-            - `SWIFT`: International payment sent through the SWIFT network.
+            - `INST`: SEPA Instant Credit Transfer.
+            - `TIPS`: TARGET Instant Payment.
+            - `TARGET2`: Payment received through TARGET2. TARGET2 payments can be received but cannot be initiated as return payments.
+            - `SEPA`: SEPA Credit Transfer.
+            - `SWIFT`: International payment sent through the SWIFT network. SWIFT payments can be received but cannot be initiated as return payments.
           type: string
           example: SEPA
           enum:
             - INTERNAL
-            - BETWEEN_OWN
             - INST
             - TIPS
+            - TARGET2
             - SEPA
             - SWIFT
-            # Other possbile codes, but not exisiting in our current context, keeping for reference.-
-            # - BETWEEN_OWN: Payment between the customer's own accounts at the same financial institution.-
-            # - FAST: Payment sent using the UK Faster Payments Service (FPS)..
-            # - GROUP: Payment between LHV Group entities, such as LHV Bank (UK) and LHV Pank (Estonia).
-            # - BACS: UK BACS Credit payment.
-            # - BACSDD: UK BACS Direct Debit Payment.
         uetr:
-          description: A Unique End-to-end Transaction Reference  is a 36-character tracking code used to follow international wire transfers across the SWIFT payment network.
+          description: A Unique End-to-end Transaction Reference is a 36-character tracking code used to follow international wire transfers across the SWIFT payment network.
           type: string
           example: ''
           maxLength: 36
           minLength: 36
         instructionId:
-          description: An Instruction Identification is a point-to-point payment identifier primarily used in ISO 20022 messaging standards.
+          description: 'An Instruction Identification is a point-to-point payment identifier primarily used in ISO 20022 messaging standards, assinged by the sending party.'
           type: string
           example: ''
         meta:
