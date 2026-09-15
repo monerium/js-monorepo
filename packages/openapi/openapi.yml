@@ -1964,7 +1964,9 @@ paths:
       summary: Order payments
       description: |
         Look up the payments associated with an order. Returns the list of payments
-        processed by the payment provider for the given order.
+        processed by Monerium for the given order.
+        An order can have more then one payment associated with it in the case of a rejected/refunder payment.
+        Cross-chain orders and transfers between Monerium accounts do not have an associated payment.
       parameters:
         - name: orderId
           in: path
@@ -2592,7 +2594,7 @@ components:
       pattern: '^(?:[A-Z]{2}[0-9]{2}(?:\s?[0-9A-Z]{4}){1,7}\s?[0-9A-Z]{1,4})$'
     Memo:
       description: |
-        UTF-8 Payment reference / memo. Can be used as filter parameters when querying
+        UTF-8 Paymentmemo. Can be used as filter parameters when querying
         orders.
       type: string
       example: Powered by Monerium
@@ -2849,7 +2851,6 @@ components:
         - meta
       title: Order
     Payment:
-      description: Payment details provided when an order results in a payment processed by the payment provider. Cross-chain orders and transfers between Monerium accounts do not have an associated payment.
       type: object
       properties:
         id:
@@ -2885,10 +2886,10 @@ components:
         memo:
           $ref: '#/components/schemas/Memo'
         referenceNumber:
-          description: Structured SEPA reference (max 35 characters).
+          description: Structured SEPA reference.
           $ref: '#/components/schemas/ReferenceNumber'
         reference:
-          description: Bank-assigned transaction reference. This value is provided by the payment provider and is primarily available for incoming payments.
+          description: 'An Account Servicer Reference is a payment identifier primarly used in ISO 20022 messaging standars, assigned by Monerium to uniquely identify a transaction.'
           type: string
           example: 3DA2AF392E26EE11911E00155DBDB493
         type:
@@ -2898,9 +2899,9 @@ components:
             - `INTERNAL`: Payment between accounts held at the same financial institution.
             - `INST`: SEPA Instant Credit Transfer.
             - `TIPS`: TARGET Instant Payment.
-            - `TARGET2`: Payment received through TARGET2. TARGET2 payments can be received but cannot be initiated as return payments.
+            - `TARGET2`: Payment received through TARGET2.
             - `SEPA`: SEPA Credit Transfer.
-            - `SWIFT`: International payment sent through the SWIFT network. SWIFT payments can be received but cannot be initiated as return payments.
+            - `SWIFT`: International payment via the SWIFT network.
           type: string
           example: SEPA
           enum:
@@ -2911,7 +2912,7 @@ components:
             - SEPA
             - SWIFT
         uetr:
-          description: A Unique End-to-end Transaction Reference is a 36-character tracking code used to follow international wire transfers across the SWIFT payment network.
+          description: A Unique End-to-end Transaction Reference is a tracking code used to follow international wire transfers across the SWIFT payment network.
           type: string
           example: ''
           maxLength: 36
@@ -2933,7 +2934,6 @@ components:
         - currency
         - amount
         - counterpart
-        - memo
       title: Payment
     AccessToken:
       type: object
