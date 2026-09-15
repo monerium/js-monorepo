@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.2.1](https://github.com/monerium/js-monorepo/compare/sdk-v4.2.0...sdk-v4.2.1) (2026-09-15)
+
+
+### Miscellaneous
+
+* add option for mainnet and localhost ([f2cc722](https://github.com/monerium/js-monorepo/commit/f2cc7227e4e7b8efba93b72824164655d3c02951))
+* add profile submittion endpoints to sdk + partner demo app ([1cba573](https://github.com/monerium/js-monorepo/commit/1cba573959a418c0093d5010aa9e253374067eca))
+* revert order payments ([2cbe531](https://github.com/monerium/js-monorepo/commit/2cbe5311aabfdd7946a1e470ddad0fdd815231fc))
+
 ## [4.2.0](https://github.com/monerium/js-monorepo/compare/sdk-v4.1.0...sdk-v4.2.0) (2026-08-19)
 
 
