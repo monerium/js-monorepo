@@ -18,9 +18,23 @@ import { loadPartnerEnv } from './load-env';
 loadPartnerEnv();
 
 const port = Number(process.env.PARTNER_PORT ?? 8787);
-const environment: ENV = 'sandbox';
+type PartnerEnvironment = 'localhost' | 'sandbox' | 'production';
+const configuredEnvironment = process.env.ENV ?? 'sandbox';
+if (!['localhost', 'sandbox', 'production'].includes(configuredEnvironment)) {
+  throw new Error(`Unsupported ENV: ${configuredEnvironment}`);
+}
+const partnerEnvironment = configuredEnvironment as PartnerEnvironment;
+const environment: ENV =
+  partnerEnvironment === 'production' ? 'production' : 'sandbox';
 const clientId = process.env.MONERIUM_CLIENT_ID;
 const clientSecret = process.env.MONERIUM_CLIENT_SECRET;
+const apiUrl =
+  process.env.MONERIUM_API_URL ??
+  (partnerEnvironment === 'localhost'
+    ? 'http://localhost:4000/external-api'
+    : environment === 'production'
+      ? 'https://api.monerium.app'
+      : 'https://api.monerium.dev');
 
 if (!clientId || !clientSecret) {
   throw new Error(
@@ -38,7 +52,11 @@ const getAccessToken = async (): Promise<string | undefined> => {
   return tokens.access_token;
 };
 
-const client = new MoneriumPrivateClient({ environment, getAccessToken });
+const client = new MoneriumPrivateClient({
+  environment,
+  apiUrl,
+  getAccessToken,
+});
 
 const personalVerificationKinds: PersonalVerificationKind[] = [
   'idDocument',
@@ -164,8 +182,12 @@ const server = createServer(async (request, response) => {
 
   try {
     if (url.pathname === '/api/session' && request.method === 'GET') {
+      // console.log('[partner] Session request', { apiUrl });
       await getAccessToken();
-      return json(response, 200, { authenticated: true, environment });
+      return json(response, 200, {
+        authenticated: true,
+        environment: partnerEnvironment,
+      });
     }
 
     if (
@@ -188,6 +210,7 @@ const server = createServer(async (request, response) => {
     if (url.pathname === '/api/sdk' && request.method === 'POST') {
       const body = await readBody(request);
       const method = String(body.method ?? '');
+      // console.log('[partner] SDK action', { method, apiUrl });
       if (!allowedActions.has(method))
         return json(response, 400, {
           error: `Unsupported SDK action: ${method}`,
@@ -205,6 +228,24 @@ const server = createServer(async (request, response) => {
 
     return json(response, 404, { error: 'Not found' });
   } catch (error) {
+    console.error('[partner] Request failed', {
+      method: request.method,
+      path: url.pathname,
+      error:
+        error instanceof Error
+          ? {
+              name: error.name,
+              message: error.message,
+              ...(error instanceof MoneriumApiError && {
+                code: error.code,
+                status: error.status,
+                errors: error.errors,
+                details: error.details,
+              }),
+              stack: error.stack,
+            }
+          : error,
+    });
     if (error instanceof MoneriumApiError) {
       return json(response, 500, {
         error: error.message,
@@ -215,7 +256,10 @@ const server = createServer(async (request, response) => {
       });
     }
     return json(response, 500, {
-      error: error instanceof Error ? error.message : String(error),
+      error:
+        error instanceof Error && error.message
+          ? error.message
+          : 'An unknown server error occurred',
     });
   }
 });

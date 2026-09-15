@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { type AppKit, createAppKit } from '@reown/appkit';
-import { sepolia } from '@reown/appkit/networks';
+import { type AppKitNetwork, mainnet, sepolia } from '@reown/appkit/networks';
 import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 
 import {
@@ -18,11 +18,29 @@ import {
 } from '@monerium/sdk';
 
 const projectId = import.meta.env.VITE_REOWN_PROJECT_ID as string | undefined;
+type PartnerEnvironment = 'localhost' | 'sandbox' | 'production';
+const partnerEnvironment = (import.meta.env.VITE_PARTNER_ENV ??
+  'sandbox') as PartnerEnvironment;
+const mainChain = partnerEnvironment === 'sandbox' ? 'sepolia' : 'ethereum';
+const localNetwork: AppKitNetwork = {
+  id: 6666,
+  name: 'Ethereum',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: { http: [import.meta.env.VITE_LOCAL_RPC_URL || ''] },
+  },
+};
+const walletNetwork: AppKitNetwork =
+  partnerEnvironment === 'localhost'
+    ? localNetwork
+    : partnerEnvironment === 'production'
+      ? mainnet
+      : sepolia;
 const appKit: AppKit | undefined = projectId
   ? createAppKit({
       adapters: [new EthersAdapter()],
-      networks: [sepolia],
-      defaultNetwork: sepolia,
+      networks: [walletNetwork],
+      defaultNetwork: walletNetwork,
       projectId,
       metadata: {
         name: 'Monerium Partner Tool',
@@ -200,9 +218,10 @@ const api = async <T,>(method: string, input?: unknown): Promise<T> => {
         ? apiError.error
         : JSON.stringify(apiError.error ?? value);
     const extra = Object.fromEntries(
-      Object.entries({ errors: apiError.errors, details: apiError.details }).filter(
-        ([, item]) => item !== undefined
-      )
+      Object.entries({
+        errors: apiError.errors,
+        details: apiError.details,
+      }).filter(([, item]) => item !== undefined)
     );
     throw new Error(
       Object.keys(extra).length > 0
@@ -229,7 +248,9 @@ const errorMessage = (reason: unknown): string => {
     if (typeof value.message === 'string') return value.message;
     try {
       const serialized = JSON.stringify(reason);
-      return serialized && serialized !== '{}' ? serialized : 'An unknown error occurred';
+      return serialized && serialized !== '{}'
+        ? serialized
+        : 'An unknown error occurred';
     } catch {
       return 'An unknown error occurred';
     }
@@ -349,9 +370,13 @@ function ProfileDetailsForm({
     profile?.kind === 'corporate' ? 'reliance' : 'sharing'
   );
   const [occupation, setOccupation] = useState('OCCUPATION_EMPLOYED');
-  const [profession, setProfession] = useState('PROFESSION_INFORMATION_TECHNOLOGY');
+  const [profession, setProfession] = useState(
+    'PROFESSION_INFORMATION_TECHNOLOGY'
+  );
   const [fundOrigin, setFundOrigin] = useState('FUND_ORIGIN_SALARY');
-  const [annualIncome, setAnnualIncome] = useState('ANNUAL_INCOME_FROM_50K_TO_150K');
+  const [annualIncome, setAnnualIncome] = useState(
+    'ANNUAL_INCOME_FROM_50K_TO_150K'
+  );
   const [monthlyTurnover, setMonthlyTurnover] = useState('TURNOVER_UNDER_10K');
   const [monthlyTransactionCount, setMonthlyTransactionCount] = useState(
     'TRANSACTION_COUNT_UNDER_5'
@@ -367,10 +392,18 @@ function ProfileDetailsForm({
   const [service, setService] = useState('Software development services');
   const [legalForm, setLegalForm] = useState('LEGAL_FORM_PRIVATE_LIMITED');
   const [purpose, setPurpose] = useState('PURPOSE_COLLECTING_PAYMENTS');
-  const [corporateActivity, setCorporateActivity] = useState('ACTIVITY_SOFTWARE_TECHNOLOGY');
-  const [corporateFundOrigin, setCorporateFundOrigin] = useState('FUND_ORIGIN_REVENUE');
-  const [corporateTurnover, setCorporateTurnover] = useState('TURNOVER_UNDER_100K');
-  const [corporateTransactionCount, setCorporateTransactionCount] = useState('TRANSACTION_COUNT_UNDER_100');
+  const [corporateActivity, setCorporateActivity] = useState(
+    'ACTIVITY_SOFTWARE_TECHNOLOGY'
+  );
+  const [corporateFundOrigin, setCorporateFundOrigin] = useState(
+    'FUND_ORIGIN_REVENUE'
+  );
+  const [corporateTurnover, setCorporateTurnover] = useState(
+    'TURNOVER_UNDER_100K'
+  );
+  const [corporateTransactionCount, setCorporateTransactionCount] = useState(
+    'TRANSACTION_COUNT_UNDER_100'
+  );
   const [shareToken, setShareToken] = useState('sandbox-test-sumsub-token');
   const [error, setError] = useState('');
   const runProfileAction = async (
@@ -497,45 +530,107 @@ function ProfileDetailsForm({
   return (
     <>
       <details open={!submitted}>
-      <summary>
-        Profile details {submitted ? '(already submitted)' : '(required)'}
-      </summary>
-      {profile?.kind === 'corporate' ? (
-        <>
+        <summary>
+          Profile details {submitted ? '(already submitted)' : '(required)'}
+        </summary>
+        {profile?.kind === 'corporate' ? (
+          <>
+            <div className="grid">
+              <label>
+                Company name
+                <input
+                  value={companyName}
+                  onChange={(event) => setCompanyName(event.target.value)}
+                />
+              </label>
+              <label>
+                Registration number
+                <input
+                  value={registrationNumber}
+                  onChange={(event) =>
+                    setRegistrationNumber(event.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Registration date
+                <input
+                  value={registrationDate}
+                  onChange={(event) => setRegistrationDate(event.target.value)}
+                />
+              </label>
+              <label>
+                VAT number
+                <input
+                  value={vatNumber}
+                  onChange={(event) => setVatNumber(event.target.value)}
+                />
+              </label>
+              <label>
+                Website
+                <input
+                  value={website}
+                  onChange={(event) => setWebsite(event.target.value)}
+                />
+              </label>
+              <label>
+                Address
+                <input
+                  value={address}
+                  onChange={(event) => setAddress(event.target.value)}
+                />
+              </label>
+              <label>
+                Postal code
+                <input
+                  value={postalCode}
+                  onChange={(event) => setPostalCode(event.target.value)}
+                />
+              </label>
+              <label>
+                City
+                <input
+                  value={city}
+                  onChange={(event) => setCity(event.target.value)}
+                />
+              </label>
+              <label>
+                Country
+                <input
+                  value={country}
+                  onChange={(event) => setCountry(event.target.value)}
+                />
+              </label>
+              <label>
+                State/county
+                <input
+                  value={countryState}
+                  onChange={(event) => setCountryState(event.target.value)}
+                />
+              </label>
+            </div>
+            <label>
+              Representatives, beneficiaries and directors JSON
+              <textarea
+                value={people}
+                onChange={(event) => setPeople(event.target.value)}
+              />
+            </label>
+          </>
+        ) : (
           <div className="grid">
             <label>
-              Company name
+              First name
               <input
-                value={companyName}
-                onChange={(event) => setCompanyName(event.target.value)}
+                value={firstName}
+                onChange={(event) => setFirstName(event.target.value)}
               />
             </label>
             <label>
-              Registration number
+              Last name
               <input
-                value={registrationNumber}
-                onChange={(event) => setRegistrationNumber(event.target.value)}
-              />
-            </label>
-            <label>
-              Registration date
-              <input
-                value={registrationDate}
-                onChange={(event) => setRegistrationDate(event.target.value)}
-              />
-            </label>
-            <label>
-              VAT number
-              <input
-                value={vatNumber}
-                onChange={(event) => setVatNumber(event.target.value)}
-              />
-            </label>
-            <label>
-              Website
-              <input
-                value={website}
-                onChange={(event) => setWebsite(event.target.value)}
+                value={lastName}
+                onChange={(event) => setLastName(event.target.value)}
               />
             </label>
             <label>
@@ -573,116 +668,56 @@ function ProfileDetailsForm({
                 onChange={(event) => setCountryState(event.target.value)}
               />
             </label>
+            <label>
+              Nationality
+              <input
+                value={nationality}
+                onChange={(event) => setNationality(event.target.value)}
+              />
+            </label>
+            <label>
+              Birthday
+              <input
+                value={birthday}
+                onChange={(event) => setBirthday(event.target.value)}
+              />
+            </label>
+            <label>
+              Phone
+              <input
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+              />
+            </label>
+            <label>
+              Email
+              <input
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </label>
+            <label>
+              ID document number
+              <input
+                value={documentNumber}
+                onChange={(event) => setDocumentNumber(event.target.value)}
+              />
+            </label>
+            <label>
+              ID document kind
+              <select
+                value={documentKind}
+                onChange={(event) => setDocumentKind(event.target.value)}
+              >
+                <option value="passport">Passport</option>
+                <option value="nationalId">National ID</option>
+              </select>
+            </label>
           </div>
-          <label>
-            Representatives, beneficiaries and directors JSON
-            <textarea
-              value={people}
-              onChange={(event) => setPeople(event.target.value)}
-            />
-          </label>
-        </>
-      ) : (
-        <div className="grid">
-          <label>
-            First name
-            <input
-              value={firstName}
-              onChange={(event) => setFirstName(event.target.value)}
-            />
-          </label>
-          <label>
-            Last name
-            <input
-              value={lastName}
-              onChange={(event) => setLastName(event.target.value)}
-            />
-          </label>
-          <label>
-            Address
-            <input
-              value={address}
-              onChange={(event) => setAddress(event.target.value)}
-            />
-          </label>
-          <label>
-            Postal code
-            <input
-              value={postalCode}
-              onChange={(event) => setPostalCode(event.target.value)}
-            />
-          </label>
-          <label>
-            City
-            <input
-              value={city}
-              onChange={(event) => setCity(event.target.value)}
-            />
-          </label>
-          <label>
-            Country
-            <input
-              value={country}
-              onChange={(event) => setCountry(event.target.value)}
-            />
-          </label>
-          <label>
-            State/county
-            <input
-              value={countryState}
-              onChange={(event) => setCountryState(event.target.value)}
-            />
-          </label>
-          <label>
-            Nationality
-            <input
-              value={nationality}
-              onChange={(event) => setNationality(event.target.value)}
-            />
-          </label>
-          <label>
-            Birthday
-            <input
-              value={birthday}
-              onChange={(event) => setBirthday(event.target.value)}
-            />
-          </label>
-          <label>
-            Phone
-            <input
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-            />
-          </label>
-          <label>
-            Email
-            <input
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </label>
-          <label>
-            ID document number
-            <input
-              value={documentNumber}
-              onChange={(event) => setDocumentNumber(event.target.value)}
-            />
-          </label>
-          <label>
-            ID document kind
-            <select
-              value={documentKind}
-              onChange={(event) => setDocumentKind(event.target.value)}
-            >
-              <option value="passport">Passport</option>
-              <option value="nationalId">National ID</option>
-            </select>
-          </label>
-        </div>
-      )}
-      <button onClick={() => runProfileAction(submit)} disabled={!profile}>
-        Submit profile details
-      </button>
+        )}
+        <button onClick={() => runProfileAction(submit)} disabled={!profile}>
+          Submit profile details
+        </button>
       </details>
       <h3>Onboarding path</h3>
       <div className="inline">
@@ -699,7 +734,9 @@ function ProfileDetailsForm({
             <option value="sharing">Share KYC data</option>
           </select>
         </label>
-        {profile?.kind === 'corporate' && <span>Corporate profiles use Form + verification.</span>}
+        {profile?.kind === 'corporate' && (
+          <span>Corporate profiles use Form + verification.</span>
+        )}
       </div>
       {onboardingPath === 'sharing' && profile?.kind === 'personal' ? (
         <details open>
@@ -707,7 +744,10 @@ function ProfileDetailsForm({
           <p>Share a verified Sumsub applicant with Monerium.</p>
           <label>
             Sumsub applicant token
-            <input value={shareToken} onChange={(event) => setShareToken(event.target.value)} />
+            <input
+              value={shareToken}
+              onChange={(event) => setShareToken(event.target.value)}
+            />
           </label>
           <button
             onClick={() => runProfileAction(shareKycData)}
@@ -722,30 +762,252 @@ function ProfileDetailsForm({
             <summary>Profile form</summary>
             {profile?.kind === 'corporate' ? (
               <div className="grid">
-                <label>Service description<input value={service} onChange={(event) => setService(event.target.value)} /></label>
-                <label>Legal form<select value={legalForm} onChange={(event) => setLegalForm(event.target.value)}>{corporateLegalFormOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Purpose<select value={purpose} onChange={(event) => setPurpose(event.target.value)}>{corporatePurposeOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Activity<select value={corporateActivity} onChange={(event) => setCorporateActivity(event.target.value)}>{corporateActivityOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Fund origin<select value={corporateFundOrigin} onChange={(event) => setCorporateFundOrigin(event.target.value)}>{corporateFundOriginOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Monthly turnover<select value={corporateTurnover} onChange={(event) => setCorporateTurnover(event.target.value)}>{corporateTurnoverOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Monthly transactions<select value={corporateTransactionCount} onChange={(event) => setCorporateTransactionCount(event.target.value)}>{corporateTransactionOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
+                <label>
+                  Service description
+                  <input
+                    value={service}
+                    onChange={(event) => setService(event.target.value)}
+                  />
+                </label>
+                <label>
+                  Legal form
+                  <select
+                    value={legalForm}
+                    onChange={(event) => setLegalForm(event.target.value)}
+                  >
+                    {corporateLegalFormOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Purpose
+                  <select
+                    value={purpose}
+                    onChange={(event) => setPurpose(event.target.value)}
+                  >
+                    {corporatePurposeOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Activity
+                  <select
+                    value={corporateActivity}
+                    onChange={(event) =>
+                      setCorporateActivity(event.target.value)
+                    }
+                  >
+                    {corporateActivityOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Fund origin
+                  <select
+                    value={corporateFundOrigin}
+                    onChange={(event) =>
+                      setCorporateFundOrigin(event.target.value)
+                    }
+                  >
+                    {corporateFundOriginOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Monthly turnover
+                  <select
+                    value={corporateTurnover}
+                    onChange={(event) =>
+                      setCorporateTurnover(event.target.value)
+                    }
+                  >
+                    {corporateTurnoverOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Monthly transactions
+                  <select
+                    value={corporateTransactionCount}
+                    onChange={(event) =>
+                      setCorporateTransactionCount(event.target.value)
+                    }
+                  >
+                    {corporateTransactionOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
             ) : (
               <div className="grid">
-                <label>Occupation<select value={occupation} onChange={(event) => setOccupation(event.target.value)}>{occupationOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Profession<select value={profession} onChange={(event) => setProfession(event.target.value)}>{professionOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Fund origin<select value={fundOrigin} onChange={(event) => setFundOrigin(event.target.value)}>{personalFundOriginOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Annual income<select value={annualIncome} onChange={(event) => setAnnualIncome(event.target.value)}>{annualIncomeOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Monthly turnover<select value={monthlyTurnover} onChange={(event) => setMonthlyTurnover(event.target.value)}>{personalTurnoverOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Monthly transactions<select value={monthlyTransactionCount} onChange={(event) => setMonthlyTransactionCount(event.target.value)}>{personalTransactionOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Activities<select value={activities} onChange={(event) => setActivities(event.target.value)}>{personalActivityOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                <label>Other activity<input value={activityOther} onChange={(event) => setActivityOther(event.target.value)} /></label>
-                <label>TIN<input value={tin} onChange={(event) => setTin(event.target.value)} /></label>
-                <label>Tax residence country<input value={taxResidenceCountry} onChange={(event) => setTaxResidenceCountry(event.target.value)} /></label>
-                <label><input type="checkbox" checked={publicFunction} onChange={(event) => setPublicFunction(event.target.checked)} /> Public function / PEP</label>
-                <label><input type="checkbox" checked={fundOwner} onChange={(event) => setFundOwner(event.target.checked)} /> Fund owner</label>
-                <label><input type="checkbox" checked={usCitizen} onChange={(event) => setUsCitizen(event.target.checked)} /> US citizen</label>
-                <label><input type="checkbox" checked={usTaxPerson} onChange={(event) => setUsTaxPerson(event.target.checked)} /> US tax person</label>
+                <label>
+                  Occupation
+                  <select
+                    value={occupation}
+                    onChange={(event) => setOccupation(event.target.value)}
+                  >
+                    {occupationOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Profession
+                  <select
+                    value={profession}
+                    onChange={(event) => setProfession(event.target.value)}
+                  >
+                    {professionOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Fund origin
+                  <select
+                    value={fundOrigin}
+                    onChange={(event) => setFundOrigin(event.target.value)}
+                  >
+                    {personalFundOriginOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Annual income
+                  <select
+                    value={annualIncome}
+                    onChange={(event) => setAnnualIncome(event.target.value)}
+                  >
+                    {annualIncomeOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Monthly turnover
+                  <select
+                    value={monthlyTurnover}
+                    onChange={(event) => setMonthlyTurnover(event.target.value)}
+                  >
+                    {personalTurnoverOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Monthly transactions
+                  <select
+                    value={monthlyTransactionCount}
+                    onChange={(event) =>
+                      setMonthlyTransactionCount(event.target.value)
+                    }
+                  >
+                    {personalTransactionOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Activities
+                  <select
+                    value={activities}
+                    onChange={(event) => setActivities(event.target.value)}
+                  >
+                    {personalActivityOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Other activity
+                  <input
+                    value={activityOther}
+                    onChange={(event) => setActivityOther(event.target.value)}
+                  />
+                </label>
+                <label>
+                  TIN
+                  <input
+                    value={tin}
+                    onChange={(event) => setTin(event.target.value)}
+                  />
+                </label>
+                <label>
+                  Tax residence country
+                  <input
+                    value={taxResidenceCountry}
+                    onChange={(event) =>
+                      setTaxResidenceCountry(event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={publicFunction}
+                    onChange={(event) =>
+                      setPublicFunction(event.target.checked)
+                    }
+                  />{' '}
+                  Public function / PEP
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={fundOwner}
+                    onChange={(event) => setFundOwner(event.target.checked)}
+                  />{' '}
+                  Fund owner
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={usCitizen}
+                    onChange={(event) => setUsCitizen(event.target.checked)}
+                  />{' '}
+                  US citizen
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={usTaxPerson}
+                    onChange={(event) => setUsTaxPerson(event.target.checked)}
+                  />{' '}
+                  US tax person
+                </label>
               </div>
             )}
             <button
@@ -757,7 +1019,10 @@ function ProfileDetailsForm({
           </details>
           <details open>
             <summary>Profile verification</summary>
-            <p>Uploads a 1 KB test document and attaches it to every available verification.</p>
+            <p>
+              Uploads a 1 KB test document and attaches it to every available
+              verification.
+            </p>
             <button
               onClick={() => runProfileAction(simulateProfileVerifications)}
               disabled={!profile}
@@ -785,7 +1050,7 @@ function CustomerView({
   const [orders, setOrders] = useState<Order[]>([]);
   const [profileResponse, setProfileResponse] = useState<Profile>();
   const [selectedAddress, setSelectedAddress] = useState('');
-  const [selectedChain, setSelectedChain] = useState('sepolia');
+  const [selectedChain, setSelectedChain] = useState(mainChain);
   const [iban, setIban] = useState('FR7630006000011234567890189');
   const [amount, setAmount] = useState('1');
   const [output, setOutput] = useState<unknown>();
@@ -808,11 +1073,11 @@ function CustomerView({
       const [addressResult, ibanResult, orderResult] = await Promise.all([
         api<AddressesResponse>('getAddresses', {
           profile: profile.id,
-          chain: 'sepolia',
+          chain: mainChain,
         }),
         api<IBANsResponse>('getIbans', {
           profile: profile.id,
-          chain: 'sepolia',
+          chain: mainChain,
         }),
         api<OrdersResponse>('getOrders', { profile: profile.id }),
       ]);
@@ -880,13 +1145,22 @@ function CustomerView({
       params: [message, walletAddress],
     });
   };
+  const openWallet = async (): Promise<void> => {
+    if (!appKit) return;
+    try {
+      await appKit.open();
+    } catch (reason) {
+      console.error('[partner] Reown wallet connection failed', reason);
+      setError(errorMessage(reason));
+    }
+  };
   const linkWallet = async (): Promise<void> => {
     try {
       const message = 'I hereby declare that I am the address owner.';
       await run('linkAddress', {
         profile: profile?.id,
         address: walletAddress,
-        chain: 'sepolia',
+        chain: mainChain,
         message,
         signature: await sign(message),
       });
@@ -900,7 +1174,7 @@ function CustomerView({
       await run('placeOrder', {
         profile: profile?.id,
         address: walletAddress,
-        chain: 'sepolia',
+        chain: mainChain,
         amount,
         currency: Currency.eur,
         counterpart: {
@@ -917,7 +1191,9 @@ function CustomerView({
   const walletAlreadyLinked = Boolean(
     walletAddress &&
     addresses.some(
-      (item) => item.address.toLowerCase() === walletAddress.toLowerCase()
+      (item) =>
+        item.address.toLowerCase() === walletAddress.toLowerCase() &&
+        item.chains.includes(mainChain)
     )
   );
   const addressChainOptions = addresses.flatMap((item) =>
@@ -945,168 +1221,175 @@ function CustomerView({
             onError={setError}
           />
           <section className="wallet-panel">
-        <h3>Wallet</h3>
-        <button onClick={() => appKit?.open()} disabled={!appKit}>
-          {walletAddress ? 'Wallet connected' : 'Connect wallet'}
-        </button>
-        <p>Connected wallet: {walletAddress ?? 'none'}</p>
-        <button
-          onClick={linkWallet}
-          disabled={!walletAddress || !profile || walletAlreadyLinked}
-        >
-          Sign and link wallet
-        </button>
-        <h3>Linked Sepolia addresses</h3>
-        {addresses.length === 0 ? (
-          <p>No linked addresses.</p>
-        ) : (
-          <div className="resource-list">
-            {addresses.flatMap((item) =>
-              item.chains.map((chain) => (
-                <article className="resource" key={`${item.address}:${chain}`}>
-                  <strong>{item.address}</strong>
-                  <span>{chain}</span>
-                  <span>
-                    Balance:{' '}
-                    {balances[`${item.address}:${chain}`]?.balances
-                      .map((item) => `${item.amount} ${item.currency}`)
-                      .join(', ') ?? 'unavailable'}
-                  </span>
-                </article>
-              ))
+            <h3>Wallet</h3>
+        <button onClick={openWallet} disabled={!appKit}>
+              {walletAddress ? 'Wallet connected' : 'Connect wallet'}
+            </button>
+            <p>Connected wallet: {walletAddress ?? 'none'}</p>
+            <button
+              onClick={linkWallet}
+              disabled={!walletAddress || !profile || walletAlreadyLinked}
+            >
+              Sign and link wallet
+            </button>
+            <h3>Linked Sepolia addresses</h3>
+            {addresses.length === 0 ? (
+              <p>No linked addresses.</p>
+            ) : (
+              <div className="resource-list">
+                {addresses.flatMap((item) =>
+                  item.chains.map((chain) => (
+                    <article
+                      className="resource"
+                      key={`${item.address}:${chain}`}
+                    >
+                      <strong>{item.address}</strong>
+                      <span>{chain}</span>
+                      <span>
+                        Balance:{' '}
+                        {balances[`${item.address}:${chain}`]?.balances
+                          .map((item) => `${item.amount} ${item.currency}`)
+                          .join(', ') ?? 'unavailable'}
+                      </span>
+                    </article>
+                  ))
+                )}
+              </div>
             )}
-          </div>
-        )}
-        <h3>IBAN</h3>
-        {!selectedIban ? (
-          <>
-            <p>No IBANs.</p>
-            <div className="inline">
-              <select
-                value={`${selectedAddress}:${selectedChain}`}
-                onChange={(event) => {
-                  const [nextAddress, nextChain] =
-                    event.target.value.split(':');
-                  setSelectedAddress(nextAddress ?? '');
-                  setSelectedChain(nextChain ?? 'sepolia');
-                }}
-              >
-                {addressChainOptions.map((option) => (
-                  <option
-                    key={`${option.address}:${option.chain}`}
-                    value={`${option.address}:${option.chain}`}
+            <h3>IBAN</h3>
+            {!selectedIban ? (
+              <>
+                <p>No IBANs.</p>
+                <div className="inline">
+                  <select
+                    value={`${selectedAddress}:${selectedChain}`}
+                    onChange={(event) => {
+                      const [nextAddress, nextChain] =
+                        event.target.value.split(':');
+                      setSelectedAddress(nextAddress ?? '');
+                      setSelectedChain(nextChain ?? mainChain);
+                    }}
                   >
-                    {option.address} · {option.chain}
-                  </option>
-                ))}
-              </select>
-              <button
-                onClick={() =>
-                  run('requestIban', {
-                    profile: profile?.id,
-                    address: selectedAddress,
-                    chain: selectedChain,
-                  })
-                }
-                disabled={!profile || !selectedAddress}
-              >
-                Request IBAN
-              </button>
-            </div>
-          </>
-        ) : (
-          <article className="resource">
-            <strong>{selectedIban.iban}</strong>
-            <span>
-              {selectedIban.bic} · {selectedIban.state}
-            </span>
-            <small>
-              Address: {selectedIban.address} · {selectedIban.chain}
-            </small>
-            <div className="inline">
-              <select
-                value={`${selectedAddress}:${selectedChain}`}
-                onChange={(event) => {
-                  const [nextAddress, nextChain] =
-                    event.target.value.split(':');
-                  setSelectedAddress(nextAddress ?? '');
-                  setSelectedChain(nextChain ?? 'sepolia');
-                }}
-              >
-                {addressChainOptions.map((option) => (
-                  <option
-                    key={`${option.address}:${option.chain}`}
-                    value={`${option.address}:${option.chain}`}
+                    {addressChainOptions.map((option) => (
+                      <option
+                        key={`${option.address}:${option.chain}`}
+                        value={`${option.address}:${option.chain}`}
+                      >
+                        {option.address} · {option.chain}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() =>
+                      run('requestIban', {
+                        profile: profile?.id,
+                        address: selectedAddress,
+                        chain: selectedChain,
+                      })
+                    }
+                    disabled={!profile || !selectedAddress}
                   >
-                    {option.address} · {option.chain}
-                  </option>
-                ))}
-              </select>
-              <button
-                onClick={() =>
-                  run('moveIban', {
-                    iban: selectedIban.iban,
-                    address: selectedAddress,
-                    chain: selectedChain,
-                  })
-                }
-                disabled={
-                  !profile || !selectedAddress || ibanAlreadyAtSelectedAddress
-                }
-              >
-                Move IBAN
-              </button>
-            </div>
-          </article>
-        )}
+                    Request IBAN
+                  </button>
+                </div>
+              </>
+            ) : (
+              <article className="resource">
+                <strong>{selectedIban.iban}</strong>
+                <span>
+                  {selectedIban.bic} · {selectedIban.state}
+                </span>
+                <small>
+                  Address: {selectedIban.address} · {selectedIban.chain}
+                </small>
+                <div className="inline">
+                  <select
+                    value={`${selectedAddress}:${selectedChain}`}
+                    onChange={(event) => {
+                      const [nextAddress, nextChain] =
+                        event.target.value.split(':');
+                      setSelectedAddress(nextAddress ?? '');
+                      setSelectedChain(nextChain ?? mainChain);
+                    }}
+                  >
+                    {addressChainOptions.map((option) => (
+                      <option
+                        key={`${option.address}:${option.chain}`}
+                        value={`${option.address}:${option.chain}`}
+                      >
+                        {option.address} · {option.chain}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={() =>
+                      run('moveIban', {
+                        iban: selectedIban.iban,
+                        address: selectedAddress,
+                        chain: selectedChain,
+                      })
+                    }
+                    disabled={
+                      !profile ||
+                      !selectedAddress ||
+                      ibanAlreadyAtSelectedAddress
+                    }
+                  >
+                    Move IBAN
+                  </button>
+                </div>
+              </article>
+            )}
           </section>
           <h3>Initiate transfer</h3>
           <div className="inline">
-        <input
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-          placeholder="Amount"
-        />
-        <input
-          value={iban}
-          onChange={(event) => setIban(event.target.value)}
-          placeholder="Recipient IBAN"
-        />
-        <button
-          onClick={placeOrder}
-          disabled={!walletAddress || !profile || !amount || !iban}
-        >
-          Sign and place redeem order
-        </button>
+            <input
+              value={amount}
+              onChange={(event) => setAmount(event.target.value)}
+              placeholder="Amount"
+            />
+            <input
+              value={iban}
+              onChange={(event) => setIban(event.target.value)}
+              placeholder="Recipient IBAN"
+            />
+            <button
+              onClick={placeOrder}
+              disabled={!walletAddress || !profile || !amount || !iban}
+            >
+              Sign and place redeem order
+            </button>
           </div>
           <h3>Orders</h3>
           {orders.length === 0 ? (
             <p>No orders.</p>
           ) : (
             <div className="resource-list">
-          {orders.map((order) => (
-            <article className="resource" key={order.id}>
-              <strong>
-                {order.kind} · {order.amount} {order.currency}
-              </strong>
-              <span>
-                {order.state} · {order.chain}
-              </span>
-              <small>
-                Recipient:{' '}
-                {order.counterpart.identifier.standard === 'iban'
-                  ? order.counterpart.identifier.iban
-                  : JSON.stringify(order.counterpart.identifier)}
-              </small>
-              <small>Wallet: {order.address}</small>
-              {order.meta.rejectedReason && (
-                <small>Rejected: {order.meta.rejectedReason}</small>
-              )}
-              {order.meta.txHashes && order.meta.txHashes.length > 0 && (
-                <small>Transactions: {order.meta.txHashes.join(', ')}</small>
-              )}
-            </article>
-          ))}
+              {orders.map((order) => (
+                <article className="resource" key={order.id}>
+                  <strong>
+                    {order.kind} · {order.amount} {order.currency}
+                  </strong>
+                  <span>
+                    {order.state} · {order.chain}
+                  </span>
+                  <small>
+                    Recipient:{' '}
+                    {order.counterpart.identifier.standard === 'iban'
+                      ? order.counterpart.identifier.iban
+                      : JSON.stringify(order.counterpart.identifier)}
+                  </small>
+                  <small>Wallet: {order.address}</small>
+                  {order.meta.rejectedReason && (
+                    <small>Rejected: {order.meta.rejectedReason}</small>
+                  )}
+                  {order.meta.txHashes && order.meta.txHashes.length > 0 && (
+                    <small>
+                      Transactions: {order.meta.txHashes.join(', ')}
+                    </small>
+                  )}
+                </article>
+              ))}
             </div>
           )}
         </div>
@@ -1155,23 +1438,43 @@ export default function App(): JSX.Element {
     const unsubscribe = appKit.subscribeAccount((account) =>
       setWalletAddress(account.address)
     );
+    const unsubscribeConnections = appKit.subscribeConnections((state) => {
+      const reownError = appKit.getError();
+      console.log('[partner] Reown connection state', {
+        status: state.status,
+        error: reownError || undefined,
+      });
+      if (reownError) {
+        console.error('[partner] Reown connection failed', reownError);
+        setError(reownError);
+      }
+    });
     fetch('/api/session')
       .then((response) => response.json())
       .then((value: { authenticated: boolean }) =>
         setAuthenticated(value.authenticated)
       )
       .then(refresh)
-      .catch((reason: unknown) =>
-        setError(errorMessage(reason))
-      );
-    return unsubscribe;
+      .catch((reason: unknown) => setError(errorMessage(reason)));
+    return () => {
+      unsubscribe();
+      unsubscribeConnections();
+    };
   }, []);
   return (
     <main>
       <header>
         <div>
           <h1>Monerium Partner Tool</h1>
-          <p>Whitelabel · Sandbox · Sepolia (11155111)</p>
+          <p>
+            Whitelabel · {partnerEnvironment} · {mainChain} (
+            {partnerEnvironment === 'localhost'
+              ? 6666
+              : partnerEnvironment === 'sandbox'
+                ? 11155111
+                : 1}
+            )
+          </p>
         </div>
         <span className="config">
           Reown: {projectId ? 'configured' : 'missing'}
