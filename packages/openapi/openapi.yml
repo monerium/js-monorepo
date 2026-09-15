@@ -3971,6 +3971,7 @@ components:
         * `pending`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`.
         * `approved`: The profile is active and all Monerium services are available.
         * `rejected`: Final rejection — the applicant details did not meet compliance requirements.
+        * `closed`: The profile has been closed. Associated IBAN accounts are also closed.
       type: string
       example: incomplete
       enum:
@@ -3979,6 +3980,7 @@ components:
         - pending
         - approved
         - rejected
+        - closed
     ProfileKind:
       description: String identifier specifying the type of the profile.
       type: string
@@ -3995,9 +3997,15 @@ components:
           type: string
           example: The applicant details did not meet compliance requirements.
         reasonCode:
-          description: Code indicating the reason for the profile rejection or closure. Only present when the profile has been rejected or closed.
+          description: Code indicating the reason for closing the profile. Only present when the profile has been closed.
           type: string
-          example: null
+          example: user-requested
+          enum:
+            - compliance
+            - inactive
+            - user-requested
+            - duplicate
+            - other
     ProfileSummary:
       type: object
       properties:
@@ -4556,7 +4564,8 @@ webhooks:
                 "name": "Jane Doe",
                 "state": "rejected",
                 "meta": {
-                  "rejectedReason": "The applicant details did not meet compliance requirements."
+                  "reason": "The applicant details did not meet compliance requirements.",
+                  "reasonCode": "compliance"
                 }
               }
             }'
