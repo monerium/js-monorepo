@@ -2828,6 +2828,8 @@ components:
         verifications:
           description: Verifications for an individual
           $ref: '#/components/schemas/PersonalVerifications'
+        meta:
+          $ref: '#/components/schemas/ProfileMeta'
     ProfileCorporate:
       type: object
       properties:
@@ -2854,6 +2856,8 @@ components:
         verifications:
           description: Verifications for a company
           $ref: '#/components/schemas/CorporateVerifications'
+        meta:
+          $ref: '#/components/schemas/ProfileMeta'
     Profile:
       oneOf:
         - $ref: '#/components/schemas/ProfilePersonal'
@@ -3880,6 +3884,14 @@ components:
       enum:
         - corporate
         - personal
+    ProfileMeta:
+      description: Optional metadata about a profile.
+      type: object
+      properties:
+        rejectedReason:
+          description: Message stating why the profile was rejected. Only present when the profile has been rejected.
+          type: string
+          example: The applicant details did not meet compliance requirements.
     ProfileSummary:
       type: object
       properties:
@@ -3900,6 +3912,8 @@ components:
           example: user@example.com
         state:
           $ref: '#/components/schemas/ProfileState'
+        meta:
+          $ref: '#/components/schemas/ProfileMeta'
     TimeStamp:
       description: "The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
       type: string
@@ -4153,6 +4167,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-09-04:
+      * [GET /profiles/{profile}](#operation/profile), `ProfilePersonal`, `ProfileCorporate`, `ProfileSummary` - Added an optional `meta` object with a `rejectedReason` string. `rejectedReason` is present only when the profile has been rejected and states why.
+
       ### 2026-08-17:
       * [Webhook profile.error](#operation/webhook-profile-error) - New opt-in webhook event fired when profile data received from a KYC provider is rejected as invalid and skipped during ingestion (e.g. an address over the maximum allowed length). The profile stays `incomplete` until the listed fields are corrected and resubmitted. Payload includes the rejected `field`(s) and `reason`.
 
@@ -4430,7 +4447,10 @@ webhooks:
                 "id": "4f079ef8-6d26-11eb-9bc8-acde48001122",
                 "kind": "personal",
                 "name": "Jane Doe",
-                "state": "pending"
+                "state": "rejected",
+                "meta": {
+                  "rejectedReason": "The applicant details did not meet compliance requirements."
+                }
               }
             }'
   profile.error:
