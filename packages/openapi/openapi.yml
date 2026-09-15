@@ -1958,6 +1958,81 @@ paths:
             curl https://api.monerium.dev/orders/b48f7ca4-e51f-11ed-9e13-cacb9390199c \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
             -H "Accept: application/vnd.monerium.api-v2+json"
+  '/orders/{orderId}/payments':
+    get:
+      operationId: order-payments
+      summary: Order payments
+      description: |
+        Look up the payments associated with an order. Returns the list of payments
+        processed by Monerium for the given order.
+        An order can have more then one payment associated with it in the case of a rejected/refunder payment.
+        Cross-chain orders and transfers between Monerium accounts do not have an associated payment.
+      parameters:
+        - name: orderId
+          in: path
+          description: The ID of the order
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payment'
+                  total:
+                    description: The total number of payments for the order.
+                    type: integer
+                    example: 1
+                required:
+                  - payments
+                  - total
+        '400':
+          description: Bad Request - the order ID is not a valid UUID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '404':
+          description: Not Found - the order was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError'
+      security:
+        - BearerAuth: []
+      tags:
+        - orders
+      x-codeSamples:
+        - lang: bash
+          label: curl
+          source: |-
+            curl https://api.monerium.dev/orders/379dce7b-bef4-4a76-8ac2-baad27bc0799/payments \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
   /files:
     post:
       operationId: upload-file
@@ -2519,8 +2594,7 @@ components:
       pattern: '^(?:[A-Z]{2}[0-9]{2}(?:\s?[0-9A-Z]{4}){1,7}\s?[0-9A-Z]{1,4})$'
     Memo:
       description: |
-        UTF-8 Payment reference / memo. Can be used as filter parameters when querying
-        orders.
+        UTF-8 Payment reference supplied by the sender to provide additional information. Can be used as filter parameters when querying orders.
       type: string
       example: Powered by Monerium
       maxLength: 140
@@ -2775,6 +2849,91 @@ components:
         - state
         - meta
       title: Order
+    Payment:
+      type: object
+      properties:
+        id:
+          allOf:
+            - $ref: '#/components/schemas/UUID'
+            - description: The ID of the payment.
+              example: e69940ba-9286-11f1-accf-bac9bf26c37d
+        orderId:
+          allOf:
+            - $ref: '#/components/schemas/UUID'
+            - description: The ID of the order associated with the payment.
+              example: 379dce7b-bef4-4a76-8ac2-baad27bc0799
+        direction:
+          description: |
+            The direction of funds relative to the Monerium
+            account:
+
+            - `in`: Funds were received into the account.
+            - `out`: Funds were sent from the account.
+          type: string
+          example: out
+          enum:
+            - in
+            - out
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          description: The payment amount.
+          type: string
+          example: '1'
+        counterpart:
+          $ref: '#/components/schemas/CounterpartResponse'
+        memo:
+          $ref: '#/components/schemas/Memo'
+        referenceNumber:
+          description: Structured SEPA reference.
+          $ref: '#/components/schemas/ReferenceNumber'
+        reference:
+          description: 'An Account Servicer Reference is a payment identifier primarly used in ISO 20022 messaging standars, assigned by Monerium to uniquely identify a transaction.'
+          type: string
+          example: 3DA2AF392E26EE11911E00155DBDB493
+        type:
+          description: |
+            The payment scheme or type assigned by the payment provider:
+
+            - `INTERNAL`: Payment between accounts held at the same financial institution.
+            - `INST`: SEPA Instant Credit Transfer.
+            - `TIPS`: TARGET Instant Payment.
+            - `TARGET2`: Payment received through TARGET2.
+            - `SEPA`: SEPA Credit Transfer.
+            - `SWIFT`: International payment via the SWIFT network.
+          type: string
+          example: SEPA
+          enum:
+            - INTERNAL
+            - INST
+            - TIPS
+            - TARGET2
+            - SEPA
+            - SWIFT
+        uetr:
+          description: A Unique End-to-end Transaction Reference is a tracking code used to follow international wire transfers across the SWIFT payment network.
+          type: string
+          example: ''
+          maxLength: 36
+          minLength: 36
+        instructionId:
+          description: 'An Instruction Identification is a point-to-point payment identifier primarily used in ISO 20022 messaging standards, assinged by the sending party.'
+          type: string
+          example: ''
+        meta:
+          type: object
+          properties:
+            processedAt:
+              description: "When was the payment processed. Only visible when the payment has been processed. The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
+              $ref: '#/components/schemas/TimeStamp'
+      required:
+        - id
+        - orderId
+        - direction
+        - currency
+        - amount
+        - counterpart
+      title: Payment
     AccessToken:
       type: object
       properties:
@@ -4153,6 +4312,8 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-09-15:
+           * [GET /orders/{orderId}/payments](#operation/order-payments) - New endpoint to look up the payments processed by the payment provider for a given order.
       ### 2026-08-17:
       * [Webhook profile.error](#operation/webhook-profile-error) - New opt-in webhook event fired when profile data received from a KYC provider is rejected as invalid and skipped during ingestion (e.g. an address over the maximum allowed length). The profile stays `incomplete` until the listed fields are corrected and resubmitted. Payload includes the rejected `field`(s) and `reason`.
 
