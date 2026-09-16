@@ -3756,7 +3756,7 @@ components:
               - proofOfResidency
               - sourceOfFunds
           state:
-            $ref: '#/components/schemas/SectionState'
+            $ref: '#/components/schemas/VerificationState'
         required:
           - kind
           - state
@@ -3972,7 +3972,7 @@ components:
               - beneficialOwnership
               - powerOfAttorney
           state:
-            $ref: '#/components/schemas/SectionState'
+            $ref: '#/components/schemas/VerificationState'
         required:
           - kind
           - state
@@ -4009,6 +4009,23 @@ components:
         - pending
         - approved
         - rejected
+    VerificationState:
+      description: |
+        The state of a verification:
+
+        * `incomplete`: The partner can still submit or update this verification.
+        * `pending`: All required information has been provided; awaiting review.
+        * `review`: The verification is on hold pending manual review by Monerium compliance (e.g. source of funds under review). Resolved by Monerium — partners cannot set this state.
+        * `approved`: The verification has been approved.
+        * `rejected`: Final rejection; no resubmission possible.
+      type: string
+      example: incomplete
+      enum:
+        - incomplete
+        - pending
+        - review
+        - approved
+        - rejected
     ProfileSection:
       description: A profile section with its current state.
       type: object
@@ -4021,7 +4038,8 @@ components:
 
         * `created`: The profile has been created but no data has been submitted yet.
         * `incomplete`: One or more sections still require information. The partner can submit or update data.
-        * `pending`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, or back to `incomplete`.
+        * `pending`: All required information has been provided and the profile is awaiting review. Further submissions are blocked until the state transitions to `approved`, `rejected`, `review`, or back to `incomplete`.
+        * `review`: The profile is on hold pending manual review by Monerium compliance. Triggered automatically (e.g. when a verification requires manual attention) and resolved by Monerium — partners cannot set this state.
         * `approved`: The profile is active and all Monerium services are available.
         * `rejected`: Final rejection — the applicant details did not meet compliance requirements.
       type: string
@@ -4030,6 +4048,7 @@ components:
         - created
         - incomplete
         - pending
+        - review
         - approved
         - rejected
     ProfileKind:
@@ -4313,7 +4332,9 @@ tags:
     x-displayName: Changelog
     description: |
       ### 2026-09-15:
-           * [GET /orders/{orderId}/payments](#operation/order-payments) - New endpoint to look up the payments processed by the payment provider for a given order.
+      * [GET /orders/{orderId}/payments](#operation/order-payments) - New endpoint to look up the payments processed by the payment provider for a given order.
+      * [GET /profiles](#operation/profiles), [GET /profiles/{profile}](#operation/profile), [Webhook profile.updated](#operation/webhook-profile-updated) - Added `review` to `ProfileState` and to verification item states: profiles and verifications can now be placed on hold pending manual review by Monerium compliance. New `VerificationState` schema; profile sections keep `SectionState` (no `review`).
+
       ### 2026-08-17:
       * [Webhook profile.error](#operation/webhook-profile-error) - New opt-in webhook event fired when profile data received from a KYC provider is rejected as invalid and skipped during ingestion (e.g. an address over the maximum allowed length). The profile stays `incomplete` until the listed fields are corrected and resubmitted. Payload includes the rejected `field`(s) and `reason`.
 
