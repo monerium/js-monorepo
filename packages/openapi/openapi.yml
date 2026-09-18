@@ -843,6 +843,108 @@ paths:
             curl https://api.monerium.dev/profiles/4f079ef8-6d26-11eb-9bc8-acde48001122 \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
             -H "Accept: application/vnd.monerium.api-v2+json"
+  '/profiles/{profile}/state':
+    patch:
+      operationId: close-profile
+      summary: Close profile
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">
+          Whitelabel
+        </span>
+
+        Closes a profile. The profile must not have any pending orders. Closing a profile also closes its associated IBAN accounts.
+
+        The `reasonCode` is required. When `reasonCode` is `other`, provide a `reason` with at least 5 characters.
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - name: profile
+          in: path
+          description: The ID of the profile to close.
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  description: The target profile state. Must be `closed`.
+                  type: string
+                  example: closed
+                  enum:
+                    - closed
+                reasonCode:
+                  description: The reason for closing the profile.
+                  type: string
+                  example: user-requested
+                  enum:
+                    - compliance
+                    - inactive
+                    - user-requested
+                    - duplicate
+                    - other
+                reason:
+                  description: Additional details. Required when `reasonCode` is `other` and must contain at least 5 characters.
+                  type: string
+                  example: Customer requested closure
+                  minLength: 5
+              required:
+                - state
+                - reasonCode
+            example:
+              state: closed
+              reasonCode: user-requested
+      responses:
+        '202':
+          description: |
+            Accepted
+
+            The profile closure has been queued for processing. The profile's associated IBAN accounts will be closed asynchronously.
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenPartnerError'
+        '409':
+          description: |
+            Conflict
+
+            The profile is already closed or has pending orders.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - BearerAuth: []
+      tags:
+        - profiles
+      x-codeSamples:
+        - lang: bash
+          label: CLI
+          source: |-
+            curl -X PATCH 'https://api.monerium.dev/profiles/4f079ef8-6d26-11eb-9bc8-acde48001122/state' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data-raw '{
+              "state": "closed",
+              "reasonCode": "user-requested"
+            }'
   '/profiles/{profile}/share':
     post:
       operationId: share-profile-kyc
@@ -2987,6 +3089,8 @@ components:
         verifications:
           description: Verifications for an individual
           $ref: '#/components/schemas/PersonalVerifications'
+        meta:
+          $ref: '#/components/schemas/ProfileMeta'
     ProfileCorporate:
       type: object
       properties:
@@ -3013,6 +3117,8 @@ components:
         verifications:
           description: Verifications for a company
           $ref: '#/components/schemas/CorporateVerifications'
+        meta:
+          $ref: '#/components/schemas/ProfileMeta'
     Profile:
       oneOf:
         - $ref: '#/components/schemas/ProfilePersonal'
@@ -4042,6 +4148,7 @@ components:
         * `review`: The profile is on hold pending manual review by Monerium compliance. Triggered automatically (e.g. when a verification requires manual attention) and resolved by Monerium — partners cannot set this state.
         * `approved`: The profile is active and all Monerium services are available.
         * `rejected`: Final rejection — the applicant details did not meet compliance requirements.
+        * `closed`: The profile has been closed. Associated IBAN accounts are also closed.
       type: string
       example: incomplete
       enum:
@@ -4051,6 +4158,7 @@ components:
         - review
         - approved
         - rejected
+        - closed
     ProfileKind:
       description: String identifier specifying the type of the profile.
       type: string
@@ -4058,6 +4166,24 @@ components:
       enum:
         - corporate
         - personal
+    ProfileMeta:
+      description: Optional metadata about a profile.
+      type: object
+      properties:
+        reason:
+          description: Message stating why the profile was rejected or closed. Only present when the profile has been rejected or closed.
+          type: string
+          example: The applicant details did not meet compliance requirements.
+        reasonCode:
+          description: Code indicating the reason for closing the profile. Only present when the profile has been closed.
+          type: string
+          example: user-requested
+          enum:
+            - compliance
+            - inactive
+            - user-requested
+            - duplicate
+            - other
     ProfileSummary:
       type: object
       properties:
@@ -4078,6 +4204,8 @@ components:
           example: user@example.com
         state:
           $ref: '#/components/schemas/ProfileState'
+        meta:
+          $ref: '#/components/schemas/ProfileMeta'
     TimeStamp:
       description: "The timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format. It includes the date, time to the second, and optional fractional seconds, followed by 'Z' to indicate UTC time."
       type: string
@@ -4332,6 +4460,8 @@ tags:
     x-displayName: Changelog
     description: |
       ### 2026-09-15:
+      * [PATCH /profiles/{profile}/state](#operation/close-profile) - Added the whitelabel endpoint for closing profiles with a required `reasonCode` and optional `reason`.
+      * [GET /profiles/{profile}](#operation/profile), `ProfilePersonal`, `ProfileCorporate`, `ProfileSummary` - Added an optional `meta` object with a `reason` string and a `reasonCode` enum. `reason` is present only when the profile has been rejected or closed and states why. `reasonCode` is present only when the profile has been closed and states the reason code.
       * [GET /orders/{orderId}/payments](#operation/order-payments) - New endpoint to look up the payments processed by the payment provider for a given order.
       * [GET /profiles](#operation/profiles), [GET /profiles/{profile}](#operation/profile), [Webhook profile.updated](#operation/webhook-profile-updated) - Added `review` to `ProfileState` and to verification item states: profiles and verifications can now be placed on hold pending manual review by Monerium compliance. New `VerificationState` schema; profile sections keep `SectionState` (no `review`).
 
@@ -4612,7 +4742,10 @@ webhooks:
                 "id": "4f079ef8-6d26-11eb-9bc8-acde48001122",
                 "kind": "personal",
                 "name": "Jane Doe",
-                "state": "pending"
+                "state": "rejected",
+                "meta": {
+                  "reason": "The applicant details did not meet compliance requirements.",
+                }
               }
             }'
   profile.error:
