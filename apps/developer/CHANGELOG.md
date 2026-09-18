@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/monerium/js-monorepo/compare/developer-v2.1.1...developer-v2.2.0) (2026-09-18)
+
+
+### Features
+
+* add review state to profile and verification states ([#218](https://github.com/monerium/js-monorepo/issues/218)) ([cc9b54a](https://github.com/monerium/js-monorepo/commit/cc9b54a9bd30fd7e45b8447f3b221df8a5f8c890))
+
 ## [2.1.1](https://github.com/monerium/js-monorepo/compare/developer-v2.1.0...developer-v2.1.1) (2026-08-19)
 
 

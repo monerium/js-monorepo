@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.6.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.5.0...openapi-v2.6.0) (2026-09-18)
+
+
+### Features
+
+* add review state to profile and verification states ([#218](https://github.com/monerium/js-monorepo/issues/218)) ([cc9b54a](https://github.com/monerium/js-monorepo/commit/cc9b54a9bd30fd7e45b8447f3b221df8a5f8c890))
+
+
+### Miscellaneous
+
+* close profile endpoint ([#220](https://github.com/monerium/js-monorepo/issues/220)) ([147de08](https://github.com/monerium/js-monorepo/commit/147de08149e6fb084edfd0c8b30ae83d40a4f4ae))
+* **openapi:** add order payment details endpoint ([#219](https://github.com/monerium/js-monorepo/issues/219)) ([5ade196](https://github.com/monerium/js-monorepo/commit/5ade1961fe32e09f4dea20b290115b9f041ac34d))
+* placed state missing on orders filter ([74bee3b](https://github.com/monerium/js-monorepo/commit/74bee3be6da258e97aadf0525156bae48d3cbe69))
+* revert order payments ([2cbe531](https://github.com/monerium/js-monorepo/commit/2cbe5311aabfdd7946a1e470ddad0fdd815231fc))
+
 ## [2.5.0](https://github.com/monerium/js-monorepo/compare/openapi-v2.4.0...openapi-v2.5.0) (2026-08-19)
 
 

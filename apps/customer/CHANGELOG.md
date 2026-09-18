@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.2](https://github.com/monerium/js-monorepo/compare/customer-v0.11.1...customer-v0.11.2) (2026-09-18)
+
+
+### Bug Fixes
+
+* wagmi - rainbowkit version mismatch ([21b6cc3](https://github.com/monerium/js-monorepo/commit/21b6cc305680cbb54ec48f01f13deff3a98e9dd2))
+
 ## [0.11.1](https://github.com/monerium/js-monorepo/compare/customer-v0.11.0...customer-v0.11.1) (2026-08-19)
 
 
