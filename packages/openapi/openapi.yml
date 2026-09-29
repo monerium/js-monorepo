@@ -1865,11 +1865,13 @@ paths:
       operationId: post-orders
       summary: Place order
       description: |
-        An order represents an instruction to transfer funds from one account to another.
-        The transfer can occur within the blockchain ecosystem (cross-chain) or from a blockchain account to a traditional bank account via SEPA.
+        An order represents an instruction to move funds. The request body depends on the type of order:
 
-        An order requires a signature from the wallet owner to authorize the processing of the order.
-        The wallet owner signs a specific message to prove ownership and consent for the transaction.
+        * **Redeem** - tokens are burned and sent to a bank account via SEPA. Requires a signature from the wallet owner.
+        * **Issue** - tokens are minted for a payment the application has received outside of Monerium. Authorized by the `order.create.issue` scope, no signature required. <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(237, 108, 2);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Beta</span>
+        * **Cross-chain** - tokens are burned on one chain and minted to an address on another chain. Requires a signature from the wallet owner.
+
+        For redeem and cross-chain orders the wallet owner signs a specific message to prove ownership and consent for the transaction.
 
         Attaching a supporting document for amounts above 15,000 EUR is required. Supporting document can be an invoice or an agreement.
       parameters:
@@ -1924,10 +1926,11 @@ paths:
         - orders
       x-codeSamples:
         - lang: bash
-          label: CLI
+          label: Redeem
           source: |-
             curl -X POST 'https://api.monerium.dev/orders' \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
             --data-raw '{
               "address": "0x5731Ffc2747A25a8132A5d11768F95941Ae9c6ee",
               "currency": "eur",
@@ -1945,6 +1948,50 @@ paths:
               "message": "Send EUR 4 to EE52...1285 at 2024-06-07T18:25:19.948Z",
               "signature": "0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f",
               "memo": "Powered by Monerium"
+            }'
+        - lang: bash
+          label: Issue (Beta)
+          source: |-
+            curl -X POST 'https://api.monerium.dev/orders' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "address": "0x5731Ffc2747A25a8132A5d11768F95941Ae9c6ee",
+              "currency": "eur",
+              "chain": "ethereum",
+              "kind": "issue",
+              "amount": "4",
+              "counterpart": {
+                "identifier": { "standard": "iban", "iban": "EE521273842688571285" },
+                "details": {
+                  "firstName": "Satoshi",
+                  "lastName": "Nakamoto",
+                  "country": "FR"
+                }
+              },
+              "memo": "Powered by Monerium"
+            }'
+        - lang: bash
+          label: Cross-chain
+          source: |-
+            curl -X POST 'https://api.monerium.dev/orders' \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "address": "0x5731Ffc2747A25a8132A5d11768F95941Ae9c6ee",
+              "currency": "eur",
+              "chain": "ethereum",
+              "kind": "redeem",
+              "amount": "4",
+              "counterpart": {
+                "identifier": {
+                  "standard": "chain",
+                  "address": "0x4B4c34f35b0Bb9Af56418FAdD4677ce45ADF7760",
+                  "chain": "gnosis"
+                }
+              },
+              "message": "Send EUR 4 to 0x4B4c34f35b0Bb9Af56418FAdD4677ce45ADF7760 on gnosis at 2024-06-07T18:25:19Z",
+              "signature": "0x5rc0b4cb4efbb577cb0c19d1cb23c7cc4912d2138b3267ee4799c88a68e203a5d568bec12f5da2b3a416f9bb03257b472a1605bf489bcdb805c2c029c212d3a5120505f52546da16217f630339cd332d6049f11cf15a1a82939663a58b02d129c40607c0c290ace726c89c35228b6485f5d3796d6c10df5b8a0de196092797bfe7e1f"
             }'
     get:
       operationId: orders
@@ -2135,6 +2182,73 @@ paths:
           source: |-
             curl https://api.monerium.dev/orders/379dce7b-bef4-4a76-8ac2-baad27bc0799/payments \
             -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+    post:
+      operationId: post-order-payment
+      summary: Add order payment
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(237, 108, 2);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Beta</span>
+
+        Confirm that the payment for an [issue order](#operation/post-orders) has been received by the application.
+        Once the payment is added, Monerium continues processing the order and mints the tokens.
+
+        * Only supported for issue orders.
+        * Requires the `order.create.issue` scope and can only be called by the application that placed the order.
+        * `amount` and `currency` must match the order.
+        * A payment can only be added once per order.
+      parameters:
+        - $ref: '#/components/parameters/AcceptHeaderV2'
+        - name: orderId
+          in: path
+          description: The ID of the order
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewOrderPayment'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: 'Bad Request - the order was not found, is not an issue order, already has a payment, or the amount or currency does not match the order.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: UNAUTHORIZED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: FORBIDDEN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+      security:
+        - BearerAuth: []
+      tags:
+        - orders
+      x-codeSamples:
+        - lang: bash
+          label: curl
+          source: |-
+            curl -X POST https://api.monerium.dev/orders/379dce7b-bef4-4a76-8ac2-baad27bc0799/payments \
+            -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+            -H "Accept: application/vnd.monerium.api-v2+json" \
+            --data-raw '{
+              "externalId": "5f1e3c1a-3d6b-4f5e-9c1a-2b7d8e9f0a1b",
+              "amount": "4",
+              "currency": "eur"
+            }'
   /files:
     post:
       operationId: upload-file
@@ -2760,6 +2874,18 @@ components:
           description: The chain that this IBAN is connected to
           $ref: '#/components/schemas/Chain'
     NewOrder:
+      description: |
+        The request body depends on the type of order. Pick the tab that matches the order you want to place:
+
+        * **Redeem** - burn tokens and send a SEPA payment to an IBAN.
+        * **Issue** - mint tokens to a linked address for a payment settled outside of Monerium. <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(237, 108, 2);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Beta</span>
+        * **Cross-chain** - burn tokens on one chain and mint them to an address on another chain.
+      oneOf:
+        - $ref: '#/components/schemas/NewOrderRedeem'
+        - $ref: '#/components/schemas/NewOrderIssue'
+        - $ref: '#/components/schemas/NewOrderCrossChain'
+    NewOrderRedeem:
+      description: Tokens are burned from the given address and chain and sent as a SEPA payment to the counterpart IBAN.
       type: object
       properties:
         id:
@@ -2773,73 +2899,45 @@ components:
         chain:
           $ref: '#/components/schemas/Chain'
         kind:
-          description: Identifier specifying the nature of the order. </br></br> Redeem order is when tokens are burned on blockchain and sent to bank.
+          description: Redeem order is when tokens are burned on blockchain and sent to bank.
           type: string
           enum:
             - redeem
         amount:
-          description: 'The quantity of money sent, represented as a series of digits, possibly followed by a decimal point and up to two additional digits. The amount must be a non-negative value.'
+          description: 'The quantity of money sent, represented as a series of digits, possibly followed by a decimal point and up to two additional digits. The minimum amount is 0.01.'
           type: string
           example: '1000'
         counterpart:
-          $ref: '#/components/schemas/Counterpart'
+          $ref: '#/components/schemas/CounterpartIBAN'
         message:
-          description: 'A string message that the wallet owner must sign to authorize the processing of the order. This signed message verifies the consent of the wallet owner, ensuring that the transaction can proceed securely and legitimately.'
-          oneOf:
-            - title: IBAN
-              description: |
-                For outgoing SEPA payments, the message is composed as such:
+          description: |
+            A string message that the wallet owner must sign to authorize the processing of the order. This signed message verifies the consent of the wallet owner, ensuring that the transaction can proceed securely and legitimately.
 
-                <code>Send \<CURRENCY\> \<AMOUNT\> to \<IBAN\> at \<TIMESTAMP\></code>
-                </br>
+            The message is composed as such:
 
-                Where:
+            <code>Send \<CURRENCY\> \<AMOUNT\> to \<IBAN\> at \<TIMESTAMP\></code>
+            </br>
 
-                * `CURRENCY`: The order currency, the three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in uppercase.
-                * `AMOUNT`: The order amount.
-                * `IBAN`: The counterpart IBAN in either a) uppercase with no spaces or b) in shortened format
-                * `TIMESTAMP`: the timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format accurate to the minute. The timestamp must be within 5 minutes of the current time or any time in the future.
+            Where:
 
-                While full IBAN length may vary, the shortened format is always 11 characters, where the first four and last four characters are shown, the rest are replaced with three dots: `EE12...2602`.
+            * `CURRENCY`: The order currency, the three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in uppercase.
+            * `AMOUNT`: The order amount.
+            * `IBAN`: The counterpart IBAN in either a) uppercase with no spaces or b) in shortened format
+            * `TIMESTAMP`: the timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format accurate to the minute. The timestamp must be within 5 minutes of the current time or any time in the future.
 
-                Example with full IBAN:
+            While full IBAN length may vary, the shortened format is always 11 characters, where the first four and last four characters are shown, the rest are replaced with three dots: `EE12...2602`.
 
-                <code>Send EUR 1.23 to EE127310138155512606682602 at 2024-07-12T12:02:49Z</code>
+            Example with full IBAN:
 
-                Example with shortened IBAN:
+            <code>Send EUR 1.23 to EE127310138155512606682602 at 2024-07-12T12:02:49Z</code>
 
-                <code>Send EUR 1.23 to EE12...2602 at 2024-07-12T12:02:49Z</code>
-              type: string
-              example: 'Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z'
-            - title: Cross-chain transaction
-              description: |
-                For Cross-chain transaction, the message is composed as such:
+            Example with shortened IBAN:
 
-                <code>Send \<CURRENCY\> \<AMOUNT\> to \<ADDRESS\> on \<CHAIN\> at \<TIMESTAMP\></code>
-                </br>
-
-                Where:
-
-                * `CURRENCY`: The order currency, the three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in uppercase.
-                * `AMOUNT`: The order amount.
-                * `ADDRESS`: the recipient blockchain address `counterpart.identifier.address`.
-                * `CHAIN`: the recipient blockchain `counterpart.identifier.chain`.
-                * `TIMESTAMP`: the timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format accurate to the minute. The timestamp must be within 5 minutes of the current time or any time in the future.
-
-                Example:
-
-                <code>Send EUR 1.23 to 0x4B4c34f35b0Bb9Af56418FAdD4677ce45ADF7760 on ethereum at 2024-07-12T12:02:49Z</code>
-              type: string
-              pattern: '^Send\s([A-Z]{3})\s(\d+(\.\d{1,2})?)\sto\s([A-Z]{2}\d{2}\s?([A-Z0-9]{4}\s?){1,7}[A-Z0-9]{1,4})\sat\s(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z)$'
-              example: 'Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z'
+            <code>Send EUR 1.23 to EE12...2602 at 2024-07-12T12:02:49Z</code>
+          type: string
+          example: 'Send EUR 1 to EE127310138155512606682602 at 2024-07-12T12:02:49Z'
         signature:
-          oneOf:
-            - $ref: '#/components/schemas/SignatureEOA'
-              title: EOA address
-            - $ref: '#/components/schemas/SignatureSafeOnchain'
-              title: Safe onchain
-            - $ref: '#/components/schemas/SignatureSafeOffchain'
-              title: Safe offchain
+          $ref: '#/components/schemas/OrderSignature'
         memo:
           $ref: '#/components/schemas/Memo'
         referenceNumber:
@@ -2857,6 +2955,150 @@ components:
         - signature
         - message
         - counterpart
+      title: Redeem
+    NewOrderIssue:
+      description: |
+        <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(237, 108, 2);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Beta</span>
+
+        Tokens are minted to the given address and chain for a payment the application has received from the counterpart outside of Monerium.
+
+        Requires the `order.create.issue` scope. No `message` or `signature` is needed, the scope authorizes the order.
+        The address must be linked to a profile with an approved KYC.
+
+        The order is not processed until the payment is confirmed with [POST /orders/{orderId}/payments](#operation/post-order-payment).
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the order.
+          $ref: '#/components/schemas/UUID'
+        address:
+          description: The address to mint to. Can be any Monerium linked address.
+          $ref: '#/components/schemas/Address'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        chain:
+          $ref: '#/components/schemas/Chain'
+        kind:
+          description: Issue order is when tokens are minted on blockchain for a received payment.
+          type: string
+          enum:
+            - issue
+        amount:
+          description: 'The quantity of money received, represented as a series of digits, possibly followed by a decimal point and up to two additional digits. The amount must be greater than zero.'
+          type: string
+          example: '1000'
+        counterpart:
+          description: 'The payer, the party the payment was received from.'
+          $ref: '#/components/schemas/CounterpartIBAN'
+        memo:
+          $ref: '#/components/schemas/Memo'
+        referenceNumber:
+          $ref: '#/components/schemas/ReferenceNumber'
+        supportingDocumentId:
+          description: 'File ID of a supporting document for the payment, e.g. an invoice.'
+          example: 3ebc51a8-044f-11ed-8b1f-4a76448b7b21
+          $ref: '#/components/schemas/UUID'
+      required:
+        - address
+        - currency
+        - chain
+        - kind
+        - amount
+        - counterpart
+      title: Issue
+    NewOrderCrossChain:
+      description: Tokens are burned from the given address and chain and minted to the counterpart address on a different chain.
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the order.
+          $ref: '#/components/schemas/UUID'
+        address:
+          description: The address to redeem from. Can be any Monerium linked address.
+          $ref: '#/components/schemas/Address'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        chain:
+          $ref: '#/components/schemas/Chain'
+        kind:
+          description: Cross-chain orders are placed as redeem orders with a chain counterpart.
+          type: string
+          enum:
+            - redeem
+        amount:
+          description: 'The quantity of money sent, represented as a series of digits, possibly followed by a decimal point and up to two additional digits. The minimum amount is 0.01.'
+          type: string
+          example: '1000'
+        counterpart:
+          $ref: '#/components/schemas/CounterpartChain'
+        message:
+          description: |
+            A string message that the wallet owner must sign to authorize the processing of the order. This signed message verifies the consent of the wallet owner, ensuring that the transaction can proceed securely and legitimately.
+
+            The message is composed as such:
+
+            <code>Send \<CURRENCY\> \<AMOUNT\> to \<ADDRESS\> on \<CHAIN\> at \<TIMESTAMP\></code>
+            </br>
+
+            Where:
+
+            * `CURRENCY`: The order currency, the three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in uppercase.
+            * `AMOUNT`: The order amount.
+            * `ADDRESS`: the recipient blockchain address `counterpart.identifier.address`.
+            * `CHAIN`: the recipient blockchain `counterpart.identifier.chain`.
+            * `TIMESTAMP`: the timestamp in [RFC3339](https://tools.ietf.org/html/rfc3339) format accurate to the minute. The timestamp must be within 5 minutes of the current time or any time in the future.
+
+            Example:
+
+            <code>Send EUR 1.23 to 0x4B4c34f35b0Bb9Af56418FAdD4677ce45ADF7760 on ethereum at 2024-07-12T12:02:49Z</code>
+          type: string
+          example: 'Send EUR 1 to 0x4B4c34f35b0Bb9Af56418FAdD4677ce45ADF7760 on gnosis at 2024-07-12T12:02:49Z'
+        signature:
+          $ref: '#/components/schemas/OrderSignature'
+        memo:
+          $ref: '#/components/schemas/Memo'
+        supportingDocumentId:
+          description: 'File ID, required for orders with amount greater or equal to €15,000.'
+          example: 3ebc51a8-044f-11ed-8b1f-4a76448b7b21
+          $ref: '#/components/schemas/UUID'
+      required:
+        - address
+        - currency
+        - chain
+        - kind
+        - amount
+        - signature
+        - message
+        - counterpart
+      title: Cross-chain
+    OrderSignature:
+      oneOf:
+        - $ref: '#/components/schemas/SignatureEOA'
+          title: EOA address
+        - $ref: '#/components/schemas/SignatureSafeOnchain'
+          title: Safe onchain
+        - $ref: '#/components/schemas/SignatureSafeOffchain'
+          title: Safe offchain
+    NewOrderPayment:
+      description: |
+        Confirmation that the payment for an issue order has been received by the application.
+        `amount` and `currency` must match the order.
+      type: object
+      properties:
+        externalId:
+          description: "The application's own unique identifier for the payment, used for reconciliation. Must be a UUID."
+          example: 5f1e3c1a-3d6b-4f5e-9c1a-2b7d8e9f0a1b
+          $ref: '#/components/schemas/UUID'
+        amount:
+          description: The received amount. Must equal the order amount.
+          type: string
+          example: '1000'
+        currency:
+          $ref: '#/components/schemas/Currency'
+      required:
+        - externalId
+        - amount
+        - currency
     OrderState:
       description: |
         The state of the order:
@@ -3362,85 +3604,92 @@ components:
             - nonce
             - signature
             - calldata
-    Counterpart:
+    CounterpartDetails:
+      description: Details about the counterpart that can be either a corporate or an individual.
+      oneOf:
+        - title: Individual
+          type: object
+          description: The counterpart is an individual.
+          required:
+            - firstName
+            - lastName
+            - country
+          properties:
+            firstName:
+              description: The first name of the individual. The middle name(s) can also be included here.
+              type: string
+              example: Satoshi
+              minLength: 2
+            lastName:
+              description: The last name of the individual.
+              type: string
+              example: Nakamoto
+              minLength: 2
+            country:
+              description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart lives. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
+              $ref: '#/components/schemas/CountryCode'
+        - title: Corporation
+          type: object
+          description: Only one naming method is required. Either companyName or firstName and lastName
+          required:
+            - companyName
+            - country
+          properties:
+            companyName:
+              description: Used for outgoing payments when the recipient is a company
+              type: string
+              example: Monerium
+            country:
+              description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
+              $ref: '#/components/schemas/CountryCode'
+    CounterpartIBAN:
       description: 'The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country.'
       type: object
       properties:
         identifier:
           description: Counterpart account information.
-          oneOf:
-            - title: IBAN
-              type: object
-              required:
-                - standard
+          type: object
+          properties:
+            standard:
+              description: An International Bank Account Number (IBAN) is used to send and receive payments from bank accounts. The IBAN may contain spaces.
+              type: string
+              example: iban
+              enum:
                 - iban
-              properties:
-                standard:
-                  description: An International Bank Account Number (IBAN) is used to send and receive payments from bank accounts. The IBAN may contain spaces.
-                  type: string
-                  example: iban
-                  enum:
-                    - iban
-                iban:
-                  $ref: '#/components/schemas/IBAN'
-            - title: Cross-chain
-              type: object
-              required:
-                - standard
-                - address
-                - chain
-              properties:
-                standard:
-                  description: Used to send cross chain transaction from one wallet to another on a different blockchain.
-                  type: string
-                  example: chain
-                  enum:
-                    - chain
-                address:
-                  $ref: '#/components/schemas/Address'
-                chain:
-                  $ref: '#/components/schemas/Chain'
+            iban:
+              $ref: '#/components/schemas/IBAN'
+          required:
+            - standard
+            - iban
         details:
-          description: Details about the counterpart that can be either a corporate or an individual.
-          oneOf:
-            - title: Individual
-              type: object
-              description: The counterpart is an individual.
-              required:
-                - firstName
-                - lastName
-                - country
-              properties:
-                firstName:
-                  description: The first name of the individual. The middle name(s) can also be included here.
-                  type: string
-                  example: Satoshi
-                  minLength: 2
-                lastName:
-                  description: The last name of the individual.
-                  type: string
-                  example: Nakamoto
-                  minLength: 2
-                country:
-                  description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart lives. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
-                  $ref: '#/components/schemas/CountryCode'
-            - title: Corporation
-              type: object
-              description: Only one naming method is required. Either companyName or firstName and lastName
-              required:
-                - companyName
-                - country
-              properties:
-                companyName:
-                  description: Used for outgoing payments when the recipient is a company
-                  type: string
-                  example: Monerium
-                country:
-                  description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
-                  $ref: '#/components/schemas/CountryCode'
+          $ref: '#/components/schemas/CounterpartDetails'
       required:
         - identifier
         - details
+    CounterpartChain:
+      description: The recipient wallet on a different blockchain.
+      type: object
+      properties:
+        identifier:
+          description: Counterpart account information.
+          type: object
+          properties:
+            standard:
+              description: Used to send cross chain transaction from one wallet to another on a different blockchain.
+              type: string
+              example: chain
+              enum:
+                - chain
+            address:
+              $ref: '#/components/schemas/Address'
+            chain:
+              $ref: '#/components/schemas/Chain'
+          required:
+            - standard
+            - address
+            - chain
+      required:
+        - identifier
     CounterpartResponse:
       description: 'The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country.'
       type: object
@@ -4426,6 +4675,8 @@ tags:
       New to the Monerium API? See the [Getting Started](/) guide for setup instructions, environment details, and integration walkthroughs.
 
       Endpoints marked <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(44, 108, 167);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Whitelabel</span> or <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(46, 125, 50);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Private</span> are only available to those application types.
+
+      Endpoints marked <span style="display: inline-block;padding: 2px 8px;margin: 0px;background-color: rgb(237, 108, 2);color: rgb(255, 255, 255);vertical-align: middle;line-height: 1.6;border-radius: 4px;font-weight: 600;font-size: 12px;">Beta</span> are subject to change before general availability.
   - name: auth
     x-displayName: Authentication
     description: 'Endpoints for authorization and token management. See the [OAuth](/oauth#authorization), [Whitelabel](/whitelabel#authentication), and [Private](/private#authentication) guides for integration walkthroughs.'
@@ -4459,6 +4710,11 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-09-29:
+      * [POST /orders](#operation/post-orders) - Request body split into Redeem, Issue and Cross-chain variants, each documenting only the fields it supports. `Counterpart` schema replaced with `CounterpartIBAN` and `CounterpartChain`.
+      * [POST /orders](#operation/post-orders) - Beta: Added issue orders (`kind: issue`) for applications with the `order.create.issue` scope. No `message` or `signature` required.
+      * [POST /orders/{orderId}/payments](#operation/post-order-payment) - Beta: New endpoint to confirm the payment for an issue order with `externalId`, `amount` and `currency`.
+
       ### 2026-09-15:
       * [PATCH /profiles/{profile}/state](#operation/close-profile) - Added the whitelabel endpoint for closing profiles with a required `reasonCode` and optional `reason`.
       * [GET /profiles/{profile}](#operation/profile), `ProfilePersonal`, `ProfileCorporate`, `ProfileSummary` - Added an optional `meta` object with a `reason` string and a `reasonCode` enum. `reason` is present only when the profile has been rejected or closed and states why. `reasonCode` is present only when the profile has been closed and states the reason code.
