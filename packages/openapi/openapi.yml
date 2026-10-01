@@ -3053,11 +3053,17 @@ components:
                 chain:
                   $ref: '#/components/schemas/Chain'
         details:
-          description: Details about the counterpart that can be either a corporate or an individual.
+          description: 'Details about the counterpart that can be either an individual, corporation, or own account.'
           oneOf:
             - title: Individual
               type: object
               description: The counterpart is an individual.
+              not:
+                required:
+                  - own
+                properties:
+                  own:
+                    const: true
               required:
                 - firstName
                 - lastName
@@ -3079,6 +3085,12 @@ components:
             - title: Corporation
               type: object
               description: Only one naming method is required. Either companyName or firstName and lastName
+              not:
+                required:
+                  - own
+                properties:
+                  own:
+                    const: true
               required:
                 - companyName
                 - country
@@ -3090,6 +3102,16 @@ components:
                 country:
                   description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
                   $ref: '#/components/schemas/CountryCode'
+            - title: Own Account
+              type: object
+              description: "Personal profiles only. Recipient details are replaced with the approved KYC profile's first name, last name, and country."
+              required:
+                - own
+              properties:
+                own:
+                  type: boolean
+                  example: true
+                  const: true
       required:
         - identifier
         - details
@@ -3144,6 +3166,10 @@ components:
                 - lastName
                 - country
               properties:
+                own:
+                  description: Present and true for own-account orders.
+                  type: boolean
+                  example: true
                 firstName:
                   description: The first name of the individual. The middle name(s) can also be included here.
                   type: string
@@ -4052,6 +4078,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-10-01:
+      * [POST /orders](#operation/post-orders) - Added `counterpart.details.own: true` for personal own-account payments. Recipient details come from the approved KYC profile; order responses retain `own: true`.
+
       ### 2026-07-03:
       * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - Added `phone` and `email` parameters to `PersonalDetails` request body schema.
 
