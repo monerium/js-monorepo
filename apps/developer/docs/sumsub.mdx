@@ -28,7 +28,19 @@ Our Sumsub client ID is `monerium.com`. If you generate share tokens yourself vi
 
 ---
 
-## 2. Sandbox Testing with Sumsub Templates
+## 2. Set Up a Verification Level
+
+Partners must configure a Sumsub verification level that requires all three of the following:
+
+1. **ID document**
+2. **Selfie for liveness check**
+3. **Proof of address**
+
+Applicants that do not complete all three checks will fail Monerium's pre-checks.
+
+---
+
+## 3. Sandbox Testing with Sumsub Templates
 
 When testing your integration in the sandbox environment, we highly recommend creating test applicants in Sumsub using Sumsub's official document templates.
 
@@ -39,7 +51,7 @@ In particular, **German document templates** work exceptionally well for verific
 
 ---
 
-## 3. Sharing Applicant Data via API
+## 4. Sharing Applicant Data via API
 
 Once Monerium is configured as a recipient partner, you can share applicant details via the API using the `/profiles/{profileId}/share` endpoint.
 
