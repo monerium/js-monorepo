@@ -68,15 +68,15 @@ const sidebars: SidebarsConfig = {
       },
       items: require('./docs/packages/sdk/typedoc-sidebar.cjs'),
     },
-    {
-      type: 'category',
-      label: 'SDK React Provider',
-      link: {
-        type: 'doc',
-        id: 'packages/sdk-react-provider/index',
-      },
-      items: require('./docs/packages/sdk-react-provider/typedoc-sidebar.cjs'),
-    },
+    // {
+    //   type: 'category',
+    //   label: 'SDK React Provider',
+    //   link: {
+    //     type: 'doc',
+    //     id: 'packages/sdk-react-provider/index',
+    //   },
+    //   items: require('./docs/packages/sdk-react-provider/typedoc-sidebar.cjs'),
+    // },
     {
       type: 'doc',
       id: 'MigrationGuide',

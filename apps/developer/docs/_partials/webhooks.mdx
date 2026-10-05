@@ -29,6 +29,7 @@ const response = await fetch('https://api.monerium.dev/webhooks', {
     secret,
     types: [
       'profile.updated',
+      'profile.error',
       'iban.updated',
       'order.created',
       'order.updated',
@@ -57,7 +58,7 @@ secret := "whsec_" + base64.StdEncoding.EncodeToString(raw)
 body, _ := json.Marshal(map[string]any{
   "url":    "https://your-app.com/webhooks/monerium",
   "secret": secret,
-  "types":  []string{"profile.updated", "iban.updated", "order.created", "order.updated"},
+  "types":  []string{"profile.updated", "profile.error", "iban.updated", "order.created", "order.updated"},
 })
 
 req, _ := http.NewRequest("POST", "https://api.monerium.dev/webhooks", bytes.NewBuffer(body))
@@ -160,9 +161,12 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 | Event             | When it fires                    |
 | :---------------- | :------------------------------- |
 | `profile.updated` | Profile details or state changed |
+| `profile.error`   | KYC profile data was rejected as invalid and skipped during ingestion |
 | `iban.updated`    | IBAN details or state changed    |
 | `order.created`   | New order placed                 |
 | `order.updated`   | Order state changed              |
+
+`profile.error` is **opt-in** — add it to the `types` array when creating or updating a subscription. It is not included by default. The payload lists the `field`(s) that were rejected and the `reason`; the profile stays `incomplete` until the invalid data is corrected and resubmitted.
 
 ### Retries
 
