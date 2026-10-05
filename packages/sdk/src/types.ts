@@ -684,6 +684,8 @@ export interface Counterpart {
  * @group Orders
  */
 export interface CounterpartDetails {
+  /** Personal-profile own-account declaration. Monerium replaces recipient details with the approved profile's names and country. Subject to verification and volume limits. */
+  own?: boolean;
   name?: string;
   bank?: CounterpartBank;
   country?: string;
