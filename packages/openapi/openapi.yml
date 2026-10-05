@@ -1874,6 +1874,7 @@ paths:
         For redeem and cross-chain orders the wallet owner signs a specific message to prove ownership and consent for the transaction.
 
         Attaching a supporting document for amounts above 15,000 EUR is required. Supporting document can be an invoice or an agreement.
+        Own-account payouts with `counterpart.details.own: true` are exempt from this requirement.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
       requestBody:
@@ -2943,7 +2944,7 @@ components:
         referenceNumber:
           $ref: '#/components/schemas/ReferenceNumber'
         supportingDocumentId:
-          description: 'File ID, required for orders with amount greater or equal to €15,000.'
+          description: 'Uploaded file ID, required for payouts of €15,000 or more, except own-account payouts with counterpart.details.own: true.'
           example: 3ebc51a8-044f-11ed-8b1f-4a76448b7b21
           $ref: '#/components/schemas/UUID'
       required:
@@ -3605,8 +3606,19 @@ components:
             - signature
             - calldata
     CounterpartDetails:
-      description: Details about the counterpart that can be either a corporate or an individual.
-      oneOf:
+      description: 'Recipient details. For own-account payouts, submit {"own":true}. Details come from the approved personal profile. Corporate profiles cannot use own: true.'
+      anyOf:
+        - title: Own account
+          type: object
+          required:
+            - own
+          properties:
+            own:
+              type: boolean
+              enum:
+                - true
+          example:
+            own: true
         - title: Individual
           type: object
           description: The counterpart is an individual.
@@ -3741,6 +3753,9 @@ components:
                 - lastName
                 - country
               properties:
+                own:
+                  description: Present and true for own-account payouts.
+                  type: boolean
                 firstName:
                   description: The first name of the individual. The middle name(s) can also be included here.
                   type: string
@@ -4697,7 +4712,7 @@ tags:
     description: 'Fetch pending signature requests for linking addresses and approving orders. Used with smart contract wallets that sign on-chain. See the [Link a wallet](/whitelabel#link-wallet) guide.'
   - name: files
     x-displayName: Files
-    description: 'Upload files to obtain a `fileId` for use in profile verifications and orders above €15,000. See the [Onboarding guide](/whitelabel#onboarding) for verification requirements.'
+    description: 'Upload files to obtain a `fileId` for use in profile verifications and payouts requiring supporting documents. See the [Onboarding guide](/whitelabel#onboarding) for verification requirements.'
   - name: webhooks
     x-displayName: Webhooks
     description: 'Receive real-time event notifications for profile approvals, IBAN provisioning, and order state changes. See the [Webhooks](/whitelabel#webhooks) guide for registration and signature verification details.'
@@ -4710,6 +4725,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-10-05:
+      * [POST /orders](#operation/post-orders) - Added personal own-account payouts using `counterpart.details.own: true`, exempt from the €15,000 supporting-document requirement.
+
       ### 2026-09-29:
       * [POST /orders](#operation/post-orders) - Request body split into Redeem, Issue and Cross-chain variants, each documenting only the fields it supports. `Counterpart` schema replaced with `CounterpartIBAN` and `CounterpartChain`.
       * [POST /orders](#operation/post-orders) - Beta: Added issue orders (`kind: issue`) for applications with the `order.create.issue` scope. No `message` or `signature` required.
