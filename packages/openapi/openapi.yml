@@ -4554,6 +4554,10 @@ components:
           enum:
             - active
             - inactive
+        deactivationReason:
+          description: Reason the subscription was deactivated. Omitted when no reason is set.
+          type: string
+          example: max delivery attempts reached
       required:
         - id
         - url
@@ -4727,6 +4731,9 @@ tags:
     description: |
       ### 2026-10-05:
       * [POST /orders](#operation/post-orders) - Added personal own-account payouts using `counterpart.details.own: true`, exempt from the €15,000 supporting-document requirement.
+
+      ### 2026-10-02:
+      * [GET /webhooks](#operation/list-subscriptions) - Documented the optional `deactivationReason` field in webhook subscription responses.
 
       ### 2026-09-29:
       * [POST /orders](#operation/post-orders) - Request body split into Redeem, Issue and Cross-chain variants, each documenting only the fields it supports. `Counterpart` schema replaced with `CounterpartIBAN` and `CounterpartChain`.
