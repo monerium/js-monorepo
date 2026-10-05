@@ -60,8 +60,49 @@ function resolveChain<T extends Record<string, unknown>>(obj: T): T {
   return obj;
 }
 
+type ApiErrorPayload = {
+  code?: unknown;
+  status?: unknown;
+  message?: unknown;
+  error?: unknown;
+  errors?: Record<string, string>;
+  details?: unknown;
+};
+
+function normalizeApiError(
+  body: unknown,
+  httpStatus: number
+): {
+  code: number;
+  status: string;
+  message: string;
+  errors?: Record<string, string>;
+  details?: unknown;
+} {
+  const payload: ApiErrorPayload =
+    body && typeof body === 'object' ? (body as ApiErrorPayload) : {};
+  const message =
+    typeof payload.message === 'string'
+      ? payload.message
+      : typeof payload.error === 'string'
+        ? payload.error
+        : `Request failed with HTTP status ${httpStatus}`;
+  return {
+    code: typeof payload.code === 'number' ? payload.code : httpStatus,
+    status:
+      typeof payload.status === 'string'
+        ? payload.status
+        : `HTTP ${httpStatus}`,
+    message,
+    ...(payload.errors !== undefined && { errors: payload.errors }),
+    ...(payload.details !== undefined && { details: payload.details }),
+  };
+}
+
 export interface MoneriumApiClientOptions {
   environment?: ENV;
+  /** Override the API base URL, including an optional path prefix. */
+  apiUrl?: string;
   getAccessToken: () => Promise<string | undefined> | string | undefined;
   transport?: Transport;
 }
@@ -80,7 +121,10 @@ export abstract class MoneriumBaseClient {
 
   constructor(options: MoneriumApiClientOptions) {
     this.options = options;
-    this.env = getEnv(options.environment);
+    const environment = getEnv(options.environment);
+    this.env = options.apiUrl
+      ? { ...environment, api: options.apiUrl.replace(/\/+$/, '') }
+      : environment;
     this.transport = options.transport ?? defaultTransport;
   }
 
@@ -139,9 +183,7 @@ export abstract class MoneriumBaseClient {
     }
 
     if (status < 200 || status >= 300) {
-      throw new MoneriumApiError(
-        json as { code: number; status: string; message: string }
-      );
+      throw new MoneriumApiError(normalizeApiError(json, status));
     }
 
     return json as T;
@@ -180,9 +222,7 @@ export abstract class MoneriumBaseClient {
     }
 
     if (status < 200 || status >= 300) {
-      throw new MoneriumApiError(
-        json as { code: number; status: string; message: string }
-      );
+      throw new MoneriumApiError(normalizeApiError(json, status));
     }
 
     return json as T;
@@ -307,6 +347,7 @@ export abstract class MoneriumBaseClient {
    */
   public async requestIban(input: RequestIbanInput): Promise<AcceptedResponse> {
     return this.request<AcceptedResponse>('POST', 'ibans', {
+      ...(input.profile && { profile: input.profile }),
       address: input.address,
       chain: parseChain(input.chain),
       emailNotifications: input.emailNotifications ?? true,
@@ -497,7 +538,78 @@ export abstract class MoneriumServerClient extends MoneriumBaseClient {
 }
 
 export class MoneriumPrivateClient extends MoneriumServerClient {
-  // To be populated
+  /**
+   * Creates a new whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/create-profile | API Documentation}
+   */
+  public async createProfile(input: CreateProfileInput): Promise<Profile> {
+    return this.request<Profile>('POST', 'profiles', input);
+  }
+
+  /**
+   * Submit compliance details for a whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-details | API Documentation}
+   */
+  public async updateProfileDetails(
+    input: UpdateProfileDetailsInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/details`,
+      body
+    );
+  }
+
+  /**
+   * Share KYC data from a supported third-party provider for a whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/share-profile-kyc | API Documentation}
+   */
+  public async shareProfileKYC(
+    input: ShareProfileKYCInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'POST',
+      `profiles/${profile}/share`,
+      body
+    );
+  }
+
+  /**
+   * Submit additional data for a whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-form | API Documentation}
+   */
+  public async updateProfileForm(
+    input: UpdateProfileFormInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/form`,
+      body
+    );
+  }
+
+  /**
+   * Submit verifications for a whitelabel customer profile.
+   *
+   * @see {@link https://docs.monerium.com/api#tag/profiles/operation/patch-profile-verifications | API Documentation}
+   */
+  public async updateProfileVerifications(
+    input: UpdateProfileVerificationsInput
+  ): Promise<AcceptedResponse> {
+    const { profile, ...body } = input;
+    return this.request<AcceptedResponse>(
+      'PATCH',
+      `profiles/${profile}/verifications`,
+      body
+    );
+  }
 }
 
 export class MoneriumOAuthClient extends MoneriumBaseClient {

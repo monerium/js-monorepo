@@ -1,6 +1,4 @@
-import encodeBase64Url from 'crypto-js/enc-base64url.js';
-import WordArray from 'crypto-js/lib-typedarrays.js';
-import SHA256 from 'crypto-js/sha256.js';
+import { base64UrlEncode, sha256, toUtf8Bytes } from './crypto.helpers';
 
 /**
  * Generate a cryptographically random PKCE code verifier (RFC 7636).
@@ -12,7 +10,7 @@ import SHA256 from 'crypto-js/sha256.js';
 export const randomPKCECodeVerifier = (): string => {
   const bytes = new Uint8Array(32);
   crypto.getRandomValues(bytes);
-  return encodeBase64Url.stringify(WordArray.create(bytes));
+  return base64UrlEncode(bytes);
 };
 
 /**
@@ -22,7 +20,7 @@ export const randomPKCECodeVerifier = (): string => {
  * @category Functions
  */
 export const calculatePKCECodeChallenge = (codeVerifier: string): string => {
-  return encodeBase64Url.stringify(SHA256(codeVerifier as string));
+  return base64UrlEncode(sha256(toUtf8Bytes(codeVerifier)));
 };
 
 /**
