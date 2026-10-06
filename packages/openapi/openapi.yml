@@ -1873,8 +1873,8 @@ paths:
 
         For redeem and cross-chain orders the wallet owner signs a specific message to prove ownership and consent for the transaction.
 
-        Attaching a supporting document for amounts above 15,000 EUR is required. Supporting document can be an invoice or an agreement.
-        Own-account payouts with `counterpart.details.own: true` are exempt from this requirement.
+        Personal third-party payouts of 15,000 EUR or more require a supporting document, such as an invoice or an agreement.
+        Corporate payouts and personal own payouts are exempt. Any supplied supporting document is validated.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
       requestBody:
@@ -2944,7 +2944,7 @@ components:
         referenceNumber:
           $ref: '#/components/schemas/ReferenceNumber'
         supportingDocumentId:
-          description: 'Uploaded file ID, required for payouts of €15,000 or more, except own-account payouts with counterpart.details.own: true.'
+          description: 'Uploaded file ID, required for personal third-party payouts of €15,000 or more. Optional for corporate payouts and personal own payouts. Any supplied document is validated.'
           example: 3ebc51a8-044f-11ed-8b1f-4a76448b7b21
           $ref: '#/components/schemas/UUID'
       required:
@@ -3606,19 +3606,8 @@ components:
             - signature
             - calldata
     CounterpartDetails:
-      description: 'Recipient details. For own-account payouts, submit {"own":true}. Details come from the approved personal profile. Corporate profiles cannot use own: true.'
+      description: Details about the counterpart that can be either a corporate or an individual.
       anyOf:
-        - title: Own account
-          type: object
-          required:
-            - own
-          properties:
-            own:
-              type: boolean
-              enum:
-                - true
-          example:
-            own: true
         - title: Individual
           type: object
           description: The counterpart is an individual.
@@ -3654,6 +3643,17 @@ components:
             country:
               description: 'The two-letter country code (ISO 3166-1 alpha-2) representing the country where the counterpart is located. For more information, refer to the [ISO 3166-1 alpha-2 standard](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).'
               $ref: '#/components/schemas/CountryCode'
+        - title: Own account
+          type: object
+          required:
+            - own
+          properties:
+            own:
+              type: boolean
+              enum:
+                - true
+          example:
+            own: true
     CounterpartIBAN:
       description: 'The counterpart represents the other party involved in a financial transaction, such as the recipient of a payment or the payer. The counterpart can be either an individual or a corporate. It includes identifying information such as account details, name, and country.'
       type: object
@@ -3754,7 +3754,7 @@ components:
                 - country
               properties:
                 own:
-                  description: Present and true for own-account payouts.
+                  description: Indicates a personal own payout.
                   type: boolean
                 firstName:
                   description: The first name of the individual. The middle name(s) can also be included here.
@@ -4729,8 +4729,11 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-10-06:
+      * [POST /orders](#operation/post-orders) - Clarified supporting-document exemptions for corporate and personal own payouts. Recipient variants are listed as Individual, Corporation and Own account.
+
       ### 2026-10-05:
-      * [POST /orders](#operation/post-orders) - Added personal own-account payouts using `counterpart.details.own: true`, exempt from the €15,000 supporting-document requirement.
+      * [POST /orders](#operation/post-orders) - Added personal own payouts, exempt from the €15,000 supporting-document requirement.
 
       ### 2026-10-02:
       * [GET /webhooks](#operation/list-subscriptions) - Documented the optional `deactivationReason` field in webhook subscription responses.

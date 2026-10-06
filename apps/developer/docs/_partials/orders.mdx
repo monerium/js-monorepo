@@ -113,9 +113,9 @@ const response = await fetch('https://api.monerium.dev/orders', {
 // 200: order placed and processing
 ```
 
-#### Own-account payout
+#### Own payout
 
-For personal own-account payouts, set `counterpart.details.own` to `true`:
+For personal own payouts, use the following recipient details:
 
 ```js
 counterpart: {
@@ -124,12 +124,12 @@ counterpart: {
 }
 ```
 
-Recipient details come from the approved personal profile. Corporate profiles cannot use `own: true`.
+Recipient details come from the approved personal profile.
 
 :::note Orders above €15,000
-Orders with an amount of €15,000 or more require a supporting document (invoice or contract). Upload it first via `POST /files` to obtain a `fileId`, then include `supportingDocumentId: fileId` in the order payload.
+Personal third-party payouts with an amount of €15,000 or more require a supporting document (invoice or contract). Upload it first via `POST /files` to obtain a `fileId`, then include `supportingDocumentId: fileId` in the order payload.
 
-Own-account payouts with `counterpart.details.own: true` are exempt from this requirement.
+Supporting documents are optional for corporate payouts and personal own payouts. Any supplied document is validated.
 :::
 
 ### Cross-chain transfer (bridging)
