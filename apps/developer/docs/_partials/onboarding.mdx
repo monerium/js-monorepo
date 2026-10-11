@@ -101,12 +101,6 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
 // Returns 202 — monitor progress via profile.updated webhooks
 ```
 
-##### Diagnose missing data
-
-`202` means sharing was accepted, not that onboarding was approved. Fetch `GET /profiles/{profileId}` with `Accept: application/vnd.monerium.api-v2+json` and inspect `state`, `meta.reason`, and verification states. A reason such as `phone is too short` can indicate a missing phone. Use profile reads alongside webhooks; not every incomplete-state transition emits an event.
-
-Compare the donor applicant, recipient applicant, and imported profile data. If a value is missing from the recipient, inspect the [Reusable KYC Report](https://docs.sumsub.com/docs/reusable-kyc-share#review-reused-verification-in-dashboard). If present on the recipient but missing from Monerium, contact Monerium with the profile and applicant IDs.
-
   </TabItem>
   <TabItem value="reliance-personal" label="KYC Reliance — Personal">
 
@@ -229,8 +223,6 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
 ### 3. Submit form data
 
 Required for all integrations. Captures additional risk assessment data such as occupation, purpose of account, source of funds, and expected monthly volume.
-
-See the [API reference](https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-form) for fields, enum values, and requirements. Submit form data separately; do not assume Sumsub questionnaire answers are imported.
 
 <Endpoint method="PATCH" path="/profiles/{profileId}/form" href="https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-form" />
 
