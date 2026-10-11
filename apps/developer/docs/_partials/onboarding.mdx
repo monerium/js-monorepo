@@ -51,6 +51,38 @@ Before sharing applicant data, you must add Monerium as a recipient in your Sums
 Before sharing, ensure your customer passes all required checks. See the [KYC Guide — Individuals](./kyc-guide-individuals).
 :::
 
+##### Shared identity and contact data
+
+Collect these values in standard Sumsub applicant fields before sharing. Successful verification on donor side does not guarantee all data required by the recipient is present.
+
+| Data | Requirement | Sumsub source and collection notes |
+| --- | --- | --- |
+| First name | Required | `fixedInfo.firstName` or `info.firstName` |
+| Last name | Required | `fixedInfo.lastName` or `info.lastName` |
+| Date of birth | Required | `fixedInfo.dob` or `info.dob`, in `YYYY-MM-DD` format. Customers must be at least 18. |
+| Nationality | Required | `fixedInfo.nationality` or `info.nationality`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Collect explicitly if unavailable from documents. |
+| Residential street and building number | Required | First address in `fixedInfo.addresses` or `info.addresses`, using `street` and `buildingNumber`. |
+| Residential city | Required | First address's `town`. |
+| Country of residence | Required | First address `country`, `fixedInfo.country` or `info.country`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Use residential country, not document's issuing country. |
+| Phone number | Required | Applicant's top-level `phone`, in E.164 format including the country code (e.g. `+351912345678`). |
+| Email address | Required | Applicant's top-level `email` |
+| Postal code | Required | First address's `postCode` |
+| State or region | Optional | First address's `state` |
+
+When using the [Sumsub Web SDK](https://docs.sumsub.com/docs/get-started-with-web-sdk):
+
+- Supply contact data with [`.withConf({ email: applicantEmail, phone: applicantPhone })`](https://docs.sumsub.com/docs/get-started-with-web-sdk#standalone-example-of-websdk-initialization). For the React SDK, pass these values in the [`config` prop](https://docs.sumsub.com/docs/get-started-with-web-sdk#react-integration).
+- Supply predefined identity and address data through the [applicant API](https://docs.sumsub.com/reference/create-applicant#request-examples) in `fixedInfo` before launching the SDK. Do not use custom questionnaire answers for these fields.
+- The SDK's `country` option prefills the document-upload country but does not set nationality or residential country.
+
+:::note
+A [Phone Verification step](https://docs.sumsub.com/docs/email-and-phone-verification) is not required for sharing the phone number.
+:::
+
+##### Verification documents
+
+Complete identity document, selfie/liveness, and proof-of-address checks before sharing. See [document acceptance by issuing country](./sumsub-id-documents) for document requirements, and the [KYC Guide](./kyc-guide-individuals#documents-and-verification) for proof-of-address requirements.
+
 <Endpoint method="POST" path="/profiles/{profileId}/share" href="https://docs.monerium.com/api/#tag/profiles/operation/share-profile-kyc" />
 
 ```js
@@ -68,6 +100,12 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
 });
 // Returns 202 — monitor progress via profile.updated webhooks
 ```
+
+##### Diagnose missing data
+
+`202` means sharing was accepted, not that onboarding was approved. Fetch `GET /profiles/{profileId}` with `Accept: application/vnd.monerium.api-v2+json` and inspect `state`, `meta.reason`, and verification states. A reason such as `phone is too short` can indicate a missing phone. Use profile reads alongside webhooks; not every incomplete-state transition emits an event.
+
+Compare the donor applicant, recipient applicant, and imported profile data. If a value is missing from the recipient, inspect the [Reusable KYC Report](https://docs.sumsub.com/docs/reusable-kyc-share#review-reused-verification-in-dashboard). If present on the recipient but missing from Monerium, contact Monerium with the profile and applicant IDs.
 
   </TabItem>
   <TabItem value="reliance-personal" label="KYC Reliance — Personal">
@@ -191,6 +229,8 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
 ### 3. Submit form data
 
 Required for all integrations. Captures additional risk assessment data such as occupation, purpose of account, source of funds, and expected monthly volume.
+
+See the [API reference](https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-form) for fields, enum values, and requirements. Submit form data separately; do not assume Sumsub questionnaire answers are imported.
 
 <Endpoint method="PATCH" path="/profiles/{profileId}/form" href="https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-form" />
 
