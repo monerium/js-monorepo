@@ -49,7 +49,7 @@ Your wallet needs gas to send on-chain transactions. Use the faucets below to ge
    }
    ```
 
-6. **Test the source of funds flow** — onboard a profile that requires source of funds (e.g: restricted residency/nationality or PEP) and submit the verification. See [Source of funds](/kyc-guide-individuals#source-of-funds).
+6. **Test the source of funds flow** — onboard a profile that requires source of funds (e.g: restricted residency/nationality or PEP) and submit the verification. Monerium may also request source of funds after submission based on risk evaluation: your endpoint receives a `profile.updated` webhook with the profile back in `incomplete` and a `sourceOfFunds` verification added in `incomplete` — collect the documents and submit them via `PATCH /profiles/{profileId}/verifications`. See [Source of funds](/kyc-guide-individuals#source-of-funds).
 7. **Link a wallet** — associate a blockchain address with the profile.
 8. **Get an IBAN** — request a dedicated IBAN for the profile.
 9. **Get test EURe** — simulate a bank transfer to mint test EURe.
