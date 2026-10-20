@@ -6,7 +6,7 @@ import { Endpoint } from '@site/src/components/Endpoint';
 
 Monerium supports two strategies for identity verification:
 
-- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and for corporate profiles when Monerium has configured a corporate verification level for your partner.
+- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and for corporate profiles in private preview when Monerium has configured a corporate verification level for your partner.
 - **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for partners without SumSub.
 
 The steps below apply to both strategies. Where the paths diverge, tabs indicate which applies.
@@ -36,7 +36,7 @@ const { id: profileId, state } = await response.json();
 
 ### 2. Submit customer details
 
-KYC Sharing is available for personal profiles, and for corporate profiles when Monerium has configured a corporate verification level for your partner. Partners without Sumsub must use KYC Reliance.
+KYC Sharing is available for personal profiles, and for corporate profiles in private preview when Monerium has configured a corporate verification level for your partner. Partners without Sumsub must use KYC Reliance.
 
 <Tabs>
   <TabItem value="sharing" label="KYC Sharing — Personal">
@@ -141,6 +141,10 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
   <TabItem value="sharing-corporate" label="KYC Sharing — Corporate">
 
 Transfer a verified corporate applicant from your SumSub account to Monerium. Returns `202`; Monerium fetches the company, its associated parties, and the company documents asynchronously.
+
+:::warning Unreleased feature
+Corporate KYC Sharing is not generally available yet. These instructions are for partners in the private preview.
+:::
 
 :::info Sumsub setup required
 Corporate sharing must be enabled by Monerium for your partner. Add Monerium as a recipient in your Sumsub dashboard and configure the corporate level as described in the [Sumsub Integration Guide](./sumsub#corporate-profiles).

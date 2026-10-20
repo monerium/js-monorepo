@@ -9,7 +9,7 @@ import ComplianceDisclaimer from './_partials/compliance-disclaimer.mdx';
 
 # KYB Guide — Corporates
 
-This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles must use KYC Reliance — KYC Sharing via SumSub is not supported for companies.
+This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles can onboard via KYC Reliance, or via KYC Sharing with Sumsub in private preview when Monerium has configured a corporate verification level for your partner. The data requirements below apply to both flows.
 
 <ComplianceDisclaimer />
 
@@ -63,7 +63,7 @@ The following company information is required:
 | `city`               | Yes      | City                                   |
 | `country`            | Yes      | ISO 3166-1 alpha-2 country code        |
 | `countryState`       | Yes      | State or county                        |
-| `registrationDate`   | Yes      | Company registration date (YYYY-MM-DD) |
+| `registrationDate`   | No       | Company registration date (YYYY-MM-DD) |
 | `vatNumber`          | No       | VAT number                             |
 | `website`            | No       | Company website                        |
 
@@ -83,8 +83,6 @@ Each representative requires full personal details plus an identity document:
 | `country`           | Yes      | ISO 3166-1 alpha-2 country code                          |
 | `nationality`       | Yes      | ISO 3166-1 alpha-2 nationality code                      |
 | `birthday`          | Yes      | Date of birth (YYYY-MM-DD)                               |
-| `phone`             | Yes      | Phone number                                             |
-| `email`             | Yes      | Email address                                            |
 | `idDocument.kind`   | Yes      | `passport`, `nationalIdentityCard`, or `residencePermit` |
 | `idDocument.number` | Yes      | Document number                                          |
 
@@ -98,13 +96,11 @@ Each beneficial owner requires the same personal details as representatives, plu
 | :-------------------- | :------- | :---------------------------- |
 | `ownershipPercentage` | Yes      | Ownership percentage (25–100) |
 
-Contact details (`phone`, `email`) are required for beneficial owners.
-
 No identity document is required for beneficial owners.
 
 ## Directors
 
-Directors are individuals with the power to legally bind the company (power of procuration). Each director requires the same personal details as representatives — including `phone` and `email` — but no identity document.
+Directors are individuals with the power to legally bind the company (power of procuration). Each director requires the same personal details as representatives but no identity document.
 
 ## Form data
 
@@ -154,6 +150,26 @@ Source of funds verification is required when any of the following apply:
 - PEP status of any director or beneficial owner
 
 Monerium may also request source of funds after submission based on risk evaluation. You will be notified via a `profile.updated` webhook with `sourceOfFunds` marked as `incomplete`.
+
+## Sumsub KYB sharing
+
+:::warning Unreleased feature
+Corporate KYC Sharing is not generally available yet. These instructions are for partners in the private preview. Monerium enables the corporate verification level per partner.
+:::
+
+With KYC Sharing, Sumsub collects and verifies the company and its associated parties, and Monerium imports the data from the corporate applicant. Sharing is in private preview and enabled per partner; contact Monerium before configuring the corporate level.
+
+The corporate level must collect:
+
+- Company name, registration number, registered address, postal code, city, country, and state.
+- Company documents supporting the legal name, registered address, and registration number.
+- At least one representative with full personal details and an identity document.
+- Directors with full personal details, no identity document.
+- Every beneficial owner at 25% or more with full personal details and ownership percentage, no identity document.
+
+Do not require a separate shareholder role. Shareholders at or above the 25% threshold are declared as beneficial owners; Monerium does not model shareholders below that threshold. Do not require person-level proof-of-address documents for corporate persons.
+
+Sumsub does not provide the corporate form data (`service`, `legalForm`, `purpose`, `activity`, `fundOrigin`, `monthlyTurnover`, `monthlyTransactionCount`) or the company registration date, VAT number, and website. Submit the form via `PATCH /profiles/{profileId}/form` and any missing company details via `PATCH /profiles/{profileId}/details`. See [Sumsub Integration](./sumsub#corporate-profiles) for the level configuration and share request.
 
 ## Submitting data
 
