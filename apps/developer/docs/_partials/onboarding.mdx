@@ -386,6 +386,13 @@ app.post('/webhooks/monerium', express.raw({ type: 'application/json' }), async 
   res.sendStatus(200);
 
   const event = JSON.parse(req.body);
+
+  if (event.type === 'profile.error') {
+    // Opt-in event: profile data was rejected as invalid during ingestion.
+    // event.data.errors lists the rejected fields — correct and resubmit them.
+    return;
+  }
+
   if (event.type !== 'profile.updated') return;
 
   const { state, verifications } = event.data;
@@ -414,3 +421,9 @@ app.post('/webhooks/monerium', express.raw({ type: 'application/json' }), async 
   }
 });
 ```
+
+:::note Invalid profile data
+
+Profile data received from a KYC provider can be rejected as invalid during ingestion — for example, an address exceeding the maximum allowed length. The invalid fields are skipped, the profile stays `incomplete`, and — if you subscribe to the opt-in [`profile.error`](#webhooks) event — your endpoint receives the rejected `field`(s) and `reason`. Correct the fields, resubmit the details, and the profile resumes the normal approval flow.
+
+:::
