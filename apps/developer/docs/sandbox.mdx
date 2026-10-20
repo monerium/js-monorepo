@@ -33,13 +33,29 @@ Your wallet needs gas to send on-chain transactions. Use the faucets below to ge
 2. **Authenticate** — obtain an access token via client credentials.
 3. **Set up webhooks** — register an endpoint to receive sandbox events.
 4. **Onboard a profile** — create and approve a test profile (KYC).
-5. **Test the source of funds flow** — onboard a profile that requires source of funds (e.g: restricted residency/nationality or PEP) and submit the verification. See [Source of funds](/kyc-guide-individuals#source-of-funds).
-6. **Link a wallet** — associate a blockchain address with the profile.
-7. **Get an IBAN** — request a dedicated IBAN for the profile.
-8. **Get test EURe** — simulate a bank transfer to mint test EURe.
-9. **Get test gas** — use faucets to fund the wallet for on-chain transactions.
-10. **Fund your whitelabel profiles** — move test EURe from your regular profile to whitelabel profiles.
-11. **Place a test order** — send or receive a payment to verify the full flow.
+5. **Trigger a `profile.error` webhook** — add `profile.error` to your subscription's `types`, then submit profile data that fails ingestion validation (e.g. an address longer than 70 characters). The profile stays `incomplete` until corrected and resubmitted. Your endpoint receives:
+
+   ```json
+   {
+     "type": "profile.error",
+     "timestamp": "2024-08-09T12:44:04.777884Z",
+     "data": {
+       "id": "4f079ef8-6d26-11eb-9bc8-acde48001122",
+       "kind": "personal",
+       "errors": [
+         { "field": "address", "reason": "address exceeds 70 characters" }
+       ]
+     }
+   }
+   ```
+
+6. **Test the source of funds flow** — onboard a profile that requires source of funds (e.g: restricted residency/nationality or PEP) and submit the verification. See [Source of funds](/kyc-guide-individuals#source-of-funds).
+7. **Link a wallet** — associate a blockchain address with the profile.
+8. **Get an IBAN** — request a dedicated IBAN for the profile.
+9. **Get test EURe** — simulate a bank transfer to mint test EURe.
+10. **Get test gas** — use faucets to fund the wallet for on-chain transactions.
+11. **Fund your whitelabel profiles** — move test EURe from your regular profile to whitelabel profiles.
+12. **Place a test order** — send or receive a payment to verify the full flow.
 
 ## Funding whitelabel profiles
 
