@@ -954,7 +954,7 @@ paths:
           Whitelabel
         </span>
 
-        Reuse KYC data from a third-party provider (e.g. Sumsub) to populate the profile's
+        Reuse KYC data from a third-party provider (e.g. Sumsub) to populate a personal or corporate profile's
         `details` and `verifications`.
 
         Monerium uses the supplied token to fetch data from the provider and updates the
@@ -991,13 +991,34 @@ paths:
                       example: husheu817472
                   required:
                     - token
+                corporate:
+                  description: Token for a corporate profile applicant.
+                  type: object
+                  properties:
+                    token:
+                      description: Provider-issued applicant token.
+                      type: string
+                      example: husheu817472
+                  required:
+                    - token
+              oneOf:
+                - required:
+                    - personal
+                - required:
+                    - corporate
               required:
                 - provider
-                - personal
-            example:
-              provider: sumsub
+            examples:
               personal:
-                token: husheu817472
+                value:
+                  provider: sumsub
+                  personal:
+                    token: husheu817472
+              corporate:
+                value:
+                  provider: sumsub
+                  corporate:
+                    token: husheu817472
       responses:
         '202':
           description: |
@@ -1039,6 +1060,9 @@ paths:
                 "token": "husheu817472"
               }
             }'
+
+            # Corporate profiles use the same endpoint with a corporate token:
+            # --data-raw '{"provider":"sumsub","corporate":{"token":"husheu817472"}}'
   '/profiles/{profile}/details':
     patch:
       operationId: patch-profile-details

@@ -6,8 +6,8 @@ import { Endpoint } from '@site/src/components/Endpoint';
 
 Monerium supports two strategies for identity verification:
 
-- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles only.
-- **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for corporate profiles and for partners without SumSub.
+- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and for corporate profiles when Monerium has configured a corporate verification level for your partner.
+- **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for partners without SumSub.
 
 The steps below apply to both strategies. Where the paths diverge, tabs indicate which applies.
 
@@ -36,7 +36,7 @@ const { id: profileId, state } = await response.json();
 
 ### 2. Submit customer details
 
-KYC Sharing is available for personal profiles only. Corporate profiles must always use KYC Reliance.
+KYC Sharing is available for personal profiles, and for corporate profiles when Monerium has configured a corporate verification level for your partner. Partners without Sumsub must use KYC Reliance.
 
 <Tabs>
   <TabItem value="sharing" label="KYC Sharing — Personal">
@@ -55,19 +55,19 @@ Before sharing, ensure your customer passes all required checks. See the [KYC Gu
 
 Collect these values in standard Sumsub applicant fields before sharing. Successful verification on donor side does not guarantee all data required by the recipient is present.
 
-| Data | Requirement | Sumsub source and collection notes |
-| --- | --- | --- |
-| First name | Required | `fixedInfo.firstName` or `info.firstName` |
-| Last name | Required | `fixedInfo.lastName` or `info.lastName` |
-| Date of birth | Required | `fixedInfo.dob` or `info.dob`, in `YYYY-MM-DD` format. Customers must be at least 18. |
-| Nationality | Required | `fixedInfo.nationality` or `info.nationality`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Collect explicitly if unavailable from documents. |
-| Residential street and building number | Required | First address in `fixedInfo.addresses` or `info.addresses`, using `street` and `buildingNumber`. |
-| Residential city | Required | First address's `town`. |
-| Country of residence | Required | First address `country`, `fixedInfo.country` or `info.country`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Use residential country, not document's issuing country. |
-| Phone number | Required | Applicant's top-level `phone`, in E.164 format including the country code (e.g. `+351912345678`). |
-| Email address | Required | Applicant's top-level `email` |
-| Postal code | Required | First address's `postCode` |
-| State or region | Optional | First address's `state` |
+| Data                                   | Requirement | Sumsub source and collection notes                                                                                                                                   |
+| -------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| First name                             | Required    | `fixedInfo.firstName` or `info.firstName`                                                                                                                            |
+| Last name                              | Required    | `fixedInfo.lastName` or `info.lastName`                                                                                                                              |
+| Date of birth                          | Required    | `fixedInfo.dob` or `info.dob`, in `YYYY-MM-DD` format. Customers must be at least 18.                                                                                |
+| Nationality                            | Required    | `fixedInfo.nationality` or `info.nationality`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Collect explicitly if unavailable from documents.                         |
+| Residential street and building number | Required    | First address in `fixedInfo.addresses` or `info.addresses`, using `street` and `buildingNumber`.                                                                     |
+| Residential city                       | Required    | First address's `town`.                                                                                                                                              |
+| Country of residence                   | Required    | First address `country`, `fixedInfo.country` or `info.country`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Use residential country, not document's issuing country. |
+| Phone number                           | Required    | Applicant's top-level `phone`, in E.164 format including the country code (e.g. `+351912345678`).                                                                    |
+| Email address                          | Required    | Applicant's top-level `email`                                                                                                                                        |
+| Postal code                            | Required    | First address's `postCode`                                                                                                                                           |
+| State or region                        | Optional    | First address's `state`                                                                                                                                              |
 
 When using the [Sumsub Web SDK](https://docs.sumsub.com/docs/get-started-with-web-sdk):
 
@@ -136,6 +136,41 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
   }),
 });
 ```
+
+  </TabItem>
+  <TabItem value="sharing-corporate" label="KYC Sharing — Corporate">
+
+Transfer a verified corporate applicant from your SumSub account to Monerium. Returns `202`; Monerium fetches the company, its associated parties, and the company documents asynchronously.
+
+:::info Sumsub setup required
+Corporate sharing must be enabled by Monerium for your partner. Add Monerium as a recipient in your Sumsub dashboard and configure the corporate level as described in the [Sumsub Integration Guide](./sumsub#corporate-profiles).
+:::
+
+:::note Pre-checks
+Before sharing, ensure the company passes all required checks. See the [KYB Guide — Corporates](./kyb-guide-corporates).
+:::
+
+The corporate applicant must contain the company name, registration number, registered address, the company documents supporting the name/address/registration number, at least one representative with an identity document, and the directors and beneficial owners (25%+). Directors and beneficial owners need personal details but no identity document. Do not require a separate shareholder role or person-level proof of address.
+
+<Endpoint method="POST" path="/profiles/{profileId}/share" href="https://docs.monerium.com/api/#tag/profiles/operation/share-profile-kyc" />
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    provider: 'sumsub',
+    corporate: { token: sumsubApplicantToken },
+  }),
+});
+// Returns 202 — monitor progress via profile.updated webhooks
+```
+
+Sumsub does not provide the corporate form data. Continue with [step 3](#3-submit-form-data) to submit it.
 
   </TabItem>
   <TabItem value="reliance-corporate" label="KYC Reliance — Corporate">
@@ -340,9 +375,32 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
 ```
 
   </TabItem>
+  <TabItem value="corporate-sharing" label="Corporate — KYC Sharing">
+
+Company documents and the representative's identity document are populated automatically from SumSub. Directors and beneficial owners have no person-level verifications. You only need this step if source of funds is required — either identified upfront or triggered by a `profile.updated` webhook with the `sourceOfFunds` verification in `incomplete` state.
+
+```js
+const { id: fileId } = await uploadFile(sofDocument); // POST /files
+
+await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    corporate: [
+      { kind: 'sourceOfFunds', documents: [{ kind: 'sourceOfFunds', fileId }] },
+    ],
+  }),
+});
+```
+
+  </TabItem>
   <TabItem value="corporate-reliance" label="Corporate — KYC Reliance">
 
-Submit corporate verification documents. Profile-level (company) documents omit `personId`. Person-scoped verifications — `idDocument` and `proofOfResidency` for representatives, directors, and beneficial owners — include a `personId` obtained from the profile response. `sourceOfFunds` is included if required.
+Submit corporate verification documents. Profile-level (company) documents omit `personId`. Only the representative has a person-scoped `idDocument`; directors and beneficial owners need no person-level document. `sourceOfFunds` is included if required.
 
 ```js
 // Upload each document via POST /files to get fileIds, then:
@@ -362,9 +420,8 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
       { kind: 'dateOfRegistration', documents: [{ kind: 'companyFilePDF', fileId: dateOfRegistrationFileId }] },
       { kind: 'beneficialOwnership', documents: [{ kind: 'companyFilePDF', fileId: beneficialOwnershipFileId }] },
       { kind: 'powerOfAttorney', documents: [{ kind: 'companyFilePDF', fileId: powerOfAttorneyFileId }] },
-      // Person-scoped verifications (representative / director / beneficial owner)
+      // Person-scoped verification: representative only. Directors and beneficial owners have none.
       { personId: representativeId, kind: 'idDocument', documents: [{ kind: 'passport', fileId: representativeIdFileId }] },
-      { personId: representativeId, kind: 'proofOfResidency', documents: [{ kind: 'proofOfResidency', fileId: representativePorFileId }] },
       // { kind: 'sourceOfFunds', documents: [{ kind: 'sourceOfFunds', fileId: sofFileId }] }, // if required
     ],
   }),

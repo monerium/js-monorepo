@@ -5,7 +5,7 @@ id: sumsub
 
 # Sumsub Integration
 
-If you use Sumsub for identity verification, you can share the verified applicant data directly with Monerium using the KYC Sharing flow. This automates the retrieval of verified customer details and documents, accelerating your user onboarding.
+If you use Sumsub for identity verification, you can share the verified applicant data directly with Monerium using the KYC Sharing flow. This works for personal profiles, and for corporate profiles when Monerium has configured a corporate verification level for your partner. Sharing automates the retrieval of verified customer details and documents, accelerating your onboarding.
 
 To share applicant data, you must first configure Monerium as a recipient partner in your Sumsub dashboard.
 
@@ -30,6 +30,8 @@ Our Sumsub client ID is `monerium.com`. If you generate share tokens yourself vi
 
 ## 2. Set Up a Verification Level
 
+### Personal profiles
+
 Partners must configure a Sumsub verification level that requires all three of the following:
 
 1. **ID document**
@@ -40,6 +42,26 @@ Applicants that do not complete all three checks will fail Monerium's pre-checks
 
 See [document acceptance by issuing country](./sumsub-id-documents) for document requirements.
 
+### Corporate profiles
+
+Corporate sharing requires a corporate-level configuration that Monerium enables per partner. Contact Monerium before configuring the level. The level must collect:
+
+| Data              | Requirement                                                                                                                   |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Company data      | `companyName`, `registrationNumber`, registered street address, postal code, city, country, and state                         |
+| Company documents | Incorporation certificate or state registry, proof of address, and the shareholder/ownership structure                        |
+| Representative    | At least one authorised signatory with full personal details and an identity document                                         |
+| Directors         | Full personal details; no identity document                                                                                   |
+| Beneficial owners | Every individual owning or controlling 25% or more, with full personal details and ownership percentage; no identity document |
+
+Do not configure a separate required **shareholder** role. At a 25% UBO threshold, every individual shareholder at or above 25% is already declared as a UBO, and Monerium does not model shareholders below that threshold.
+
+The associated-person level should collect identity documents and personal data. Do not require a proof-of-address document from directors or beneficial owners; Monerium does not require person-level address documents for corporate profiles. Company address evidence is collected at the company level.
+
+:::info Sumsub webhooks
+Configure the Sumsub webhook for both company and individual applicants. Monerium consumes the company applicant webhook and fetches the linked individual applicants itself; individual-level webhooks are not required for corporate ingestion.
+:::
+
 ---
 
 ## 3. Sandbox Testing with Sumsub Templates
@@ -48,13 +70,49 @@ When testing your integration in the sandbox environment, we highly recommend cr
 
 In particular, **German document templates** work exceptionally well for verification and simulate a real user onboarding experience successfully.
 
-* Refer to the [Sumsub Verification Document Templates](https://docs.sumsub.com/docs/verification-document-templates) guide to download sample documents (such as IDs, Passports, and Proof of Address).
-* Upload these template documents when creating test applicants in your Sumsub sandbox dashboard to easily trigger successful verifications.
+- Refer to the [Sumsub Verification Document Templates](https://docs.sumsub.com/docs/verification-document-templates) guide to download sample documents (such as IDs, Passports, and Proof of Address).
+- Upload these template documents when creating test applicants in your Sumsub sandbox dashboard to easily trigger successful verifications.
 
 ---
 
 ## 4. Sharing Applicant Data via API
 
-Once Monerium is configured as a recipient partner, you can share applicant details via the API using the `/profiles/{profileId}/share` endpoint.
+Once Monerium is configured as a recipient partner, share applicant details via `POST /profiles/{profileId}/share`.
 
-For a full step-by-step walkthrough of the Whitelabel onboarding flow and how to call this endpoint, please see the [Whitelabel Onboarding Guide](./whitelabel#onboarding).
+### Personal profiles
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    provider: 'sumsub',
+    personal: { token: sumsubApplicantToken },
+  }),
+});
+```
+
+### Corporate profiles
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    provider: 'sumsub',
+    corporate: { token: sumsubApplicantToken },
+  }),
+});
+```
+
+Both endpoints return `202 Accepted`. Monerium fetches the applicant asynchronously; wait for a `profile.updated` webhook before reading the imported data. Sumsub does not provide the corporate form data (service, legal form, purpose, activity, fund origin, turnover, and transaction count). Submit that separately via `PATCH /profiles/{profileId}/form`.
+
+For a full step-by-step walkthrough of the Whitelabel onboarding flow and how to call these endpoints, see the [Whitelabel Onboarding Guide](./whitelabel#onboarding). For the corporate data contract, see the [KYB Guide](./kyb-guide-corporates).
