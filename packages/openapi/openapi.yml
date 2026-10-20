@@ -955,7 +955,8 @@ paths:
         </span>
 
         Reuse KYC data from a third-party provider (e.g. Sumsub) to populate a personal or corporate profile's
-        `details` and `verifications`. Corporate applicant sharing is in private preview and must be enabled per partner.
+        `details` and `verifications`. Corporate applicant sharing is in draft (private preview, subject to change
+        before release) and must be enabled per partner.
 
         Monerium uses the supplied token to fetch data from the provider and updates the
         relevant sections. Each section that receives sufficient data transitions to
