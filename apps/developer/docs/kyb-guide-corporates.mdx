@@ -63,7 +63,7 @@ The following company information is required:
 | `city`               | Yes      | City                                   |
 | `country`            | Yes      | ISO 3166-1 alpha-2 country code        |
 | `countryState`       | Yes      | State or county                        |
-| `registrationDate`   | No       | Company registration date (YYYY-MM-DD) |
+| `registrationDate`   | Yes      | Company registration date (YYYY-MM-DD) |
 | `vatNumber`          | No       | VAT number                             |
 | `website`            | No       | Company website                        |
 
@@ -73,18 +73,20 @@ Representatives are individuals authorised to act on behalf of the company (auth
 
 Each representative requires full personal details plus an identity document:
 
-| Field               | Required | Description                                |
-| :------------------ | :------- | :----------------------------------------- |
-| `firstName`         | Yes      | First name                                 |
-| `lastName`          | Yes      | Last name                                  |
-| `address`           | Yes      | Residential street address                 |
-| `postalCode`        | Yes      | Postal code                                |
-| `city`              | Yes      | City                                       |
-| `country`           | Yes      | ISO 3166-1 alpha-2 country code            |
-| `nationality`       | Yes      | ISO 3166-1 alpha-2 nationality code        |
-| `birthday`          | Yes      | Date of birth (YYYY-MM-DD)                 |
+| Field               | Required | Description                                              |
+| :------------------ | :------- | :------------------------------------------------------- |
+| `firstName`         | Yes      | First name                                               |
+| `lastName`          | Yes      | Last name                                                |
+| `address`           | Yes      | Residential street address                               |
+| `postalCode`        | Yes      | Postal code                                              |
+| `city`              | Yes      | City                                                     |
+| `country`           | Yes      | ISO 3166-1 alpha-2 country code                          |
+| `nationality`       | Yes      | ISO 3166-1 alpha-2 nationality code                      |
+| `birthday`          | Yes      | Date of birth (YYYY-MM-DD)                               |
+| `phone`             | Yes      | Phone number                                             |
+| `email`             | Yes      | Email address                                            |
 | `idDocument.kind`   | Yes      | `passport`, `nationalIdentityCard`, or `residencePermit` |
-| `idDocument.number` | Yes      | Document number                            |
+| `idDocument.number` | Yes      | Document number                                          |
 
 ## Beneficial owners
 
@@ -96,11 +98,13 @@ Each beneficial owner requires the same personal details as representatives, plu
 | :-------------------- | :------- | :---------------------------- |
 | `ownershipPercentage` | Yes      | Ownership percentage (25–100) |
 
+Contact details (`phone`, `email`) are required for beneficial owners.
+
 No identity document is required for beneficial owners.
 
 ## Directors
 
-Directors are individuals with the power to legally bind the company (power of procuration). Each director requires the same personal details as representatives but no identity document.
+Directors are individuals with the power to legally bind the company (power of procuration). Each director requires the same personal details as representatives — including `phone` and `email` — but no identity document.
 
 ## Form data
 
