@@ -4729,11 +4729,11 @@ tags:
     description: 'Preview USDC/EURe swap endpoints for sandbox on Arbitrum Sepolia. See the [Swap](/swap) guide for the full client flow.'
   - name: changes
     x-displayName: Changelog
-      description: |
-        ### 2026-10-21:
-        * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - `CorporateDetails`: `registrationDate` is now a required field.
+    description: |
+      ### 2026-10-21:
+      * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - `CorporateDetails`: `registrationDate` is now a required field.
 
-        ### 2026-10-06:
+      ### 2026-10-06:
       * [POST /orders](#operation/post-orders) - Clarified supporting-document exemptions for corporate and personal own payouts. Recipient variants are listed as Individual, Corporation and Own account.
 
       ### 2026-10-05:
