@@ -48,24 +48,61 @@ See [document acceptance by issuing country](./sumsub-id-documents) for document
 
 Corporate sharing uses one company level plus two individual levels for the company's associated parties. Monerium must enable corporate sharing for your partner before you can share a corporate applicant.
 
-**Company level.** The level must collect the company data and documents Monerium stores on the corporate profile:
+Monerium's sandbox tenant uses the levels below as a reference. Create equivalents in your own account.
 
-| Data               | Requirement                                                                                                                      |
-| :----------------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| Company data       | `companyName`, `registrationNumber`, registration date, registered street address, postal code, city, country, and country state |
-| Company documents  | Incorporation certificate or state registry (company name and registration number), and proof of the registered address          |
-| Associated parties | At least one representative. Include directors and beneficial owners when they exist                                             |
+#### Company level (`kyb-monerium-sandbox`)
 
-**Representative level.** The representative (authorised signatory) goes through a full individual level that requires all three of:
+The company level collects the company data and documents Monerium stores on the corporate profile.
 
-1. **ID document**
-2. **Selfie for liveness check**
-3. **Proof of address**
+**Company data** (all required):
 
-**Associated-person level.** Directors and beneficial owners use a lighter individual level that requires:
+| Field                | Notes                       |
+| :------------------- | :-------------------------- |
+| `companyName`        | Prefilled from the registry |
+| `registrationNumber` | Prefilled from the registry |
+| `country`            | Prefilled from the registry |
+| `street`             | Registered street address   |
+| `postCode`           | Postal code                 |
+| `town`               | City                        |
+| `state`              | State or county             |
 
-1. **ID document**
-2. **Proof of address**
+**Company documents** (all required):
+
+| Group                          | Document types                                                                                |
+| :----------------------------- | :-------------------------------------------------------------------------------------------- |
+| `legalPresence`                | Incorporation certificate (`INCORPORATION_CERT`) or state registry extract (`STATE_REGISTRY`) |
+| `companyDetails`               | Proof of address (`PROOF_OF_ADDRESS`)                                                         |
+| `ownershipStructure`           | Shareholder registry (`SHAREHOLDER_REGISTRY`)                                                 |
+| `representativesAuthorization` | Power of attorney (`POWER_OF_ATTORNEY`) or incorporation certificate (`INCORPORATION_CERT`)   |
+| `controlStructure`             | Directors registry (`DIRECTORS_REGISTRY`) or incumbency certificate (`INCUMBENCY_CERT`)       |
+
+**Associated parties.** Set the UBO and shareholder thresholds to 25% and map each category to an individual level:
+
+| Category          | Individual level        | Collected fields                                                                                                  |
+| :---------------- | :---------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| `representatives` | Representative level    | `firstName`, `lastName`, `dob`, `email`, `phone`, `nationality`, `country`, `street`, `town`, `state`, `postCode` |
+| `ubos`            | Associated-person level | `firstName`, `lastName`, `dob`, `email`, `phone`, `shareSize`                                                     |
+| `directors`       | Associated-person level | `firstName`, `lastName`, `dob`, `email`, `phone`, `nationality`, `street`, `town`, `country`, `state`, `postCode` |
+
+#### Representative level (`kyb-representative-sandbox`)
+
+The representative (authorised signatory) goes through a full individual level:
+
+| Step                 | Requirement                            |
+| :------------------- | :------------------------------------- |
+| `IDENTITY`           | ID card, passport, or residence permit |
+| `SELFIE`             | Selfie with passive liveness           |
+| `PROOF_OF_RESIDENCE` | Utility bill                           |
+
+#### Associated-person level (`kyb-associated-person`)
+
+Directors and beneficial owners use a lighter individual level:
+
+| Step                 | Requirement                                                                                        |
+| :------------------- | :------------------------------------------------------------------------------------------------- |
+| `IDENTITY`           | ID card, passport, or residence permit                                                             |
+| `APPLICANT_DATA`     | `firstName`, `lastName`, `dob`, `street`, `town`, `state`, `postCode`, `country`, `email`, `phone` |
+| `PROOF_OF_RESIDENCE` | Utility bill                                                                                       |
 
 No selfie is required for this level.
 
