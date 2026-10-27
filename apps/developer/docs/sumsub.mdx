@@ -5,7 +5,7 @@ id: sumsub
 
 # Sumsub Integration
 
-If you use Sumsub for identity verification, you can share the verified applicant data directly with Monerium using the KYC Sharing flow. This automates the retrieval of verified customer details and documents, accelerating your user onboarding.
+If you use Sumsub for identity verification, you can share the verified applicant data directly with Monerium using the KYC Sharing flow. This works for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner. Sharing automates the retrieval of verified customer details and documents, accelerating your onboarding.
 
 To share applicant data, you must first configure Monerium as a recipient partner in your Sumsub dashboard.
 
@@ -30,6 +30,10 @@ Our Sumsub client ID is `monerium.com`. If you generate share tokens yourself vi
 
 ## 2. Set Up a Verification Level
 
+Monerium imports the data and documents your levels collect. Configure the levels below so that the shared applicant carries everything Monerium needs; incomplete data delays the import or leaves the profile incomplete.
+
+### Personal profiles
+
 Partners must configure a Sumsub verification level that requires all three of the following:
 
 1. **ID document**
@@ -39,6 +43,82 @@ Partners must configure a Sumsub verification level that requires all three of t
 Applicants that do not complete all three checks will fail Monerium's pre-checks.
 
 See [document acceptance by issuing country](./sumsub-id-documents) for document requirements.
+
+### Corporate profiles
+
+Corporate sharing uses one company level plus two individual levels for the company's associated parties. Monerium must enable corporate sharing for your partner before you can share a corporate applicant.
+
+Monerium's sandbox tenant uses the levels below as a reference. Create equivalents in your own account.
+
+#### Company level (`kyb-monerium-sandbox`)
+
+The company level collects the company data and documents Monerium stores on the corporate profile.
+
+**Company data** (all required):
+
+| Field                | Notes                       |
+| :------------------- | :-------------------------- |
+| `companyName`        | Prefilled from the registry |
+| `registrationNumber` | Prefilled from the registry |
+| `country`            | Prefilled from the registry |
+| `street`             | Registered street address   |
+| `postCode`           | Postal code                 |
+| `town`               | City                        |
+| `state`              | State or county             |
+
+**Company documents** (all required):
+
+| Group                          | Document types                                                                                |
+| :----------------------------- | :-------------------------------------------------------------------------------------------- |
+| `legalPresence`                | Incorporation certificate (`INCORPORATION_CERT`) or state registry extract (`STATE_REGISTRY`) |
+| `companyDetails`               | Proof of address (`PROOF_OF_ADDRESS`)                                                         |
+| `ownershipStructure`           | Shareholder registry (`SHAREHOLDER_REGISTRY`)                                                 |
+| `representativesAuthorization` | Power of attorney (`POWER_OF_ATTORNEY`) or incorporation certificate (`INCORPORATION_CERT`)   |
+| `controlStructure`             | Directors registry (`DIRECTORS_REGISTRY`) or incumbency certificate (`INCUMBENCY_CERT`)       |
+
+**Associated parties.** Set the UBO and shareholder thresholds to 25% and map each category to an individual level:
+
+| Category          | Individual level        | Collected fields                                                                                                  |
+| :---------------- | :---------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| `representatives` | Representative level    | `firstName`, `lastName`, `dob`, `email`, `phone`, `nationality`, `country`, `street`, `town`, `state`, `postCode` |
+| `ubos`            | Associated-person level | `firstName`, `lastName`, `dob`, `email`, `phone`, `shareSize`                                                     |
+| `directors`       | Associated-person level | `firstName`, `lastName`, `dob`, `email`, `phone`, `nationality`, `street`, `town`, `country`, `state`, `postCode` |
+
+#### Representative level (`kyb-representative-sandbox`)
+
+The representative (authorised signatory) goes through a full individual level:
+
+| Step                 | Requirement                            |
+| :------------------- | :------------------------------------- |
+| `IDENTITY`           | ID card, passport, or residence permit |
+| `SELFIE`             | Selfie with passive liveness           |
+| `PROOF_OF_RESIDENCE` | Utility bill                           |
+
+#### Associated-person level (`kyb-associated-person`)
+
+Directors and beneficial owners use a lighter individual level:
+
+| Step                 | Requirement                                                                                        |
+| :------------------- | :------------------------------------------------------------------------------------------------- |
+| `IDENTITY`           | ID card, passport, or residence permit                                                             |
+| `APPLICANT_DATA`     | `firstName`, `lastName`, `dob`, `street`, `town`, `state`, `postCode`, `country`, `email`, `phone` |
+| `PROOF_OF_RESIDENCE` | Utility bill                                                                                       |
+
+No selfie is required for this level.
+
+Map the categories in the company level to the individual levels: representatives to the representative level, and UBOs and directors to the associated-person level. Monerium records the level each associated applicant was verified under; a mismatch is imported but the person is queued for manual review instead of being approved automatically.
+
+:::warning Shareholder role
+
+Do not configure a separate required **shareholder** role. At a 25% UBO threshold, every individual shareholder at or above 25% is already declared as a UBO, and Monerium does not model shareholders below that threshold. Requiring it can block companies owned by other entities or without an individual shareholder at 25% or more.
+
+:::
+
+:::info Sumsub webhooks
+
+Configure the Sumsub webhook for both company and individual applicants. Monerium consumes the company applicant webhook and fetches the linked individual applicants itself; individual-level webhooks are not required for corporate ingestion.
+
+:::
 
 ---
 
@@ -57,4 +137,40 @@ In particular, **German document templates** work exceptionally well for verific
 
 Once Monerium is configured as a recipient partner, you can share applicant details via the API using the `/profiles/{profileId}/share` endpoint.
 
-For a full step-by-step walkthrough of the Whitelabel onboarding flow and how to call this endpoint, please see the [Whitelabel Onboarding Guide](./whitelabel#onboarding).
+### Personal profiles
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    provider: 'sumsub',
+    personal: { token: sumsubApplicantToken },
+  }),
+});
+```
+
+### Corporate profiles
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    provider: 'sumsub',
+    corporate: { token: sumsubApplicantToken },
+  }),
+});
+```
+
+Both requests return `202 Accepted`. Monerium fetches the applicant asynchronously; wait for a `profile.updated` webhook before reading the imported data. Sumsub does not provide the corporate form data (service, legal form, purpose, activity, fund origin, monthly turnover, and transaction count). Submit that separately via `PATCH /profiles/{profileId}/form`.
+
+For a full step-by-step walkthrough of the Whitelabel onboarding flow and how to call this endpoint, please see the [Whitelabel Onboarding Guide](./whitelabel#onboarding). For the corporate data contract, see the [KYB Guide](./kyb-guide-corporates).
