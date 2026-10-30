@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.2.0](https://github.com/monerium/js-monorepo/compare/developer-v2.1.1...developer-v2.2.0) (2026-10-30)
+
+
+### Features
+
+* add review state to profile and verification states ([#218](https://github.com/monerium/js-monorepo/issues/218)) ([cc9b54a](https://github.com/monerium/js-monorepo/commit/cc9b54a9bd30fd7e45b8447f3b221df8a5f8c890))
+* **emoney:** clarify supportingDocumentId exemption ([#230](https://github.com/monerium/js-monorepo/issues/230)) ([b03c791](https://github.com/monerium/js-monorepo/commit/b03c791cfd6518cd97c7d21c8afa0628a41bbaa6))
+* **kyc:** add own account exemption ([#228](https://github.com/monerium/js-monorepo/issues/228)) ([de6e0e3](https://github.com/monerium/js-monorepo/commit/de6e0e36f9f3bd099df53f9dc0f332d4baf5a79a))
+* **sumsub:** acceptance requirements ([#231](https://github.com/monerium/js-monorepo/issues/231)) ([7686303](https://github.com/monerium/js-monorepo/commit/76863038453fe85f6dc3544afdf90e1b9820c4c2))
+
+
+### Documentation
+
+* **developer:** add source of funds flow to sandbox checklist ([#221](https://github.com/monerium/js-monorepo/issues/221)) ([88aa370](https://github.com/monerium/js-monorepo/commit/88aa3709b806c22226ab7290792738c74a50bb43))
+* **developer:** align KYB enums with EMS ([#232](https://github.com/monerium/js-monorepo/issues/232)) ([4c439a3](https://github.com/monerium/js-monorepo/commit/4c439a3e68133255e39406204b3615d624de51a6))
+* **developer:** document Monerium Sumsub client ID and forClientId ([#222](https://github.com/monerium/js-monorepo/issues/222)) ([010a14f](https://github.com/monerium/js-monorepo/commit/010a14f06fbb79f0ff63f20aa9ba796c390e0cb4))
+* **developer:** document profile.error webhook edge cases ([#233](https://github.com/monerium/js-monorepo/issues/233)) ([2109e9f](https://github.com/monerium/js-monorepo/commit/2109e9f2bba4e8a985db3e206a79a588fa2bb27f))
+* **developer:** document Sumsub verification level requirements ([#227](https://github.com/monerium/js-monorepo/issues/227)) ([8e339b7](https://github.com/monerium/js-monorepo/commit/8e339b7099a65c4e30475104e0cd4a60c191863e))
+* **developer:** expand SoF flow notes with incomplete webhook ([#234](https://github.com/monerium/js-monorepo/issues/234)) ([a918839](https://github.com/monerium/js-monorepo/commit/a918839d74e8f24fbb6938c642065448927ff1a1))
+* **developer:** KYB guide updates ([#235](https://github.com/monerium/js-monorepo/issues/235)) ([0a53b5e](https://github.com/monerium/js-monorepo/commit/0a53b5e846c5f8f1827fe92acf3c3d44631c928e))
+* **developer:** use absolute docs link in sandbox checklist ([#223](https://github.com/monerium/js-monorepo/issues/223)) ([6c8b06c](https://github.com/monerium/js-monorepo/commit/6c8b06c05453c8d3cda6621bc15e06670f15b67b))
+* pricing ([3bb3b74](https://github.com/monerium/js-monorepo/commit/3bb3b7452091e0a9673ab3da9770eb2639537435))
+
 ## [2.1.1](https://github.com/monerium/js-monorepo/compare/developer-v2.1.0...developer-v2.1.1) (2026-08-19)
 
 
