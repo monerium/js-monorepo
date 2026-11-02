@@ -9,7 +9,7 @@ import ComplianceDisclaimer from './_partials/compliance-disclaimer.mdx';
 
 # KYB Guide — Corporates
 
-This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles can use KYC Sharing via Sumsub when Monerium has enabled it for your partner; otherwise they must use KYC Reliance.
+This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles can use KYC Sharing via Sumsub when Monerium has enabled it for your partner (in draft, not generally available yet); otherwise they must use KYC Reliance.
 
 <ComplianceDisclaimer />
 
@@ -147,6 +147,10 @@ All verification documents are uploaded via `POST /files` to obtain a `fileId`, 
 | `sourceOfFunds`       | Declaration of the company's source of funds (if required)  |
 
 ## Sumsub KYB sharing
+
+:::warning Draft — unreleased feature
+Corporate KYC Sharing is in draft and not generally available yet. This section is subject to change before release.
+:::
 
 When corporate sharing is enabled for your partner, you can share a verified company applicant instead of submitting details and documents through the API. See [Sumsub Integration — Corporate profiles](./sumsub#corporate-profiles) for the full setup.
 
