@@ -9,7 +9,7 @@ import ComplianceDisclaimer from './_partials/compliance-disclaimer.mdx';
 
 # KYB Guide — Corporates
 
-This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles must use KYC Reliance — KYC Sharing via SumSub is not supported for companies.
+This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles can use KYC Sharing via Sumsub when Monerium has enabled it for your partner; otherwise they must use KYC Reliance.
 
 <ComplianceDisclaimer />
 
@@ -146,6 +146,25 @@ All verification documents are uploaded via `POST /files` to obtain a `fileId`, 
 | `powerOfAttorney`     | Document granting authority to act on behalf of the company |
 | `sourceOfFunds`       | Declaration of the company's source of funds (if required)  |
 
+## Sumsub KYB sharing
+
+When corporate sharing is enabled for your partner, you can share a verified company applicant instead of submitting details and documents through the API. See [Sumsub Integration — Corporate profiles](./sumsub#corporate-profiles) for the full setup.
+
+The company level must collect the company data and company documents listed above. Associated parties use two individual levels:
+
+| Role                                  | Required verification                                    |
+| :------------------------------------ | :------------------------------------------------------- |
+| Representative (authorised signatory) | ID document, selfie for liveness check, proof of address |
+| Directors and beneficial owners       | ID document, proof of address                            |
+
+Do not configure a separate required shareholder role. At the 25% UBO threshold every individual shareholder at or above 25% is already declared as a beneficial owner.
+
+Sumsub does not provide everything this guide requires. After the share completes, submit the rest via the API:
+
+- **Form data** — service, legal form, purpose, activity, fund origin, monthly turnover, and transaction count. Use `PATCH /profiles/{profileId}/form`.
+- **Details the registry does not return** — for example `vatNumber`, `website`, or a registered address that differs from the operating address. Use `PATCH /profiles/{profileId}/details`.
+- **Source of funds** — still required when the [conditions above](#source-of-funds) apply.
+
 ## Source of funds
 
 Source of funds verification is required when any of the following apply:
@@ -157,7 +176,7 @@ Monerium may also request source of funds after submission based on risk evaluat
 
 ## Submitting data
 
-Once your company passes the pre-checks above, submit their data via the Whitelabel onboarding flow. See [Onboarding](./whitelabel#onboarding) for the full API walkthrough.
+Once your company passes the pre-checks above, submit their data via the Whitelabel onboarding flow — by sharing a Sumsub applicant when corporate sharing is enabled, or through KYC Reliance. See [Onboarding](./whitelabel#onboarding) for the full API walkthrough.
 
 ---
 

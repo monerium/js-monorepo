@@ -954,12 +954,15 @@ paths:
           Whitelabel
         </span>
 
-        Reuse KYC data from a third-party provider (e.g. Sumsub) to populate the profile's
+        Reuse KYC data from a third-party provider (e.g. Sumsub) to populate a personal or corporate profile's
         `details` and `verifications`.
 
         Monerium uses the supplied token to fetch data from the provider and updates the
         relevant sections. Each section that receives sufficient data transitions to
         `pending`; any that remain incomplete stay `incomplete`.
+
+        Corporate profiles must have corporate sharing enabled for the partner. Sumsub does not provide the
+        corporate form data; submit it separately via [`PATCH /profiles/{profile}/form`](#operation/patch-profile-form).
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: profile
@@ -991,13 +994,34 @@ paths:
                       example: husheu817472
                   required:
                     - token
+                corporate:
+                  description: Token for a corporate profile applicant.
+                  type: object
+                  properties:
+                    token:
+                      description: Provider-issued applicant token.
+                      type: string
+                      example: husheu817472
+                  required:
+                    - token
+              oneOf:
+                - required:
+                    - personal
+                - required:
+                    - corporate
               required:
                 - provider
-                - personal
-            example:
-              provider: sumsub
+            examples:
               personal:
-                token: husheu817472
+                value:
+                  provider: sumsub
+                  personal:
+                    token: husheu817472
+              corporate:
+                value:
+                  provider: sumsub
+                  corporate:
+                    token: husheu817472
       responses:
         '202':
           description: |
@@ -1039,6 +1063,9 @@ paths:
                 "token": "husheu817472"
               }
             }'
+
+            # Corporate profiles use the same endpoint with a corporate token:
+            # --data-raw '{"provider":"sumsub","corporate":{"token":"husheu817472"}}'
   '/profiles/{profile}/details':
     patch:
       operationId: patch-profile-details
@@ -4730,6 +4757,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-10-27:
+      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - Accepts a `corporate` applicant token in addition to `personal`, for corporate KYC Sharing via Sumsub when corporate sharing is enabled for the partner. Corporate form data must still be submitted via `PATCH /profiles/{profile}/form`.
+
       ### 2026-10-21:
       * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - `CorporateDetails`: `registrationDate` is now a required field.
 

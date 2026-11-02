@@ -6,8 +6,8 @@ import { Endpoint } from '@site/src/components/Endpoint';
 
 Monerium supports two strategies for identity verification:
 
-- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles only.
-- **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for corporate profiles and for partners without SumSub.
+- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner.
+- **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for partners without SumSub.
 
 The steps below apply to both strategies. Where the paths diverge, tabs indicate which applies.
 
@@ -36,7 +36,7 @@ const { id: profileId, state } = await response.json();
 
 ### 2. Submit customer details
 
-KYC Sharing is available for personal profiles only. Corporate profiles must always use KYC Reliance.
+KYC Sharing is available for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner. Partners without Sumsub must use KYC Reliance.
 
 <Tabs>
   <TabItem value="sharing" label="KYC Sharing — Personal">
@@ -136,6 +136,41 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
   }),
 });
 ```
+
+  </TabItem>
+  <TabItem value="sharing-corporate" label="KYC Sharing — Corporate">
+
+Transfer a verified company applicant from your SumSub account to Monerium. Returns `202`; Monerium fetches the company, its associated parties, and the company documents asynchronously.
+
+:::info Sumsub setup required
+Corporate sharing must be enabled by Monerium for your partner. Add Monerium as a recipient in your Sumsub dashboard and configure the company, representative, and associated-person levels as described in the [Sumsub Integration Guide](./sumsub#corporate-profiles).
+:::
+
+:::note Pre-checks
+Before sharing, ensure the company passes all required checks. See the [KYB Guide — Corporates](./kyb-guide-corporates).
+:::
+
+The company applicant must contain the company name, registration number, registration date, registered address, the company documents supporting the name/address/registration number, at least one representative, and the directors and beneficial owners (25%+). The representative must carry an identity document, a selfie/liveness check, and proof of address; directors and beneficial owners must carry an identity document and proof of address.
+
+<Endpoint method="POST" path="/profiles/{profileId}/share" href="https://docs.monerium.com/api/#tag/profiles/operation/share-profile-kyc" />
+
+```js
+await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    provider: 'sumsub',
+    corporate: { token: sumsubApplicantToken },
+  }),
+});
+// Returns 202 — monitor progress via profile.updated webhooks
+```
+
+Sumsub does not provide the corporate form data. Continue with [step 3](#3-submit-form-data) to submit it.
 
   </TabItem>
   <TabItem value="reliance-corporate" label="KYC Reliance — Corporate">
@@ -334,6 +369,29 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
       { kind: 'facialSimilarity', documents: [{ kind: 'other', fileId: selfieFileId }] },
       { kind: 'proofOfResidency', documents: [{ kind: 'proofOfResidency', fileId: proofOfResidencyFileId }] },
       // { kind: 'sourceOfFunds', documents: [{ kind: 'sourceOfFunds', fileId: sofFileId }] }, // if required
+    ],
+  }),
+});
+```
+
+  </TabItem>
+  <TabItem value="corporate-sharing" label="Corporate — KYC Sharing">
+
+Company documents, the representative's `idDocument`, `facialSimilarity`, and `proofOfResidency`, and the directors' and beneficial owners' `idDocument` and `proofOfResidency` are populated automatically from SumSub. You only need this step if source of funds is required — either identified upfront or triggered by a `profile.updated` webhook with the `sourceOfFunds` verification in `incomplete` state.
+
+```js
+const { id: fileId } = await uploadFile(sofDocument); // POST /files
+
+await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/vnd.monerium.api-v2+json',
+  },
+  body: JSON.stringify({
+    corporate: [
+      { kind: 'sourceOfFunds', documents: [{ kind: 'sourceOfFunds', fileId }] },
     ],
   }),
 });
