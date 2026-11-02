@@ -6,7 +6,7 @@ import { Endpoint } from '@site/src/components/Endpoint';
 
 Monerium supports two strategies for identity verification:
 
-- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner.
+- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner (corporate sharing is in draft and not generally available yet).
 - **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for partners without SumSub.
 
 The steps below apply to both strategies. Where the paths diverge, tabs indicate which applies.
@@ -55,19 +55,19 @@ Before sharing, ensure your customer passes all required checks. See the [KYC Gu
 
 Collect these values in standard Sumsub applicant fields before sharing. Successful verification on donor side does not guarantee all data required by the recipient is present.
 
-| Data | Requirement | Sumsub source and collection notes |
-| --- | --- | --- |
-| First name | Required | `fixedInfo.firstName` or `info.firstName` |
-| Last name | Required | `fixedInfo.lastName` or `info.lastName` |
-| Date of birth | Required | `fixedInfo.dob` or `info.dob`, in `YYYY-MM-DD` format. Customers must be at least 18. |
-| Nationality | Required | `fixedInfo.nationality` or `info.nationality`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Collect explicitly if unavailable from documents. |
-| Residential street and building number | Required | First address in `fixedInfo.addresses` or `info.addresses`, using `street` and `buildingNumber`. |
-| Residential city | Required | First address's `town`. |
-| Country of residence | Required | First address `country`, `fixedInfo.country` or `info.country`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Use residential country, not document's issuing country. |
-| Phone number | Required | Applicant's top-level `phone`, in E.164 format including the country code (e.g. `+351912345678`). |
-| Email address | Required | Applicant's top-level `email` |
-| Postal code | Required | First address's `postCode` |
-| State or region | Optional | First address's `state` |
+| Data                                   | Requirement | Sumsub source and collection notes                                                                                                                                   |
+| -------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| First name                             | Required    | `fixedInfo.firstName` or `info.firstName`                                                                                                                            |
+| Last name                              | Required    | `fixedInfo.lastName` or `info.lastName`                                                                                                                              |
+| Date of birth                          | Required    | `fixedInfo.dob` or `info.dob`, in `YYYY-MM-DD` format. Customers must be at least 18.                                                                                |
+| Nationality                            | Required    | `fixedInfo.nationality` or `info.nationality`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Collect explicitly if unavailable from documents.                         |
+| Residential street and building number | Required    | First address in `fixedInfo.addresses` or `info.addresses`, using `street` and `buildingNumber`.                                                                     |
+| Residential city                       | Required    | First address's `town`.                                                                                                                                              |
+| Country of residence                   | Required    | First address `country`, `fixedInfo.country` or `info.country`, as an ISO 3166-1 alpha-3 code (e.g. `PRT`). Use residential country, not document's issuing country. |
+| Phone number                           | Required    | Applicant's top-level `phone`, in E.164 format including the country code (e.g. `+351912345678`).                                                                    |
+| Email address                          | Required    | Applicant's top-level `email`                                                                                                                                        |
+| Postal code                            | Required    | First address's `postCode`                                                                                                                                           |
+| State or region                        | Optional    | First address's `state`                                                                                                                                              |
 
 When using the [Sumsub Web SDK](https://docs.sumsub.com/docs/get-started-with-web-sdk):
 
@@ -141,6 +141,10 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
   <TabItem value="sharing-corporate" label="KYC Sharing — Corporate">
 
 Transfer a verified company applicant from your SumSub account to Monerium. Returns `202`; Monerium fetches the company, its associated parties, and the company documents asynchronously.
+
+:::warning Draft — unreleased feature
+Corporate KYC Sharing is in draft and not generally available yet. These instructions are subject to change before release.
+:::
 
 :::info Sumsub setup required
 Corporate sharing must be enabled by Monerium for your partner. Add Monerium as a recipient in your Sumsub dashboard and configure the company, representative, and associated-person levels as described in the [Sumsub Integration Guide](./sumsub#corporate-profiles).
