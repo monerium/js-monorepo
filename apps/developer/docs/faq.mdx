@@ -1,0 +1,52 @@
+---
+title: FAQ
+id: faq
+---
+
+# FAQ
+
+Common questions from partners integrating with Monerium.
+
+## Accounts and IBANs
+
+### Can an IBAN be linked to a Safe smart account via EIP-1271, so SEPA payments mint straight to it?
+
+Yes. An IBAN can be linked to an EIP-1271 smart contract wallet such as Safe, and incoming SEPA payments mint EURe to that wallet. Both the off-chain and on-chain EIP-1271 flows are supported. We recommend the off-chain flow: the signature is verified immediately and the address is linked in the response, whereas the on-chain flow requires an on-chain `signMessage` transaction that Monerium polls for. See [Link wallet](/whitelabel#link-wallet) and [EIP-1271](/whitelabel#eip-1271).
+
+### Can a signed order move EURe between two wallets on the same chain?
+
+No. The `Send <CURRENCY> <AMOUNT> to <ADDRESS> on <CHAIN>` order format is for cross-chain transfers (bridging). Same-chain, gasless wallet-to-wallet transfers are not currently supported; the wallet holding the EURe must send an on-chain transfer and pay gas. See [Cross-chain transfer](/whitelabel#cross-chain-transfer-bridging).
+
+## Onboarding and KYC
+
+### Do you accept Sumsub reusable identity (ID) tokens?
+
+No. Onboarding uses classic applicant tokens through KYC Sharing. See [Sumsub](/sumsub) and the [onboarding flow](/whitelabel#onboarding).
+
+### Is proof of address required for every customer?
+
+Yes, proof of address is required for all applicants. It must show the customer's name and current address and be no older than three months from account creation. Non-document proof of address is not currently available. See the accepted document list in the [KYC guide](/kyc-guide-individuals#documents-and-verification).
+
+### Which risk form fields can be prefilled from Sumsub data?
+
+Only the TIN and tax residence country are pre-filled by Monerium. The full set of required fields is documented in the [`PATCH /profiles/{profile}/form`](/api#tag/profiles/operation/patch-profile-form) API reference. Importing a prefilled questionnaire is not currently supported.
+
+## Orders and limits
+
+### What are the deposit and withdrawal limits? Is there a minimum?
+
+The minimum deposit and withdrawal amount is `0.01`. There are no per-customer limits.
+
+### Does `POST /orders` accept an idempotency key? How should we retry, and what are the rate limits?
+
+The signed order message is the idempotency key. There are currently no rate limits. For retries, use exponential backoff and retry only on `5xx` responses; do not retry other `4xx` errors. If you receive a `400` for a duplicate order, look up the order first before retrying. Set the order timestamp a couple of minutes ahead to leave room for retries and latency. See [Signing an order](/whitelabel#signing-an-order).
+
+## Sandbox and go-live
+
+### Do webhooks come from fixed IPs we should allowlist?
+
+No, Monerium does not pin webhook source IPs. Verify each webhook using the `webhook-signature` header, which contains an HMAC-SHA256 signature over the `webhook-id`, `webhook-timestamp`, and raw request body. See [Webhooks](/whitelabel#webhooks).
+
+### Are whitelabel IBANs supported on Polygon Amoy?
+
+Yes. Polygon Amoy is supported in the sandbox environment. See [Sandbox](/sandbox).
