@@ -37,7 +37,7 @@ const codeChallenge = generateCodeChallenge(codeVerifier);
 Your backend builds the authorization URL and redirects the user to the Monerium portal. What happens there depends on whether the user has an account:
 
 1. **Login or sign up**: the user logs in with their Monerium username and password, or creates a new account.
-2. **KYC/KYB**: new users complete identity verification before they can use their account. Returning users who are already verified skip this step. See the [KYC Guide: Individuals](./kyc-guide-individuals) and [KYB Guide: Corporates](./kyb-guide-corporates) for what is required, allowed, and prohibited.
+2. **KYC/KYB**: new users complete identity verification before they can use their account. Returning users who are already verified skip this step. See the [KYC Guide: Individuals](/kyc-guide-individuals) and [KYB Guide: Corporates](/kyb-guide-corporates) for what is required, allowed, and prohibited.
 3. **Authorization**: the user is shown a consent screen listing what your application is requesting access to (profile details and payment data) and accepts or cancels.
 
 Once the user accepts, they are redirected to your `redirect_uri` with an authorization `code` in the query string.
