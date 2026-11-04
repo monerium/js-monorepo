@@ -6,7 +6,7 @@ import { Endpoint } from '@site/src/components/Endpoint';
 
 Monerium supports two strategies for identity verification:
 
-- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner (corporate sharing is in draft and not generally available yet).
+- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and KYB Sharing for corporate profiles when Monerium has enabled corporate sharing for your partner (available in sandbox, not yet released to production).
 - **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for partners without SumSub.
 
 The steps below apply to both strategies. Where the paths diverge, tabs indicate which applies.
@@ -138,12 +138,12 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
 ```
 
   </TabItem>
-  <TabItem value="sharing-corporate" label="KYC Sharing — Corporate">
+  <TabItem value="sharing-corporate" label="KYB Sharing — Corporate">
 
 Transfer a verified company applicant from your SumSub account to Monerium. Returns `202`; Monerium fetches the company, its associated parties, and the company documents asynchronously.
 
-:::warning Draft — unreleased feature
-Corporate KYC Sharing is in draft and not generally available yet. These instructions are subject to change before release.
+:::warning Sandbox preview
+KYB Sharing is available in sandbox, not yet released to production. These instructions are subject to change before release.
 :::
 
 :::info Sumsub setup required
@@ -154,7 +154,7 @@ Corporate sharing must be enabled by Monerium for your partner. Add Monerium as 
 Before sharing, ensure the company passes all required checks. See the [KYB Guide — Corporates](./kyb-guide-corporates).
 :::
 
-The company applicant must contain the company name, registration number, registration date, registered address, the company documents supporting the name/address/registration number, at least one representative, and the directors and beneficial owners (25%+). The representative must carry an identity document, a selfie/liveness check, and proof of address; directors and beneficial owners must carry an identity document and proof of address.
+The company applicant must contain the company name, registration number, incorporation date, registered address, company email, and company phone, the company documents supporting the name/address/registration number, at least one representative, and the directors and beneficial owners (25%+). The representative must carry an identity document, a selfie/liveness check, and proof of address; directors and beneficial owners must carry an identity document and proof of address. The profile stays incomplete until the company email, phone, and incorporation date are present.
 
 <Endpoint method="POST" path="/profiles/{profileId}/share" href="https://docs.monerium.com/api/#tag/profiles/operation/share-profile-kyc" />
 
@@ -379,7 +379,7 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
 ```
 
   </TabItem>
-  <TabItem value="corporate-sharing" label="Corporate — KYC Sharing">
+  <TabItem value="corporate-sharing" label="Corporate — KYB Sharing">
 
 Company documents, the representative's `idDocument`, `facialSimilarity`, and `proofOfResidency`, and the directors' and beneficial owners' `idDocument` and `proofOfResidency` are populated automatically from SumSub. You only need this step if source of funds is required — either identified upfront or triggered by a `profile.updated` webhook with the `sourceOfFunds` verification in `incomplete` state.
 

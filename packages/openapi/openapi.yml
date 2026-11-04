@@ -955,8 +955,8 @@ paths:
         </span>
 
         Reuse KYC data from a third-party provider (e.g. Sumsub) to populate a personal or corporate profile's
-        `details` and `verifications`. Corporate applicant sharing is in draft, not generally available yet, and
-        subject to change before release; it must be enabled per partner.
+        `details` and `verifications`. Corporate applicant sharing is available in sandbox, not yet released to
+        production, and subject to change before release; it must be enabled per partner.
 
         Monerium uses the supplied token to fetch data from the provider and updates the
         relevant sections. Each section that receives sufficient data transitions to
@@ -4758,8 +4758,11 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-11-04:
+      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - KYB Sharing is now available in sandbox, not yet released to production. The Sumsub company level must also collect the company email, phone, and incorporation date; corporate profiles stay incomplete until those fields are present.
+
       ### 2026-10-27:
-      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - Accepts a `corporate` applicant token in addition to `personal`, for corporate KYC Sharing via Sumsub when corporate sharing is enabled for the partner. Corporate form data must still be submitted via `PATCH /profiles/{profile}/form`.
+      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - Accepts a `corporate` applicant token in addition to `personal`, for KYB Sharing via Sumsub when corporate sharing is enabled for the partner. Corporate form data must still be submitted via `PATCH /profiles/{profile}/form`.
 
       ### 2026-10-21:
       * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - `CorporateDetails`: `registrationDate` is now a required field.
