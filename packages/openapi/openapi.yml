@@ -4759,10 +4759,10 @@ tags:
     x-displayName: Changelog
     description: |
       ### 2026-11-04:
-      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - Corporate KYC Sharing is now available in sandbox, not yet released to production. The Sumsub company level must also collect the company email, phone, and incorporation date; corporate profiles stay incomplete until those fields are present.
+      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - KYB Sharing is now available in sandbox, not yet released to production. The Sumsub company level must also collect the company email, phone, and incorporation date; corporate profiles stay incomplete until those fields are present.
 
       ### 2026-10-27:
-      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - Accepts a `corporate` applicant token in addition to `personal`, for corporate KYC Sharing via Sumsub when corporate sharing is enabled for the partner. Corporate form data must still be submitted via `PATCH /profiles/{profile}/form`.
+      * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - Accepts a `corporate` applicant token in addition to `personal`, for KYB Sharing via Sumsub when corporate sharing is enabled for the partner. Corporate form data must still be submitted via `PATCH /profiles/{profile}/form`.
 
       ### 2026-10-21:
       * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - `CorporateDetails`: `registrationDate` is now a required field.
