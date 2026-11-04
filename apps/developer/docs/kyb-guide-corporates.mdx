@@ -9,7 +9,7 @@ import ComplianceDisclaimer from './_partials/compliance-disclaimer.mdx';
 
 # KYB Guide — Corporates
 
-This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles can use KYB Sharing via Sumsub when Monerium has enabled it for your partner (available in sandbox, not yet released to production); otherwise they must use KYC Reliance.
+This guide defines the data requirements and validation rules for onboarding corporate customers. Corporate profiles can use KYB Sharing via Sumsub when Monerium has enabled it for your partner (available in sandbox, not yet released to production); otherwise they must use KYB Reliance.
 
 <ComplianceDisclaimer />
 
@@ -71,7 +71,7 @@ The following company information is required:
 
 Representatives are individuals authorised to act on behalf of the company (authorised signatories). At least one representative is required.
 
-Each representative requires full personal details plus an identity document:
+Each representative requires full personal details, an identity document, and proof of address:
 
 | Field               | Required | Description                                              |
 | :------------------ | :------- | :------------------------------------------------------- |
@@ -88,11 +88,13 @@ Each representative requires full personal details plus an identity document:
 | `idDocument.kind`   | Yes      | `passport`, `nationalIdentityCard`, or `residencePermit` |
 | `idDocument.number` | Yes      | Document number                                          |
 
+The proof of address is submitted as a `proofOfResidency` verification with the representative's `personId` (see [Verifications](#verifications)). Accepted documents: utility bill, bank or credit card statement, or government-issued document (tax statement, certificate of residency, government letter).
+
 ## Beneficial owners
 
 Beneficial owners are individuals who directly or indirectly own 25% or more of the company. All must be declared.
 
-Each beneficial owner requires the same personal details as representatives, plus:
+Each beneficial owner requires the same personal details and documents as representatives, plus:
 
 | Field                 | Required | Description                   |
 | :-------------------- | :------- | :---------------------------- |
@@ -100,11 +102,11 @@ Each beneficial owner requires the same personal details as representatives, plu
 
 Contact details (`phone`, `email`) are required for beneficial owners.
 
-No identity document is required for beneficial owners.
+Every beneficial owner also requires an identity document and proof of address, submitted as `idDocument` and `proofOfResidency` verifications with the person's `personId`.
 
 ## Directors
 
-Directors are individuals with the power to legally bind the company (power of procuration). Each director requires the same personal details as representatives — including `phone` and `email` — but no identity document.
+Directors are individuals with the power to legally bind the company (power of procuration). Each director requires the same personal details and documents as representatives — including `phone` and `email`.
 
 ## Form data
 
@@ -145,6 +147,8 @@ All verification documents are uploaded via `POST /files` to obtain a `fileId`, 
 | `beneficialOwnership` | Document identifying individuals with 25%+ ownership        |
 | `powerOfAttorney`     | Document granting authority to act on behalf of the company |
 | `sourceOfFunds`       | Declaration of the company's source of funds (if required)  |
+| `idDocument`          | Person-scoped: the person's identity document (`personId` required) |
+| `proofOfResidency`    | Person-scoped: the person's proof of address (`personId` required) |
 
 ## Sumsub KYB sharing
 
@@ -152,7 +156,7 @@ All verification documents are uploaded via `POST /files` to obtain a `fileId`, 
 KYB Sharing is available in sandbox, not yet released to production. This section is subject to change before release.
 :::
 
-When corporate sharing is enabled for your partner, you can share a verified company applicant instead of submitting details and documents through the API. See [Sumsub Integration — Corporate profiles](./sumsub#corporate-profiles) for the full setup.
+When corporate sharing is enabled for your partner, you can share a verified company applicant instead of submitting details and documents through the API. See [Sumsub Integration — Corporate profiles](/sumsub#corporate-profiles) for the full setup.
 
 The company level must collect the company data and company documents listed above, including the company email, phone, and incorporation date — the profile stays incomplete without them. Associated parties use two individual levels:
 
@@ -180,7 +184,7 @@ Monerium may also request source of funds after submission based on risk evaluat
 
 ## Submitting data
 
-Once your company passes the pre-checks above, submit their data via the Whitelabel onboarding flow — by sharing a Sumsub applicant when corporate sharing is enabled, or through KYC Reliance. See [Onboarding](./whitelabel#onboarding) for the full API walkthrough.
+Once your company passes the pre-checks above, submit their data via the Whitelabel onboarding flow — by sharing a Sumsub applicant when corporate sharing is enabled, or through KYB Reliance. See [Onboarding](/whitelabel#onboarding) for the full API walkthrough.
 
 ---
 
