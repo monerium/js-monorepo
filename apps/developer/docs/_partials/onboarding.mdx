@@ -6,7 +6,7 @@ import { Endpoint } from '@site/src/components/Endpoint';
 
 Monerium supports two strategies for identity verification:
 
-- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner (corporate sharing is available in sandbox, not yet released to production).
+- **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and KYB Sharing for corporate profiles when Monerium has enabled corporate sharing for your partner (available in sandbox, not yet released to production).
 - **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for partners without SumSub.
 
 The steps below apply to both strategies. Where the paths diverge, tabs indicate which applies.
@@ -138,7 +138,7 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/details`, {
 ```
 
   </TabItem>
-  <TabItem value="sharing-corporate" label="KYB Sharing">
+  <TabItem value="sharing-corporate" label="KYB Sharing — Corporate">
 
 Transfer a verified company applicant from your SumSub account to Monerium. Returns `202`; Monerium fetches the company, its associated parties, and the company documents asynchronously.
 
