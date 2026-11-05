@@ -7,7 +7,7 @@ import { Endpoint } from '@site/src/components/Endpoint';
 Monerium supports two strategies for identity verification:
 
 - **KYC Sharing** — you use SumSub for identity verification and share the verified data directly with Monerium using the applicant token. Available for personal profiles, and KYB Sharing for corporate profiles when Monerium has enabled corporate sharing for your partner (available in sandbox, not yet released to production).
-- **KYC Reliance** — you hold the appropriate licences and have a KYC Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for partners without SumSub.
+- **KYC/KYB Reliance** — you hold the appropriate licences and have a KYC or KYB Reliance agreement with Monerium. You submit the verified identity data directly via the API. Required for partners without SumSub.
 
 The steps below apply to both strategies. Where the paths diverge, tabs indicate which applies.
 
@@ -36,7 +36,7 @@ const { id: profileId, state } = await response.json();
 
 ### 2. Submit customer details
 
-KYC Sharing is available for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner. Partners without Sumsub must use KYC Reliance.
+KYC Sharing is available for personal profiles, and for corporate profiles when Monerium has enabled corporate sharing for your partner. Partners without Sumsub must use KYC Reliance for personal profiles and KYB Reliance for corporate profiles.
 
 <Tabs>
   <TabItem value="sharing" label="KYC Sharing — Personal">
@@ -44,11 +44,11 @@ KYC Sharing is available for personal profiles, and for corporate profiles when 
 Transfer the verified applicant data from your SumSub account to Monerium using the applicant token. Returns `202`; Monerium fetches the data asynchronously.
 
 :::info Sumsub Setup Required
-Before sharing applicant data, you must add Monerium as a recipient in your Sumsub dashboard. See the [Sumsub Integration Guide](./sumsub) for step-by-step setup instructions, sandbox share tokens, and testing tips.
+Before sharing applicant data, you must add Monerium as a recipient in your Sumsub dashboard. See the [Sumsub Integration Guide](/sumsub) for step-by-step setup instructions, sandbox share tokens, and testing tips.
 :::
 
 :::note Pre-checks
-Before sharing, ensure your customer passes all required checks. See the [KYC Guide — Individuals](./kyc-guide-individuals).
+Before sharing, ensure your customer passes all required checks. See the [KYC Guide — Individuals](/kyc-guide-individuals).
 :::
 
 ##### Shared identity and contact data
@@ -81,7 +81,7 @@ A [Phone Verification step](https://docs.sumsub.com/docs/email-and-phone-verific
 
 ##### Verification documents
 
-Complete identity document, selfie/liveness, and proof-of-address checks before sharing. See [document acceptance by issuing country](./sumsub-id-documents) for document requirements, and the [KYC Guide](./kyc-guide-individuals#documents-and-verification) for proof-of-address requirements.
+Complete identity document, selfie/liveness, and proof-of-address checks before sharing. See [document acceptance by issuing country](/sumsub-id-documents) for document requirements, and the [KYC Guide](/kyc-guide-individuals#documents-and-verification) for proof-of-address requirements.
 
 <Endpoint method="POST" path="/profiles/{profileId}/share" href="https://docs.monerium.com/api/#tag/profiles/operation/share-profile-kyc" />
 
@@ -107,7 +107,7 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
 Submit the customer's verified identity data directly. All fields are required.
 
 :::note Pre-checks
-Before submitting, ensure your customer passes all required checks. See the [KYC Guide — Individuals](./kyc-guide-individuals).
+Before submitting, ensure your customer passes all required checks. See the [KYC Guide — Individuals](/kyc-guide-individuals).
 :::
 
 <Endpoint method="PATCH" path="/profiles/{profileId}/details" href="https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-details" />
@@ -147,11 +147,11 @@ KYB Sharing is available in sandbox, not yet released to production. These instr
 :::
 
 :::info Sumsub setup required
-Corporate sharing must be enabled by Monerium for your partner. Add Monerium as a recipient in your Sumsub dashboard and configure the company, representative, and associated-person levels as described in the [Sumsub Integration Guide](./sumsub#corporate-profiles).
+Corporate sharing must be enabled by Monerium for your partner. Add Monerium as a recipient in your Sumsub dashboard and configure the company, representative, and associated-person levels as described in the [Sumsub Integration Guide](/sumsub#corporate-profiles).
 :::
 
 :::note Pre-checks
-Before sharing, ensure the company passes all required checks. See the [KYB Guide — Corporates](./kyb-guide-corporates).
+Before sharing, ensure the company passes all required checks. See the [KYB Guide — Corporates](/kyb-guide-corporates).
 :::
 
 The company applicant must contain the company name, registration number, incorporation date, registered address, company email, and company phone, the company documents supporting the name/address/registration number, at least one representative, and the directors and beneficial owners (25%+). The representative must carry an identity document, a selfie/liveness check, and proof of address; directors and beneficial owners must carry an identity document and proof of address. The profile stays incomplete until the company email, phone, and incorporation date are present.
@@ -177,12 +177,12 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/share`, {
 Sumsub does not provide the corporate form data. Continue with [step 3](#3-submit-form-data) to submit it.
 
   </TabItem>
-  <TabItem value="reliance-corporate" label="KYC Reliance — Corporate">
+  <TabItem value="reliance-corporate" label="KYB Reliance — Corporate">
 
 Submit the company's verified details. Include all representatives (authorised signatories), final beneficiaries (25%+ ownership), and directors.
 
 :::note Pre-checks
-Before submitting, ensure the company passes all required checks. See the [KYB Guide — Corporates](./kyb-guide-corporates).
+Before submitting, ensure the company passes all required checks. See the [KYB Guide — Corporates](/kyb-guide-corporates).
 :::
 
 <Endpoint method="PATCH" path="/profiles/{profileId}/details" href="https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-details" />
@@ -402,7 +402,7 @@ await fetch(`https://api.monerium.dev/profiles/${profileId}/verifications`, {
 ```
 
   </TabItem>
-  <TabItem value="corporate-reliance" label="Corporate — KYC Reliance">
+  <TabItem value="corporate-reliance" label="Corporate — KYB Reliance">
 
 Submit corporate verification documents. Profile-level (company) documents omit `personId`. Person-scoped verifications — `idDocument` and `proofOfResidency` for representatives, directors, and beneficial owners — include a `personId` obtained from the profile response. `sourceOfFunds` is included if required.
 
