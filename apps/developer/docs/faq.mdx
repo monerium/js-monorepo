@@ -37,7 +37,7 @@ The minimum deposit and withdrawal amount is `0.01`. There are no per-customer l
 
 ### Does `POST /orders` accept an idempotency key? How should we retry, and what are the rate limits?
 
-Yes, in two ways. The signed order message acts as an idempotency key: posting the same signed message twice returns a `400` for a duplicate order, so look up the order before retrying. You may also supply a client-generated UUID in the optional `id` field, which becomes the order's ID; if you omit it, the server generates one. If you use `id`, always retry the exact same request (same `id`, same signed message) and never reuse an `id` with new content, such as a re-signed timestamp, because that fails permanently with a `500` that looks retryable.
+Yes, in two ways. The signed order message acts as an idempotency key: posting the same signed message twice returns a `400` for a duplicate order, so look up the order before retrying. You may also supply a client-generated UUID in the optional `id` field, which becomes the order's ID; if you omit it, the server generates one. If you use `id`, retry the exact same request (same `id`, same signed message).
 
 There are currently no rate limits. For retries, use exponential backoff and retry only on `5xx` responses; do not retry other `4xx` errors. Set the order timestamp a couple of minutes ahead to leave room for retries and latency. See [Signing an order](/whitelabel#signing-an-order).
 
