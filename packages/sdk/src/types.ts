@@ -293,6 +293,10 @@ export interface CorporateProfileDetails {
   vatNumber?: string;
   /** The company's website */
   website?: string;
+  /** The company's email address. */
+  email: string;
+  /** The company's phone number. */
+  phone: string;
   /** Street and building number where the corporate is located. */
   address: string;
   /** Postal code where the corporate is located. */
@@ -302,7 +306,7 @@ export interface CorporateProfileDetails {
   /** Two-letter country code [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) where the corporate is located */
   country: string;
   /** State/County where the corporate is located. */
-  countryState: string;
+  countryState?: string;
   /** List of individuals representing the company and authorized to act on it's behalf. */
   representatives: Representative[];
   /** List of beneficial owner that owns 25% or more in a corporation. */

@@ -52,15 +52,14 @@ Your wallet needs gas to send on-chain transactions. Use the faucets below to ge
 6. **Test the source of funds flow** — onboard a profile that requires source of funds (e.g: restricted residency/nationality or PEP) and submit the verification. Monerium may also request source of funds after submission based on risk evaluation: your endpoint receives a `profile.updated` webhook with the profile back in `incomplete` and a `sourceOfFunds` verification added in `incomplete` — collect the documents and submit them via `PATCH /profiles/{profileId}/verifications`. See [Source of funds](/kyc-guide-individuals#source-of-funds).
 7. **Link a wallet** — associate a blockchain address with the profile.
 8. **Get an IBAN** — request a dedicated IBAN for the profile.
-9. **Get test EURe** — simulate a bank transfer to mint test EURe.
-10. **Get test gas** — use faucets to fund the wallet for on-chain transactions.
-11. **Fund your whitelabel profiles** — move test EURe from your regular profile to whitelabel profiles.
+9. **[Get test EURe](#get-test-eure)** — see below.
+10. **[Get test gas](#get-test-gas)** — see below.
+11. **[Fund your whitelabel profiles](#funding-whitelabel-profiles)** — see below.
 12. **Place a test order** — send or receive a payment to verify the full flow.
 
 ## Funding whitelabel profiles
 
 To test whitelabel integrations end-to-end, you need EURe on the whitelabel profiles rather than just on your personal sandbox account. Use your regular sandbox profile as the source:
 
-1. Go to your regular sandbox profile and follow the steps above to get an IBAN.
-2. Simulate a bank transfer under **Receive → Simulate bank transfer** to mint test EURe.
-3. Transfer the minted EURe on-chain to the wallet addresses linked to your whitelabel profiles.
+1. Get an IBAN and mint test EURe on your regular profile (see [Get test EURe](#get-test-eure) above).
+2. Transfer the minted EURe on-chain to the wallet addresses linked to your whitelabel profiles.
