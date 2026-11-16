@@ -4185,6 +4185,15 @@ components:
           description: The company's website.
           type: string
           example: 'https://janedoe.com/'
+        email:
+          description: The company's email address.
+          type: string
+          format: email
+          example: jane.doe@example.com
+        phone:
+          description: The company's phone number.
+          type: string
+          example: '+3548888888'
         address:
           description: Street and building number where the corporate is located.
           type: string
@@ -4251,7 +4260,8 @@ components:
         - postalCode
         - city
         - country
-        - countryState
+        - email
+        - phone
         - representatives
         - finalBeneficiaries
         - directors
@@ -4758,6 +4768,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-11-09:
+      * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - `CorporateDetails`: `countryState` is now optional; `email` and `phone` are now required.
+
       ### 2026-11-04:
       * [POST /profiles/{profile}/share](#operation/share-profile-kyc) - KYB Sharing is now available in sandbox, not yet released to production. The Sumsub company level must also collect the company email, phone, and incorporation date; corporate profiles stay incomplete until those fields are present.
 
