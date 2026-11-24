@@ -10,6 +10,23 @@ import { Yes, No, Feature } from '@site/src/components/FeatureStatus';
 
 Use the Monerium API to issue regulated e-money on-chain, automate SEPA payments, and connect bank accounts to blockchain wallets. Build financial products ranging from payments, lending, and treasury automation to on-chain exchange and cross-chain orchestration.
 
+## AI coding assistant
+
+If you use an AI coding assistant (Claude Code, Cursor, OpenCode, Codex, and others), install the Monerium skills first. They give your assistant the API conventions, auth flows, webhooks, and FAQ context.
+
+```bash
+npx skills add monerium/js-monorepo
+```
+
+List the available skills or install a single one:
+
+```bash
+npx skills add monerium/js-monorepo --list
+npx skills add monerium/js-monorepo --skill monerium-oauth
+```
+
+See [Use with AI](/use-with-ai) for the available skills and raw context files.
+
 ## Environments
 
 Monerium has two environments: [**Sandbox**](https://sandbox.monerium.dev) and [**Production**](https://monerium.app).

@@ -7,6 +7,28 @@ id: use-with-ai
 
 The context files below are designed to be pasted directly into an AI assistant (Claude, ChatGPT, Cursor, Copilot, etc.) alongside your question. Each file contains everything needed for a complete integration — auth, webhooks, wallet linking, IBANs, and orders — for a specific application type.
 
+## Skills
+
+If your AI assistant supports skills (Claude Code, Cursor, OpenCode, Codex, and others), install the Monerium skills directly from this repository:
+
+```bash
+npx skills add monerium/js-monorepo
+```
+
+List the available skills first:
+
+```bash
+npx skills add monerium/js-monorepo --list
+```
+
+Install a single skill:
+
+```bash
+npx skills add monerium/js-monorepo --skill monerium-oauth
+```
+
+Available skills: `monerium` (integration router), `monerium-oauth`, `monerium-whitelabel`, `monerium-private`, `monerium-faq`, `monerium-sandbox`, and `monerium-api-rules`.
+
 ## Context files
 
 ### OAuth
@@ -16,7 +38,7 @@ For apps where users authorize your application through the Monerium portal.
 **Download:** [/llms/oauth.txt](/llms/oauth.txt)
 
 ```text
-I'm building a Monerium OAuth integration in [your language/framework]. 
+I'm building a Monerium OAuth integration in [your language/framework].
 
 Using the attached context, implement:
 1. Authorization Code + PKCE flow (backend-only, no browser CORS)
@@ -58,7 +80,7 @@ For apps that interact with your own Monerium account without managing other use
 I'm building a Monerium Private integration in [your language/framework].
 
 Using the attached context, implement:
-1. Client credentials authentication  
+1. Client credentials authentication
 2. Webhook registration and signature verification for order events
 3. Wallet linking
 4. Requesting an IBAN

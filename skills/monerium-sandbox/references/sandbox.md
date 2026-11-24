@@ -1,0 +1,60 @@
+# Sandbox
+
+The sandbox environment at [sandbox.monerium.dev](https://sandbox.monerium.dev) lets you build and test without real money or real blockchain transactions. Use it to simulate the full payment flow before going live.
+
+**Sandbox API:** `https://api.monerium.dev`
+
+## Get test EURe
+
+In the sandbox, incoming SEPA payments are simulated rather than real. To mint test EURe to your wallet:
+
+1. Log in at [sandbox.monerium.dev](https://sandbox.monerium.dev).
+2. Go to the **Receive** page (`/receive`).
+3. Under **Simulate bank transfer**, enter an amount and click **Add money**.
+
+EURe is minted to the wallet linked to your IBAN. This triggers the same `order.created` and `order.updated` webhook events as a real incoming payment, so you can test your full integration end-to-end.
+
+## Get test gas
+
+Your wallet needs gas to send on-chain transactions. Use the faucets below to get test tokens for each network:
+
+- [Sepolia faucet](https://sepolia-faucet.pk910.de) — sepETH for Ethereum Sepolia
+- [Chiado faucet](https://faucet.chiadochain.net/) — test xDAI for Gnosis Chiado
+- [Amoy faucet](https://faucet.polygon.technology/) or [Alchemy's faucet](https://www.alchemy.com/faucets/polygon-amoy) — test MATIC for Polygon Amoy
+
+## Checklist
+
+1. **Create an application** — get your Client ID and Secret from the [Developers](https://sandbox.monerium.dev/developers) page.
+2. **Authenticate** — obtain an access token via client credentials.
+3. **Set up webhooks** — register an endpoint to receive sandbox events.
+4. **Onboard a profile** — create and approve a test profile (KYC).
+5. **Trigger a `profile.error` webhook** — add `profile.error` to your subscription's `types`, then submit profile data that fails ingestion validation (e.g. an address longer than 70 characters). The profile stays `incomplete` until corrected and resubmitted. Your endpoint receives:
+
+   ```json
+   {
+     "type": "profile.error",
+     "timestamp": "2024-08-09T12:44:04.777884Z",
+     "data": {
+       "id": "4f079ef8-6d26-11eb-9bc8-acde48001122",
+       "kind": "personal",
+       "errors": [
+         { "field": "address", "reason": "address exceeds 70 characters" }
+       ]
+     }
+   }
+   ```
+
+6. **Test the source of funds flow** — onboard a profile that requires source of funds (e.g: restricted residency/nationality or PEP) and submit the verification. Monerium may also request source of funds after submission based on risk evaluation: your endpoint receives a `profile.updated` webhook with the profile back in `incomplete` and a `sourceOfFunds` verification added in `incomplete` — collect the documents and submit them via `PATCH /profiles/{profileId}/verifications`. See [Source of funds](https://docs.monerium.com/kyc-guide-individuals#source-of-funds).
+7. **Link a wallet** — associate a blockchain address with the profile.
+8. **Get an IBAN** — request a dedicated IBAN for the profile.
+9. **[Get test EURe](#get-test-eure)** — see below.
+10. **[Get test gas](#get-test-gas)** — see below.
+11. **[Fund your whitelabel profiles](#funding-whitelabel-profiles)** — see below.
+12. **Place a test order** — send or receive a payment to verify the full flow.
+
+## Funding whitelabel profiles
+
+To test whitelabel integrations end-to-end, you need EURe on the whitelabel profiles rather than just on your personal sandbox account. Use your regular sandbox profile as the source:
+
+1. Get an IBAN and mint test EURe on your regular profile (see [Get test EURe](#get-test-eure) above).
+2. Transfer the minted EURe on-chain to the wallet addresses linked to your whitelabel profiles.
