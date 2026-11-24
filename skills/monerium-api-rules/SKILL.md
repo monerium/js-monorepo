@@ -45,4 +45,4 @@ description: 'Condensed Monerium API rules for AI coding assistants. Covers base
 ## Reference
 
 - OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
-- Rendered API reference: `https://docs.monerium.com/api`
+- Rendered API reference: `https://docs.monerium.com/api/`

@@ -22,7 +22,7 @@ Yes, proof of address is required for all applicants. It must show the customer'
 
 ### Which risk form fields can be prefilled from Sumsub data?
 
-Only the TIN and tax residence country are pre-filled by Monerium. The full set of required fields is documented in the [`PATCH /profiles/{profile}/form`](https://docs.monerium.com/api#tag/profiles/operation/patch-profile-form) API reference. Importing a prefilled questionnaire is not currently supported.
+Only the TIN and tax residence country are pre-filled by Monerium. The full set of required fields is documented in the [`PATCH /profiles/{profile}/form`](https://docs.monerium.com/api/#tag/profiles/operation/patch-profile-form) API reference. Importing a prefilled questionnaire is not currently supported.
 
 ## Orders and limits
 

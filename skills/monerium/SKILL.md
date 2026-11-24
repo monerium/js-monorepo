@@ -29,7 +29,7 @@ Monerium provides onchain fiat (EURe) accounts with IBANs and blockchain address
 ## Spec and API reference
 
 - OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
-- Rendered API reference: `https://docs.monerium.com/api`
+- Rendered API reference: `https://docs.monerium.com/api/`
 - npm package: `@monerium/openapi`
 
 ## Next steps
