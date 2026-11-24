@@ -101,7 +101,7 @@ app.post(
 );
 ```
 
-If your endpoint does not return `200 OK`, Monerium retries up to 10 times over 12 hours using exponential backoff. Store processed `webhook-id` values to avoid handling the same event twice.
+If your endpoint does not return `200 OK`, Monerium retries up to 10 times over 12 hours using exponential backoff. Store processed `webhook-id` values to avoid handling the same event twice. When all retries fail, the subscription is deactivated (`state: inactive` with a `deactivationReason`); fix your endpoint and `PATCH /webhooks/{subscription}` with `{"state": "active"}` to resume deliveries. Missed events are not replayed, so reconcile with the `GET` endpoints.
 
 <LinkWallet />
 

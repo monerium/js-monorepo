@@ -511,6 +511,8 @@ paths:
 
         Update an existing webhook subscription to change the URL, secret, or event types.
         The updated subscription will be validated by sending a [subscription created](#operation/webhook-subscription-created) notification to the new URL.
+
+        Set `state` to `active` to reactivate a subscription that was deactivated after all delivery attempts failed. This clears the `deactivationReason` and resumes deliveries; events missed while the subscription was inactive are not replayed.
       parameters:
         - $ref: '#/components/parameters/AcceptHeaderV2'
         - name: subscription
@@ -530,6 +532,7 @@ paths:
                   description: |
                     The state of the webhook subscription. If set to `inactive`, the webhook will not send notifications.
                     If set to `active`, the webhook will send notifications as usual.
+                    Setting `active` on a subscription that was deactivated after all delivery attempts failed reactivates it and clears the `deactivationReason`.
                   type: string
                   example: active
                   enum:
@@ -4768,6 +4771,9 @@ tags:
   - name: changes
     x-displayName: Changelog
     description: |
+      ### 2026-11-24:
+      * [PATCH /webhooks/{subscription}](#operation/update-subscription) - Documented reactivating a deactivated subscription by setting `state` to `active`, which clears the `deactivationReason` and resumes deliveries without replaying missed events.
+
       ### 2026-11-09:
       * [PATCH /profiles/{profile}/details](#operation/patch-profile-details) - `CorporateDetails`: `countryState` is now optional; `email` and `phone` are now required.
 

@@ -171,3 +171,41 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 ### Retries
 
 If your endpoint does not return `200 OK`, Monerium retries up to 10 times over 12 hours using exponential backoff. Retried events carry the same `webhook-id` as the original — store processed IDs to avoid handling the same event twice.
+
+### Deactivated subscriptions
+
+When a delivery exhausts all retries, the subscription is deactivated: `GET /webhooks` returns it with `state: inactive` and a `deactivationReason` such as `max delivery attempts reached`. No further events are delivered until you reactivate it.
+
+Fix the cause first — the endpoint being unreachable, slow, or returning a non-`200` status — then set the state back to `active`:
+
+<Endpoint method="PATCH" path="/webhooks/{subscription}" href="https://docs.monerium.com/api/#tag/webhooks/operation/update-subscription" />
+
+<Tabs>
+  <TabItem value="node" label="Node.js">
+
+```js
+const response = await fetch(`https://api.monerium.dev/webhooks/${subscriptionId}`, {
+  method: 'PATCH',
+  headers: {
+    Authorization: `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ state: 'active' }),
+});
+```
+
+  </TabItem>
+  <TabItem value="go" label="Go">
+
+```go
+body, _ := json.Marshal(map[string]any{"state": "active"})
+
+req, _ := http.NewRequest("PATCH", "https://api.monerium.dev/webhooks/"+subscriptionID, bytes.NewBuffer(body))
+req.Header.Set("Authorization", "Bearer "+accessToken)
+req.Header.Set("Content-Type", "application/json")
+```
+
+  </TabItem>
+</Tabs>
+
+Reactivating clears the `deactivationReason` and resumes deliveries. Events that occurred while the subscription was inactive are not replayed, so reconcile missed state with the `GET` endpoints (profiles, IBANs, orders) after reactivating.

@@ -41,6 +41,21 @@ Yes, in two ways. The signed order message acts as an idempotency key: posting t
 
 There are currently no rate limits. For retries, use exponential backoff and retry only on `5xx` responses; do not retry other `4xx` errors. Set the order timestamp a couple of minutes ahead to leave room for retries and latency. See [Signing an order](/whitelabel#signing-an-order).
 
+## Webhooks
+
+### How do I reactivate a disabled webhook subscription?
+
+A subscription is deactivated automatically when a delivery exhausts all retries. It then has `state: inactive` and a `deactivationReason` such as `max delivery attempts reached`. Fix the cause (your endpoint being unreachable or not returning `200 OK`), then reactivate it by patching the subscription with `state: active`:
+
+```bash
+curl -X PATCH https://api.monerium.dev/webhooks/{subscription} \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"state": "active"}'
+```
+
+Reactivating clears the `deactivationReason` and resumes deliveries. Events sent while the subscription was inactive are not replayed, so reconcile the affected profiles, IBANs, and orders with the `GET` endpoints after reactivating. See [Webhooks](/whitelabel#deactivated-subscriptions).
+
 ## Sandbox and go-live
 
 ### Do webhooks come from fixed IPs we should allowlist?
