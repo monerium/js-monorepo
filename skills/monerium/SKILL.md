@@ -26,6 +26,12 @@ Monerium provides onchain fiat (EURe) accounts with IBANs and blockchain address
 - On `429`, read `Retry-After` and back off exponentially.
 - Do not use the zero UUID (`00000000-0000-0000-0000-000000000000`); it is reserved.
 
+## Spec and API reference
+
+- OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
+- Rendered API reference: `https://docs.monerium.com/api`
+- npm package: `@monerium/openapi`
+
 ## Next steps
 
 Read the matching skill's `SKILL.md` and its `references/` file before writing code. For common questions, load `monerium-faq`. For sandbox testing, load `monerium-sandbox`. For a condensed rules checklist, load `monerium-api-rules`.

@@ -25,3 +25,5 @@ Read `references/private.md` in full. It contains client credentials, webhooks, 
 ## Reference
 
 - `references/private.md` — full integration guide.
+- OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
+- Rendered API reference: `https://docs.monerium.com/api`

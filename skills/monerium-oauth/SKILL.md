@@ -24,3 +24,5 @@ Read `references/oauth.md` in full. It contains the PKCE flow, SIWE, wallet link
 ## Reference
 
 - `references/oauth.md` — full integration guide.
+- OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
+- Rendered API reference: `https://docs.monerium.com/api`

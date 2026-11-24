@@ -31,3 +31,5 @@ Read `references/faq.md` for the full Q&A. Quick answers:
 ## Reference
 
 - `references/faq.md` — full Q&A with links to the docs.
+- OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
+- Rendered API reference: `https://docs.monerium.com/api`

@@ -25,3 +25,5 @@ Read `references/whitelabel.md` in full. It contains client credentials, webhook
 ## Reference
 
 - `references/whitelabel.md` — full integration guide.
+- OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
+- Rendered API reference: `https://docs.monerium.com/api`

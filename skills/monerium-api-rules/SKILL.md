@@ -41,3 +41,8 @@ description: 'Condensed Monerium API rules for AI coding assistants. Covers base
 - Do not poll for state changes. Use webhooks (whitelabel/private) or on-chain events (OAuth).
 - Do not expose access tokens to the frontend.
 - Do not use the zero UUID (`00000000-0000-0000-0000-000000000000`); it is reserved for the Monerium system.
+
+## Reference
+
+- OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
+- Rendered API reference: `https://docs.monerium.com/api`

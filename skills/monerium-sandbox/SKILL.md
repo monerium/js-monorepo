@@ -21,3 +21,5 @@ Read `references/sandbox.md` in full. It contains the sandbox checklist, test EU
 ## Reference
 
 - `references/sandbox.md` — full sandbox guide.
+- OpenAPI spec: `https://raw.githubusercontent.com/monerium/js-monorepo/main/packages/openapi/openapi.yml`
+- Rendered API reference: `https://docs.monerium.com/api`
