@@ -1,14 +1,12 @@
 import { type AppKit, createAppKit } from '@reown/appkit';
-import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 import { type AppKitNetwork, mainnet, sepolia } from '@reown/appkit/networks';
+import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 
 const projectId = import.meta.env.VITE_REOWN_PROJECT_ID as string | undefined;
-
-console.log('projectid', projectId);
 type PartnerEnvironment = 'localhost' | 'sandbox' | 'production';
 export const partnerEnvironment: PartnerEnvironment = (import.meta.env
   .VITE_PARTNER_ENV ?? 'sandbox') as PartnerEnvironment;
-export const mainChain: string =
+export const mainChain: 'ethereum' | 'sepolia' =
   partnerEnvironment === 'sandbox' ? 'sepolia' : 'ethereum';
 const localNetwork: AppKitNetwork = {
   id: 6666,
