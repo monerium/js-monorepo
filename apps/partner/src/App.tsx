@@ -1,7 +1,4 @@
 import { useEffect, useState } from 'react';
-import { type AppKit, createAppKit } from '@reown/appkit';
-import { type AppKitNetwork, mainnet, sepolia } from '@reown/appkit/networks';
-import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 
 import {
   type Address,
@@ -17,44 +14,16 @@ import {
   type ProfilesResponse,
 } from '@monerium/sdk';
 
-const projectId = import.meta.env.VITE_REOWN_PROJECT_ID as string | undefined;
-type PartnerEnvironment = 'localhost' | 'sandbox' | 'production';
-const partnerEnvironment = (import.meta.env.VITE_PARTNER_ENV ??
-  'sandbox') as PartnerEnvironment;
-const mainChain = partnerEnvironment === 'sandbox' ? 'sepolia' : 'ethereum';
-const localNetwork: AppKitNetwork = {
-  id: 6666,
-  name: 'Ethereum',
-  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-  rpcUrls: {
-    default: { http: [import.meta.env.VITE_LOCAL_RPC_URL || ''] },
-  },
-};
-const walletNetwork: AppKitNetwork =
-  partnerEnvironment === 'localhost'
-    ? localNetwork
-    : partnerEnvironment === 'production'
-      ? mainnet
-      : sepolia;
-const appKit: AppKit | undefined = projectId
-  ? createAppKit({
-      adapters: [new EthersAdapter()],
-      networks: [walletNetwork],
-      defaultNetwork: walletNetwork,
-      projectId,
-      metadata: {
-        name: 'Monerium Partner Tool',
-        description: 'Monerium SDK partner test tool',
-        url: window.location.origin,
-        icons: [],
-      },
-      features: { analytics: false },
-    })
-  : undefined;
+import {
+  mainChain,
+  openWallet,
+  partnerEnvironment,
+  signMessage,
+  subscribeWallet,
+  walletConfigured,
+} from './appkit';
+
 type Mode = 'admin' | 'customer';
-type Eip1193Provider = {
-  request: (request: { method: string; params: unknown[] }) => Promise<unknown>;
-};
 
 const occupationOptions = [
   'OCCUPATION_STUDENT',
@@ -1136,21 +1105,10 @@ function CustomerView({
       setError(errorMessage(reason));
     }
   };
-  const sign = async (message: string): Promise<unknown> => {
-    if (!appKit) throw new Error('Wallet is not configured');
-    const provider = appKit.getWalletProvider() as Eip1193Provider | undefined;
-    if (!provider || !walletAddress) throw new Error('Connect a wallet first');
-    return provider.request({
-      method: 'personal_sign',
-      params: [message, walletAddress],
-    });
-  };
-  const openWallet = async (): Promise<void> => {
-    if (!appKit) return;
+  const connectWallet = async (): Promise<void> => {
     try {
-      await appKit.open();
+      await openWallet();
     } catch (reason) {
-      console.error('[partner] Reown wallet connection failed', reason);
       setError(errorMessage(reason));
     }
   };
@@ -1162,7 +1120,7 @@ function CustomerView({
         address: walletAddress,
         chain: mainChain,
         message,
-        signature: await sign(message),
+        signature: await signMessage(message, walletAddress),
       });
     } catch (reason) {
       setError(errorMessage(reason));
@@ -1182,7 +1140,7 @@ function CustomerView({
           details: { firstName: 'Sathoshi', lastName: 'Nakamoto' },
         },
         message,
-        signature: await sign(message),
+        signature: await signMessage(message, walletAddress),
       });
     } catch (reason) {
       setError(errorMessage(reason));
@@ -1222,7 +1180,7 @@ function CustomerView({
           />
           <section className="wallet-panel">
             <h3>Wallet</h3>
-        <button onClick={openWallet} disabled={!appKit}>
+            <button onClick={connectWallet} disabled={!walletConfigured}>
               {walletAddress ? 'Wallet connected' : 'Connect wallet'}
             </button>
             <p>Connected wallet: {walletAddress ?? 'none'}</p>
@@ -1429,26 +1387,13 @@ export default function App(): JSX.Element {
     }
   };
   useEffect(() => {
-    if (!appKit) {
+    if (!walletConfigured) {
       setError(
         'VITE_REOWN_PROJECT_ID must be set before building the partner app'
       );
       return;
     }
-    const unsubscribe = appKit.subscribeAccount((account) =>
-      setWalletAddress(account.address)
-    );
-    const unsubscribeConnections = appKit.subscribeConnections((state) => {
-      const reownError = appKit.getError();
-      console.log('[partner] Reown connection state', {
-        status: state.status,
-        error: reownError || undefined,
-      });
-      if (reownError) {
-        console.error('[partner] Reown connection failed', reownError);
-        setError(reownError);
-      }
-    });
+    const unsubscribe = subscribeWallet(setWalletAddress, setError);
     fetch('/api/session')
       .then((response) => response.json())
       .then((value: { authenticated: boolean }) =>
@@ -1456,10 +1401,7 @@ export default function App(): JSX.Element {
       )
       .then(refresh)
       .catch((reason: unknown) => setError(errorMessage(reason)));
-    return () => {
-      unsubscribe();
-      unsubscribeConnections();
-    };
+    return unsubscribe;
   }, []);
   return (
     <main>
@@ -1477,7 +1419,7 @@ export default function App(): JSX.Element {
           </p>
         </div>
         <span className="config">
-          Reown: {projectId ? 'configured' : 'missing'}
+          Reown: {walletConfigured ? 'configured' : 'missing'}
         </span>
       </header>
       <nav className="tabs">
